@@ -4,7 +4,7 @@ B. Purpose: **Storage of resources that can be text, images, links, documents, m
 C. Example: Golang projects repo archive, Golang community inspirational story repo, Golang Package archive (that were made from our community) etc.
 D. Interview Q&A github repo (Archive catagory)
 
-**Catagory ideas**
+**Category ideas**
 
 1. Interview Q&A
 2. Class Notes:
