@@ -81,25 +81,27 @@ golang-community-vault/
 │ ├── slide-decks/ # Presentation PDFs
 │ └── benchmarks/ # Performance comparisons
 ```
-
 ⸻
+
 ## 📁 Category Overview & Example Resources
+
 
 | Category | Description | Example Resource |
 |---------|-------------|------------------|
-| `1-interview-qa/` | Real interview Q&A and topic-wise challenges | 🔗 [Golang Interview Q&A - Bangla](https://github.com/dynamiclance/golang-interview-questions-and-answers-bangla) <br> 🔗 [Go Leetcode Solutions](https://github.com/austingebauer/go-leetcode) |
-| `2-class-notes/` | Course notes, bootcamp and academic summaries | 🔗 [Practical Go Lessons](https://www.practical-go-lessons.com/) <br> 🔗 [MIT 6.824 Notes](https://github.com/kwongloh/mit-6.824-notes) |
-| `3-project-archive/` | Real-world Go projects (CLI, web, microservices) | 🔗 [Awesome Go – Projects](https://github.com/avelino/awesome-go#projects) |
-| `4-image-infographic-archive/` | Visual aids like diagrams, cheat sheets, flowcharts | 🔗 [ByteByteGo Visuals](https://bytebytego.com/) |
-| `5-community-stories/` | Real-life stories, job search experiences, and lessons | 🔗 [Dev.to – #golang stories](https://dev.to/t/golang) |
-| `6-package-archive/` | Community-built packages and middleware | 🔗 [pkg.go.dev](https://pkg.go.dev/) |
-| `7-community-blogs/` | Community-written blogs, how-tos, tutorials | 🔗 [Go Blog](https://blog.golang.org/) <br> 🔗 [Gopher Academy](https://blog.gopheracademy.com/) 
-| `8-news-events/` | Newsletters, conferences, meetups, hackathons | 🔗 [Golang Weekly](https://golangweekly.com/) <br> 🔗 [GopherCon](https://www.gophercon.com/) |
-| `9-video-archive/` | Tutorials, tech talks, curated playlists | 🔗 [JustForFunc YouTube](https://www.youtube.com/c/JustForFunc) <br> 🔗 [GopherCon Playlist](https://www.youtube.com/c/GopherAcademy/playlists) |
-| `10-course-content/` | Full-length open-source Go courses | 🔗 [Go by Example](https://gobyexample.com/) <br> 🔗 [Learn Go with Tests](https://github.com/quii/learn-go-with-tests) <br> 🔗 [Tour of Go](https://tour.golang.org/) |
-| `11-link-resource-archive/` | Curated list of links: docs, tools, benchmarks | 🔗 [Awesome Go](https://github.com/avelino/awesome-go) |
+| `1-interview-qa/` | Real interview Q&A and topic-wise challenges | 🔗 [Golang Interview Q&A - Bangla](https://github.com/dynamiclance/golang-interview-questions-and-answers-bangla) 
+| `2-class-notes/` | Course notes, bootcamp and academic summaries | |
+| `3-project-archive/` | Real-world Go projects (CLI, web, microservices) | |
+| `4-image-infographic-archive/` | Visual aids like diagrams, cheat sheets, flowcharts | |
+| `5-community-stories/` | Real-life stories, job search experiences, and lessons | |
+| `6-package-archive/` | Community-built packages and middleware | |
+| `7-community-blogs/` | Community-written blogs, how-tos, tutorials | |
+| `8-news-events/` | Newsletters, conferences, meetups, hackathons |  |
+| `9-video-archive/` | Tutorials, tech talks, curated playlists |  |
+| `10-course-content/` | Full-length open-source Go courses |  |
+| `11-link-resource-archive/` | Curated list of links: docs, tools, benchmarks |  |
 
 ---
+⸻
 
 🧩 Tech Stack (Future Web App Vision)
 
