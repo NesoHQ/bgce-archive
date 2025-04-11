@@ -181,11 +181,11 @@ Each folder contains relevant sub-categories. If you’re unsure where to place 
 ⸻
 
 📝 File Naming & Formatting
-• Use kebab-case for file and folder names:
+- Use kebab-case for file and folder names:
 ✅ go-cheatsheet.pdf
 ✅ how-goroutines-work.md
-• All text content should be in Markdown (.md) unless it’s an image, PDF, or video.
-• Include frontmatter metadata at the top of your .md files whenever possible:
+- All text content should be in Markdown (.md) unless it’s an image, PDF, or video.
+- Include frontmatter metadata at the top of your .md files whenever possible:
 
 ---
 
@@ -243,19 +243,19 @@ git push origin add-go-microservice-guide
 ⸻
 
 💬 Need Help?
-• Open an Issue
-• Start a Discussion
-• Or ping a maintainer directly
+- Open an Issue
+- Start a Discussion
+- Or ping a maintainer directly
 
 We’re here to help and love working with newcomers.
 
 ⸻
 
 ✅ Final Tips
-• Keep content high-quality, respectful, and useful.
-• Avoid uploading copyrighted or paywalled content.
-• Add sources if you reference or remix someone else’s material.
-• All contributions are reviewed before being merged — we’ll try to be fast!
+- Keep content high-quality, respectful, and useful.
+- Avoid uploading copyrighted or paywalled content.
+- Add sources if you reference or remix someone else’s material.
+- All contributions are reviewed before being merged — we’ll try to be fast!
 
 Thanks for being awesome, and welcome to the Golang Community Vault! 🎉
 
