@@ -83,7 +83,6 @@ golang-community-vault/
 ```
 
 ⸻
-
 ## 📁 Category Overview & Example Resources
 
 | Category | Description | Example Resource |
@@ -101,8 +100,6 @@ golang-community-vault/
 | `11-link-resource-archive/` | Curated list of links: docs, tools, benchmarks | 🔗 [Awesome Go](https://github.com/avelino/awesome-go) |
 
 ---
-
-⸻
 
 🧩 Tech Stack (Future Web App Vision)
 
