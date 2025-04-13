@@ -223,43 +223,72 @@ tags: [career, switching, golang]
 
 ⸻
 
-🚀 How to Submit a Contribution
+🛠️ How to Contribute to the Archive Project as a Community Member
 
-1. Fork this repository.
+🧩 **Not part of our community yet?**  
+Join us and help build a powerful open-source knowledge vault — where developers share ideas, grow together, and make something meaningful.  
+Whether you're into research, backend, frontend, or just want to learn, **there’s a place for you here.**
 
-2. Clone your fork locally:
+Thank you for your interest in contributing! Follow the steps below to get started:
+1. 📣 Get Assigned to a Team
 
-```bash
-git clone https://github.com/your-username/golang-community-vault.git
-```
+    Mention a moderator in the Discord group to request team assignment.
 
-3. Create a new branch:
+    By default, you'll be added to the R&D team first, since research is the foundation of the project.
 
-```bash
-git checkout -b add-go-microservice-guide
-```
+    If you’re interested in contributing to Backend or Frontend, you will be assigned to those teams after completing your initial R&D phase.
 
-4. Add your content to the relevant folder.
+    So for example, if you want to work on Backend, you will be part of R&D + Backend (once the dev phase starts).
 
-```bash
-git add .
-```
+2. ⭐️ Fork and Setup the Project
 
-5. Commit your changes:
+    Star the repository to show your support.
 
-```bash
-git commit -m "Work On Upload Text Feature"
-```
+    Fork the repository to your GitHub account.
 
-6. Push your branch:
+    Clone your fork locally:
+    
+    ```bash
+    git clone https://github.com/your-username/https://github.com/JsIqbal/bgce-archive.git
+    ``` 
+	```bash
+	cd bgce-archive
+	```
+	    
+  
 
-```bash
-git push origin add-go-microservice-guide
-```
+3. 🔧 Make Your Changes
 
-7. Open a Pull Request on GitHub with a short and clear description.
+    Create a new branch:
 
-⸻
+   ``bash
+   git checkout -b feature/your-feature-name``
+
+   Make your changes and commit them with clear messages:
+
+    ```bash 
+    git add .
+    git commit -m "Add: your contribution"
+     ```
+
+4. 🚀 Push and Submit a PR
+
+    Push your branch:
+
+    ```bash
+    git push origin feature/your-feature-name
+    ```
+
+    Open a Pull Request (PR) from your forked repo to the main project repo.
+
+    Wait for moderators or maintainers to review your PR. Be ready to make changes if requested.
+
+5. 🧠 Collaborate and Improve
+
+    Stay active in the Discord group.
+
+    Review other contributors’ PRs if you can.
+
 
 💬 Need Help?
 - Open an Issue
@@ -279,3 +308,4 @@ We’re here to help and love working with newcomers.
 Thanks for being awesome, and welcome to the Golang Community Vault! 🎉
 
 ---
+
