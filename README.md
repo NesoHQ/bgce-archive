@@ -80,17 +80,17 @@ golang-community-vault/
 
 | Microservice                   | Description                                         | Documentation Link                                                             |
 | ------------------------------ | --------------------------------------------------- | ------------------------------------------------------------------------------ |
-| `1-interview-qa/`              | Real interview Q&A and Go-topic challenges          | 🔗 [Golang Interview Q&A - Bangla](./docs/service/interview-qa.md)             |
-| `2-class-notes/`               | Academic and bootcamp course notes & summaries      | 🔗 [Class Notes Documentation](./docs/service/class-notes.md)                  |
-| `3-project-archive/`           | Real-world Go projects (CLI, web, microservices)    | 🔗 [Project Archive Documentation](./docs/service/project-archive.md)          |
-| `4-image-infographic-archive/` | Diagrams, cheat sheets, flowcharts                  | 🔗 [Visual Archive Documentation](./docs/service/image-infographic-archive.md) |
-| `5-community-stories/`         | Job search experiences, lessons, and career stories | 🔗 [Community Stories Documentation](./docs/service/community-stories.md)      |
-| `6-package-archive/`           | Go libraries, middleware, API clients, etc.         | 🔗 [Package Archive Documentation](./docs/service/package-archive.md)          |
-| `7-community-blogs/`           | Blogs, how-tos, opinion pieces from the community   | 🔗 [Community Blogs Documentation](./docs/service/community-blogs.md)          |
-| `8-news-events/`               | Go community news, events, hackathons               | 🔗 [News & Events Documentation](./docs/service/news-events.md)                |
-| `9-video-archive/`             | Curated learning videos, tech talks, playlists      | 🔗 [Video Archive Documentation](./docs/service/video-archive.md)              |
-| `10-course-content/`           | Full-length open-source Go courses                  | 🔗 [Course Content Documentation](./docs/service/course-content.md)            |
-| `11-link-resource-archive/`    | Curated links to tools, documentation, benchmarks   | 🔗 [Link Resources Documentation](./docs/service/link-resource-archive.md)     |
+| `1-interview-qa/`              | Real interview Q&A and Go-topic challenges          | 🔗 [Golang Interview Q&A - Bangla](./docs/service/inteview-qa.md)             |
+| `2-class-notes/`               | Academic and bootcamp course notes & summaries      | 🔗 [Class Notes Documentation](#)                  |
+| `3-project-archive/`           | Real-world Go projects (CLI, web, microservices)    | 🔗 [Project Archive Documentation](#)          |
+| `4-image-infographic-archive/` | Diagrams, cheat sheets, flowcharts                  | 🔗 [Visual Archive Documentation](#) |
+| `5-community-stories/`         | Job search experiences, lessons, and career stories | 🔗 [Community Stories Documentation](#)      |
+| `6-package-archive/`           | Go libraries, middleware, API clients, etc.         | 🔗 [Package Archive Documentation](#)          |
+| `7-community-blogs/`           | Blogs, how-tos, opinion pieces from the community   | 🔗 [Community Blogs Documentation](#)          |
+| `8-news-events/`               | Go community news, events, hackathons               | 🔗 [News & Events Documentation](#)                |
+| `9-video-archive/`             | Curated learning videos, tech talks, playlists      | 🔗 [Video Archive Documentation](#)              |
+| `10-course-content/`           | Full-length open-source Go courses                  | 🔗 [Course Content Documentation](#)            |
+| `11-link-resource-archive/`    | Curated links to tools, documentation, benchmarks   | 🔗 [Link Resources Documentation](#)     |
 
 ---
 
@@ -168,13 +168,38 @@ Every PR should have the following:
 
 ---
 
-## 💬 **Stay Connected & Join Us!**
+Absolutely! Here's a **polished, engaging, and robust version** of the "Stay Connected" section — complete with **icons, emotional tone**, and great readability for Markdown-based environments (like GitHub, Docusaurus, or Hugo):
 
-If you want to get involved, have suggestions, or want help with templates and automation ideas, we’re here for you. Whether you want to work on a web version or just contribute to documentation, **your help is invaluable**.
-
-Let’s **grow together**. 🐹✨
-
-🔗 [Join the Best Golang Community Ever - Discord](https://discord.gg/xUVYrGaXS3)
-🔗 [Join the Best Golang Community Ever - Facebook](https://www.facebook.com/groups/1118405403169990)
-🔗 [Join the Best Golang Community Ever - Youtube](https://www.youtube.com/@gowithhabib)
 ---
+
+## 💬 **Stay Connected & Grow With Us!**
+
+We believe in **community-driven learning**. Whether you're here to contribute, collaborate, or just explore — your presence makes a difference. 💛
+
+Join the **Best Golang Community Ever** and become part of something bigger than just code!
+
+---
+
+### 🌐 **Connect With Us**
+
+| 🌟 Platform            | 📌 Join Link                                                                                                                                           |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 💬 **Discord**         | [Join the Go Community on Discord](https://discord.gg/xUVYrGaXS3) – Real-time discussions, questions, support, and collab rooms.                       |
+| 📘 **Facebook Group**  | [Join the Go Facebook Community](https://www.facebook.com/groups/1118405403169990) – Casual Q&As, success stories, community posts, and announcements. |
+| 🎥 **YouTube Channel** | [Subscribe to GoWithHabib](https://www.youtube.com/@gowithhabib) – Deep dives, tutorials, interviews, and community videos.                            |
+
+---
+
+### 🤝 **Get Involved**
+
+✅ Share your stories, notes, code, or insights  
+✅ Help with templates, docs, automation, or structure  
+✅ Collaborate on our **static site** or **web vault**  
+✅ Be part of building something that helps thousands
+
+---
+
+### ✨ **Together, We Learn & Grow**
+
+> _“Code fades. Community lasts.”_  
+> Let’s archive knowledge, share what we’ve learned, and help the next generation of Gophers grow. 🐹🚀
