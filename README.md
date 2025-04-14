@@ -174,6 +174,7 @@ If you want to get involved, have suggestions, or want help with templates and a
 
 Let’s **grow together**. 🐹✨
 
-🔗 [Join the Gophers Community](https://golang.org/community)
-
+🔗 [Join the Best Golang Community Ever - Discord](https://discord.gg/xUVYrGaXS3)
+🔗 [Join the Best Golang Community Ever - Facebook](https://www.facebook.com/groups/1118405403169990)
+🔗 [Join the Best Golang Community Ever - Youtube](https://www.youtube.com/@gowithhabib)
 ---
