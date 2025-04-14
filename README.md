@@ -1,281 +1,179 @@
-# 🌐 Golang Community Vault
+# 🌐 **Golang Community Vault**
 
-A community-powered digital archive to collect, organize, and preserve knowledge, resources, and experiences from the Golang and wider software engineering ecosystem.
-
-Whether you're a student, job seeker, contributor, or mentor — this is your place to give and receive value from the Go community.
+Welcome to **Golang Community Vault**, a community-driven digital archive designed to collect, organize, and preserve the vast knowledge, resources, and experiences from the Go programming ecosystem and beyond. Whether you're a beginner, job seeker, seasoned contributor, or mentor — **this is the place** where we give and receive knowledge.
 
 ---
 
-## 🎯 Project Purpose
+## 🎯 **Project Purpose**
 
--   📚 Preserve useful, community-generated content.
--   🤝 Promote collaboration and open knowledge sharing.
--   🔎 Help job-seekers and learners benefit from real-world experiences.
--   🧠 Centralize resources scattered across the internet.
+The **Golang Community Vault** is not just an archive, it's a vibrant, evolving repository that serves:
+
+-   📚 **Preservation** of valuable community-generated content.
+-   🤝 **Collaboration** to promote open knowledge sharing and growth.
+-   🔎 **Job Seekers & Learners** can gain insights from real-world experiences.
+-   🧠 **Centralized Resources** to gather knowledge and tools scattered across the web.
 
 ---
 
-## 📂 Archive Categories
+## 📂 **Archive Categories**
+
+Here's a quick look at the structure of the archive, where each folder represents a key area of Golang knowledge, experience, and resources.
 
 ```bash
 golang-community-vault/
-├── 1-interview-qa/ # Real interview Q&A and topic-wise challenges
-│ ├── company-wise/ # Interview questions by company (Google, etc.)
-│ ├── topic-wise/ # Go concepts (goroutines, interfaces, etc.)
-│ └── curated-challenges/ # Problem-solving & deep dives
-
-├── 2-class-notes/ # Course notes & summaries
-│ ├── university-notes/ # Academic notes from CS/SE courses
-│ ├── bootcamp-notes/ # Bootcamp summaries
-│ └── online-course-summaries/ # Udemy, Coursera, etc.
-
-├── 3-project-archive/ # Real-world Golang projects
-│ ├── cli-tools/ # Command-line Go utilities
-│ ├── web-servers/ # REST/HTTP server projects
-│ ├── microservices/ # Auth, DB, API services
-│ └── misc-projects/ # Other cool stuff
-
-├── 4-image-infographic-archive/ # Visual learning materials
-│ ├── architecture-diagrams/ # System-level illustrations
-│ ├── cheat-sheets/ # Handy printable sheets
-│ └── flowcharts/ # Logic and memory flow maps
-
-├── 5-community-stories/ # Real experiences and lessons
-│ ├── job-search-experience/ # First job, internships, etc.
-│ ├── rejection-learnings/ # Lessons from failures
-│ └── career-switch-tales/ # From other stacks to Go
-
-├── 6-package-archive/ # Community-built Go libraries
-│ ├── utils/ # Helper packages
-│ ├── api-clients/ # Wrappers around APIs
-│ ├── middleware/ # HTTP middleware
-│ └── tools-and-libs/ # Misc open-source code
-
-├── 7-community-blogs/ # Written insights from community
-│ ├── how-tos/ # Step-by-step guides
-│ ├── internals/ # Deep dives into Go internals
-│ ├── opinion-pieces/ # Dev thoughts & philosophies
-│ └── tutorials/ # Learning-by-doing articles
-
-├── 8-news-events/ # What’s happening in the Go world
-│ ├── newsletters/ # Go Weekly, Go Gazette, etc.
-│ ├── conference-recaps/ # GopherCon and others
-│ ├── meetup-summaries/ # Community-organized events
-│ └── hackathons/ # Team projects & idea sharing
-
-├── 9-video-archive/ # Curated video learning
-│ ├── tutorials/ # End-to-end builds
-│ ├── tech-talks/ # Expert presentations
-│ ├── documentaries/ # Tech culture films
-│ └── playlists/ # Themed content
-
-├── 10-course-content/ # Entire open-source courses
-│ ├── community-courses/ # From the people — for the people
-│ ├── mini-moocs/ # Micro-learning paths
-│ └── challenge-series/ # 30-day learning challenges
-
-├── 11-link-resource-archive/ # Curated bookmarks
-│ ├── tooling/ # Formatters, linters, generators
-│ ├── blogs/ # Long-form articles
-│ ├── documentation/ # Package guides & deep dives
-│ ├── slide-decks/ # Presentation PDFs
-│ └── benchmarks/ # Performance comparisons
+├── 1-interview-qa/         # Real interview Q&A and topic-wise challenges
+│   ├── company-wise/       # Interview questions by company (Google, etc.)
+│   ├── topic-wise/         # Go concepts (goroutines, interfaces, etc.)
+│   └── curated-challenges/ # Problem-solving & deep dives
+├── 2-class-notes/          # Course notes & summaries
+│   ├── university-notes/   # Academic notes from CS/SE courses
+│   ├── bootcamp-notes/     # Bootcamp summaries
+│   └── online-course-summaries/ # Udemy, Coursera, etc.
+├── 3-project-archive/      # Real-world Golang projects
+│   ├── cli-tools/          # Command-line Go utilities
+│   ├── web-servers/        # REST/HTTP server projects
+│   ├── microservices/      # Auth, DB, API services
+│   └── misc-projects/      # Other cool stuff
+├── 4-image-infographic-archive/ # Visual aids like diagrams, cheat sheets
+│   ├── architecture-diagrams/
+│   ├── cheat-sheets/
+│   └── flowcharts/
+├── 5-community-stories/    # Real experiences, job search, career switch
+│   ├── job-search-experience/
+│   ├── rejection-learnings/
+│   └── career-switch-tales/
+├── 6-package-archive/     # Community-built Go libraries and tools
+│   ├── utils/
+│   ├── api-clients/
+│   ├── middleware/
+│   └── tools-and-libs/
+├── 7-community-blogs/     # Written insights from the community
+│   ├── how-tos/
+│   ├── internals/
+│   ├── opinion-pieces/
+│   └── tutorials/
+├── 8-news-events/         # Updates from the Go world
+│   ├── newsletters/
+│   ├── conference-recaps/
+│   ├── meetup-summaries/
+│   └── hackathons/
+├── 9-video-archive/       # Curated video learning
+│   ├── tutorials/
+│   ├── tech-talks/
+│   ├── documentaries/
+│   └── playlists/
+├── 10-course-content/     # Full-length open-source Go courses
+│   ├── community-courses/
+│   ├── mini-moocs/
+│   └── challenge-series/
+├── 11-link-resource-archive/ # Curated bookmarks and links
+│   ├── tooling/
+│   ├── blogs/
+│   ├── documentation/
+│   ├── slide-decks/
+│   └── benchmarks/
 ```
-⸻
-
-## 📁 Category Overview & Example Resources
-
-
-| Category | Description | Example Resource |
-|---------|-------------|------------------|
-| `1-interview-qa/` | Real interview Q&A and topic-wise challenges | 🔗 [Golang Interview Q&A - Bangla](https://github.com/dynamiclance/golang-interview-questions-and-answers-bangla) 
-| `2-class-notes/` | Course notes, bootcamp and academic summaries | |
-| `3-project-archive/` | Real-world Go projects (CLI, web, microservices) | |
-| `4-image-infographic-archive/` | Visual aids like diagrams, cheat sheets, flowcharts | |
-| `5-community-stories/` | Real-life stories, job search experiences, and lessons | |
-| `6-package-archive/` | Community-built packages and middleware | |
-| `7-community-blogs/` | Community-written blogs, how-tos, tutorials | |
-| `8-news-events/` | Newsletters, conferences, meetups, hackathons |  |
-| `9-video-archive/` | Tutorials, tech talks, curated playlists |  |
-| `10-course-content/` | Full-length open-source Go courses |  |
-| `11-link-resource-archive/` | Curated list of links: docs, tools, benchmarks |  |
-
----
-⸻
-
-🧩 Tech Stack (Future Web App Vision)
-
-If this turns into a community-driven web interface:
-
-```bash
-• Frontend: React / Svelte / Next.js / Vue
-• Backend: Go
-• Storage: GitHub + SQLite/Postgres
-• Auth: GitHub OAuth (optional)
-• Deployment: AWS
-```
-UI/UX ideas for the future web App
-```bash
-Most preferable one for now:
-1. Modern Library-Style UI
-   - Homepage: A clean, minimalist grid of featured archives with a search bar in the center.
-   - Filters & Categories: Sidebar with quick access to categories (by year, author, tags, etc.).
-   - Reading Mode: Dark/light mode toggle, distraction-free fullscreen mode.
-   - Bookmarking & Notes: Users can highlight text and add personal notes to archives.
-```
-Other types of UI
-```bash
-2. Timeline-Based UI
-3. Grid & Gallery UI
-4. Terminal-Inspired UI
-5. Tag-Based UI
-6. Map-Based UI
-7. AI-Assisted UI
-8. Infinite Scroll vs. Pagination Debate
-```
-
-⸻
-
-🌟 Inspiration
-
-“Code fades. Community lasts.”
-This archive exists to support, uplift, and celebrate the Golang community. It’s more than code — it’s our collective knowledge, sweat, and stories.
-
-⸻
-
-💬 Want to Help More?
-
-Let us know if you’d like templates, automation ideas, or a web version of the vault.
-
-Together, we grow. 🐹✨
 
 ---
 
-⸻
+## 📁 **Category Overview**
 
-# ✍️ Contributing to Golang Community Vault
-
-Welcome, fellow gopher! 🐹
-We're thrilled you want to contribute to the **Golang Community Vault** — a collaborative archive of all things Go. Whether you're sharing knowledge, uploading projects, or writing a blog post, you're making the community better. Thank you!
-
----
-
-## 📦 What Can You Contribute?
-
-We accept many types of contributions:
-
--   **🧠 Interview Content** – Real-world Q&A, curated challenges, topic-wise notes.
--   **📚 Class Notes** – University, bootcamp, or online course summaries.
--   **🛠️ Golang Projects** – From beginner CLI tools to full-scale microservices.
--   **🖼️ Visual Resources** – Architecture diagrams, cheat sheets, flowcharts.
--   **📖 Blog Posts** – How-tos, opinion pieces, technical deep-dives.
--   **🎬 Videos** – Tech talks, tutorials, playlists, or webinars.
--   **📖 Personal Stories** – Career transitions, rejections, job search journeys.
--   **📦 Go Packages** – Utilities, middleware, API clients.
--   **🔗 Curated Links** – Tools, docs, slide decks, benchmarks.
+| Microservice                   | Description                                         | Documentation Link                                                             |
+| ------------------------------ | --------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `1-interview-qa/`              | Real interview Q&A and Go-topic challenges          | 🔗 [Golang Interview Q&A - Bangla](./docs/service/interview-qa.md)             |
+| `2-class-notes/`               | Academic and bootcamp course notes & summaries      | 🔗 [Class Notes Documentation](./docs/service/class-notes.md)                  |
+| `3-project-archive/`           | Real-world Go projects (CLI, web, microservices)    | 🔗 [Project Archive Documentation](./docs/service/project-archive.md)          |
+| `4-image-infographic-archive/` | Diagrams, cheat sheets, flowcharts                  | 🔗 [Visual Archive Documentation](./docs/service/image-infographic-archive.md) |
+| `5-community-stories/`         | Job search experiences, lessons, and career stories | 🔗 [Community Stories Documentation](./docs/service/community-stories.md)      |
+| `6-package-archive/`           | Go libraries, middleware, API clients, etc.         | 🔗 [Package Archive Documentation](./docs/service/package-archive.md)          |
+| `7-community-blogs/`           | Blogs, how-tos, opinion pieces from the community   | 🔗 [Community Blogs Documentation](./docs/service/community-blogs.md)          |
+| `8-news-events/`               | Go community news, events, hackathons               | 🔗 [News & Events Documentation](./docs/service/news-events.md)                |
+| `9-video-archive/`             | Curated learning videos, tech talks, playlists      | 🔗 [Video Archive Documentation](./docs/service/video-archive.md)              |
+| `10-course-content/`           | Full-length open-source Go courses                  | 🔗 [Course Content Documentation](./docs/service/course-content.md)            |
+| `11-link-resource-archive/`    | Curated links to tools, documentation, benchmarks   | 🔗 [Link Resources Documentation](./docs/service/link-resource-archive.md)     |
 
 ---
 
-## 🧩 Folder Structure
+## 🧩 **Tech Stack & Tools**
 
-Please place your content in the appropriate folder:
+This vault is powered by several modern tools and practices for collaboration, code sharing, and documentation. Feel free to explore more about our tech stack:
 
-```bash
-golang-community-vault/
-├── 1-interview-qa/
-├── 2-class-notes/
-├── 3-project-archive/
-├── 4-image-infographic-archive/
-├── 5-community-stories/
-├── 6-package-archive/
-├── 7-community-blogs/
-├── 8-news-events/
-├── 9-video-archive/
-├── 10-course-content/
-└── 11-link-resource-archive/
-```
-
-Each folder contains relevant sub-categories. If you’re unsure where to place something, open an issue or ask in Discussions.
-
-⸻
-
-📝 File Naming & Formatting
-- Use kebab-case for file and folder names:
-✅ go-cheatsheet.pdf
-✅ how-goroutines-work.md
-- All text content should be in Markdown (.md) unless it’s an image, PDF, or video.
-- Include frontmatter metadata at the top of your .md files whenever possible:
+🔗 [Tech Stack Overview](.github/templates/TECH-STACK.md)
 
 ---
 
-title: "From Python to Go: My Career Switch"
-author: Jane Doe
-date: 2025-04-11
-tags: [career, switching, golang]
+## 🌟 **Inspiration & Vision**
+
+“**Code fades. Community lasts.**”
+
+This archive is designed to support, uplift, and celebrate the **Golang Community**. It’s not just about sharing code — it’s about collecting **collective knowledge**, **hard-won experiences**, and **stories that shape our journey**. Whether you're new to Go or a veteran, this vault is your home.
 
 ---
 
-    •	Write clean, clear Markdown using:
-    •	Headings: #, ##, ###
-    •	Lists: -, *
-    •	Code blocks: ```go for Go code
-    •	Links: [text](url)
+## ✍️ **How to Contribute?**
 
-⸻
+We're excited to have you contribute to the **Golang Community Vault**! Whether you’re adding resources, sharing your experiences, or helping to maintain content — you are adding to the growth and strength of our community.
 
-🚀 How to Submit a Contribution
+---
 
-1. Fork this repository.
+### 🚀 **Types of Contributions**
 
-2. Clone your fork locally:
+We welcome a wide range of contributions! Here’s how you can help:
 
-```bash
-git clone https://github.com/your-username/golang-community-vault.git
-```
+-   **Knowledge Sharing**  
+    Contribute articles, tutorials, or reference material that can help others learn and grow.
+-   **Real-world Experiences**  
+    Share your job search stories, career-switch insights, rejection learnings, or any other experiences that can inspire and educate others.
 
-3. Create a new branch:
+-   **Code & Projects**  
+    Upload your open-source Golang projects, libraries, tools, or code snippets that can benefit the community.
 
-```bash
-git checkout -b add-go-microservice-guide
-```
+-   **Learning Resources**  
+    Contribute notes, video tutorials, course summaries, or any other educational content to help others learn Golang.
 
-4. Add your content to the relevant folder.
+---
 
-```bash
-git add .
-```
+### 📚 **Contributor’s Guides**
 
-5. Commit your changes:
+-   **For Non-Tech Contributions**  
+    No coding required! Learn how you can help with documentation, resources, and content.  
+    🔗 [Contributor’s Guide (No-Code)](.github/templates/NO-CODE.md)
 
-```bash
-git commit -m "Work On Upload Text Feature"
-```
+-   **For Code Contributions**  
+    If you want to contribute code or projects, follow our code contribution guidelines.  
+    🔗 [Contributor’s Guide (Code)](.github/templates/CONTRIBUTING.md)
 
-6. Push your branch:
+---
 
-```bash
-git push origin add-go-microservice-guide
-```
+This version separates the contributions into **Tech** and **Non-Tech** categories and streamlines the content to make it easier to understand. You can now clearly see the difference between code contributions and non-code contributions. Let me know if you'd like to tweak anything else!
 
-7. Open a Pull Request on GitHub with a short and clear description.
+## 🛠 **Our Contribution Process**
 
-⸻
+1. **Fork the repository** and clone it to your local machine.
+2. **Add your content** in the relevant folder. If you’re unsure, refer to the contribution guidelines for the structure.
+3. **Create a pull request** with a clear title and description. Please include any necessary tags and metadata.
+4. **Stay engaged** – Be active in the discussion around your contribution, and help improve it based on feedback!
 
-💬 Need Help?
-- Open an Issue
-- Start a Discussion
-- Or ping a maintainer directly
+### 📑 **Pull Request Template**
 
-We’re here to help and love working with newcomers.
+Every PR should have the following:
 
-⸻
+-   Clear title and description
+-   Reference to the issue (if applicable)
+-   Testing instructions (if applicable)
 
-✅ Final Tips
-- Keep content high-quality, respectful, and useful.
-- Avoid uploading copyrighted or paywalled content.
-- Add sources if you reference or remix someone else’s material.
-- All contributions are reviewed before being merged — we’ll try to be fast!
+🔗 [Pull Request Template](.github/templates/PULL_REQUEST_TEMPLATE.md)
 
-Thanks for being awesome, and welcome to the Golang Community Vault! 🎉
+🔗 [COMMIT-STRATEGY Template](.github/templates/COMMIT-STRATEGY.md)
+
+---
+
+## 💬 **Stay Connected & Join Us!**
+
+If you want to get involved, have suggestions, or want help with templates and automation ideas, we’re here for you. Whether you want to work on a web version or just contribute to documentation, **your help is invaluable**.
+
+Let’s **grow together**. 🐹✨
+
+🔗 [Join the Gophers Community](https://golang.org/community)
 
 ---

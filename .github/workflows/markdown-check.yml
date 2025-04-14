@@ -1,0 +1,31 @@
+name: Markdown Quality Check
+
+on:
+    pull_request:
+        paths:
+            - "**.md"
+
+jobs:
+    markdown-check:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+
+            - name: Install markdownlint, link-checker, prettier
+              run: |
+                  npm install -g markdownlint-cli2 markdown-link-check prettier
+
+            - name: Lint Markdown
+              run: markdownlint-cli2 "**/*.md"
+
+            - name: Check Links
+              run: |
+                  find . -name "*.md" -print0 | xargs -0 -n1 markdown-link-check --quiet
+
+            - name: Format Markdown
+              run: prettier --check "**/*.md"
