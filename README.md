@@ -162,7 +162,7 @@ Every PR should have the following:
 -   Reference to the issue (if applicable)
 -   Testing instructions (if applicable)
 
-🔗 [Pull Request Template](.github/templates/PULL_REQUEST_TEMPLATE.md)
+🔗 [Pull Request Template](.github/templates/PR.md)
 
 🔗 [COMMIT-STRATEGY Template](.github/templates/COMMIT-STRATEGY.md)
 
