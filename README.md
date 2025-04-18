@@ -1,3 +1,6 @@
+<img src="./docs/ui/bgce.png" alt="BGCE-ARCHIVE" width="200"
+  style="border-radius: 50%; border: 2px solid #1e90ff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);"/>
+
 # 🌐 **Golang Community Vault**
 
 Welcome to **Golang Community Vault**, a community-driven digital archive designed to collect, organize, and preserve the vast knowledge, resources, and experiences from the Go programming ecosystem and beyond. Whether you're a beginner, job seeker, seasoned contributor, or mentor — **this is the place** where we give and receive knowledge.
