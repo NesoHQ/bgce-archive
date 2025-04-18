@@ -6,4 +6,4 @@ src = "src"
 title = "BGCE ARCHIVE"
 
 [output.html]
-git-repository-url = "https://github.com/YOUR_USER/YOUR_REPO"
+git-repository-url = "https://github.com/JsIqbal/bgce-archive"
