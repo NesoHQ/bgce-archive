@@ -10,7 +10,7 @@ import (
 
 func main(){
 	if len(os.Args) < 3 {
-		fmt.Println("Usage: ccwc -c filename")
+		fmt.Println("Usage: ccwc -<option> filename")
 		return
 	}
 	option := os.Args[1]
@@ -33,6 +33,14 @@ func main(){
 		fmt.Printf("%8d %s\n", count, filename)
 	case "-l":
 		count, err := processor.CountLines(file)
+		if err != nil {
+			fmt.Println("Error:", err)
+			return
+		}
+		fmt.Printf("%8d %s\n", count, filename)
+
+	case "-w":
+		count , err := processor.CountWords(file)
 		if err != nil {
 			fmt.Println("Error:", err)
 			return
