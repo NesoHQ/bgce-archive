@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"os"
 	"strings"
+	"unicode/utf8"
 )
 
 func CountBytes(file *os.File)(int, error){
@@ -32,4 +33,14 @@ func CountWords(file *os.File)(int, error){
 		wordCount += len(words)
 	}
 	return wordCount, scanner.Err()
+}
+
+func CountChars(file *os.File) (int, error) {
+	scanner := bufio.NewScanner(file)
+	charCount := 0
+	for scanner.Scan() {
+		line := scanner.Text()
+		charCount += utf8.RuneCountInString(line)
+	}
+	return charCount, scanner.Err()
 }
