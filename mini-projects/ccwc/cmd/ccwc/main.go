@@ -31,6 +31,13 @@ func main(){
 			return
 		}
 		fmt.Printf("%8d %s\n", count, filename)
+	case "-l":
+		count, err := processor.CountLines(file)
+		if err != nil {
+			fmt.Println("Error:", err)
+			return
+		}
+		fmt.Printf("%8d %s\n", count, filename)
 
 	default:
 		fmt.Println("Unknown option:", option)
