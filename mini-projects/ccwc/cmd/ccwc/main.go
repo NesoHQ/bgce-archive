@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/0xRokib/ccwc/internal/processor"
 )
 
 
@@ -22,13 +24,17 @@ func main(){
 	defer file.Close()
 
 	switch option{
-	case "c":
-		
+	case "-c":
+		count , err := processor.CountBytes(file)
+		if err != nil {
+			fmt.Println("Error:", err)
+			return
+		}
+		fmt.Printf("%8d %s\n", count, filename)
 
 	default:
 		fmt.Println("Unknown option:", option)
 
 	}
 	
-
 }
