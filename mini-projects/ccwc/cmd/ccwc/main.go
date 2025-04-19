@@ -26,9 +26,7 @@ func printUsage() {
 	fmt.Println("  line count, word count, and byte count.")
 }
 
-
-
-func main(){
+func main() {
 	var option string
 	var filename string
 	var file *os.File
@@ -55,7 +53,7 @@ func main(){
 		option = args[1]
 		filename = args[2]
 	}
-	
+
 	if filename != "" {
 		file, err = os.Open(filename)
 		if err != nil {
@@ -64,7 +62,7 @@ func main(){
 		}
 		defer file.Close()
 	}
-	
+
 	// Default Mode: No option passed
 	if option != "-c" && option != "-l" && option != "-w" && option != "-m" {
 		lines, err := processor.CountLines(file)
@@ -95,11 +93,10 @@ func main(){
 		return
 	}
 
-
 	// If an option is passed
-	switch option{
+	switch option {
 	case "-c":
-		count , err := processor.CountBytes(file)
+		count, err := processor.CountBytes(file)
 		if err != nil {
 			fmt.Println("Error:", err)
 			return
@@ -114,7 +111,7 @@ func main(){
 		printOutput(count, filename)
 
 	case "-w":
-		count , err := processor.CountWords(file)
+		count, err := processor.CountWords(file)
 		if err != nil {
 			fmt.Println("Error:", err)
 			return
@@ -132,5 +129,5 @@ func main(){
 		fmt.Println("Unknown option:", option)
 		printUsage()
 	}
-	
+
 }
