@@ -7,28 +7,63 @@ import (
 	"github.com/0xRokib/ccwc/internal/processor"
 )
 
+func printOutput(count int, filename string) {
+	if filename != "" {
+		fmt.Printf("%8d %s\n", count, filename)
+	} else {
+		fmt.Printf("%8d\n", count)
+	}
+}
+
+func printUsage() {
+	fmt.Println("Usage: ccwc [options] [filename]")
+	fmt.Println("Options:")
+	fmt.Println("  -c    Print byte count")
+	fmt.Println("  -l    Print line count")
+	fmt.Println("  -w    Print word count")
+	fmt.Println("  -m    Print character count (locale-dependent)")
+	fmt.Println("\nIf no options are provided, the default behavior will print:")
+	fmt.Println("  line count, word count, and byte count.")
+}
+
+
 
 func main(){
-	if len(os.Args) < 2 {
-		fmt.Println("Usage: ccwc -<option> filename or ccwc filename")
-		return
-	}
 	var option string
 	var filename string
-	if len(os.Args) == 2{
+	var file *os.File
+	var err error
+
+	args := os.Args
+
+	if len(args) == 1 {
 		option = ""
-		filename = os.Args[1]
-	}else{
-		option = os.Args[1]
-		filename = os.Args[2]
+		filename = ""
+		file = os.Stdin
+		printUsage()
+		return
+	} else if len(args) == 2 {
+		if args[1][0] == '-' {
+			option = args[1]
+			filename = ""
+			file = os.Stdin
+		} else {
+			option = ""
+			filename = args[1]
+		}
+	} else if len(args) >= 3 {
+		option = args[1]
+		filename = args[2]
 	}
 	
-	file , err := os.Open(filename)
-	if err != nil{
-		fmt.Println("Error:", err)
-		return
+	if filename != "" {
+		file, err = os.Open(filename)
+		if err != nil {
+			fmt.Printf("Error: Unable to open file '%s'. %v\n", filename, err)
+			return
+		}
+		defer file.Close()
 	}
-	defer file.Close()
 	
 	// Default Mode: No option passed
 	if option != "-c" && option != "-l" && option != "-w" && option != "-m" {
@@ -52,7 +87,11 @@ func main(){
 			return
 		}
 
-		fmt.Printf("%8d %8d %8d %s\n", lines, words, bytes, filename)
+		if filename != "" {
+			fmt.Printf("%8d %8d %8d %s\n", lines, words, bytes, filename)
+		} else {
+			fmt.Printf("%8d %8d %8d\n", lines, words, bytes)
+		}
 		return
 	}
 
@@ -65,14 +104,14 @@ func main(){
 			fmt.Println("Error:", err)
 			return
 		}
-		fmt.Printf("%8d %s\n", count, filename)
+		printOutput(count, filename)
 	case "-l":
 		count, err := processor.CountLines(file)
 		if err != nil {
 			fmt.Println("Error:", err)
 			return
 		}
-		fmt.Printf("%8d %s\n", count, filename)
+		printOutput(count, filename)
 
 	case "-w":
 		count , err := processor.CountWords(file)
@@ -80,18 +119,18 @@ func main(){
 			fmt.Println("Error:", err)
 			return
 		}
-		fmt.Printf("%8d %s\n", count, filename)
+		printOutput(count, filename)
 	case "-m":
 		count, err := processor.CountChars(file)
 		if err != nil {
 			fmt.Println("Error:", err)
 			return
 		}
-		fmt.Printf("%8d %s\n", count, filename)
+		printOutput(count, filename)
 
 	default:
 		fmt.Println("Unknown option:", option)
-
+		printUsage()
 	}
 	
 }
