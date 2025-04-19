@@ -71,7 +71,7 @@ If no options are provided, ccwc displays line count, word count, and byte count
 
 6. Read from standard input:
 ```bash
-echo "Hello, World!" | ./ccwc -w
+cat testdata/test.txt | ./ccwc -m
 ```
 
 ## Project Structure
