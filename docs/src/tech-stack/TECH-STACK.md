@@ -1,4 +1,5 @@
-🧩 Tech Stack (Future Web App Vision)
+# 🧩 Tech Stack (Future Web App Vision)
+
 This vault is powered by several modern tools and practices for collaboration, code sharing, and documentation. Feel free to explore more about our tech stack:
 
 If this turns into a community-driven web interface:

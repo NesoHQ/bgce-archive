@@ -2,16 +2,20 @@
 
 Welcome to **Golang Community Vault**, a community-driven digital archive designed to collect, organize, and preserve the vast knowledge, resources, and experiences from the Go programming ecosystem and beyond. Whether you're a beginner, job seeker, seasoned contributor, or mentor — **this is the place** where we give and receive knowledge.
 
+<div  style="text-align: center;">
+    <img src="./format/images/bgce.png" alt="BGCE Archive Logo" align-items="center" width="200" style="border-radius: 50%; border: 2px solid #1e90ff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);"/>
+</div>
+
 ---
 
 ## 🎯 **Project Purpose**
 
 The **Golang Community Vault** is not just an archive, it's a vibrant, evolving repository that serves:
 
--   📚 **Preservation** of valuable community-generated content.
--   🤝 **Collaboration** to promote open knowledge sharing and growth.
--   🔎 **Job Seekers & Learners** can gain insights from real-world experiences.
--   🧠 **Centralized Resources** to gather knowledge and tools scattered across the web.
+- 📚 **Preservation** of valuable community-generated content.
+- 🤝 **Collaboration** to promote open knowledge sharing and growth.
+- 🔎 **Job Seekers & Learners** can gain insights from real-world experiences.
+- 🧠 **Centralized Resources** to gather knowledge and tools scattered across the web.
 
 ---
 
@@ -120,28 +124,28 @@ We're excited to have you contribute to the **Golang Community Vault**! Whether 
 
 We welcome a wide range of contributions! Here’s how you can help:
 
--   **Knowledge Sharing**  
-    Contribute articles, tutorials, or reference material that can help others learn and grow.
--   **Real-world Experiences**  
-    Share your job search stories, career-switch insights, rejection learnings, or any other experiences that can inspire and educate others.
+- **Knowledge Sharing**  
+  Contribute articles, tutorials, or reference material that can help others learn and grow.
+- **Real-world Experiences**  
+  Share your job search stories, career-switch insights, rejection learnings, or any other experiences that can inspire and educate others.
 
--   **Code & Projects**  
-    Upload your open-source Golang projects, libraries, tools, or code snippets that can benefit the community.
+- **Code & Projects**  
+  Upload your open-source Golang projects, libraries, tools, or code snippets that can benefit the community.
 
--   **Learning Resources**  
-    Contribute notes, video tutorials, course summaries, or any other educational content to help others learn Golang.
+- **Learning Resources**  
+  Contribute notes, video tutorials, course summaries, or any other educational content to help others learn Golang.
 
 ---
 
 ### 📚 **Contributor’s Guides**
 
--   **For Non-Tech Contributions**  
-    No coding required! Learn how you can help with documentation, resources, and content.  
-    🔗 [Contributor’s Guide (No-Code)](.github/templates/NO-CODE.md)
+- **For Non-Tech Contributions**  
+  No coding required! Learn how you can help with documentation, resources, and content.  
+  🔗 [Contributor’s Guide (No-Code)](.github/templates/NO-CODE.md)
 
--   **For Code Contributions**  
-    If you want to contribute code or projects, follow our code contribution guidelines.  
-    🔗 [Contributor’s Guide (Code)](.github/templates/CONTRIBUTING.md)
+- **For Code Contributions**  
+  If you want to contribute code or projects, follow our code contribution guidelines.  
+  🔗 [Contributor’s Guide (Code)](.github/templates/CONTRIBUTING.md)
 
 ---
 
@@ -158,9 +162,9 @@ This version separates the contributions into **Tech** and **Non-Tech** categori
 
 Every PR should have the following:
 
--   Clear title and description
--   Reference to the issue (if applicable)
--   Testing instructions (if applicable)
+- Clear title and description
+- Reference to the issue (if applicable)
+- Testing instructions (if applicable)
 
 🔗 [Pull Request Template](.github/templates/PR.md)
 
