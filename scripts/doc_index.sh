@@ -22,16 +22,34 @@ function prettify() {
 }
 
 # Check if a directory has any markdown files
+# Check if a directory has any markdown files directly or in immediate subdirectories
 function has_markdown_files() {
     local dir="$1"
+
+    # Direct README.md
     if [ -f "$dir/README.md" ]; then
-        return 0  # True, has README.md
+        return 0
     fi
-    
+
+    # Any other markdown files in this dir
     local count
     count=$(find "$dir" -maxdepth 1 -name "*.md" | wc -l)
-    [ "$count" -gt 0 ]
+    if [ "$count" -gt 0 ]; then
+        return 0
+    fi
+
+    # Check if any immediate subdir contains markdown files
+    for subdir in "$dir"/*/; do
+        [ -d "$subdir" ] || continue
+        count=$(find "$subdir" -maxdepth 1 -name "*.md" | wc -l)
+        if [ "$count" -gt 0 ]; then
+            return 0
+        fi
+    done
+
+    return 1
 }
+
 
 # Process directories and files recursively
 function walk_dir() {
@@ -65,7 +83,7 @@ function walk_dir() {
         # Directory has markdown files but no README
         local dir_name
         dir_name=$(prettify "$(basename "$current_dir")")
-        echo "${indent}- $dir_name" >> "$OUTPUT_FILE"
+        echo "${indent}- [$dir_name]()" >> "$OUTPUT_FILE"
     fi
     
     # Process other markdown files in this directory (excluding README.md)
