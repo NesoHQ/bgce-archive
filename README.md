@@ -142,11 +142,11 @@ We welcome a wide range of contributions! Here’s how you can help:
 
 -   **For Non-Tech Contributions**  
     No coding required! Learn how you can help with documentation, resources, and content.  
-    🔗 [Contributor’s Guide (No-Code)](.github/templates/NO-CODE.md)
+    🔗 [Contributor’s Guide (No-Code)](.github/contribution-guide/NO-CODE.md)
 
 -   **For Code Contributions**  
     If you want to contribute code or projects, follow our code contribution guidelines.  
-    🔗 [Contributor’s Guide (Code)](.github/templates/CONTRIBUTING.md)
+    🔗 [Contributor’s Guide (Code)](.github/contribution-guide/CONTRIBUTING.md)
 
 ---
 
