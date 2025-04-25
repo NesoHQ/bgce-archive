@@ -201,3 +201,7 @@ func main() {
     }
 }
 ```
+
+## Array vs Slice
+
+- ongbhongchong vugichugi
