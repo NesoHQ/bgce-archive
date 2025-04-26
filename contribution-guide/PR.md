@@ -1,4 +1,4 @@
-### 2. ✅ PULL REQUEST TEMPLATE (`./pull_request_template.md`)
+### ✅ PULL REQUEST TEMPLATE
 
 ```md
 ### 📘 Description
@@ -11,14 +11,14 @@ Closes #[issue-number]
 
 ### 🚀 Changes Made
 
--   Added/Updated [category/file-name.md]
--   Fixed formatting/link issues
+- Added/Updated [category/file-name.md]
+- Fixed formatting/link issues
 
 ### ✅ Checklist
 
--   [ ] Follows contribution guidelines
--   [ ] Uses correct Markdown format
--   [ ] Tested rendering in preview
+- [ ] Follows contribution guidelines
+- [ ] Uses correct Markdown format
+- [ ] Tested rendering in preview
 ```
 
 ---

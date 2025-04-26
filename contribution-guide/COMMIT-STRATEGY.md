@@ -1,4 +1,4 @@
-### 3. 📌 COMMIT STRATEGY
+### 📌 COMMIT STRATEGY
 
 #### ✅ Format:
 
@@ -8,10 +8,10 @@
 
 #### 💡 Types:
 
--   `feat`: New content or file
--   `fix`: Fixes formatting or broken links
--   `docs`: Changes to README, guides
--   `refactor`: Structural changes
+- `feat`: New content or file
+- `fix`: Fixes formatting or broken links
+- `docs`: Changes to README, guides
+- `refactor`: Structural changes
 
 #### 🧪 Example Commits:
 

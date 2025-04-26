@@ -6,17 +6,17 @@ We’re excited to have your contributions. Here's how you can help:
 
 #### 📌 Guidelines:
 
--   **Fork** the repo and create a new branch (name it `feat/<title>` or `fix/<title>`).
--   Add your Markdown files to the appropriate subfolder.
--   Follow our [README](../../README.md) For Complete Documentation.
--   Ensure links are working and code is properly formatted.
--   Commit strategy using our [COMMIT-STRATEGY](./COMMIT-STRATEGY.md).
--   Submit a pull request using our [PR Template](./PR.md).
+- **Fork** the repo and create a new branch (name it `feat/<title>` or `fix/<title>`).
+- Add your Markdown files to the appropriate subfolder.
+- Follow our [README] For Complete Documentation.
+- Ensure links are working and code is properly formatted.
+- Commit strategy using our [COMMIT-STRATEGY].
+- Submit a pull request using our [PULL REQUEST Template].
 
 #### 📂 Folder Naming Convention:
 
--   All folders must use `kebab-case`.
--   Use `README.md` inside folders for summaries.
+- All folders must use `kebab-case`.
+- Use `README.md` inside folders for summaries.
 
 #### 📝 Markdown File Template
 
@@ -49,9 +49,9 @@ _Brief explanation of the content._
 
 ## 📚 Resources
 
--   [Link1]()
+- [Link1]()
 
-````
+```
 
 ## ✅ Contribution Rules
 
@@ -65,3 +65,7 @@ _Brief explanation of the content._
 -   [Static Site Preview](../site)
 
 ```
+
+[README]: ../README.md
+[COMMIT-STRATEGY]: COMMIT-STRATEGY.md
+[PULL REQUEST Template]: PR.md
