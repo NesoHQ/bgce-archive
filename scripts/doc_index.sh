@@ -5,6 +5,7 @@ set -e
 OUTPUT_FILE="docs/src/SUMMARY.md"
 DEST_DIR="docs/src"
 IGNORED_DIRS=("scripts" "docs" ".git" "node_modules" ".github" ".vscode")
+FIRST_CHAPTER="introduction"  # Directory to process first
 
 # Create destination directory if it doesn't exist
 if [ ! -d "$DEST_DIR" ]; then
@@ -21,7 +22,6 @@ function prettify() {
     echo "$1" | sed -E 's/[-_]/ /g' | awk '{for(i=1;i<=NF;i++)$i=toupper(substr($i,1,1))tolower(substr($i,2)); print}' | paste -sd' ' -
 }
 
-# Check if a directory has any markdown files
 # Check if a directory has any markdown files directly or in immediate subdirectories
 function has_markdown_files() {
     local dir="$1"
@@ -50,7 +50,6 @@ function has_markdown_files() {
     return 1
 }
 
-
 # Process directories and files recursively
 function walk_dir() {
     local current_dir="$1"
@@ -66,19 +65,11 @@ function walk_dir() {
     # If we have a README.md in this directory
     if [ -f "$current_dir/README.md" ]; then
         local dir_name
-        
-        # For root directory, use "Introduction"
-        if [ "$relative_path" = "." ]; then
-            echo "[Introduction](./README.md)" >> "$OUTPUT_FILE"
-            # Copy README.md to docs/src
-            cp "$current_dir/README.md" "$DEST_DIR/"
-        else
-            dir_name=$(prettify "$(basename "$current_dir")")
-            echo "${indent}- [$dir_name]($relative_path/README.md)" >> "$OUTPUT_FILE"
-            # Copy README.md to docs/src with directory structure
-            mkdir -p "$DEST_DIR/$relative_path"
-            cp "$current_dir/README.md" "$DEST_DIR/$relative_path/"
-        fi
+        dir_name=$(prettify "$(basename "$current_dir")")
+        echo "${indent}- [$dir_name]($relative_path/README.md)" >> "$OUTPUT_FILE"
+        # Copy README.md to docs/src with directory structure
+        mkdir -p "$DEST_DIR/$relative_path"
+        cp "$current_dir/README.md" "$DEST_DIR/$relative_path/"
     elif [ "$include" = true ]; then
         # Directory has markdown files but no README
         local dir_name
@@ -123,7 +114,33 @@ function walk_dir() {
     done
 }
 
-# Start processing from the current directory
-walk_dir "." "." ""
+# First process the introduction directory if it exists
+if [ -d "$FIRST_CHAPTER" ]; then
+    echo "📘 Processing $FIRST_CHAPTER directory first..."
+    walk_dir "$FIRST_CHAPTER" "$FIRST_CHAPTER" ""
+fi
+
+# Process all remaining directories
+find . -maxdepth 1 -type d ! -path "." | sort | while read -r dir; do
+    dir_basename=$(basename "$dir")
+    
+    # Skip if it's the introduction or in ignored list
+    if [ "$dir_basename" = "$FIRST_CHAPTER" ]; then
+        continue
+    fi
+    
+    # Skip ignored directories
+    should_ignore=false
+    for ignored in "${IGNORED_DIRS[@]}"; do
+        if [ "$dir_basename" = "$ignored" ]; then
+            should_ignore=true
+            break
+        fi
+    done
+    
+    if [ "$should_ignore" = false ]; then
+        walk_dir "$dir" "$dir_basename" ""
+    fi
+done
 
 echo "✅ SUMMARY.md successfully generated at $OUTPUT_FILE"

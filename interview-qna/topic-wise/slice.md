@@ -202,6 +202,15 @@ func main() {
 }
 ```
 
-## Array vs Slice
+## ⚡ Array vs Slice
 
-- ongbhongchong vugichugi
+| Feature      | Array                           | Slice                                           |
+| ------------ | ------------------------------- | ----------------------------------------------- |
+| Size         | Fixed                           | Dynamic (can grow/shrink)                       |
+| Type         | Value type                      | Reference type                                  |
+| Memory       | All data copied on assignment   | Just the slice descriptor copied (shallow copy) |
+| Creation     | `var a [5]int`                  | `var s []int` or slicing an array               |
+| Common Usage | Rare (low-level memory control) | Very common                                     |
+| Performance  | No hidden cost                  | Some overhead with dynamic growth               |
+
+---

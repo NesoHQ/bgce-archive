@@ -10,7 +10,7 @@ We’re excited to have your contributions. Here's how you can help:
 - Add your Markdown files to the appropriate subfolder.
 - Follow our [README] For Complete Documentation.
 - Ensure links are working and code is properly formatted.
-- Commit strategy using our [COMMIT-STRATEGY].
+- Commit strategy using our [COMMIT STRATEGY].
 - Submit a pull request using our [PULL REQUEST Template].
 
 #### 📂 Folder Naming Convention:
@@ -66,6 +66,5 @@ _Brief explanation of the content._
 
 ```
 
-[README]: ../README.md
-[COMMIT-STRATEGY]: COMMIT-STRATEGY.md
+[COMMIT STRATEGY]: COMMIT-STRATEGY.md
 [PULL REQUEST Template]: PR.md
