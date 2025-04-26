@@ -30,6 +30,20 @@ func main() {
 			return
 		}
 		fmt.Println("Task added successfully!")
+	
+	case "list":
+		all := false
+		if len(args) > 2 && args[2] == "--all"{
+			all = true
+		}
+		tasks := task.ListTasks(all)
+		if len(tasks) == 0 {
+			fmt.Println("No tasks found.")
+			return
+		}
+		for _, task := range tasks {
+			fmt.Printf("ID: %d, Description: %s, Created At: %s, Done: %t\n", task.ID, task.Description, task.CreatedAt.Format("2006-01-02 15:04:05"), task.Done)
+		}
 
 	default:
 		fmt.Println("Unknown command. Available commands: add, list, complete, delete")

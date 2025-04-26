@@ -26,6 +26,21 @@ func AddTask(description string)error{
 	Tasks = append(Tasks, task)
 	return SaveTasks()
 }
-// func ListTasks(all bool)[]Task{}
+func ListTasks(all bool)[]Task{
+	err := LoadTasks()
+    if err != nil {
+        return nil
+    }
+	if all{
+		return Tasks
+	}
+	var incompleteTasks []Task
+	for _, task := range Tasks{
+		if !task.Done{
+			incompleteTasks = append(incompleteTasks, task)
+		}
+	}
+	return incompleteTasks
+}
 // func CompleteTask(id int)bool{}
 // func DeleteTask(id int)bool{}
