@@ -1,6 +1,9 @@
 package task
 
-import "time"
+import (
+	"slices"
+	"time"
+)
 
 type Task struct{
 	ID int
@@ -42,5 +45,41 @@ func ListTasks(all bool)[]Task{
 	}
 	return incompleteTasks
 }
-// func CompleteTask(id int)bool{}
-// func DeleteTask(id int)bool{}
+func CompleteTask(id int) bool {
+    err := LoadTasks()
+    if err != nil {
+        return false
+    }
+
+    for i, task := range Tasks {
+        if task.ID == id {
+            if Tasks[i].Done {
+                return false 
+            }
+            Tasks[i].Done = true
+            err = SaveTasks()
+            if err != nil {
+                return false
+            }
+            return true 
+        }
+    }
+    return false 
+}
+func DeleteTask(id int)bool{
+	err := LoadTasks()
+	if err != nil {
+		return false
+	}
+	for i, task := range Tasks{
+		if task.ID == id{
+			Tasks = slices.Delete(Tasks, i, i+1)
+			err = SaveTasks()
+			if err != nil {
+				return false
+			}
+			return true
+		}
+	}
+	return false
+}
