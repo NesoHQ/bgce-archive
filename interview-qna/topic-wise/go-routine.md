@@ -9,6 +9,8 @@
 
 This page provides a comprehensive list of 15 Go interview questions focused on concurrency and goroutines, with detailed, explanatory answers, followed by a bonus question comparing Go’s concurrency model to other languages. The questions cover theoretical concepts, practical applications, and common pitfalls, suitable for interview preparation or deepening your understanding of Go’s concurrency model. The bonus question explores why Go’s goroutines are praised compared to concurrency mechanisms in Java, Python, and other languages, with a focus on efficiency and performance.
 
+<img src="https://www.clipartmax.com/png/middle/277-2771013_golang-routine-channel-golang-gopher.png" alt="Golang Routine Channel - Golang Gopher@clipartmax.com">
+
 ---
 
 ## 1. What are goroutines, and how do they differ from threads?
