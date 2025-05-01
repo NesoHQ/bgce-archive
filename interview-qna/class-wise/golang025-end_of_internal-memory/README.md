@@ -20,8 +20,8 @@ This class focused on the internal workings of a Go program with a spotlight on 
 |-------------------------|-----------------------------------------------------------------------------|
 | **Compilation Phase**   | Parses and compiles source code into a binary executable. No code runs yet. |
 | **Execution Phase**     | Runs the compiled binary, starting from `init()` and then `main()`.         |
-| **Code Segment**        | Where compiled functions (like `main`, `call`, and anonymous functions) live.|
-| **Data Segment**        | Holds global variables and constants (like `p` and `a`).                    |
+| **Code Segment**        | Where compiled functions (`main`, `call`, anonymous `add`) and constants (`a`) are stored as part of executable instructions.|
+| **Data Segment**        | Holds global variables (like `p`).                    |
 | **Function Expressions**| Treated as runtime function objects, stored in code segment.                |
 
 ---
@@ -70,8 +70,8 @@ func init() {
 - Generates a **binary** that includes all necessary machine code + metadata.
 
 Binary includes:
-- Code Segment: `main`, `call`, anonymous function
-- Data Segment: `const a`, `var p`
+- Code Segment: `const a`, `main`, `call`, anonymous function
+- Data Segment: `var p`
 - No execution happens here.
 
 ---
@@ -95,13 +95,13 @@ Binary includes:
 ┌─────────────────────────────┐
 │       Code Segment          │
 │-----------------------------│
-│ main, call, init, add-func  │
+│ const a = 10                |
+| main, call, init, add-func  │
 └─────────────────────────────┘
           ↓
 ┌─────────────────────────────┐
 │       Data Segment          │
 │-----------------------------│
-│ const a = 10                │
 │ var p = 100                 │
 └─────────────────────────────┘
           ↓
@@ -109,8 +109,8 @@ Binary includes:
 │           Stack             │
 │-----------------------------│
 │ call() frame → add func     │
-│   x=5,y=6,z=11               │
-│   x=100,y=10,z=110           │
+│   x=5,y=6,z=11              │
+│   x=100,y=10,z=110          │
 └─────────────────────────────┘
 ```
 
