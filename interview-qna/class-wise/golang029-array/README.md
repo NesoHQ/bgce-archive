@@ -82,3 +82,7 @@ func main() {
 - They're stored contiguously in memory.
 - Go makes it easy to work with arrays, and it's a good base before moving to slices!
 
+[**Author:** @ifrunruhin12
+**Date:** 2025-05-01
+**Category:** interview-qa/arrays
+]

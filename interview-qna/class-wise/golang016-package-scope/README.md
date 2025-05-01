@@ -91,3 +91,8 @@ func main() {
     Only **exported** identifiers (functions/variables that start with a **capital letter**) can be accessed from outside the package.
 
 🧠 This class was all about understanding how Go handles packages, visibility, and modular code — crucial stuff for building real-world Go apps!
+
+[**Author:** @ifrunruhin12
+**Date:** 2025-05-01
+**Category:** interview-qa/arrays
+]

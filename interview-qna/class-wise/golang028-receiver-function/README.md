@@ -95,3 +95,7 @@ This pattern lets `Todos` have its own custom logic, like `add`, `delete`, `togg
 
 ---
 
+[**Author:** @ifrunruhin12
+**Date:** 2025-05-01
+**Category:** interview-qa/arrays
+]

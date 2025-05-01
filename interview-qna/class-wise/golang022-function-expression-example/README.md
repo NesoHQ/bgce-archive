@@ -144,3 +144,8 @@ Shadowing | Local variable hides the same-named global one
 Temporal Dead Zone | You can't use variables before their declaration in Go
 IIFE vs Assignment | IIFE executes immediately; assignment waits to be called explicitly
 
+
+[**Author:** @ifrunruhin12
+**Date:** 2025-05-01
+**Category:** interview-qa/arrays
+]
