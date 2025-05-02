@@ -19,9 +19,7 @@ The **Golang Community Vault** is not just an archive, it's a vibrant, evolving 
 
 ---
 
-## IMPORTANT:
-
-    -   Check out our book for detailed info: [ARCHIVE-DOCS](https://nesohq.github.io/bgce-archive/)
+## IMPORTANT:  check out our book for detailed info: [ARCHIVE-DOCS](https://nesohq.github.io/bgce-archive/) <<<
 
 ## 💬 **Stay Connected & Grow With Us!**
 
