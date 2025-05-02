@@ -16,7 +16,9 @@ jobs:
               uses: actions/checkout@v3
 
             - name: 📝 Generate SUMMARY.md and index docs
-              run: chmod +x ./scripts/doc_index.sh && ./scripts/doc_index.sh
+              run: |
+                  chmod +x ./scripts/docs/generate_index.sh
+                  ./scripts/docs/generate_index.sh
 
             - name: 📦 Install mdBook
               run: cargo install mdbook

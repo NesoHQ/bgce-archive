@@ -1,8 +1,8 @@
 arcdocs-index:
-	chmod +x ./scripts/doc_index.sh && ./scripts/doc_index.sh
+	chmod +x ./scripts/docs/generate_index.sh && ./scripts/docs/generate_index.sh
 
 arcdocs: arcdocs-index
-	chmod +x ./scripts/docs.sh && ./scripts/docs.sh
+	chmod +x ./scripts/docs/run.sh && ./scripts/docs/run.sh
 
-arcdocs-serve: 
-	cd docs && mdbook serve --open
+arcdocs-serve:
+	chmod +x ./scripts/docs/serve.sh && ./scripts/docs/serve.sh
