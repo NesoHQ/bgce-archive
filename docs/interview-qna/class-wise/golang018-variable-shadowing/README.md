@@ -88,4 +88,7 @@ func main() {
 
 -[] 🧼 At the end, the stack is cleared, but the data segment lives throughout the whole execution.
 
-
+[**Author:** @ifrunruhin12
+**Date:** 2025-05-01
+**Category:** interview-qa/arrays
+]

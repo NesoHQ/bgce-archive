@@ -37,5 +37,6 @@ func main() {
 		Age: 21,
 		Salary: 0,
 	}
-	fmt.Println(user1)
+	p2 := &user1
+	fmt.Println(p2.Age)
 }

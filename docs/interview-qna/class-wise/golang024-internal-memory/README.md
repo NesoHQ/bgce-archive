@@ -99,3 +99,7 @@ init() Function | Special function in Go — runs before main()
 > 🧼 Garbage Collector Insight:
 > Go’s GC sits on the heap and sweeps unused allocations to keep memory clean. You won't notice it in this small program, but it's your bestie when your app scales.
 
+[**Author:** @ifrunruhin12
+**Date:** 2025-05-01
+**Category:** interview-qa/arrays
+]

@@ -165,3 +165,7 @@ It’s like building your own Lego brick with a custom shape, and then making as
 > You’re now struct-urally sound in Go! 😎 Next time you model data, flex your type muscles and track those memory segments like a boss.
 
 
+[**Author:** @ifrunruhin12
+**Date:** 2025-05-01
+**Category:** interview-qa/arrays
+]

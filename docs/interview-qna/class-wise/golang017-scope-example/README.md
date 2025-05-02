@@ -50,3 +50,8 @@ It's built to be:
     📖 Readable
 
 You can write in a functional-ish style, but Go wasn’t designed for heavy functional abstractions.
+
+[**Author:** @ifrunruhin12
+**Date:** 2025-05-01
+**Category:** interview-qa/arrays
+]

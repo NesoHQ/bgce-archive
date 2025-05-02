@@ -144,3 +144,8 @@ This is a classic example of how init() can prepare or modify the runtime enviro
 3. 💡 A Go file can have at most one `main()`, but multiple `init()`s.
 
 > 🧪 "Init is like the secret backstage crew. You don’t see them during the show, but they’re the reason the lights come on."
+
+[**Author:** @ifrunruhin12
+**Date:** 2025-05-01
+**Category:** interview-qa/arrays
+]

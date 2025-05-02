@@ -12,3 +12,7 @@
 - Receiver function or method
 - IIFE- Immediately invoked function expression
 
+[**Author:** @ifrunruhin12
+**Date:** 2025-05-01
+**Category:** interview-qa/arrays
+]

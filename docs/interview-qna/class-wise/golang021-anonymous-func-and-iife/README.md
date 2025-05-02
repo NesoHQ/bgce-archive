@@ -108,3 +108,8 @@ main() calls an IIFE:
 -[] 🧪 Anonymous functions have no name, great for quick logic blocks.
 
 -[] 🚀 IIFE: Define & execute in one go. Great for one-off logic.
+
+[**Author:** @ifrunruhin12
+**Date:** 2025-05-01
+**Category:** interview-qa/arrays
+]
