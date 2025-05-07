@@ -79,8 +79,8 @@ Escape analysis is the process that the **Go compiler** uses during the **compil
 ### 🧱 Memory Segments
 | Segment        | What's Stored                         |
 |----------------|----------------------------------------|
-| Code Segment   | Compiled instructions (functions)      |
-| Data Segment   | Global and static variables (`a`, `p`) |
+| Code Segment   | Compiled instructions and const (functions, `a`)      |
+| Data Segment   | Global variables (`p`)                 |
 | Stack          | Local variables (`age`)                |
 | Heap           | Escaping variables (`money`)           |
 
@@ -94,15 +94,15 @@ Escape analysis is the process that the **Go compiler** uses during the **compil
 ┌─────────────────────────────┐
 │       Code Segment          │
 │-----------------------------│
-│ main, call, init, outer,    │
+│ const a = 10,               |
+| main, call, init, outer,    │
 │ anonymous show function     │
 └─────────────────────────────┘
           ↓
 ┌─────────────────────────────┐
 │       Data Segment          │
 │-----------------------------│
-│ const a = 10                │
-│ var p = 100                 │
+│ var p = 100                 │              
 └─────────────────────────────┘
           ↓
 ┌─────────────────────────────┐
