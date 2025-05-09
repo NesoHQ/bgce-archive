@@ -147,5 +147,5 @@ This is a classic example of how init() can prepare or modify the runtime enviro
 
 [**Author:** @ifrunruhin12
 **Date:** 2025-05-01
-**Category:** interview-qa/arrays
+**Category:** interview-qa/class-wise
 ]

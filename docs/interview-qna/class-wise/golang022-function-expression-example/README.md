@@ -147,5 +147,5 @@ IIFE vs Assignment | IIFE executes immediately; assignment waits to be called ex
 
 [**Author:** @ifrunruhin12
 **Date:** 2025-05-01
-**Category:** interview-qa/arrays
+**Category:** interview-qa/class-wise
 ]

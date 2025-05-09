@@ -142,5 +142,5 @@ GC is triggered automatically and runs concurrently with your program. It uses a
 
 [**Author:** @ifrunruhin12
 **Date:** 2025-05-01
-**Category:** interview-qa/arrays
+**Category:** interview-qa/class-wise
 ]

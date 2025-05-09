@@ -167,5 +167,5 @@ It’s like building your own Lego brick with a custom shape, and then making as
 
 [**Author:** @ifrunruhin12
 **Date:** 2025-05-01
-**Category:** interview-qa/arrays
+**Category:** interview-qa/class-wise
 ]

@@ -29,5 +29,7 @@ Detailed notes and example code from the **"Go with Habib"** course. Organized b
 
 ---
 
-> This is just the beginning. Watch this space as my Go journey evolves! 😤
-
+[**Author:** @ifrunruhin12
+**Date:** 2025-05-01
+**Category:** interview-qa/class-wise
+]
