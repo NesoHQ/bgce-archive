@@ -19,6 +19,8 @@
 - [ ] Loop দিয়ে ১ থেকে N পর্যন্ত প্রিন্ট করুন
 - [ ] Function ব্যবহার করে দুই সংখ্যার গড় বের করুন
 - [ ] [Vowel or Consonant](https://atcoder.jp/contests/abc049/tasks/abc049_a?lang=en) (dncpc1)
+- [ ] [Restricted](https://atcoder.jp/contests/abc063/tasks/abc063_a?lang=en) (dncpc2)
+- [ ] [Fitness](https://www.codechef.com/problems/FIT) (dncpc2)
 
 > পরবর্তীতে আরও `exercise` add করা হবে। 
 ---
@@ -33,7 +35,14 @@
 5. [Cloudberry Jams](https://codeforces.com/problemset/problem/2086/A) (dncpc1)
 6. [Restuarant](https://atcoder.jp/contests/abc055/tasks/abc055_a?lang=en) (dncpc1)
 7. [Hashmat the Brave warrior](https://onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=996)
-8. 
+8. [Between two integers](https://atcoder.jp/contests/abc061/tasks/abc061_a?lang=en) (dncpc2)
+9. [Domino Piling](https://codeforces.com/problemset/problem/50/A) (dncpc2)
+10. [Easy problem](https://codeforces.com/problemset/problem/2044/A) (dncpc3)
+11. [Election go brrr](https://atcoder.jp/contests/abc366/tasks/abc366_a?lang=en) (dncpc3)
+12. [A game of choice](https://codeforces.com/problemset/problem/959/A) (dncpc3)
+13. [Sandglass](https://atcoder.jp/contests/abc072/tasks/abc072_a?lang=en) (dncpc3)
+
+
 
 #### Beginner Friendly CP problems
 1. [Weird Algorithm](https://cses.fi/problemset/task/1068)
