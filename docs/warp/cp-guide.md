@@ -6,7 +6,7 @@
 | ------ | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------ |
 | সেশন ১ | ২০২৫-০৫-০৫ | 1. প্রবলেম সলভিং আর CP-এর ফিলোসফি<br>2. কেন আমরা CP করবো?<br>3. The Right Problem Solving Mindset<br>4. Exercise vs Problem                                                                                                                                                          | ifrunruhin12 |
 | সেশন ২ | ২০২৫-০৫-০৭ | 1. Problem Solving mindset ঠিক করার দারুন কিছু উপায়<br>2. Strategy, tactics আর pattern চিনে নেওয়ার কৌশল<br>3. Mindset আর knowledge—দুটোরই importance<br>4. Basic math ভিত্তিক problem<br>5. Census-taker problem ও তার solution<br>6. কীভাবে একটা solid math foundation তৈরি করবেন | ifrunruhin12 |
-| সেশন ৩ | ২০২৫-০৫-১০ | এখনো decide করা হয় নি                                                                                                                                                                                                                                                                | ifrunruhin12 |
+| সেশন ৩ | ২০২৫-০৫-১২ | 1. কিছু Golang conceptual exercise<br>2. Basic Math problems in CP → GCD, LCM, Prime check, Divisor, Modulo math, Factorial<br>3. Live coding এবং Q&A session                                                                                                                                                                                                                                                                | ifrunruhin12 |
 | সেশন ৪ | ...        |                                                                                                                                                                                                                                                                                      |              |
 
 > 💡 নতুন সেশন যুক্ত হতে থাকবে সময় অনুযায়ী।
@@ -45,8 +45,8 @@
 
 
 #### Beginner Friendly CP problems
-1. [Weird Algorithm](https://cses.fi/problemset/task/1068)
-2. [Concatenation of Array](https://leetcode.com/problems/concatenation-of-array/description/)
+14. [Weird Algorithm](https://cses.fi/problemset/task/1068)
+15. [Concatenation of Array](https://leetcode.com/problems/concatenation-of-array/description/)
 
 
 > পরবর্তীতে আরও প্রব্লেম এবং ক্যাটাগরি যুক্ত করা হবে। 
