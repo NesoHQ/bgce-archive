@@ -1,12 +1,14 @@
-# Class 28: Receiver Functions in Go
+# ক্লাস ২৮: Go তে রিসিভার ফাংশন (Receiver Functions)
 
-## 🔑 Key Concept: Receiver Functions
-In Go, a **receiver function** (also called a **method**) is a function that is associated with a particular **type** (usually a struct). It allows us to add behavior to data types, like attaching functions to objects in other languages (e.g., methods in OOP).
+## 🔑 মূল ধারণা: : রিসিভার ফাংশন
+
+Go তে, একটি **রিসিভার ফাংশন (receiver function)** (যাকে **method** ও বলা হয়) হলো এমন একটি ফাংশন যা কোনো নির্দিষ্ট টাইপ **(সাধারণত struct)** এর সাথে জুড়ে থাকে। এটা আমাদের ডেটাটাইপের কোনো কাজ বা ব্যবহার যুক্ত করার সুযোগ দেয়, যেমন অন্য প্রোগ্রামিং ভাষায় অবজেক্টের method থাকে।
 
 ---
 
-## 🧠 What Is a Receiver Function?
-A **receiver function** is defined like a normal function, but with a special receiver parameter placed between the `func` keyword and the function name.
+## 🧠 রিসিভার ফাংশন কি?
+
+একটা **রিসিভার ফাংশন** দেখতে সাধারণ ফাংশনের মতোই, কিন্তু `func` কী-ওয়ার্ড এবং ফাংশনের নামের মাঝে একটা বিশেষ receiver parameter থাকে।
 
 ```go
 func (r ReceiverType) FunctionName(params) returnType {
@@ -14,13 +16,15 @@ func (r ReceiverType) FunctionName(params) returnType {
 }
 ```
 
-The receiver type can be:
-- A **value receiver**: `(t Type)` → receives a copy
-- A **pointer receiver**: `(t *Type)` → receives a reference (can modify original)
+রিসিভার টাইপটি হতে পারে:
+
+- একটি **ভ্যালু রিসিভার (value receiver)**: `(t Type)` → একটি কপি রিসিভ করে
+- একটি **পয়েন্টার রিসিভার (pointer receiver)**: `(t *Type)` → একটি রেফারেন্স রিসিভ করে (অরিজিনাল ডেটা পরিবর্তন করতে পারে)
 
 ---
 
-## 🏗️ From the Project Code
+## 🏗️ প্রোজেক্টের কোড থেকে দেখতে পাই
+
 ```go
 func (todos *Todos) add(title string) {
     todo := Todo{
@@ -33,25 +37,31 @@ func (todos *Todos) add(title string) {
 }
 ```
 
-- `todos *Todos` is the **receiver**
-- This method is attached to `Todos` (which is a custom type: `[]Todo`)
-- The `*Todos` pointer allows modifications to the original slice
+হলো রিসিভার
+এই মেথড টি এর সাথে এটাচড
 
-Example usage from `main.go`:
+- `todos *Todos` হলো **রিসিভার**
+- এই method টি `Todos` এর সাথে যুক্ত (`[]Todo`: একটি কাস্টম টাইপ)
+- `*Todos` পয়েন্টারটি অরিজিনাল স্লাইসকে পরিবর্তন করতে দেয়
+
+`main.go` এ ব্যবহারের উদাহরণ:
+
 ```go
 todos.add("Buy milk")
 ```
 
 ---
 
-## 🔁 Why Use Receiver Functions?
-- Organize logic with the data it operates on ✅
-- Achieve OOP-like behavior in Go ✅
-- Maintain cleaner and modular code ✅
+## 🔁 রিসিভার ফাংশন কেন ব্যবহার করব?
+
+- ডেটার সাথে সম্পর্কিত লজিক গুছিয়ে রাখা ✅
+- Go-তে OOP-এর মতো আচরণ পাওয়া ✅
+- কোডকে আরও পরিষ্কার ও মডুলার রাখা ✅
 
 ---
 
-## 💡 Extra Simple Example
+## 💡 আরও সহজ উদাহরণ
+
 ```go
 type User struct {
     Name string
@@ -77,25 +87,29 @@ func main() {
 
 ---
 
-## ⚙️ Summary
-| Term            | Meaning                                                                 |
-|-----------------|-------------------------------------------------------------------------|
-| Receiver        | The type a method is attached to (e.g., `*Todos`)                       |
-| Value Receiver  | Gets a copy of the value; doesn't affect the original                   |
-| Pointer Receiver| Gets a reference; can modify the original                               |
+## ⚙️ ⚙️ সারাংশ
+
+| টার্ম            | অর্থ                                              |
+| ---------------- | ------------------------------------------------- |
+| Receiver         | যে টাইপের সাথে মেথড যুক্ত থাকে (যেমন, `*Todos`)   |
+| Value Receiver   | ডেটার কপি পায়; আসল ডেটা পরিবর্তন করতে পারে না    |
+| Pointer Receiver | ডেটার রেফারেন্স পায়; আসল ডেটা পরিবর্তন করতে পারে |
 
 ---
 
-## 📘 Visualizing It
-Think of `todos.add()` as calling a behavior of the object:
+## 📘 ভিজ্যুয়ালাইজেশন
+
+`todos.add()`কে অবজেক্টের কোনো কাজ বা আচরণ কল করার মতো ভাবা যেতে পারে:
+
 ```go
 object.method()
 ```
-This pattern lets `Todos` have its own custom logic, like `add`, `delete`, `toggle`, `print`, etc., just like class methods in Python/Java.
+
+এই প্যাটার্নটি `Todos` কে কাস্টম লজিক যোগ করার সুযোগ দেয়, যেমন `add`, `delete`, `toggle`, `print` ইত্যাদি, ঠিক Python বা Java-এর ক্লাস মেথডের মতো।
 
 ---
 
-[**Author:** @ifrunruhin12
-**Date:** 2025-05-01
+[**Author:** @ifrunruhin12, @nazma98
+**Date:** 2025-05-01 - 2025-05-17
 **Category:** interview-qa/class-wise
 ]
