@@ -2,12 +2,14 @@
 > 📘 _এই গাইডটি তৈরি করা হয়েছে বাংলায় CP শেখার সুবিধার্থে। টেকনিক্যাল টার্ম এবং কোড ইংরেজিতে রাখা হয়েছে যাতে ইন্টারন্যাশনাল স্ট্যান্ডার্ড ফলো করা যায়।_
 
 ## 📅 Discord session content
-| সেশন   | তারিখ      | আলোচনা করা টপিকস                                                                                                                                                                                                                                                                     | Instructor   |
+| সেশন   | তারিখ      | আলোচনা করা টপিকস                                                                                                                                                                                                                                                                     | Instructor (Discord name)   |
 | ------ | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------ |
-| সেশন ১ | ২০২৫-০৫-০৫ | 1. প্রবলেম সলভিং আর CP-এর ফিলোসফি<br>2. কেন আমরা CP করবো?<br>3. The Right Problem Solving Mindset<br>4. Exercise vs Problem                                                                                                                                                          | ifrunruhin12 |
-| সেশন ২ | ২০২৫-০৫-০৭ | 1. Problem Solving mindset ঠিক করার দারুন কিছু উপায়<br>2. Strategy, tactics আর pattern চিনে নেওয়ার কৌশল<br>3. Mindset আর knowledge—দুটোরই importance<br>4. Basic math ভিত্তিক problem<br>5. Census-taker problem ও তার solution<br>6. কীভাবে একটা solid math foundation তৈরি করবেন | ifrunruhin12 |
-| সেশন ৩ | ২০২৫-০৫-১২ | 1. কিছু Golang conceptual exercise<br>2. Basic Math problems in CP → GCD, LCM, Prime check, Divisor, Modulo math, Factorial<br>3. Live coding এবং Q&A session                                                                                                                                                                                                                                                                | ifrunruhin12 |
-| সেশন ৪ | ...        |                                                                                                                                                                                                                                                                                      |              |
+| সেশন ১ | ২০২৫-০৫-০৫ | 1. প্রবলেম সলভিং আর CP-এর ফিলোসফি<br>2. কেন আমরা CP করবো?<br>3. The Right Problem Solving Mindset<br>4. Exercise vs Problem                                                                                                                                                          | popcycle |
+| সেশন ২ | ২০২৫-০৫-০৭ | 1. Problem Solving mindset ঠিক করার দারুন কিছু উপায়<br>2. Strategy, tactics আর pattern চিনে নেওয়ার কৌশল<br>3. Mindset আর knowledge—দুটোরই importance<br>4. Basic math ভিত্তিক problem<br>5. Census-taker problem ও তার solution<br>6. কীভাবে একটা solid math foundation তৈরি করবেন | popcycle |
+| সেশন ৩ | ২০২৫-০৫-১২ | 1. কিছু Golang conceptual exercise<br>2. Basic Math problems in CP → GCD, LCM, Prime check, Divisor, Modulo math, Factorial<br>3. Live coding এবং Q&A session                                                                                                                                                                                                                                                                | popcycle |
+| সেশন ৪ | ২০২৫-০৫-১৫ |  1. Nebula Clash 001 contest  এর প্রব্লেম নিয়ে বিস্তারিত আলোচনা এবং upsolving<br>2. Problem Solving এর পিছনের idea, fastIO, concept এবং কিভাবে একটি problem approach করতে হয়<br>3. Problem solving এর জন্য সাধারণ কিছু math এবং algorithm                                                                                                                                                                                                                                                                                 | nayemul_islam |
+|সেশন ৫ | ২০২৫-০৫-১৭ | 1. Complexity জিনিসটা আসলে কি?<br>2.  দুই ধরণের complexity : time complexity এবং memory complexity<br>3. কেন complexity সম্পর্কে ধারণা থাকটা important<br>4. CP তে complexity কীভাবে কাজে লাগে<br>5. কীভাবে complexity সম্পর্কে জানার মাধ্যমে আমরা একটি algorithm কতটুকু efficient সে সম্পর্কে ধারণা পেতে পারি<br>6. complexity প্রকাশ করার বিভিন্ন Notation (যেমন Big O, Big omega, Big theta )<br>7. কীভাবে Notation গুলো কাজ করে এবং কীভাবে এই notation গুলোর মাধ্যমে complexity হিসেব করা যায়?<br>8. Big O calculate করার বিভিন্ন rules, কখন আমরা constant নিবো, কখন complexity কি হবে?<br>9. বিভিন্ন ধরণের time complexity in Big O যেমন O(1), O(logn), O(n), O(nlogon), O(n^2) ইত্যাদি<br>10. বিভিন্ন ধরণের memory complexity<br>10. Big O দিয়ে time এবং memory complexity এর বিভিন্ন Example<br>11. Recursive function, nested loop, array declaration কি রকম time এবং memory complexity ব্যাবহার করে | MArhamAA |
+
 
 > 💡 নতুন সেশন যুক্ত হতে থাকবে সময় অনুযায়ী।
 
@@ -41,6 +43,10 @@
 11. [Election go brrr](https://atcoder.jp/contests/abc366/tasks/abc366_a?lang=en) (dncpc3)
 12. [A game of choice](https://codeforces.com/problemset/problem/959/A) (dncpc3)
 13. [Sandglass](https://atcoder.jp/contests/abc072/tasks/abc072_a?lang=en) (dncpc3)
+16. [Multiple of 2 and N](https://atcoder.jp/contests/abc102/tasks/abc102_a?lang=en) (dncpc4)
+17. [Atocoder Crackers](https://atcoder.jp/contests/abc105/tasks/abc105_a?lang=en) (dncpc4)
+18. [Soldier and Bananas](https://codeforces.com/problemset/problem/546/A) (dncpc4)
+19. [Vasya and Socks](https://codeforces.com/problemset/problem/460/A) (dncpc4)
 
 
 
@@ -64,6 +70,18 @@
 
 
 > _আস্তে আস্তে আরও resources যুক্ত করা হবে।_ 
+---
+
+## আমাদের যত previous contest
+
+| No. | Contest type | Contest link |
+|-----|--------------|--------------|
+| 1.  | Daily 1      | [dncpc1](https://vjudge.net/contest/715404) |
+| 2.  | Daily 2      | [dncpc2](https://vjudge.net/contest/715654) |
+| 3.  | Daily 3      | [dncpc3](https://vjudge.net/contest/715880) |
+| 4.  | Weekly 1     | [NC001](https://www.hackerrank.com/nebula-clash) |
+| 5.  | Daily 4      | [dncpc4](https://vjudge.net/contest/717751) |
+
 ---
 
 ## কিভাবে এই guide ব্যাবহার করবেন 
