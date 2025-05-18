@@ -43,16 +43,16 @@
 11. [Election go brrr](https://atcoder.jp/contests/abc366/tasks/abc366_a?lang=en) (dncpc3)
 12. [A game of choice](https://codeforces.com/problemset/problem/959/A) (dncpc3)
 13. [Sandglass](https://atcoder.jp/contests/abc072/tasks/abc072_a?lang=en) (dncpc3)
-16. [Multiple of 2 and N](https://atcoder.jp/contests/abc102/tasks/abc102_a?lang=en) (dncpc4)
-17. [Atocoder Crackers](https://atcoder.jp/contests/abc105/tasks/abc105_a?lang=en) (dncpc4)
-18. [Soldier and Bananas](https://codeforces.com/problemset/problem/546/A) (dncpc4)
-19. [Vasya and Socks](https://codeforces.com/problemset/problem/460/A) (dncpc4)
+14. [Multiple of 2 and N](https://atcoder.jp/contests/abc102/tasks/abc102_a?lang=en) (dncpc4)
+15. [Atocoder Crackers](https://atcoder.jp/contests/abc105/tasks/abc105_a?lang=en) (dncpc4)
+16. [Soldier and Bananas](https://codeforces.com/problemset/problem/546/A) (dncpc4)
+17. [Vasya and Socks](https://codeforces.com/problemset/problem/460/A) (dncpc4)
 
 
 
 #### Beginner Friendly CP problems
-14. [Weird Algorithm](https://cses.fi/problemset/task/1068)
-15. [Concatenation of Array](https://leetcode.com/problems/concatenation-of-array/description/)
+18. [Weird Algorithm](https://cses.fi/problemset/task/1068)
+19. [Concatenation of Array](https://leetcode.com/problems/concatenation-of-array/description/)
 
 
 > পরবর্তীতে আরও প্রব্লেম এবং ক্যাটাগরি যুক্ত করা হবে। 
