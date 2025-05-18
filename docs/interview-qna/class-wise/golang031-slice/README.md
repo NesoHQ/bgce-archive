@@ -1,189 +1,187 @@
-# 📚 Slice Deep Dive in Go
+# 📚 ক্লাস ৩১: Go স্লাইস (Slice)
+
+## 🚀 মূল বিষয়সমূহ
+
+- স্লাইস কী?
+- একটি স্লাইসে কয়টি অংশ থাকে?
+- স্লাইসের Pointer, Length, এবং Capacity নির্ণয় করা
+- বিদ্যমান Array থেকে স্লাইস তৈরি
+- বিদ্যমান Slice থেকে নতুন Slice তৈরি
+- Slice Literal (সরাসরি ঘোষণা)
+- `make()` দিয়ে Slice তৈরি (শুধু length)
+- `make()` দিয়ে Slice তৈরি (length এবং capacity)
+- খালি বা Nil Slice তৈরি
+- স্লাইসে নতুন উপাদান যোগ করা (append)
+- `append` করার সময় অভ্যন্তরীণ প্রক্রিয়া (Heap এবং Underlying Array)
+- Underlying Array কীভাবে গতিশীলভাবে বাড়ে
+- কিছু মজার উদাহরণ এবং ইন্টারভিউ প্রশ্ন
+- ভ্যারিয়েডিক ফাংশন (Variadic Functions)
 
 ---
 
-# 📌 Class 31: Slice
+# 🧠 ১. স্লাইস কী?
 
-### 🚀 Key topics
+- **স্লাইস** হলো Go এর একটি ফ্লেক্সিবল ডেটা স্ট্রাকচার।
+- এটি মূলত array এর উপরে নির্মিত একটি **dynamic view**।
+- array এর মত হলেও, slice এর সাইজ পরিবর্তন করা যায় (বড় বা ছোট করা যায়)।
 
-1. What is a Slice?
-2. How many parts does a Slice have?
-3. How to determine Pointer, Length, and Capacity of a Slice?
-4. Creating a Slice from an existing Array
-5. Creating a Slice from an existing Slice
-6. Slice Literal
-7. Creating a Slice with `make()` (length only)
-8. Creating a Slice with `make()` (length and capacity)
-9. Creating an Empty or Nil Slice
-10. Appending elements to a Slice
-11. What happens internally when appending (Heap and Underlying Array behavior)
-12. How the underlying array increases dynamically
-13. Some interesting examples and interview questions
-14. Variadic Functions
+**মূল পয়েন্ট:**
+
+- স্লাইস array নয়।
+- স্লাইস array এর উপরে তৈরি হয়।
 
 ---
 
-# 🧠 1. What is a Slice?
+# 🔥 ২. একটি স্লাইসের কয়টি অংশ থাকে?
 
-- A **slice** is a lightweight data structure in Go.
-- Think of it like a dynamic view over an **array**.
-- Unlike arrays, slices can grow and shrink.
-
-**Key Points:**
-- Slices are not arrays.
-- Slices are built *on top of* arrays.
-
----
-
-# 🔥 2. How many parts does a Slice have?
-
-Under the hood, a Slice is a **struct** with three fields:
+স্লাইস মূলত একটি **struct** যা তিনটি অংশ নিয়ে গঠিত:
 
 ```go
 struct Slice {
-    pointer *T // Pointer to the underlying array
-    length  int // Current number of elements
-    capacity int // Maximum number of elements (until reallocation)
-}
+    pointer *T // underlying array কে পয়েন্ট করে
+    length  int // বর্তমান elements সংখ্যা
+    capacity int // সর্বোচ্চ elements সংখ্যা (রিয়ালোকেশন পর্যন্ত)
+	}
 ```
 
-You can think of a slice as a "window" into an array.
+স্লাইসকে মূলত একটি array এর "উইন্ডো" হিসেবে ভাবা যেতে পারে।
 
 ---
 
-# 🕵️‍♂️ 3. How to determine Pointer, Length, and Capacity
+# 🕵️‍♂️ ৩. পয়েন্টার, লেন্থ এবং ক্যাপাসিটি নির্ধারণ করার উপায়
 
-Use:
+নিম্নোক্ত built-in ফাংশন ব্যবহার করে স্লাইসের লেন্থ এবং ক্যাপাসিটি বের করা যায়:
+
 - `len(slice)` ➡️ Length
 - `cap(slice)` ➡️ Capacity
 
-Example:
+উদাহরণ:
 
 ```go
-s := arr[1:4] // From index 1 to 3
+s := arr[1:4] // ইনডেক্স 1 থেকে 3
 fmt.Println(len(s)) // 3
-fmt.Println(cap(s)) // depends on how much array is left after index 1
+fmt.Println(cap(s)) //  ইনডেক্স 1 এর পর থেকে অ্যারের শেষ পর্যন্ত
 ```
 
 ---
 
-# 🏗 4. Creating a Slice from an existing Array
+# 🏗 ৪. অ্যারে থেকে স্লাইস তৈরি করা
 
 ```go
 arr := [6]string{"This", "is", "a", "Go", "interview", "Questions"}
 s := arr[1:4] // slice ["is", "a", "Go"]
 ```
 
-- `pointer`: points to index 1 of `arr`
-- `length`: 3 (from index 1 to 3)
-- `capacity`: 5 (indexes 1 to 5)
+- `pointer`: `arr` এর 1 নম্বর ইনডেক্স নির্দেশ করে
+- `length`: 3 (ইনডেক্স 1 থেকে 3)
+- `capacity`: 5 (ইনডেক্স 1 থেকে 5)
 
 ---
 
-# 🔄 5. Creating a Slice from an existing Slice
+# 🔄 ৫. স্লাইস থেকে নতুন স্লাইস তৈরি
 
 ```go
 s1 := s[1:2] // Slice "a"
 ```
 
-- This slice is again a **view** into the same array!
-- Changing `s1` can affect `arr`.
+- `s1` স্লাইসটি একই অ্যারের একটি **view**!
+- `s1` পরিবর্তন করলে `arr` এর মানও পরিবর্তিত হতে পারে।
 
 ---
 
-# ✍️ 6. Slice Literal
+# ✍️ 6. স্লাইস লিটারেল
 
-Create a slice without needing an array explicitly.
+একটি স্লাইস তৈরি করতে সরাসরি মান ব্যবহার করা যায়, আলাদা করে অ্যারে তৈরি করার প্রয়োজন নেই।
 
 ```go
 s2 := []int{3, 4, 7}
 ```
 
-Here Go automatically creates an underlying array.
+## এখানে Go স্বয়ংক্রিয়ভাবে একটি underlying অ্যারে তৈরি করে।
 
----
-
-# 🏗️ 7. Creating a Slice with `make()` (length only)
+# 🏗️ ৭. make() দিয়ে একটি স্লাইস তৈরি করা
 
 ```go
 s3 := make([]int, 3)
 ```
 
-- Creates a slice of 3 zeroed elements.
+- `make()` দিয়ে ৩টি শূন্য মান (zero) সহ একটি স্লাইস তৈরি করে। অর্থাৎ, ৩টি ফাঁকা এলিমেন্ট থাকবে।
 - `len = 3`, `cap = 3`
 
 ---
 
-# 🏗️🏗️ 8. Creating a Slice with `make()` (length and capacity)
+# 🏗️🏗️ ৮. `make()` দিয়ে একটি স্লাইস তৈরি করা (length এবং capacity)
 
 ```go
 s4 := make([]int, 3, 5)
 ```
 
-- `len = 3`, but it can grow up to `cap = 5` before reallocating.
+- `len = 3`, কিন্তু ক্যাপাসিটি `cap = 5` পর্যন্ত হতে পারে রিঅ্যালোকেশন এর আগ পর্যন্ত
 
 ---
 
-# 🕳 9. Creating an Empty or Nil Slice
+# 🕳 9. শুন্য স্লাইস তৈরি (Empty / Nil Slice)
 
 ```go
 var s5 []int
 ```
 
 - `len = 0`, `cap = 0`
-- Still valid! You can append to it.
+- Still valid! এতে নতুন এলিমেন্ট যোগ (append) করা যাবে।
 
 ---
 
-# ➕ 10. Appending Elements to a Slice
+# ➕ ১০. স্লাইসে নতুন এলিমেন্ট যোগ / এপেন্ড করা
 
 ```go
 s6 := append(s6, 1)
 ```
 
-- Go handles growing the underlying array if needed.
-- May involve *allocating a bigger array* and copying elements.
+- Go নিজে থেকে underlying অ্যারে বড় করে।
+- _অনেক বড় অ্যারে_ তৈরি এবং আগের এলিমেন্টগুলো কপি করার কাজও করে থাকে।
 
 ---
 
-# 🧬 11. What Happens Internally with Append
+# 🧬 ১১. এপেন্ড করার সময় আসলে কী হয়?
 
-When a slice reaches capacity:
-- A **new array** (usually double the size) is created.
-- Old elements are copied into the new array.
+যখন একটি স্লাইস এর capacity পূর্ণ হয়:
 
-This is why sometimes appending seems "fast" and sometimes causes big memory ops.
+- একটি **নতুন অ্যারে** (সাধারণত দ্বিগুণ সাইজের) তৈরি করা হয়।
+- আগের অ্যারের সমস্ত elements নতুন অ্যারেতে কপি করা হয়।
+
+এ কারণেই কখনও কখনও অ্যাপেন্ড করা দ্রুত মনে হয় এবং কখনও বড় মেমরি অপারেশন তৈরি করতে পারে।
 
 ---
 
-# 📈 12. How Underlying Array Increases
+# 📈 ১২. Underlying Array কিভাবে বৃদ্ধি পায়:
 
-**Capacity Growth Pattern:** (simplified)
+**যে প্যাটার্নে ক্যাপাসিটি পায় (Capacity Growth Pattern):** (simplified)
+
 - Cap 1 ➡️ 2 ➡️ 4 ➡️ 8 ➡️ 16 ➡️ ...
 
-This is an optimization trick to ensure appends are amortized O(1).
+এটি একটি অপ্টিমাইজেশন কৌশল যা নিশ্চিত করে যেন অ্যাপেন্ড অপারেশনগুলো গড়ে O(1) সময়ে সম্পন্ন হয়।
 
 ---
 
+# Go Slice বৃদ্ধি: `len` এবং `cap` এর ডায়নামিক্স বোঝা
 
-# Go Slice Growth: Understanding the Dynamics of `len` and `cap`
+Go স্লাইস একটি শক্তিশালী এবং ফ্লেক্সিবল ডেটা স্ট্রাকচার, যা ডায়নামিক অ্যারের মতো কাজ করে। এর একটি মূল বৈশিষ্ট্য হলো, যখন নতুন এলিমেন্ট যোগ করা হয়, তখন স্লাইস নিজে নিজেই বৃদ্ধি পায়। স্লাইস কীভাবে এবং কখন বৃদ্ধি পায়, আর এর মেমরি অ্যালোকেশনের পদ্ধতি বুঝলে অনেক ইফিশিয়েন্ট প্রোগ্রাম ডিজাইন করা সম্ভব।
 
-Go slices are a powerful and flexible data structure, providing a dynamic array-like abstraction. One of the key features of slices is their ability to grow automatically when elements are appended. Understanding how and when a slice grows—along with the mechanics of memory allocation—can lead to more efficient use of slices in your programs.
+এখন আমরা Go স্লাইসের বৃদ্ধির পদ্ধতি বিশ্লেষণ করব:
 
-In this document, we'll break down how Go slices grow, covering:
-- The doubling of capacity when the slice's `len` and `cap` are less than 1024.
-- The 25% growth for slices when the `len` and `cap` exceed 1024.
-- Why a slice doesn't grow by a fixed amount, such as increasing from 1024 to 1280, but instead grows by larger, more optimized blocks (e.g., 1536).
+- যদি স্লাইসের `len` এবং `cap` `1024`-এর কম হয়, তাহলে এটি সাধারণত দ্বিগুণ (2x) বৃদ্ধি পায়।
+- `len` এবং `cap`, `1024` ছাড়িয়ে গেলে, এটি প্রায় 25% হারে বৃদ্ধি পায়।
+- স্লাইস কেন নির্দিষ্ট পরিমাণে (যেমন 1024 থেকে 1280) না বাড়িয়ে বড় ব্লকে (যেমন 1536) বাড়ে, সেটিও ব্যাখ্যা করা হবে।
 
-## Slice Growth Overview
+## স্লাইস বৃদ্ধির ধারণা (Slice Growth Overview)
 
-In Go, slices are backed by arrays. When you append elements to a slice, Go may allocate a new, larger array and copy the old elements into it. The key to this resizing is how Go determines the new capacity and allocates memory. 
+Go তে slice মূলত array এর উপরে ভিত্তি করে কাজ করে। যখন একটি slice-এ নতুন এলিমেন্ট অ্যাপেন্ড করা হয়, তখন প্রয়োজনে Go একটি বড় array তৈরি করে এবং পুরানো এলিমেন্টগুলো তাতে কপি করে। এই প্রসেসটি নির্ভর করে Go কিভাবে নতুন capacity নির্ধারণ করে এবং মেমরি বরাদ্দ করে।
 
-### 1. Doubling the Capacity for Small Slices (`len(cap) < 1024`)
+### ১২.১. ছোট স্লাইসের ক্ষেত্রে দ্বিগুণ বৃদ্ধি (`len(cap) < 1024`)
 
-When the slice is relatively small (i.e., when the `len` and `cap` of the slice are both smaller than 1024), the growth strategy Go uses is to **double** the capacity. This means that when you append an element to the slice and the slice needs to resize, it will allocate a new array that is twice the size of the current capacity. The `len` of the slice will increase by one, but the `cap` will double.
+যখন slice ছোট থাকে (অর্থাৎ, এর `len` এবং `cap` দুটোই 1024 এর কম), তখন Go সাধারণত capacity **দ্বিগুণ** করে। এর মানে, যখন slice এ একটি এলিমেন্ট যোগ করা হয় এবং নতুন মেমরি প্রয়োজন হয়, তখন Go আগের capacity এর দ্বিগুণ আকারের একটি নতুন array তৈরি করে এবং পুরানো এলিমেন্টগুলো সেখানে কপি করে। স্লাইসের `len` ১ বাড়বে, কিন্তু `cap` দ্বিগুণ হবে।
 
-#### Example:
+#### উদাহরণ:
 
 ```go
 s := []int{1, 2, 3}
@@ -196,15 +194,15 @@ s = append(s, 5)
 fmt.Println(len(s), cap(s)) // len: 5, cap: 12
 ```
 
-- Initially, the slice has a length of 3 and a capacity of 3.
-- When we append the fourth element, the slice grows to a capacity of 6 (doubling from 3).
-- The next append results in the slice growing to a capacity of 12 (doubling from 6).
+- প্রথমে, slice এর `len` ৩ এবং `cap` ৩ থাকে।
+- চতুর্থ এলিমেন্ট যোগ করার সময়, slice এর capacity ৩ থেকে দ্বিগুণ হয়ে ৬ হয়ে যায়।
+- পরবর্তী অ্যাপেন্ডে, slice-এর capacity ৬ থেকে দ্বিগুণ হয়ে ১২ হয়।
 
-### 2. Growth by 25% for Larger Slices (`len(cap) >= 1024`)
+### ১২.২. বড় স্লাইসের ক্ষেত্রে ২৫% বৃদ্ধি (`len(cap) >= 1024`)
 
-Once the slice grows to a size where its `len` and `cap` exceed or are equal to 1024, Go switches from doubling the capacity to increasing the capacity by **25%** of the current capacity. This growth strategy helps to strike a balance between minimizing frequent reallocations and not wasting too much memory.
+যখন slice-এর `len` এবং `cap` 1024 বা তার বেশি হয়, তখন Go দ্বিগুণের পরিবর্তে বর্তমান capacity এর **২৫%** বৃদ্ধি করে। এই কৌশলটি ঘন ঘন মেমরি পুনর্বণ্টন (reallocation) এড়াতে এবং অপ্রয়োজনীয় মেমরি অপচয় কমাতে সহায়তা করে।
 
-#### Example:
+#### উদাহরণ:
 
 ```go
 s := make([]int, 1024)  // len: 1024, cap: 1024
@@ -217,21 +215,21 @@ s = append(s, 1300) // len: 1300, cap: 1600 (1280 + 25% of 1280)
 fmt.Println(len(s), cap(s))
 ```
 
-- Initially, we create a slice with a length and capacity of 1024.
-- When appending the next element, the slice grows to a capacity of 1280, which is 1024 plus 25% of 1024.
-- Another append results in a capacity of 1600 (1280 plus 25% of 1280).
+- শুরুতে, আমরা length এবং capacity 1024 সহ একটি slice তৈরি করি।
+- পরের এলিমেন্ট অ্যাপেন্ড করলে slice এর capacity 1024 থেকে 1280 হয়, যা 1024 এর সাথে ২৫% যোগ করে পাওয়া যায়।
+- আরেকটি অ্যাপেন্ড করলে capacity 1600 হয় (1280 এর সাথে ২৫% যোগ করে)।
 
-### 3. The Role of Memory Blocks (e.g., 1536 for a Slice)
+### ১২.৩. মেমরি ব্লকের ভূমিকা (যেমন, 1536 ক্ষমতার স্লাইস)
 
-When the slice's `len` and `cap` are near the threshold of 1024 (and higher), Go doesn't always allocate memory blocks in neat, predictable sizes like 1280. Instead, it aligns to **optimal memory blocks** that align better with system memory allocation patterns.
+যখন slice-এর `len` এবং `cap` 1024 এর কাছাকাছি বা তার বেশি হয়, তখন Go সর্বদা নিখুঁত গণনা অনুযায়ী মেমরি বরাদ্দ করে না। এর পরিবর্তে এটি সিস্টেম মেমরি বরাদ্দের ধরণ অনুযায়ী **অপ্টিমাল মেমরি ব্লক** ব্যবহার করে।
 
-For example, if a slice's capacity is nearing 1024, the next allocation might not simply be an increment by 256 (i.e., from 1024 to 1280). Instead, Go will allocate memory in larger chunks to optimize memory usage and alignment. A common result of this optimization is the slice's capacity growing to **1536**, which is a more "perfect" memory block for larger sizes.
+উদাহরণস্বরূপ, যদি একটি slice-এর capacity 1024 এর কাছাকাছি থাকে, পরবর্তী বরাদ্দ সরাসরি 256 যোগ করে 1280 না হয়ে, এর থেকে বড় 1536 এর মতো ব্লকে হতে পারে। এটি বড় মেমরি ব্লকের জন্য আরও কার্যকর মেমরি ব্যবহারে সহায়তা করে।
 
-#### Why 1536 Instead of 1280?
+#### কেন 1536 এর পরিবর্তে 1280?
 
-This behavior is largely based on **hardware memory alignment**. The number 1536 is chosen because it fits better with memory block sizes that are typically aligned in powers of 2 and optimized for modern CPUs and memory systems. Memory allocations are often made in chunks that align with the system’s memory page size or cache line, resulting in a more efficient memory access pattern.
+এটি মূলত **হার্ডওয়্যার মেমরি অ্যালাইনমেন্ট** এর উপর নির্ভর করে। 1536 সংখ্যাটি বেছে নেওয়া হয় কারণ এটি সাধারণত 2-এর গুণিতক আকারের মেমরি ব্লকের সাথে ভালোভাবে মিলে যায় এবং আধুনিক CPU এবং মেমরি সিস্টেমের জন্য অপ্টিমাইজ করা। মেমরি অ্যালোকেশন সাধারণত সিস্টেমের মেমরি পেজ সাইজ বা ক্যাশ লাইনের সাথে সামঞ্জস্য রেখে বড় ব্লকে করা হয়, যা মেমরি অ্যাক্সেসকে আরও ইফিশিয়েন্ট করে তোলে।
 
-#### Example (Memory Alignment):
+#### উদাহরণ (মেমরি অ্যালাইনমেন্ট)::
 
 ```go
 s := make([]int, 1024) // len: 1024, cap: 1024
@@ -241,22 +239,21 @@ s = append(s, 1025) // len: 1025, cap: 1536 (next optimal block size)
 fmt.Println(len(s), cap(s)) // 1025, 1536
 ```
 
-- The capacity grows from 1024 to 1536 rather than 1280, as 1536 is a better memory block that optimizes system memory allocation.
+- 1024 থেকে 1536 এ capacity বৃদ্ধি হয়, কারণ 1536 একটি বেটার মেমরি ব্লক যা সিস্টেমের ইফিশিয়েন্ট মেমরি অ্যালোকেশন করে।
 
-### 4. Why Does This Happen?
+### ১২.৪. কেন এমন হয়?
 
-The reason Go doesn't strictly grow the slice by 256 (as one might expect, like going from 1024 to 1280) is due to **efficiency considerations**. The allocation strategy aims to reduce the number of reallocations while not wasting memory. By allocating a larger chunk (1536 in this case), the Go runtime ensures that the slice has enough room to accommodate several more appends without needing to resize again too soon.
+**ইফিশিয়েন্সি বিবেচনায় (efficiency considerations)** Go সরাসরি 256 করে বৃদ্ধি করে না (যেমন আমরা মনে করি 1024 থেকে 1280)। কারণ এটি ইফিশিয়েন্সি বৃদ্ধির জন্য গুরুত্বপূর্ণ। এই অ্যালোকেশন স্ট্র্যাটেজির ফলে ঘন ঘন রি-অ্যালোকেশন এড়ানো যায় এবং অপ্রয়োজনীয় মেমরি অপচয় কমে যায়। বরং বড় ব্লকে (1536) মেমরি বরাদ্দ করে Go রানটাইম নিশ্চিত করে স্লাইসে পর্যাপ্ত capacity আছে আরও element এপেন্ড করার জন্য এবং খুব তাড়াতাড়ি স্লাইসকে বাড়াতে হবে না।
 
-This leads to better performance, especially in cases where slices grow rapidly.
+এর ফলে আরও ভালো পারফরম্যান্স পাওয়া যায়, বিশেষ করে যখন slice দ্রুত বৃদ্ধি পায়।
 
-## Conclusion
+## উপসংহার
 
-Understanding slice growth behavior can help you write more efficient Go code. When the slice is smaller, Go doubles its capacity to handle more elements with fewer reallocations. When the slice reaches a certain size (1024 and beyond), it increases capacity by 25%, and occasionally, it aligns the slice's capacity with optimal memory block sizes for better efficiency. This approach leads to smoother and more performant memory handling, ensuring that slices are both memory-efficient and fast to work with.
+Go-এর slice বৃদ্ধি কৌশল অনেক ইফিশিয়েন্ট কোড লিখা সম্ভব। ছোট সাইজের slice এর ক্ষেত্রে, Go capacity দ্বিগুণ করে যাতে কম রি-অ্যালোকেশনে আরও এলিমেন্ট ধারণ করতে পারে। বড় slice (1024 এবং এর বেশি) হলে, এটি capacity ২৫% বৃদ্ধি করে এবং মাঝে মাঝে অপ্টিমাল মেমরি ব্লকের সাথে সামঞ্জস্য রাখে। এই পদ্ধতিটি slice কে দ্রুত এবং মেমরি সাশ্রয়ী করে তোলে।
 
+---
 
-___
-
-# 🤯 13. Interesting Interview Question Examples
+# 🤯১৩. কিছু ইন্টারেস্টিং ইন্টারভিউ প্রশ্নের উদাহরণ
 
 ### ⚡ Same Underlying Array Trick
 
@@ -275,16 +272,15 @@ fmt.Println(x)
 fmt.Println(y)
 ```
 
-- `x` and `y` were sharing the same backing array.
-- Mutating one could affect both.
+-x এবং y একই backing array শেয়ার করে
 
-After appending past the cap, they might split into their own arrays.
+- একটিতে পরিবর্তন (mutation) করলে দুটোরই মান পরিবর্তিত হতে পারে।
 
----
+কিন্তু `cap` অতিক্রম করে অ্যাপেন্ড করলে, তারা আলাদা অ্যারেতে বিভক্ত হতে পারে।
 
-# 🛠 14. Variadic Functions
+# 🛠 ১৪. ভ্যারিয়াডিক ফাংশন (Variadic Functions)
 
-Functions can accept an arbitrary number of arguments with `...`.
+কোন ফাংশন `...` (ellipsis) operator ব্যবহার করে অসংখ্য আর্গুমেন্ট গ্রহণ করতে পারে।
 
 ```go
 func variadic(numbers ...int) {
@@ -294,11 +290,11 @@ func variadic(numbers ...int) {
 variadic(2, 3, 4, 6, 8, 10)
 ```
 
-Internally, `numbers` is just a **slice**!
+এখানে `numbers` কিন্তু একটি **slice**!
 
 ---
 
-# 🧠 Visualizing Slice in RAM (for `arr` and `s`)
+# 🧠 RAM এ Slice এর ভিজ্যুয়ালাইজেশন (arr এবং s এর জন্য)
 
 ```
 Array arr (indexes):
@@ -315,7 +311,7 @@ Slice s:
 - cap = 5 (from "is" to "Questions")
 ```
 
-Memory Visualization:
+মেমরি ভিজ্যুয়ালাইজেশন:
 
 ```
 +---+---+---+---+---+---+
@@ -427,8 +423,7 @@ func variadic(numbers ...int) {
 }
 ```
 
-
-[**Author:** @ifrunruhin12
-**Date:** 2025-05-01
+[**Author:** @ifrunruhin12, @nazma98
+**Date:** 2025-05-01 - 2025-05-18
 **Category:** interview-qa/class-wise
 ]
