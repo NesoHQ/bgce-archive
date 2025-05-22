@@ -11,6 +11,8 @@
 | সেশন ৪ | ২০২৫-০৫-১৫ | 1. Nebula Clash 001 contest এর প্রব্লেম নিয়ে বিস্তারিত আলোচনা এবং upsolving<br>2. Problem Solving এর পিছনের idea, fastIO, concept এবং কিভাবে একটি problem approach করতে হয়<br>3. Problem solving এর জন্য সাধারণ কিছু math এবং algorithm                                                                                                                                                                                                                                                                                                                                                             | nayemul_islam              |
 | সেশন ৫ | ২০২৫-০৫-১৭ | 1. Complexity জিনিসটা আসলে কি?<br>2. দুই ধরণের complexity : time complexity এবং memory complexity<br>3. কেন complexity সম্পর্কে ধারণা থাকটা important<br>4. CP তে complexity কীভাবে কাজে লাগে<br>5. কীভাবে complexity সম্পর্কে জানার মাধ্যমে আমরা একটি algorithm কতটুকু efficient সে সম্পর্কে ধারণা পেতে পারি<br>6. complexity প্রকাশ করার বিভিন্ন Notation (যেমন Big O, Big omega, Big theta)<br>7. কীভাবে Notation গুলো কাজ করে এবং কীভাবে এই notation গুলোর মাধ্যমে complexity হিসেব করা যায়?<br>8. Big O calculate করার বিভিন্ন rules<br>9. বিভিন্ন ধরণের time complexity (O(1), O(logn), O(n), O(nlogn), O(n^2) ইত্যাদি)<br>10. বিভিন্ন ধরণের memory complexity<br>11. Recursive function, nested loop, array declaration এর complexity | MArhamAA                   |
 | সেশন ৬ | ২০২৫-০৫-১৯ | 1. Golang এ normal input এবং output method<br>2. `bufio` এবং `os` এর মাধ্যমে I/O handling<br>3. `.txt` file এবং অন্যান্য text file থেকে input এবং output handle করা<br>4. FastIO কি? buffered IO কেন fast?<br>5. buffer কি? buffered IO কীভাবে ভিতরে ভিতরে কাজ করে?<br>6. Buffered I/O vs unbuffered I/O<br>7. Buffered I/O inside Internal Memory<br>8. CP তে fastIO কেন necessary?                                                                                                                                                                                                                                                                         | popcycle                   |
+| সেশন ৭ | ২০২৫-০৫-২১ | 1. BruteForce কি এবং কেন BruteForce দরকার?<br>2. প্রত্যেকটা problem কি BruteForce দিয়ে solve করা উচিত?<br>3. BruteForce নিয়ে কি প্রথমেই ভাবা উচিত? কেন?<br>4. বিভিন্ন ধরণের problem BruteForce দিয়ে solve করার উদাহরণ                                                                                                                                                                                                                                                                                                                                                                                                          | MArhamAA                   |
+
 
 
 > 💡 নতুন সেশন যুক্ত হতে থাকবে সময় অনুযায়ী।
@@ -25,6 +27,7 @@
 - [ ] [Vowel or Consonant](https://atcoder.jp/contests/abc049/tasks/abc049_a?lang=en) (dncpc1)
 - [ ] [Restricted](https://atcoder.jp/contests/abc063/tasks/abc063_a?lang=en) (dncpc2)
 - [ ] [Fitness](https://www.codechef.com/problems/FIT) (dncpc2)
+- [ ] [Programming Education](https://atcoder.jp/contests/abc112/tasks/abc112_a?lang=en) (dncpc5)
 
 > পরবর্তীতে আরও `exercise` add করা হবে। 
 ---
@@ -49,12 +52,21 @@
 15. [Atocoder Crackers](https://atcoder.jp/contests/abc105/tasks/abc105_a?lang=en) (dncpc4)
 16. [Soldier and Bananas](https://codeforces.com/problemset/problem/546/A) (dncpc4)
 17. [Vasya and Socks](https://codeforces.com/problemset/problem/460/A) (dncpc4)
+18. [Garden](https://atcoder.jp/contests/abc106/tasks/abc106_a?lang=en) (dncpc5)
+19. [Clock Conversion](https://codeforces.com/problemset/problem/1950/C) (dncpc5)
+20. [Plus Minus X](https://atcoder.jp/contests/abc137/tasks/abc137_a?lang=en) (dncpc6)
 
 
 
 #### Beginner Friendly CP problems
-18. [Weird Algorithm](https://cses.fi/problemset/task/1068)
-19. [Concatenation of Array](https://leetcode.com/problems/concatenation-of-array/description/)
+21. [Weird Algorithm](https://cses.fi/problemset/task/1068)
+22. [Concatenation of Array](https://leetcode.com/problems/concatenation-of-array/description/)
+23. [Sakurako's Exam](https://codeforces.com/problemset/problem/2008/A)
+24. [Fifty-Fifty](https://atcoder.jp/contests/abc132/tasks/abc132_a?lang=en) (dncpc6)
+25. [Good Kid](https://codeforces.com/problemset/problem/1873/B) (dncpc6)
+26. [Make it Big](https://toph.co/p/make-it-big) (dncpc6)
+27. [Three Doors](https://codeforces.com/problemset/problem/1709/A) (dncpc6)
+
 
 
 > পরবর্তীতে আরও প্রব্লেম এবং ক্যাটাগরি যুক্ত করা হবে। 
@@ -70,6 +82,7 @@
 - 🧪 [CS50x Problem Sets](https://cs50.harvard.edu/x/2024/)
 - 👀 [Blind 75](https://leetcode.com/discuss/post/460599/blind-75-leetcode-questions-by-krishnade-9xev/)
 - [Fast I/O template for Golang](https://github.com/ifrunruhin12/gopher-grind-cp/blob/main/templates/base.go)
+- [DSA Series by Shradha Ma'am](https://docs.google.com/spreadsheets/d/1mvlc8EYc3OVVU3X7NKoC0iZJr_45BL_pVxiJec0r94c/edit?gid=0#gid=0)
 
 
 > _আস্তে আস্তে আরও resources যুক্ত করা হবে।_ 
@@ -84,6 +97,8 @@
 | 3.  | Daily       | [dncpc3](https://vjudge.net/contest/715880) |
 | 4.  | Weekly      | [NC001](https://www.hackerrank.com/nebula-clash) |
 | 5.  | Daily       | [dncpc4](https://vjudge.net/contest/717751) |
+| 6.  | Daily       | [dncpc5](https://vjudge.net/contest/718350) |
+| 7.  | Daily       | [dncpc6](https://vjudge.net/contest/718594) |
 
 ---
 
