@@ -191,12 +191,12 @@ s = append(s, 4)
 fmt.Println(len(s), cap(s)) // len: 4, cap: 6
 
 s = append(s, 5)
-fmt.Println(len(s), cap(s)) // len: 5, cap: 12
+fmt.Println(len(s), cap(s)) // len: 5, cap: 6
 ```
 
 - প্রথমে, slice এর `len` ৩ এবং `cap` ৩ থাকে।
 - চতুর্থ এলিমেন্ট যোগ করার সময়, slice এর capacity ৩ থেকে দ্বিগুণ হয়ে ৬ হয়ে যায়।
-- পরবর্তী অ্যাপেন্ডে, slice-এর capacity ৬ থেকে দ্বিগুণ হয়ে ১২ হয়।
+- পরবর্তী অ্যাপেন্ডে, slice-এর capacity ৬ ই থাকবে কারণ `len` < `cap`।
 
 ### ১২.২. বড় স্লাইসের ক্ষেত্রে ২৫% বৃদ্ধি (`len(cap) >= 1024`)
 
