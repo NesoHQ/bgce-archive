@@ -14,6 +14,7 @@
 | সেশন ৭ | ২০২৫-০৫-২১ | 1. BruteForce কি এবং কেন BruteForce দরকার?<br>2. প্রত্যেকটা problem কি BruteForce দিয়ে solve করা উচিত?<br>3. BruteForce নিয়ে কি প্রথমেই ভাবা উচিত? কেন?<br>4. বিভিন্ন ধরণের problem BruteForce দিয়ে solve করার উদাহরণ                                                                                                                                                                                                                                                                                                                                                                                                          | MArhamAA                   |
 | সেশন ৮ | ২০২৫-০৫-২৪ | 1. FastIO in Golang part 2<br>2. FastIO template of Golang for CP<br>3. `defer` function এবং এটি কী করে?<br>4. Buffered I/O flush করার ক্ষেত্রে `defer` কীভাবে কাজ করে                                                                                                                                                                                                                                                                                                                                                                                                                                                      | popcycle                   |
 | সেশন ৯ | ২০২৫-০৫-২৬ | 1. What is Greedy Technique?<br>2. Why do we need it? Isn't brute force enough?<br>3. How to approach with greedy in real problems<br>4. Think Brute Force → Then Optimize using Greedy                                                                                                                                                                                                                                                                                                                                                                                                                                         | toji                       |
+| সেশন ১০ | ২০২৫-০৫-২৮ | 1. Post contest আলোচনা<br>2. NC002 Problems Uplsolving<br>3. Q&A related to contest | MArhamAA, popcycle | 
 
 
 
@@ -102,6 +103,7 @@
 | 5.  | Daily       | [dncpc4](https://vjudge.net/contest/717751) |
 | 6.  | Daily       | [dncpc5](https://vjudge.net/contest/718350) |
 | 7.  | Daily       | [dncpc6](https://vjudge.net/contest/718594) |
+| 8.  | Weekly      | [NC002](https://www.hackerrank.com/contests/nebula-clash-002) |
 
 ---
 
