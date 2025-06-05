@@ -234,3 +234,8 @@ func main() {
 	fmt.Printf("** Type of variable s = %T", s) // Output: string
 }
 ```
+
+[**Author:** @nazma98
+**Date:** 2025-06-05
+**Category:** interview-qa/class-wise
+]
