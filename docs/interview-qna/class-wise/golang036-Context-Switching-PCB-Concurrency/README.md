@@ -1,6 +1,6 @@
 # Class 36: Context Switching, PCB, Concurrency
 
-## context switching কী এটা?
+## context switching কী ?
 
 **Context Switching** মানে হল, **CPU একটা প্রসেস রেখে আরেকটা প্রসেস চালানো শুরু করে**।
 
