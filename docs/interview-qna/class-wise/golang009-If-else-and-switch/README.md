@@ -103,3 +103,5 @@ func main() {
 ## ⚠️ Note:
 - Go তে `if` এবং `switch` ব্লকে ব্র্যাকেট `{}` আবশ্যক।
 - `switch` ব্লকে প্রতিটি case এর পরে `break` লিখতে হয় না, কারণ Go নিজেই implicity break করে দেয়, যদি না `fallthrough` ব্যবহার করা হবে |
+
+[Author : @shahriar-em0n  Date: 2025-06-11 Category: interview-qa/class-wise ]
