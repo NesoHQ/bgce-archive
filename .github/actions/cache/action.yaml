@@ -1,26 +1,26 @@
-name: 'Setup Cargo Cache and Install mdBook'
-description: 'Caches Cargo and installs mdBook if not found'
+name: "Setup Cargo Cache and Install mdBook"
+description: "Caches Cargo and installs mdBook if not found"
 
 runs:
-  using: 'composite'
-  steps:
-    - name: ♻️ Cache cargo binaries and registry
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.cargo/bin
-          ~/.cargo/registry
-          ~/.cargo/git
-        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-cargo-
+    using: "composite"
+    steps:
+        - name: ♻️ Cache cargo binaries and registry
+          uses: actions/cache@v3
+          with:
+              path: |
+                  ~/.cargo/bin
+                  ~/.cargo/registry
+                  ~/.cargo/git
+              key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+              restore-keys: |
+                  ${{ runner.os }}-cargo-
 
-    - name: 📦 Install mdBook (skip if cached)
-      shell: bash
-      run: |
-        if ! command -v mdbook &> /dev/null; then
-          echo "Installing mdbook..."
-          cargo install mdbook
-        else
-          echo "✅ mdbook already installed. Skipping install."
-        fi
+        - name: 📦 Install mdBook (skip if cached)
+          shell: bash
+          run: |
+              if ! command -v mdbook &> /dev/null; then
+                echo "Installing mdbook..."
+                cargo install mdbook
+              else
+                echo "✅ mdbook already installed. Skipping install."
+              fi
