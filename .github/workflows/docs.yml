@@ -1,10 +1,7 @@
 name: 📘 Deploy DOCS to GitHub Pages
 
 on:
-  push:
-    branches:
-      - master
-      - fix/nazma/workflow-caching
+  push: branches:[master]
 
 permissions:
   contents: write
