@@ -120,7 +120,7 @@ s4 := make([]int, 3, 5)
 
 ---
 
-# 🕳 9. Empty / Nil Slice Slice তৈরি
+# 🕳 9. Empty / Nil Slice তৈরি
 
 ```go
 var s5 []int
