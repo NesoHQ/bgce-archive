@@ -169,8 +169,105 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>kraken init</p>
-
+                        <h1 id="-class-41--separate-stack-for-separate-thread"><a class="header" href="#-class-41--separate-stack-for-separate-thread">🧵 Class 41 : Separate Stack For Separate Thread</a></h1>
+<h2 id="-recap"><a class="header" href="#-recap">🔁 Recap</a></h2>
+<ul>
+<li><a href="https://nesohq.github.io/bgce-archive/interview-qna/class-wise/golang038-thread/index.html">Thread</a> সম্পর্কে জানতে হবে।</li>
+<li><a href="https://nesohq.github.io/bgce-archive/interview-qna/class-wise/golang034-breaking-the-cpu-and-process/index.html">Process</a> সম্পর্কে জানতে হবে।</li>
+<li><a href="https://nesohq.github.io/bgce-archive/interview-qna/class-wise/golang035-BP-SP/index.html">SP BP</a> সম্পর্কে ভালো ধারনা থাকতে হবে।</li>
+</ul>
+<h2 id="-program-execution"><a class="header" href="#-program-execution">🧠 Program Execution</a></h2>
+<ul>
+<li>Program execute -&gt; Process create</li>
+<li>Process create -&gt; default একটি thread create (main thread)</li>
+<li>OS (Kernel) -&gt; Thread execute করে</li>
+<li>Thread execute -&gt; Independent task / features</li>
+</ul>
+<h3 id="-example"><a class="header" href="#-example">🧪 Example</a></h3>
+<p>একটি প্রোগ্রাম যেমন Music Player — তার অনেক গুলো কাজ (functionality) একসাথে চালানো লাগে:
+যেমন:</p>
+<ul>
+<li>🎵 Music List দেখানো</li>
+<li>▶️ Music PLay</li>
+<li>🎶 বিট/Visualizer দেখানো</li>
+</ul>
+<p>এগুলো একসাথে চলতে পারে, কিন্তু একটার কাজ আরেকটাকে আটকে রাখতে পারে না।
+এই জন্যই Thread ব্যবহার করা হয়।</p>
+<pre><code class="language-plaintext">
+Program (Process)
+│
+├── Thread 1 (Main Thread)
+│   └── Stack: funcA(), var x, return addr
+│
+├── Thread 2
+│   └── Stack: funcPlay(), var song, return addr
+│
+└── Thread 3
+    └── Stack: funcVisual(), var beat, return addr
+</code></pre>
+<h2 id="-main-function-execution"><a class="header" href="#-main-function-execution">🧷 Main Function Execution</a></h2>
+<p>প্রায় প্রতিটি compiled এবং structured language-এ execution শুরু হয় main() function দিয়ে, কারণ এটি একটি নির্ধারিত entry point যা runtime system বা OS খুঁজে নিয়ে চালায়।</p>
+<ul>
+<li><code>main</code> function -&gt; stackframe create হয়</li>
+<li><code>main()</code> এর ভিতর অন্য function invoke -&gt; তার জন্য stackframe create হয়</li>
+<li>প্রতিটি Stack, একটি Thread এর জন্য বরাদ্দ থাকে</li>
+<li>Stack Execute -&gt; Thread Execute</li>
+</ul>
+<blockquote>
+<p>Stack একটা একটা করে সব function execute করে।</p>
+</blockquote>
+<blockquote>
+<p>Stack কে Thread execute করে।</p>
+</blockquote>
+<h2 id="-thread-এবং-stack"><a class="header" href="#-thread-এবং-stack">🗂️ Thread এবং Stack</a></h2>
+<p>একটি Program execute করতে হলে multiple tasks parallely করতে হতে পারে।</p>
+<p>এর জন্য দরকার হয় Multiple Threads।</p>
+<p>প্রতিটি Thread যখন তৈরি হয়, তখন নিজস্ব Stack memory বরাদ্দ পায়।</p>
+<p>এই Stack এ থাকে:</p>
+<ul>
+<li>ফাংশন কলের return address</li>
+<li>Local variables</li>
+<li>Function arguments</li>
+</ul>
+<h2 id="-stack-কোথায়-থাকে"><a class="header" href="#-stack-কোথায়-থাকে">💾 Stack কোথায় থাকে</a></h2>
+<ul>
+<li>main thread -&gt; main stack</li>
+<li>Linux -&gt; RAM এ Stack এর জন্য <code>8MB</code> allocate হয়</li>
+<li>Independent task এর জন্য আলাদা Thread লাগবে -&gt; new Stack -&gt; RAM এ 8MB Storage</li>
+<li>Process এর জন্য -&gt; No. of Thread <code>*</code> 8MB allcoate হয়
+<ul>
+<li>Process এ <code>10</code> Thread থাকলে <code>10 * 8 = 80</code> MB RAM allocated হয়</li>
+</ul>
+</li>
+<li>Stack, RAM এর যে কোন ফাঁকা জায়গায় থাকতে পারে</li>
+<li>Code Segment, Data Segment, Heap -&gt; সব thread access / use করতে পারে</li>
+<li>Process, main thread বাদে অন্য thread track / execute করে না</li>
+<li>Thread -&gt; Stack এ কোন variable / function না থাকলে -&gt; kernel কে code segment, data segment এ search করতে request করে</li>
+</ul>
+<h2 id="-kernel"><a class="header" href="#-kernel">🖥️ Kernel</a></h2>
+<ul>
+<li>main thread বাদে অন্য thread -&gt; Kernel create করে</li>
+<li>Thread execute -&gt; Opeating System (Kernel)</li>
+<li>Kernel decide করে -&gt; কোন processor কোন process / thread কে execute করবে</li>
+<li>Kernel track রাখে -&gt; কোন process এর under এ কয়টি thread থাকে</li>
+<li>Kernel (Modern computer) -&gt; execution এর ক্ষেত্রে only thread count রাখে</li>
+</ul>
+<blockquote>
+<p>📌 Code Segment, Data Segment, Stack এর size fixed থাকে। Heap dynamically grow / shrink করতে পারে তাই data, Heap এ বেশি রাখা হয়।</p>
+</blockquote>
+<blockquote>
+<p>🧠 Operating System core component -&gt; Kernel; Kernel process schedule, concurrency / parallelism handle করে।</p>
+</blockquote>
+<blockquote>
+<p>🧾 Programming language এর উপর depend করে কীভাবে thread create হবে।</p>
+</blockquote>
+<h2 id="-default-stack-sizes-by-platform"><a class="header" href="#-default-stack-sizes-by-platform">📊 Default Stack Sizes by Platform</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>OS</th><th>Default Stack Size (main thread)</th><th>Default Stack Size (new threads)</th><th>Notes</th></tr></thead><tbody>
+<tr><td>🪟 Windows</td><td>1 MB</td><td>1 MB</td><td>Can be changed via linker or <code>CreateThread</code></td></tr>
+<tr><td>🐧 Linux</td><td>8 MB</td><td>8 MB</td><td>Controlled by <code>ulimit -s</code> and <code>pthread_attr_setstacksize()</code></td></tr>
+<tr><td>🍎 macOS</td><td>8 MB</td><td>512 KB</td><td>Main thread gets 8MB, but <code>pthread</code> threads get 512KB by default</td></tr>
+</tbody></table>
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
