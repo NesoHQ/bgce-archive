@@ -178,10 +178,10 @@
 </ul>
 <h2 id="-program-execution"><a class="header" href="#-program-execution">🧠 Program Execution</a></h2>
 <ul>
-<li>Program execute -&gt; Process create</li>
-<li>Process create -&gt; default একটি thread create (main thread)</li>
-<li>OS (Kernel) -&gt; Thread execute করে</li>
-<li>Thread execute -&gt; Independent task / features</li>
+<li>Program execute → Process create</li>
+<li>Process create → default একটি thread create (main thread)</li>
+<li>OS (Kernel) → Thread execute করে</li>
+<li>Thread execute → Independent task / features</li>
 </ul>
 <h3 id="-example"><a class="header" href="#-example">🧪 Example</a></h3>
 <p>একটি প্রোগ্রাম যেমন Music Player — তার অনেক গুলো কাজ (functionality) একসাথে চালানো লাগে:
@@ -208,10 +208,10 @@ Program (Process)
 <h2 id="-main-function-execution"><a class="header" href="#-main-function-execution">🧷 Main Function Execution</a></h2>
 <p>প্রায় প্রতিটি compiled এবং structured language-এ execution শুরু হয় main() function দিয়ে, কারণ এটি একটি নির্ধারিত entry point যা runtime system বা OS খুঁজে নিয়ে চালায়।</p>
 <ul>
-<li><code>main</code> function -&gt; stackframe create হয়</li>
-<li><code>main()</code> এর ভিতর অন্য function invoke -&gt; তার জন্য stackframe create হয়</li>
+<li><code>main</code> function → stackframe create হয়</li>
+<li><code>main()</code> এর ভিতর অন্য function invoke → তার জন্য stackframe create হয়</li>
 <li>প্রতিটি Stack, একটি Thread এর জন্য বরাদ্দ থাকে</li>
-<li>Stack Execute -&gt; Thread Execute</li>
+<li>Stack Execute → Thread Execute</li>
 </ul>
 <blockquote>
 <p>Stack একটা একটা করে সব function execute করে।</p>
@@ -231,32 +231,32 @@ Program (Process)
 </ul>
 <h2 id="-stack-কোথায়-থাকে"><a class="header" href="#-stack-কোথায়-থাকে">💾 Stack কোথায় থাকে</a></h2>
 <ul>
-<li>main thread -&gt; main stack</li>
-<li>Linux -&gt; RAM এ Stack এর জন্য <code>8MB</code> allocate হয়</li>
-<li>Independent task এর জন্য আলাদা Thread লাগবে -&gt; new Stack -&gt; RAM এ 8MB Storage</li>
-<li>Process এর জন্য -&gt; No. of Thread <code>*</code> 8MB allcoate হয়
+<li>main thread → main stack</li>
+<li>Linux → RAM এ Stack এর জন্য <code>8MB</code> allocate হয়</li>
+<li>Independent task এর জন্য আলাদা Thread লাগবে → new Stack → RAM এ 8MB Storage</li>
+<li>Process এর জন্য → No. of Thread <code>*</code> 8MB allcoate হয়
 <ul>
 <li>Process এ <code>10</code> Thread থাকলে <code>10 * 8 = 80</code> MB RAM allocated হয়</li>
 </ul>
 </li>
 <li>Stack, RAM এর যে কোন ফাঁকা জায়গায় থাকতে পারে</li>
-<li>Code Segment, Data Segment, Heap -&gt; সব thread access / use করতে পারে</li>
+<li>Code Segment, Data Segment, Heap → সব thread access / use করতে পারে</li>
 <li>Process, main thread বাদে অন্য thread track / execute করে না</li>
-<li>Thread -&gt; Stack এ কোন variable / function না থাকলে -&gt; kernel কে code segment, data segment এ search করতে request করে</li>
-</ul>
-<h2 id="-kernel"><a class="header" href="#-kernel">🖥️ Kernel</a></h2>
-<ul>
-<li>main thread বাদে অন্য thread -&gt; Kernel create করে</li>
-<li>Thread execute -&gt; Opeating System (Kernel)</li>
-<li>Kernel decide করে -&gt; কোন processor কোন process / thread কে execute করবে</li>
-<li>Kernel track রাখে -&gt; কোন process এর under এ কয়টি thread থাকে</li>
-<li>Kernel (Modern computer) -&gt; execution এর ক্ষেত্রে only thread count রাখে</li>
+<li>Thread → Stack এ কোন variable / function না থাকলে → kernel কে code segment, data segment এ search করতে request করে</li>
 </ul>
 <blockquote>
 <p>📌 Code Segment, Data Segment, Stack এর size fixed থাকে। Heap dynamically grow / shrink করতে পারে তাই data, Heap এ বেশি রাখা হয়।</p>
 </blockquote>
+<h2 id="-kernel"><a class="header" href="#-kernel">🖥️ Kernel</a></h2>
+<ul>
+<li>main thread বাদে অন্য thread → Kernel create করে</li>
+<li>Thread execute → Opeating System (Kernel)</li>
+<li>Kernel decide করে → কোন processor কোন process / thread কে execute করবে</li>
+<li>Kernel track রাখে → কোন process এর under এ কয়টি thread থাকে</li>
+<li>Kernel (Modern computer) → execution এর ক্ষেত্রে only thread count রাখে</li>
+</ul>
 <blockquote>
-<p>🧠 Operating System core component -&gt; Kernel; Kernel process schedule, concurrency / parallelism handle করে।</p>
+<p>🧠 Operating System core component → Kernel; Kernel process schedule, concurrency / parallelism handle করে।</p>
 </blockquote>
 <blockquote>
 <p>🧾 Programming language এর উপর depend করে কীভাবে thread create হবে।</p>
@@ -268,6 +268,11 @@ Program (Process)
 <tr><td>🍎 macOS</td><td>8 MB</td><td>512 KB</td><td>Main thread gets 8MB, but <code>pthread</code> threads get 512KB by default</td></tr>
 </tbody></table>
 </div>
+<p>[<strong>Author:</strong> @nazma98
+<strong>Date:</strong> 2025-06-19
+<strong>Category:</strong> interview-qa/class-wise
+]</p>
+
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
@@ -276,7 +281,7 @@ Program (Process)
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../../../interview-qna/topic-wise/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../../interview-qna/class-wise/golang042-complex-and-beautiful-goroutine/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -290,7 +295,7 @@ Program (Process)
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../../../interview-qna/topic-wise/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../../interview-qna/class-wise/golang042-complex-and-beautiful-goroutine/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

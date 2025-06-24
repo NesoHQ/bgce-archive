@@ -1,0 +1,653 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Golang042 Complex And Beautiful Goroutine - BGCE ARCHIVE</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../../favicon.svg">
+        <link rel="shortcut icon" href="../../../favicon.png">
+        <link rel="stylesheet" href="../../../css/variables.css">
+        <link rel="stylesheet" href="../../../css/general.css">
+        <link rel="stylesheet" href="../../../css/chrome.css">
+        <link rel="stylesheet" href="../../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../../../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../../../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../../../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../../../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../../../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">BGCE ARCHIVE</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/NesoHQ/bgce-archive.git" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="class-42---complex-and-beautiful-go-routine"><a class="header" href="#class-42---complex-and-beautiful-go-routine">Class 42 : ✨ Complex And Beautiful Go Routine</a></h1>
+<h2 id="-goroutine"><a class="header" href="#-goroutine">🌀 Goroutine</a></h2>
+<ul>
+<li><strong>Lightweight thread</strong> / <strong>Virtual thread</strong></li>
+<li><strong>Logically thread</strong> এর মতো কাজ করে</li>
+<li>Concurrently অনেকগুলো function execute করে</li>
+<li><strong>Go Runtime</strong> একে manage করে</li>
+</ul>
+<h2 id="-creating-a-goroutine"><a class="header" href="#-creating-a-goroutine">🛠️ Creating a Goroutine</a></h2>
+<p>কোনো function এর আগে <code>go</code> keyword লিখে দিলে সেটা <em>goroutine</em> হয়।</p>
+<h3 id="-example"><a class="header" href="#-example">💡 Example</a></h3>
+<pre><code class="language-go">package main
+
+import (
+    "fmt"
+    "time"
+    )
+
+var a = 10
+
+const p = 11
+
+func printHello(num int) {
+	fmt.Println("Hello Habib", num)
+}
+
+func main() {
+	go printHello(1)
+
+	go printHello(2)
+
+	go printHello(3)
+
+	go printHello(4)
+
+	go printHello(5)
+
+	fmt.Println(a, " ", p)
+
+	time.Sleep(5 * time.Second)
+}
+</code></pre>
+<p>এই Go কোডে একটা <code>printHello</code> নামের ফাংশন আছে, যেটা <code>"Hello Habib"</code> লিখে সাথে একটা সংখ্যা প্রিন্ট করে।</p>
+<p><code>main()</code> ফাংশনে এই ফাংশনটা ৫ বার <em>goroutine</em> দিয়ে চালানো হয়েছে</p>
+<p>সবগুলা <em>goroutine</em> যেন কাজ শেষ করতে পারে, তাই শেষে <code>time.Sleep(5 * time.Second)</code> দিয়ে ৫ সেকেন্ড প্রোগ্রামটাকে অপেক্ষা করানো হয়েছে।</p>
+<h2 id="-how-gorouitne-works-internally"><a class="header" href="#-how-gorouitne-works-internally">📦 How gorouitne works Internally</a></h2>
+<p><strong>Goroutine</strong> কীভাবে কাজ করে বুঝার জন্য আমাদের একটি Go program এর <em>compilation</em>, <em>execution phase</em> এবং <em>Thread</em> ভালভাবে বুঝতে হবে।</p>
+<h3 id="-compilation-phase-of-go-program"><a class="header" href="#-compilation-phase-of-go-program">🔧 Compilation Phase of Go Program</a></h3>
+<p>Go program কে compile করার জন্য নিচের command টি ব্যবহার করা হয়</p>
+<pre><code class="language-go">go build main.go
+</code></pre>
+<ul>
+<li>এতে একটি binary executable file তৈরি হবে (<em>Linux</em> এ <code>main</code>, <em>Windows</em> এ <code>main.exe</code>)</li>
+<li>Binary executable file → Code Segment</li>
+<li>Code Segment → <code>const</code> (read only)
+→ <strong>functions</strong></li>
+<li><code>main</code> binary executable file store → <strong>HDD</strong></li>
+</ul>
+<pre><code class="language-plaintext">                        **Code Segment**
+
+			p = 11
+			printHello = printHello() {...}
+			main = main() {...}
+
+</code></pre>
+<h3 id="-execution-phase-of-go-program"><a class="header" href="#-execution-phase-of-go-program">🚀 Execution Phase of Go Program</a></h3>
+<p>Binary executable file run করার জন্য command -</p>
+<pre><code class="language-bash">./main
+</code></pre>
+<ul>
+<li>Binary executable file load → RAM</li>
+<li>RAM Memory Layout → Code Segment, Data Segment, Stack, Heap</li>
+<li><code>main</code> program → Process create হয়</li>
+</ul>
+<div class="table-wrapper"><table><thead><tr><th>Segment</th><th>Purpose</th><th>Size / Behavior</th></tr></thead><tbody>
+<tr><td>Code Segment</td><td>compiled machine code (functions)</td><td>Fixed size</td></tr>
+<tr><td>Data Segment</td><td>global &amp; static variables</td><td>Fixed or small</td></tr>
+<tr><td>Heap</td><td>dynamically allocated data (<code>make</code>, etc.)</td><td>Grows <strong>upward</strong></td></tr>
+<tr><td>Stack</td><td>function call info, local vars</td><td>Grows <strong>downward</strong>, ~8MB (Linux)</td></tr>
+</tbody></table>
+</div>
+<blockquote>
+<p>যে কোনও programming language (যেমন C, C++, Go, Rust) এর প্রোগ্রাম যখন compile হয়ে binary (.exe / .out) তে convert হয় এবং execution শুরু হয়, তখন একটা process তৈরি হয় এবং সেই process এর জন্য memory তে <em>Code Segment, Data Segment, Stack, Heap</em> থাকে।</p>
+</blockquote>
+<h3 id="-ram-memory-layout-visualization"><a class="header" href="#-ram-memory-layout-visualization">🔍 RAM Memory Layout Visualization</a></h3>
+<pre><code class="language-plaintext">┌──────────────────────────┐
+│       Heap               │ ← Grows Upward
+├──────────────────────────┤
+│     Stack (Top ↓)        │ ← Grows Downward
+├──────────────────────────┤
+│     Data Segment         │ ← Initialized global/static variables
+├──────────────────────────┤
+│     Code Segment         │ ← Machine Instructions
+└──────────────────────────┘
+</code></pre>
+<h3 id="-program-execution-process-visualization"><a class="header" href="#-program-execution-process-visualization">⚙️ Program Execution Process Visualization</a></h3>
+<pre><code class="language-plaintext">
+HDD ➜ OS Loader ➜ RAM ➜ CPU Executes
+
+📁 HDD (Hard Disk)
+│
+│  → Executable File (.exe, .out, etc.)
+│
+▼
+📥 Loader (Operating System)
+│
+│  → Loads program into RAM
+│
+▼
+🧠 RAM (Main Memory)
+│
+├── 📄 Code Segment        → compiled machine code (instructions)
+│
+├── 🗃️ Data Segment        → global &amp; static variables
+│
+├── 📦 Heap Segment        → dynamic memory (malloc/new)
+│
+├── 📚 Stack Segment       → function calls, local variables
+│
+▼
+⚡ CPU (Processor)
+   ├── Fetch → Decode → Execute instructions
+   ├── Uses Registers (like AL, BL, etc.)
+   └── Uses Stack Pointer (SP), Base Pointer (BP)
+</code></pre>
+<h3 id="-process--thread"><a class="header" href="#-process--thread">🖥️ Process &amp; Thread</a></h3>
+<ul>
+<li>Process initially একটি Thread থাকে → Deafult Thread / Main Thread</li>
+<li>Thread কে OS এর kernel execute করলে → Stack execute হয়</li>
+<li>Stack execute → Stack frame create &amp; execute হয়</li>
+</ul>
+<h3 id="-go-runtime--a-mini-os-or-virtual-operating-system"><a class="header" href="#-go-runtime--a-mini-os-or-virtual-operating-system">🌀 Go Runtime = A Mini OS or Virtual Operating System</a></h3>
+<p>Go program → Run → <code>main</code> binary load → Code Segment</p>
+<blockquote>
+<p>⚙️ <strong><code>main</code> Binary – More Than Just Code Segment</strong></p>
+<ul>
+<li>শুধু code segment নয়</li>
+<li>আরও অনেক binary থাকে</li>
+<li>code segment শুধু একটা অংশ মাত্র</li>
+</ul>
+</blockquote>
+<ul>
+<li>Thread execute → Process start</li>
+<li>Process → Virtual computer</li>
+<li>Go Runtime → Virtual Operating System</li>
+<li>Process start → Go Runtime execute</li>
+</ul>
+<h4 id="-go-runtime-code-execute"><a class="header" href="#-go-runtime-code-execute">🧩 Go Runtime Code Execute</a></h4>
+<ul>
+<li>Stack → 8MB Stack (main stack) → Stack Frame create</li>
+<li>main thread execute করে → Go runtime</li>
+</ul>
+<p>Go Runtime initialize করে -</p>
+<ul>
+<li><strong>1. Go Routine Scheduler</strong></li>
+<li><strong>2. Heap Allocator</strong></li>
+<li><strong>3. Garbage Collector</strong></li>
+<li><strong>4. Logical Processors</strong></li>
+</ul>
+<h4 id="go-routine-scheduler"><a class="header" href="#go-routine-scheduler">Go Routine Scheduler</a></h4>
+<p><em>OS Kernel scheduler</em> → Process schedule, Concurrency, Parallelism handle করে।</p>
+<p><em>Go Routine Scheduler</em> ও Real OS Kernel Scheduler এর মতো কাজ করে।</p>
+<h4 id="logical-processors"><a class="header" href="#logical-processors">Logical Processors</a></h4>
+<blockquote>
+<p>🔁 <em>Recap</em></p>
+<ul>
+<li><a href="https://nesohq.github.io/bgce-archive/interview-qna/class-wise/golang034-breaking-the-cpu-and-process/index.html">CPU কীভাবে Code execute করে</a></li>
+</ul>
+</blockquote>
+<ul>
+<li>OS এর ভিতর → virtual processors (vCPU) create হয়</li>
+<li>CPU তে যে কয়টি vCPU (virtual CPU / logical Processor) থাকে → Go Runtime সে কয়টি logical processor create করে</li>
+<li>প্রতিটি logical processor এর জন্য → OS আলাদা OS Thread create করে
+<ul>
+<li>CPU 2 core → 4 vCPU</li>
+<li>Go Runtime initilize করে → 4 logical processors</li>
+<li>4 logical processors এর জন্য → OS আলাদা 4 OS Thread create করে</li>
+<li>4 OS Thread → 4 stack</li>
+<li>Total threads in process → 4 (OS thread) + 1 (main thread) → 5 threads</li>
+<li>OS kernel → 5 threads কে track করে</li>
+<li>1 main thread এর জন্য → 1 main stack</li>
+<li>4 supporting thread এর জন্য → 4 supporting stack</li>
+</ul>
+</li>
+<li>go runtime kernel → go routine schedule করে
+<ul>
+<li>4 thread → 10 goroutine execute করে concurrency follow করে</li>
+</ul>
+</li>
+</ul>
+<h3 id="-go-runtime-os-thread-scheduler-and-logical-processor-mapping"><a class="header" href="#-go-runtime-os-thread-scheduler-and-logical-processor-mapping">🧠 Go Runtime: OS Thread, Scheduler, and Logical Processor Mapping</a></h3>
+<pre><code class="language-plaintext">                    🌀 Go Runtime Scheduler
+                             │
+                             ▼
+──────────────────────────────────────────────────────
+|                   Logical Processors (P)           |
+|────────────────────────────────────────────────────|
+|      P1               P2              P3           |
+|        										     |
+|   [G1, G4, G6]     [G2, G5]        [G3, G7, G8]    |
+──────────────────────────────────────────────────────
+      │               │              │
+      ▼               ▼              ▼
+  Assigned to     Assigned to    Assigned to
+      │               │              │
+      ▼               ▼              ▼
+─────────────────────────────────────────────
+|             OS Threads (M)                 |
+|─────────────────────────────────────────── |
+|     M1             M2             M3       |
+|   (running)     (running)      (idle)      |
+─────────────────────────────────────────────
+      │               │
+      ▼               ▼
+   🖥️ CPU Core 1     🖥️ CPU Core 2
+
+</code></pre>
+<blockquote>
+<p>Go runtime, OS Thread কীভাবে create করতে হয় সেটি handle করে।</p>
+</blockquote>
+<blockquote>
+<p>Go runtime শুরুতেই সিস্টেমের vCPU (logical core) অনুযায়ী Logical Processor (P) তৈরি করে।</p>
+</blockquote>
+<ul>
+<li>Go Runtime নিজেই একটি kernel এর মতো কাজ করে</li>
+<li>এই "kernel" এর scheduler থাকে</li>
+<li>Scheduler, Goroutine গুলোকে execute করতে OS thread কে কাজ ভাগ করে দেয়</li>
+<li>OS Thread গুলোই CPU তে বসে goroutine গুলো execute করে</li>
+<li>Go Scheduler ঠিক করে কোন goroutine কখন execute হবে</li>
+<li>Scheduler OS thread এ map করে thousands of goroutine efficiently চালায়</li>
+</ul>
+<h3 id="-go-runtime-kernel--goroutine-scheduling"><a class="header" href="#-go-runtime-kernel--goroutine-scheduling">🖥️ Go Runtime Kernel &amp; Goroutine Scheduling</a></h3>
+<pre><code class="language-plaintext">                       🌀 Go Runtime (Mini Kernel)
+                               │
+                               ▼
+                      🧠 Go Routine Scheduler (Scheduler)
+                               │
+      -----------------------------------------------------
+      |                       |                           |
+      ▼                       ▼                           ▼
+  G1: Goroutine         G2: Goroutine               G3: Goroutine
+ (Task 1)                 (Task 2)                     (Task 3)
+      \_______________________|________________________/
+                               │
+                               ▼
+                    📦 Placed into P's Run Queue
+                               │
+                               ▼
+        🔄 Scheduler decides which G to run on which M
+                               │
+      -----------------------------------------------------
+      |                       |                          |
+      ▼                       ▼                          ▼
+   🧵 M1: OS Thread        🧵 M2: OS Thread           🧵 M3: OS Thread
+ (Executes Gs)          (Executes Gs)              (Executes Gs)
+      |                       |                          |
+      ▼                       ▼                          ▼
+   🖥️ CPU Core 1          🖥️ CPU Core 2             🖥️ CPU Core 3
+
+
+   → G (goroutine)
+   → P (Processor)
+   → M (OS Thread)
+
+</code></pre>
+<blockquote>
+<p>Programmer Goroutine create করে।</p>
+</blockquote>
+<h4 id="-effects-of-excessive-goroutines-in-go"><a class="header" href="#-effects-of-excessive-goroutines-in-go">📈🧵 Effects of Excessive Goroutines in Go</a></h4>
+<ul>
+<li>Scheduler notice করে → excessive gorutines</li>
+<li>Go Runtime → প্রয়োজন অনুযায়ী logical processors &amp; OS Thread create করে</li>
+<li>RAM full → OS Thread create করা possible হয় না</li>
+<li>❌ OS Thread → ❌ Goroutine execution</li>
+</ul>
+<blockquote>
+<p>First যে goroutine run হয় → main goroutine</p>
+</blockquote>
+<blockquote>
+<p>main function execute হয় → main goroutine এ</p>
+</blockquote>
+<h2 id="-goroutines-home-stack--heap"><a class="header" href="#-goroutines-home-stack--heap">🏠 Goroutine's Home: Stack &amp; Heap</a></h2>
+<p>Goroutine - mini thread / virtual thread / logical thread</p>
+<p>প্রতিটি goroutine</p>
+<ul>
+<li>এর <strong>stack থাকে heap</strong> memory এ</li>
+<li>শুরুতে মাত্র <strong>2KB stack</strong> পায়</li>
+</ul>
+<h3 id="main--main-goroutine"><a class="header" href="#main--main-goroutine"><code>main()</code> → Main Goroutine</a></h3>
+<ul>
+<li>Go প্রোগ্রাম রান হলেই <code>main()</code> function চালু হয়</li>
+<li>এটিই প্রথম goroutine - যাকে বলে <strong>Main Goroutine</strong></li>
+<li>সব normal function call (যেমন <code>f()</code>, <code>g()</code>) এর stack frame তৈরি হয় এই একই stack এ</li>
+</ul>
+<h3 id="go-functionname--new-goroutine"><a class="header" href="#go-functionname--new-goroutine"><code>go functionName()</code> → New Goroutine</a></h3>
+<p><code>go functionName()</code> লিখলে তখন Go runtime:</p>
+<ul>
+<li>নতুন goroutine তৈরি করে</li>
+<li>সেটার জন্য আলাদা stack তৈরি করে (initially 2KB)</li>
+<li>এটিকে scheduling queue তে দেয়</li>
+</ul>
+<h4 id="-example-1"><a class="header" href="#-example-1">🖼️ Example</a></h4>
+<pre><code class="language-go">var a = 10
+
+const p = 11
+
+func add(a, b int) {
+  fmt.Println(a + b)
+}
+
+func printHello(num int) {
+	fmt.Println("Hello Habib", num)
+
+     add(2, 4)
+}
+
+func main() {
+    var x int = 10
+
+    fmt.Println("Hello", x)
+
+    printHello(10)
+
+    go printHello(1)
+
+    go printHello(2)
+
+    go printHello(3)
+
+    go printHello(4)
+
+    go printHello(5)
+
+    fmt.Println(a, " ", p)
+
+    time.Sleep(5 * time.Second)
+}
+</code></pre>
+<p><strong>Main Goroutine</strong></p>
+<ul>
+<li>এখানে <code>main()</code> এর জন্য <em>main goroutine</em> create হবে</li>
+<li>main goroutine এ <code>main()</code>, <code>printHello(10)</code> এবং <code>fmt.Println()</code> এর জন্য Stack Frame create হবে</li>
+<li>যদি Go program এ <code>init()</code> থাকে তবে <code>init()</code> এর জন্য ও Stack Frame, <em>main goroutine</em> এ create হবে</li>
+</ul>
+<p><strong>Other Goroutines</strong></p>
+<ul>
+<li><code>printHello()</code> এর জন্য Go runtime ৫টি আলাদা goroutine তৈরি করবে</li>
+<li><code>go printHello(1)</code> এর জন্য Heap এ যে goroutine create হয় সেখানে <code>printHello(1)</code>, <code>fmt.Println()</code> এবং <code>add(2, 4)</code> এর জন্য Stack Frame create হবে</li>
+<li>একই ভাবে অন্য goroutine এর জন্যও Stack Frame create হবে</li>
+</ul>
+<p><strong>🔍 যদি 2KB Stack যথেষ্ট না হয়</strong></p>
+<ul>
+<li>➡️ Go runtime automatically stack এর size বড় করে দেয় (dynamic grow করে)</li>
+</ul>
+<p><strong>📈 কিভাবে কাজ করে?</strong></p>
+<ul>
+<li><em>শুরুতে:</em> <strong>2KB</strong></li>
+<li><em>দরকার হলে:</em> <strong>4KB</strong>, <strong>8KB</strong>, <strong>16KB</strong>... → যত দরকার তত বাড়তে পারে</li>
+<li><em>সর্বোচ্চ</em>: <strong>1 GB</strong> পর্যন্ত</li>
+</ul>
+<blockquote>
+<p>Go runtime পুরা stack copy করে নতুন বড় stack এ নিয়ে যায়, old stack ফেলে দেয়।</p>
+</blockquote>
+<blockquote>
+<p>Go Runtime reallocate করতে পারে।</p>
+</blockquote>
+<p>Heap এর Stack এ যে <a href="https://nesohq.github.io/bgce-archive/interview-qna/class-wise/golang035-BP-SP/index.html">SP, BP</a> থাকে তা মূলত <strong>Go Runtime এর initialized logical processor</strong> এর SP, BP, return address etc.</p>
+<pre><code>
+                    🧵 Goroutines &amp; Their Stack Memory
+
+┌──────────────────────────────┬─────────────────────────────┬─────────────────────────────┐
+│ Goroutine 1 (main)           │ Goroutine 2 (printHello 1)  │ Goroutine 3 (printHello 2)  │
+├──────────────────────────────┼─────────────────────────────┼─────────────────────────────┤
+│ Stack:                       │ Stack:                      │ Stack:                      │
+│ - main()                     │ - printHello(1)             │ - printHello(2)             │
+│ - printHello(10)             │ - fmt.Println()             │ - fmt.Println()             │
+│ - fmt.Println()              │ - add(2, 4)                 │ - add(2, 4)                 │
+└──────────────────────────────┴─────────────────────────────┴─────────────────────────────┘
+
+┌─────────────────────────────┬─────────────────────────────┬──────────────────────────────┐
+│ Goroutine 4 (printHello 3)  │ Goroutine 5 (printHello 4)  │ Goroutine 6 (printHello 5)   │
+├─────────────────────────────┼─────────────────────────────┼──────────────────────────────┤
+│ Stack:                      │ Stack:                      │ Stack:                       │
+│ - printHello(3)             │ - printHello(4)             │ - printHello(5)              │
+│ - fmt.Println()             │ - fmt.Println()             │ - fmt.Println()              │
+│ - add(2, 4)                 │ - add(2, 4)                 │ - add(2, 4)                  │
+└─────────────────────────────┴─────────────────────────────┴──────────────────────────────┘
+
+</code></pre>
+<blockquote>
+<p>Main goroutine শেষ হলেই পুরো program শেষ,
+তাই অন্য goroutine চালাতে চাইলে main goroutine কে কিছু সময় বাঁচিয়ে রাখতে হবে ✅</p>
+</blockquote>
+<p><strong>💥 When &amp; How <em>Main Thread</em>, <em>Go Runtime</em> &amp; <em>Main Goroutine</em> Get Destroyed</strong></p>
+<blockquote>
+<p>main thread ≠ main goroutine</p>
+</blockquote>
+<div class="table-wrapper"><table><thead><tr><th>Component</th><th>Destruction Point</th></tr></thead><tbody>
+<tr><td><strong>Main Goroutine</strong></td><td>Ends when <code>main()</code> returns or panics</td></tr>
+<tr><td><strong>Main Thread</strong></td><td>Exits after main goroutine ends</td></tr>
+<tr><td><strong>Go Runtime</strong></td><td>Terminates when main goroutine ends</td></tr>
+<tr><td><strong>Other Goroutines</strong></td><td>Force-killed when main goroutine exits</td></tr>
+</tbody></table>
+</div>
+<blockquote>
+<p>goroutine গুলো শেষ পর্যন্ত execute করার জন্য <code>main()</code> কে block করে রাখা যায় যেমন:</p>
+<ul>
+<li><code>time.Sleep()</code></li>
+<li><code>sync.WaitGroup</code></li>
+<li><code>select {}</code> (infinite block)</li>
+</ul>
+</blockquote>
+<h2 id="-thread-vs-goroutine"><a class="header" href="#-thread-vs-goroutine">🧵 Thread vs Goroutine</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Feature</th><th><strong>Thread</strong></th><th><strong>Goroutine</strong></th></tr></thead><tbody>
+<tr><td><strong>Definition</strong></td><td>OS-level execution unit</td><td>Go’s lightweight concurrent execution unit</td></tr>
+<tr><td><strong>Created By</strong></td><td>Operating System</td><td>Go Runtime Scheduler</td></tr>
+<tr><td><strong>Memory Usage</strong></td><td>~1 MB stack (fixed)</td><td>Starts with ~2 KB stack (grows dynamically)</td></tr>
+<tr><td><strong>Creation Cost</strong></td><td>High (involves system call)</td><td>Very Low (simple runtime function)</td></tr>
+<tr><td><strong>Scheduling</strong></td><td>Done by OS</td><td>Done by Go runtime (user-space scheduler)</td></tr>
+<tr><td><strong>Communication</strong></td><td>Using shared memory, locks</td><td>Using channels (safe and built-in)</td></tr>
+<tr><td><strong>Concurrency Limit</strong></td><td>Limited (few thousand max)</td><td>Huge (millions possible)</td></tr>
+<tr><td><strong>Blocking</strong></td><td>Blocks entire thread</td><td>Blocking one goroutine doesn’t block others</td></tr>
+<tr><td><strong>Context Switching</strong></td><td>Costly (kernel-level)</td><td>Cheap (user-space context switch)</td></tr>
+<tr><td><strong>Portability</strong></td><td>Depends on OS</td><td>Cross-platform (managed by Go)</td></tr>
+</tbody></table>
+</div>
+<p>[<strong>Author:</strong> @nazma98
+<strong>Date:</strong> 2025-06-24
+<strong>Category:</strong> interview-qa/class-wise
+]</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../../interview-qna/class-wise/golang041-thread-has-stack/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../../interview-qna/topic-wise/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../../interview-qna/class-wise/golang041-thread-has-stack/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../../interview-qna/topic-wise/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../../elasticlunr.min.js"></script>
+        <script src="../../../mark.min.js"></script>
+        <script src="../../../searcher.js"></script>
+
+        <script src="../../../clipboard.min.js"></script>
+        <script src="../../../highlight.js"></script>
+        <script src="../../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
