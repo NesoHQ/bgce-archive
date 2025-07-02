@@ -3383,7 +3383,7 @@ func main() {
 </code></pre>
 <p>Slice কে মূলত একটি array এর "window" হিসেবে ভাবা যেতে পারে।</p>
 <hr />
-<h1 id="-৩-pointer-lenth-এবং-capacity-নিরধারণ-করার-উপায"><a class="header" href="#-৩-pointer-lenth-এবং-capacity-নিরধারণ-করার-উপায">🕵️‍♂️ ৩. Pointer, lenth এবং capacity নির্ধারণ করার উপায়</a></h1>
+<h1 id="-৩-pointer-length-এবং-capacity-নিরধারণ-করার-উপায"><a class="header" href="#-৩-pointer-length-এবং-capacity-নিরধারণ-করার-উপায">🕵️‍♂️ ৩. Pointer, length এবং capacity নির্ধারণ করার উপায়</a></h1>
 <p>নিম্নোক্ত built-in ফাংশন ব্যবহার করে Slice এর length এবং capacity বের করা যায়:</p>
 <ul>
 <li><code>len(slice)</code> ➡️ Length</li>
@@ -3433,7 +3433,7 @@ s := arr[1:4] // slice ["is", "a", "Go"]
 <li><code>len = 3</code>, কিন্তু capacity <code>cap = 5</code> পর্যন্ত হতে পারে reallocation এর আগ পর্যন্ত</li>
 </ul>
 <hr />
-<h1 id="-9-empty--nil-slice-slice-তৈরি"><a class="header" href="#-9-empty--nil-slice-slice-তৈরি">🕳 9. Empty / Nil Slice Slice তৈরি</a></h1>
+<h1 id="-9-empty--nil-slice-তৈরি"><a class="header" href="#-9-empty--nil-slice-তৈরি">🕳 9. Empty / Nil Slice তৈরি</a></h1>
 <pre><code class="language-go">var s5 []int
 </code></pre>
 <ul>
@@ -3530,7 +3530,7 @@ fmt.Println(len(s), cap(s)) // 1025, 1536
 <p>Go-এর slice বৃদ্ধি কৌশল অনেক ইফিশিয়েন্ট কোড লিখা সম্ভব। ছোট সাইজের slice এর ক্ষেত্রে, Go capacity দ্বিগুণ করে যাতে কম রি-অ্যালোকেশনে আরও element ধারণ করতে পারে। বড় slice (1024 এবং এর বেশি) হলে, এটি capacity ২৫% বৃদ্ধি করে এবং মাঝে মাঝে অপ্টিমাল মেমরি ব্লকের সাথে সামঞ্জস্য রাখে। এই পদ্ধতিটি slice কে দ্রুত এবং মেমরি সাশ্রয়ী করে তোলে।</p>
 <hr />
 <h1 id="১৩-কিছু-ইনটারেসটিং-ইনটারভিউ-পরশনের-উদাহরণ"><a class="header" href="#১৩-কিছু-ইনটারেসটিং-ইনটারভিউ-পরশনের-উদাহরণ">🤯১৩. কিছু ইন্টারেস্টিং ইন্টারভিউ প্রশ্নের উদাহরণ</a></h1>
-<h3 id="-same-underlying-array-trick"><a class="header" href="#-same-underlying-array-trick">⚡ Same Underlying Array Trick</a></h3>
+<h3 id="-some-underlying-array-trick"><a class="header" href="#-some-underlying-array-trick">⚡ Some Underlying Array Trick</a></h3>
 <pre><code class="language-go">var x []int
 x = append(x, 1)
 x = append(x, 2)
@@ -11122,6 +11122,92 @@ DB_NAME=urlshortener
 </ol>
 <h2 id="contributing-1"><a class="header" href="#contributing-1">Contributing</a></h2>
 <p>Contributions are welcome! Please feel free to submit a Pull Request.</p>
+<div style="break-before: page; page-break-before: always;"></div><p>[<strong>Author:</strong> @hasanmubin
+<strong>Date:</strong> 2025-06-19
+<strong>Category:</strong> e.g., mini-projects/GitPulse
+<strong>Tags:</strong> [go, GitPulse, mini-projects]
+]</p>
+<h1 id="gitpulse---a-github-activity-tracker-cli-"><a class="header" href="#gitpulse---a-github-activity-tracker-cli-">GitPulse - A GitHub Activity Tracker CLI 🧑‍💻</a></h1>
+<p>A simple command-line tool that fetches and displays the recent public activity of any GitHub user using the <a href="https://api.github.com/">GitHub Events API</a>.
+Built with Go.</p>
+<hr />
+<h2 id="-features-1"><a class="header" href="#-features-1">🚀 Features</a></h2>
+<ul>
+<li>
+<p>Accepts GitHub username as a command-line argument</p>
+</li>
+<li>
+<p>Fetches recent activity from: <code>https://api.github.com/users/&lt;username&gt;/events</code></p>
+</li>
+<li>
+<p>Displays:</p>
+<ul>
+<li>Push events (e.g., number of commits pushed to a repo)</li>
+<li>Issues opened</li>
+<li>Repositories starred</li>
+<li>And more...</li>
+</ul>
+</li>
+<li>
+<p>Gracefully handles errors such as:</p>
+<ul>
+<li>Invalid GitHub usernames</li>
+<li>Unexpected data formats</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="-prerequisites"><a class="header" href="#-prerequisites">📦 Prerequisites</a></h2>
+<ul>
+<li><a href="https://golang.org/dl/">Go</a> installed (version 1.18 or above recommended)</li>
+</ul>
+<hr />
+<h2 id="-setup"><a class="header" href="#-setup">🛠️ Setup</a></h2>
+<ol>
+<li>
+<p><strong>Initialize a Go module</strong>:</p>
+<pre><code class="language-bash"> go mod init GitPulse
+</code></pre>
+</li>
+<li>
+<p><strong>Build the application</strong>:</p>
+<pre><code class="language-bash">go build -o github-activity
+</code></pre>
+<p>This will create a binary file named <code>github-activity</code>.</p>
+</li>
+</ol>
+<hr />
+<h2 id="-usage"><a class="header" href="#-usage">🧑‍💻 Usage</a></h2>
+<pre><code class="language-bash">./github-activity &lt;github-username&gt;
+</code></pre>
+<h3 id="example-5"><a class="header" href="#example-5">Example:</a></h3>
+<pre><code class="language-bash">./github-activity kamranahmedse
+</code></pre>
+<h3 id="sample-output"><a class="header" href="#sample-output">Sample Output:</a></h3>
+<pre><code>Pushed 3 commits to kamranahmedse/developer-roadmap
+Opened a new issue in kamranahmedse/developer-roadmap
+Starred kamranahmedse/developer-roadmap
+</code></pre>
+<hr />
+<h2 id="-error-handling"><a class="header" href="#-error-handling">🛯️ Error Handling</a></h2>
+<ul>
+<li>
+<p>Invalid username or no recent activity? You’ll get:</p>
+<pre><code>Error: user not found or has no recent public activity.
+</code></pre>
+</li>
+<li>
+<p>Internet down? API fails? You’ll get a meaningful error message instead of a crash.</p>
+</li>
+</ul>
+<hr />
+<h2 id="-future-improvements-optional-ideas"><a class="header" href="#-future-improvements-optional-ideas">🌱 Future Improvements (Optional Ideas)</a></h2>
+<ul>
+<li>Filter by specific event type (<code>PushEvent</code>, <code>IssuesEvent</code>, etc.)</li>
+<li>Cache results locally to reduce API calls</li>
+<li>Display output in a more structured or colorized format</li>
+<li>Explore other endpoints like <code>/repos</code>, <code>/followers</code>, <code>/starred</code>, etc.</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><p>🧩 Project: Build Your Own JSON Parser (Step 1)</p>
 <p>Imagine JSON like Lego blocks that computers use to send and understand data. In this project, we’re learning how to read those blocks and say: “Yep, this is built correctly!” or “Nope, something’s wrong!”</p>
 <p>⸻</p>

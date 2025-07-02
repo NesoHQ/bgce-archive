@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Ccwc - BGCE ARCHIVE</title>
+        <title>Git Pulse - BGCE ARCHIVE</title>
 
 
         <!-- Custom HTML head -->
@@ -169,119 +169,102 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="ccwc-custom-word-count"><a class="header" href="#ccwc-custom-word-count">CCWC (Custom Word Count)</a></h1>
-<p>A Go implementation of the Unix/Linux <code>wc</code> command that counts bytes, lines, words, and characters in text files.</p>
-<h2 id="features"><a class="header" href="#features">Features</a></h2>
+                        <p>[<strong>Author:</strong> @hasanmubin
+<strong>Date:</strong> 2025-06-19
+<strong>Category:</strong> e.g., mini-projects/GitPulse
+<strong>Tags:</strong> [go, GitPulse, mini-projects]
+]</p>
+<h1 id="gitpulse---a-github-activity-tracker-cli-"><a class="header" href="#gitpulse---a-github-activity-tracker-cli-">GitPulse - A GitHub Activity Tracker CLI 🧑‍💻</a></h1>
+<p>A simple command-line tool that fetches and displays the recent public activity of any GitHub user using the <a href="https://api.github.com/">GitHub Events API</a>.
+Built with Go.</p>
+<hr />
+<h2 id="-features"><a class="header" href="#-features">🚀 Features</a></h2>
 <ul>
-<li>Count bytes in a file (<code>-c</code>)</li>
-<li>Count lines in a file (<code>-l</code>)</li>
-<li>Count words in a file (<code>-w</code>)</li>
-<li>Count characters in a file (<code>-m</code>)</li>
-<li>Support for reading from both files and standard input (stdin)</li>
-<li>Default mode that displays line, word, and byte counts together</li>
-</ul>
-<h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
-<ol>
-<li>Ensure you have Go installed on your system</li>
-<li>Navigate to the project directory:</li>
-</ol>
-<pre><code class="language-bash">cd /Users/rokib/Developer/go_projects/bgce-archive/mini-projects/ccwc
-</code></pre>
-<ol start="3">
-<li>Build the project:</li>
-</ol>
-<pre><code class="language-bash">go build -o ccwc ./cmd/ccwc
-</code></pre>
-<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
-<h3 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h3>
-<pre><code class="language-bash">./ccwc [options] [filename]
-</code></pre>
-<p>If no filename is provided, ccwc reads from standard input.</p>
-<h3 id="options"><a class="header" href="#options">Options</a></h3>
-<ul>
-<li><code>-c</code>: Print the byte count</li>
-<li><code>-l</code>: Print the line count</li>
-<li><code>-w</code>: Print the word count</li>
-<li><code>-m</code>: Print the character count (locale-dependent)</li>
-</ul>
-<p>If no options are provided, ccwc displays line count, word count, and byte count.</p>
-<h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
-<ol>
-<li>Count bytes in a file:</li>
-</ol>
-<pre><code class="language-bash">./ccwc -c testdata/test.txt
-</code></pre>
-<ol start="2">
-<li>Count lines in a file:</li>
-</ol>
-<pre><code class="language-bash">./ccwc -l testdata/test.txt
-</code></pre>
-<ol start="3">
-<li>Count words in a file:</li>
-</ol>
-<pre><code class="language-bash">./ccwc -w testdata/test.txt
-</code></pre>
-<ol start="4">
-<li>Count characters in a file:</li>
-</ol>
-<pre><code class="language-bash">./ccwc -m testdata/test.txt
-</code></pre>
-<ol start="5">
-<li>Default output (lines, words, and bytes):</li>
-</ol>
-<pre><code class="language-bash">./ccwc testdata/test.txt
-</code></pre>
-<ol start="6">
-<li>Read from standard input:</li>
-</ol>
-<pre><code class="language-bash">cat testdata/test.txt | ./ccwc -m
-</code></pre>
-<h2 id="project-structure"><a class="header" href="#project-structure">Project Structure</a></h2>
-<pre><code>mini-projects/ccwc/
-├── cmd/
-│   └── ccwc/
-│       └── main.go       # Main application entry point
-├── internal/
-│   └── processor/
-│       └── processor.go  # Core processing functions
-├── testdata/            # Test files directory
-│   └── test.txt
-├── go.mod               # Go module file
-└── README.md           # This file
-</code></pre>
-<h2 id="implementation-details"><a class="header" href="#implementation-details">Implementation Details</a></h2>
-<p>The project is organized into two main components:</p>
-<ol>
 <li>
-<p><strong>Processor Package</strong> (<code>internal/processor/processor.go</code>):</p>
+<p>Accepts GitHub username as a command-line argument</p>
+</li>
+<li>
+<p>Fetches recent activity from: <code>https://api.github.com/users/&lt;username&gt;/events</code></p>
+</li>
+<li>
+<p>Displays:</p>
 <ul>
-<li>Contains core counting functions</li>
-<li>Implements byte, line, word, and character counting logic</li>
-<li>Uses efficient buffered I/O operations</li>
+<li>Push events (e.g., number of commits pushed to a repo)</li>
+<li>Issues opened</li>
+<li>Repositories starred</li>
+<li>And more...</li>
 </ul>
 </li>
 <li>
-<p><strong>Main Package</strong> (<code>cmd/ccwc/main.go</code>):</p>
+<p>Gracefully handles errors such as:</p>
 <ul>
-<li>Handles command-line argument parsing</li>
-<li>Manages file operations</li>
-<li>Coordinates counting operations</li>
-<li>Formats and displays output</li>
+<li>Invalid GitHub usernames</li>
+<li>Unexpected data formats</li>
 </ul>
 </li>
+</ul>
+<hr />
+<h2 id="-prerequisites"><a class="header" href="#-prerequisites">📦 Prerequisites</a></h2>
+<ul>
+<li><a href="https://golang.org/dl/">Go</a> installed (version 1.18 or above recommended)</li>
+</ul>
+<hr />
+<h2 id="-setup"><a class="header" href="#-setup">🛠️ Setup</a></h2>
+<ol>
+<li>
+<p><strong>Initialize a Go module</strong>:</p>
+<pre><code class="language-bash"> go mod init GitPulse
+</code></pre>
+</li>
+<li>
+<p><strong>Build the application</strong>:</p>
+<pre><code class="language-bash">go build -o github-activity
+</code></pre>
+<p>This will create a binary file named <code>github-activity</code>.</p>
+</li>
 </ol>
-<h2 id="contributing"><a class="header" href="#contributing">Contributing</a></h2>
-<p>Contributions are welcome! Please feel free to submit a Pull Request.</p>
+<hr />
+<h2 id="-usage"><a class="header" href="#-usage">🧑‍💻 Usage</a></h2>
+<pre><code class="language-bash">./github-activity &lt;github-username&gt;
+</code></pre>
+<h3 id="example"><a class="header" href="#example">Example:</a></h3>
+<pre><code class="language-bash">./github-activity kamranahmedse
+</code></pre>
+<h3 id="sample-output"><a class="header" href="#sample-output">Sample Output:</a></h3>
+<pre><code>Pushed 3 commits to kamranahmedse/developer-roadmap
+Opened a new issue in kamranahmedse/developer-roadmap
+Starred kamranahmedse/developer-roadmap
+</code></pre>
+<hr />
+<h2 id="-error-handling"><a class="header" href="#-error-handling">🛯️ Error Handling</a></h2>
+<ul>
+<li>
+<p>Invalid username or no recent activity? You’ll get:</p>
+<pre><code>Error: user not found or has no recent public activity.
+</code></pre>
+</li>
+<li>
+<p>Internet down? API fails? You’ll get a meaningful error message instead of a crash.</p>
+</li>
+</ul>
+<hr />
+<h2 id="-future-improvements-optional-ideas"><a class="header" href="#-future-improvements-optional-ideas">🌱 Future Improvements (Optional Ideas)</a></h2>
+<ul>
+<li>Filter by specific event type (<code>PushEvent</code>, <code>IssuesEvent</code>, etc.)</li>
+<li>Cache results locally to reduce API calls</li>
+<li>Display output in a more structured or colorized format</li>
+<li>Explore other endpoints like <code>/repos</code>, <code>/followers</code>, <code>/starred</code>, etc.</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../mini-projects/UrlShortner/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../mini-projects/ccwc/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../../mini-projects/git-pulse/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../mini-projects/jsonparser/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -291,11 +274,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../mini-projects/UrlShortner/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../mini-projects/ccwc/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../../mini-projects/git-pulse/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../mini-projects/jsonparser/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
