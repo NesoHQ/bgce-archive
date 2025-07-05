@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>1 Cards - BGCE ARCHIVE</title>
+        <title>Udp Js - BGCE ARCHIVE</title>
 
 
         <!-- Custom HTML head -->
@@ -169,17 +169,89 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="documentation-for-the-mini-cards-project"><a class="header" href="#documentation-for-the-mini-cards-project">Documentation for the mini cards project</a></h1>
+                        <pre><code class="language-markdown"># Simple UDP Server in Node.js
+
+This is a **minimal UDP server** built using Node.js `dgram` module. It listens on `127.0.0.1:41234` and optionally replies back to the client.
+
+## Files
+
+- `server.js` : Contains the UDP server code.
+
+## Requirements
+
+- Node.js (v12+ recommended)
+- npm
+
+## How to Run
+
+1. **Install dependencies (if any)**
+
+This script uses only core Node.js modules, so no installation is required. But initialize your project for good practice:
+
+```bash
+npm init -y
+</code></pre>
+<ol start="2">
+<li><strong>Run the server</strong></li>
+</ol>
+<pre><code class="language-bash">node server.js
+</code></pre>
+<p>You should see:</p>
+<pre><code>UDP Server listening on 127.0.0.1:41234
+</code></pre>
+<h2 id="code-explanation-brief"><a class="header" href="#code-explanation-brief">Code Explanation (Brief)</a></h2>
+<ul>
+<li><strong>dgram.createSocket("udp4")</strong> – creates an IPv4 UDP socket.</li>
+<li><strong>server.on("message")</strong> – handles incoming datagrams.</li>
+<li><strong>server.send()</strong> – sends a reply back to the client.</li>
+<li><strong>server.bind()</strong> – binds the server to the specified port and host.</li>
+</ul>
+<h2 id="-testing-the-server"><a class="header" href="#-testing-the-server">📡 Testing the Server</a></h2>
+<h3 id="-using-netcat-nc"><a class="header" href="#-using-netcat-nc">🔧 Using netcat (nc)</a></h3>
+<p>Open a separate terminal and run:</p>
+<pre><code class="language-bash">echo "Hello from client" | nc -u 127.0.0.1 41234
+</code></pre>
+<p>You should see the server log the received message and send a reply.</p>
+<h3 id="-using-a-nodejs-udp-client"><a class="header" href="#-using-a-nodejs-udp-client">🔧 Using a Node.js UDP client</a></h3>
+<p>Create a simple <code>client.js</code>:</p>
+<pre><code class="language-js">import dgram from "dgram";
+
+const client = dgram.createSocket("udp4");
+const msg = Buffer.from("Hello server!");
+
+client.send(msg, 0, msg.length, 41234, "127.0.0.1", (err) =&gt; {
+    if (err) console.error(err);
+    else console.log("Message sent!");
+    client.close();
+});
+</code></pre>
+<p>Run it:</p>
+<pre><code class="language-bash">node client.js
+</code></pre>
+<h2 id="reference"><a class="header" href="#reference">Reference</a></h2>
+<ul>
+<li><a href="https://nodejs.org/api/dgram.html">Node.js dgram documentation</a></li>
+</ul>
+<hr />
+<h3 id="notes"><a class="header" href="#notes">Notes</a></h3>
+<ul>
+<li>For production use, handle errors and edge cases gracefully.</li>
+<li>Use <code>udp6</code> instead of <code>udp4</code> for IPv6 sockets.</li>
+<li>Adjust <code>HOST</code> to <code>0.0.0.0</code> if you want to accept messages from any network interface.</li>
+</ul>
+<hr />
+<p>Happy UDP hacking!</p>
+<pre><code></code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../mini-projects/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../mini-projects/udp-c/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../../mini-projects/Quantique/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../mini-projects/url-shortner/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -189,11 +261,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../mini-projects/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../mini-projects/udp-c/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../../mini-projects/Quantique/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../mini-projects/url-shortner/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

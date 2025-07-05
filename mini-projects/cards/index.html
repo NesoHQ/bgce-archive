@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Urlshortner - BGCE ARCHIVE</title>
+        <title>Cards - BGCE ARCHIVE</title>
 
 
         <!-- Custom HTML head -->
@@ -169,89 +169,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="url-shortener---go"><a class="header" href="#url-shortener---go">URL Shortener - Go</a></h1>
-<p>A simple URL shortening service built with Go and MySQL. This project allows users to generate short URLs and redirect to the original long URL using a unique key.</p>
-<h2 id="features"><a class="header" href="#features">Features</a></h2>
-<ul>
-<li>Generate short URLs with unique keys</li>
-<li>Redirect to the original URL</li>
-<li>MySQL integration for URL storage</li>
-<li>JSON-based HTTP API</li>
-<li>Environment variable support via <code>.env</code> file</li>
-</ul>
-<h2 id="project-structure"><a class="header" href="#project-structure">Project Structure</a></h2>
-<pre><code>UrlShortner-Go/
-├── config/            # Loads MySQL connection using env vars
-├── database/
-│   └── mysql.go       # MySQL operations for saving and retrieving URLs
-├── handlers/
-│   └── UrlHandler.go  # HTTP handlers for shortening and redirecting
-├── models/            # Request/response models
-├── utils/
-│   └── utils.go       # Random key generation
-├── .env               # Environment variables
-└── main.go            # Entry point of the server
-</code></pre>
-<h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
-<ol>
-<li>
-<p>Clone the repository:</p>
-<pre><code class="language-bash">git clone https://github.com/0baydullah/UrlShortner-Go.git
-</code></pre>
-</li>
-<li>
-<p>Navigate to the project directory:</p>
-<pre><code class="language-bash">cd UrlShortner-Go
-</code></pre>
-</li>
-<li>
-<p>Set up your MySQL database and table:</p>
-<pre><code class="language-sql">CREATE DATABASE urlshortener;
-USE urlshortener;
-CREATE TABLE urls (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    short_key VARCHAR(255) NOT NULL UNIQUE,
-    original_url TEXT NOT NULL
-);
-</code></pre>
-</li>
-<li>
-<p>Create a <code>.env</code> file in the root directory:</p>
-<pre><code class="language-env">DB_USER=your_db_username
-DB_PASSWORD=your_db_password
-DB_HOST=localhost
-DB_PORT=3306
-DB_NAME=urlshortener
-</code></pre>
-</li>
-<li>
-<p>Run the application:</p>
-<pre><code class="language-bash">go run main.go
-</code></pre>
-</li>
-</ol>
-<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
-<h3 id="shorten-a-url"><a class="header" href="#shorten-a-url">Shorten a URL</a></h3>
-<p>Send a <code>POST</code> request to <code>/shorten</code>:</p>
-<pre><code class="language-bash">curl -X POST http://localhost:8081/shorten -H "Content-Type: application/json" -d '{"url": "https://example.com"}'
-</code></pre>
-<p><strong>Response:</strong></p>
-<pre><code class="language-json">{
-  "key": "abc123",
-  "url": "https://example.com",
-  "shortUrl": "http://localhost:8081/abc123"
-}
-</code></pre>
-<p>or If you want to  test it you can use <code>PostMan</code> too! ;-)</p>
-<h3 id="here-is-a-preview-from-postman-had-been-hosted-on-a-free-vps-maybe-expired-already"><a class="header" href="#here-is-a-preview-from-postman-had-been-hosted-on-a-free-vps-maybe-expired-already">Here is a preview from Postman (had been hosted on a free VPS, maybe expired already)</a></h3>
-<p><img src="https://github.com/0baydullah/UrlShortner-Go/blob/main/image.png?raw=true" alt="App Preview" /></p>
-<h3 id="redirect-to-original-url"><a class="header" href="#redirect-to-original-url">Redirect to Original URL</a></h3>
-<p>Visit the shortened URL:</p>
-<pre><code class="language-bash">http://localhost:8081/abc123
-</code></pre>
-<p>This will redirect to <code>https://example.com</code>.</p>
-<h2 id="contributing"><a class="header" href="#contributing">Contributing</a></h2>
-<p>Contributions are welcome! Feel free to open issues or submit pull requests.</p>
+                        <h1 id="documentation-for-the-mini-cards-project"><a class="header" href="#documentation-for-the-mini-cards-project">Documentation for the mini cards project</a></h1>
 
                     </main>
 

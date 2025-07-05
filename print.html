@@ -10879,7 +10879,6 @@ objdump -h your_program | grep -E "\.(text|rodata|data|bss)"
 </ul>
 <p>এখন যখনই আপনি global variable declare করবেন, মনে রাখবেন - আপনি একটা character এর journey শুরু করে দিচ্ছেন memory kingdom এ!</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="students-will-keep"><a class="header" href="#students-will-keep">Students will keep</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="documentation-for-the-mini-cards-project"><a class="header" href="#documentation-for-the-mini-cards-project">Documentation for the mini cards project</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><p>[<strong>Author:</strong> @mdimamhosen
 <strong>Date:</strong> 2025-04-23
 <strong>Category:</strong> e.g., mini-projects/Quantique
@@ -10936,92 +10935,10 @@ go get github.com/Delta456/box-cli-maker/v2
 <hr />
 <h2 id="-a-note-from-the-author"><a class="header" href="#-a-note-from-the-author">🤝 A Note from the Author</a></h2>
 <p>A small contribution to the incredible Best GoLang Community Ever</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="url-shortener---go"><a class="header" href="#url-shortener---go">URL Shortener - Go</a></h1>
-<p>A simple URL shortening service built with Go and MySQL. This project allows users to generate short URLs and redirect to the original long URL using a unique key.</p>
-<h2 id="features"><a class="header" href="#features">Features</a></h2>
-<ul>
-<li>Generate short URLs with unique keys</li>
-<li>Redirect to the original URL</li>
-<li>MySQL integration for URL storage</li>
-<li>JSON-based HTTP API</li>
-<li>Environment variable support via <code>.env</code> file</li>
-</ul>
-<h2 id="project-structure"><a class="header" href="#project-structure">Project Structure</a></h2>
-<pre><code>UrlShortner-Go/
-├── config/            # Loads MySQL connection using env vars
-├── database/
-│   └── mysql.go       # MySQL operations for saving and retrieving URLs
-├── handlers/
-│   └── UrlHandler.go  # HTTP handlers for shortening and redirecting
-├── models/            # Request/response models
-├── utils/
-│   └── utils.go       # Random key generation
-├── .env               # Environment variables
-└── main.go            # Entry point of the server
-</code></pre>
-<h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
-<ol>
-<li>
-<p>Clone the repository:</p>
-<pre><code class="language-bash">git clone https://github.com/0baydullah/UrlShortner-Go.git
-</code></pre>
-</li>
-<li>
-<p>Navigate to the project directory:</p>
-<pre><code class="language-bash">cd UrlShortner-Go
-</code></pre>
-</li>
-<li>
-<p>Set up your MySQL database and table:</p>
-<pre><code class="language-sql">CREATE DATABASE urlshortener;
-USE urlshortener;
-CREATE TABLE urls (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    short_key VARCHAR(255) NOT NULL UNIQUE,
-    original_url TEXT NOT NULL
-);
-</code></pre>
-</li>
-<li>
-<p>Create a <code>.env</code> file in the root directory:</p>
-<pre><code class="language-env">DB_USER=your_db_username
-DB_PASSWORD=your_db_password
-DB_HOST=localhost
-DB_PORT=3306
-DB_NAME=urlshortener
-</code></pre>
-</li>
-<li>
-<p>Run the application:</p>
-<pre><code class="language-bash">go run main.go
-</code></pre>
-</li>
-</ol>
-<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
-<h3 id="shorten-a-url"><a class="header" href="#shorten-a-url">Shorten a URL</a></h3>
-<p>Send a <code>POST</code> request to <code>/shorten</code>:</p>
-<pre><code class="language-bash">curl -X POST http://localhost:8081/shorten -H "Content-Type: application/json" -d '{"url": "https://example.com"}'
-</code></pre>
-<p><strong>Response:</strong></p>
-<pre><code class="language-json">{
-  "key": "abc123",
-  "url": "https://example.com",
-  "shortUrl": "http://localhost:8081/abc123"
-}
-</code></pre>
-<p>or If you want to  test it you can use <code>PostMan</code> too! ;-)</p>
-<h3 id="here-is-a-preview-from-postman-had-been-hosted-on-a-free-vps-maybe-expired-already"><a class="header" href="#here-is-a-preview-from-postman-had-been-hosted-on-a-free-vps-maybe-expired-already">Here is a preview from Postman (had been hosted on a free VPS, maybe expired already)</a></h3>
-<p><img src="https://github.com/0baydullah/UrlShortner-Go/blob/main/image.png?raw=true" alt="App Preview" /></p>
-<h3 id="redirect-to-original-url"><a class="header" href="#redirect-to-original-url">Redirect to Original URL</a></h3>
-<p>Visit the shortened URL:</p>
-<pre><code class="language-bash">http://localhost:8081/abc123
-</code></pre>
-<p>This will redirect to <code>https://example.com</code>.</p>
-<h2 id="contributing"><a class="header" href="#contributing">Contributing</a></h2>
-<p>Contributions are welcome! Feel free to open issues or submit pull requests.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="documentation-for-the-mini-cards-project"><a class="header" href="#documentation-for-the-mini-cards-project">Documentation for the mini cards project</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ccwc-custom-word-count"><a class="header" href="#ccwc-custom-word-count">CCWC (Custom Word Count)</a></h1>
 <p>A Go implementation of the Unix/Linux <code>wc</code> command that counts bytes, lines, words, and characters in text files.</p>
-<h2 id="features-1"><a class="header" href="#features-1">Features</a></h2>
+<h2 id="features"><a class="header" href="#features">Features</a></h2>
 <ul>
 <li>Count bytes in a file (<code>-c</code>)</li>
 <li>Count lines in a file (<code>-l</code>)</li>
@@ -11030,7 +10947,7 @@ DB_NAME=urlshortener
 <li>Support for reading from both files and standard input (stdin)</li>
 <li>Default mode that displays line, word, and byte counts together</li>
 </ul>
-<h2 id="installation-1"><a class="header" href="#installation-1">Installation</a></h2>
+<h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
 <ol>
 <li>Ensure you have Go installed on your system</li>
 <li>Navigate to the project directory:</li>
@@ -11042,7 +10959,7 @@ DB_NAME=urlshortener
 </ol>
 <pre><code class="language-bash">go build -o ccwc ./cmd/ccwc
 </code></pre>
-<h2 id="usage-1"><a class="header" href="#usage-1">Usage</a></h2>
+<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
 <h3 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h3>
 <pre><code class="language-bash">./ccwc [options] [filename]
 </code></pre>
@@ -11086,7 +11003,7 @@ DB_NAME=urlshortener
 </ol>
 <pre><code class="language-bash">cat testdata/test.txt | ./ccwc -m
 </code></pre>
-<h2 id="project-structure-1"><a class="header" href="#project-structure-1">Project Structure</a></h2>
+<h2 id="project-structure"><a class="header" href="#project-structure">Project Structure</a></h2>
 <pre><code>mini-projects/ccwc/
 ├── cmd/
 │   └── ccwc/
@@ -11120,7 +11037,7 @@ DB_NAME=urlshortener
 </ul>
 </li>
 </ol>
-<h2 id="contributing-1"><a class="header" href="#contributing-1">Contributing</a></h2>
+<h2 id="contributing"><a class="header" href="#contributing">Contributing</a></h2>
 <p>Contributions are welcome! Please feel free to submit a Pull Request.</p>
 <div style="break-before: page; page-break-before: always;"></div><p>[<strong>Author:</strong> @hasanmubin
 <strong>Date:</strong> 2025-06-19
@@ -11422,14 +11339,14 @@ docker run -it --name go-debug jsiqbal/go-debug-ready
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="todo-cli"><a class="header" href="#todo-cli">Todo CLI</a></h1>
 <p>A simple command-line interface (CLI) application for managing your to-do tasks, built with Go.</p>
-<h2 id="features-2"><a class="header" href="#features-2">Features</a></h2>
+<h2 id="features-1"><a class="header" href="#features-1">Features</a></h2>
 <ul>
 <li>Add new tasks</li>
 <li>List all tasks (with --all flag for completed tasks)</li>
 <li>Mark tasks as completed</li>
 <li>Delete tasks</li>
 </ul>
-<h2 id="project-structure-2"><a class="header" href="#project-structure-2">Project Structure</a></h2>
+<h2 id="project-structure-1"><a class="header" href="#project-structure-1">Project Structure</a></h2>
 <pre><code>todo-cli/
 ├── cmd/
 │   └── tasks/
@@ -11439,7 +11356,7 @@ docker run -it --name go-debug jsiqbal/go-debug-ready
         ├── task.go
         └── storage.go
 </code></pre>
-<h2 id="installation-2"><a class="header" href="#installation-2">Installation</a></h2>
+<h2 id="installation-1"><a class="header" href="#installation-1">Installation</a></h2>
 <ol>
 <li>Clone the repository:
 <pre><code class="language-bash">git clone https://github.com/OxRokib/bgce-archive.git
@@ -11454,7 +11371,7 @@ docker run -it --name go-debug jsiqbal/go-debug-ready
 </code></pre>
 </li>
 </ol>
-<h2 id="usage-2"><a class="header" href="#usage-2">Usage</a></h2>
+<h2 id="usage-1"><a class="header" href="#usage-1">Usage</a></h2>
 <h3 id="add-a-task"><a class="header" href="#add-a-task">Add a Task</a></h3>
 <pre><code class="language-bash">./todo add "Your task description"
 </code></pre>
@@ -11471,8 +11388,213 @@ docker run -it --name go-debug jsiqbal/go-debug-ready
 <h3 id="delete-a-task"><a class="header" href="#delete-a-task">Delete a Task</a></h3>
 <pre><code class="language-bash">./todo delete &lt;task-id&gt;
 </code></pre>
-<h2 id="contributing-2"><a class="header" href="#contributing-2">Contributing</a></h2>
+<h2 id="contributing-1"><a class="header" href="#contributing-1">Contributing</a></h2>
 <p>Contributions are welcome! Please feel free to submit a Pull Request.</p>
+<div style="break-before: page; page-break-before: always;"></div><pre><code class="language-markdown"># UDP Server in C
+
+This is a simple UDP server program written in C. It binds to `127.0.0.1` on port `5501` and listens for incoming datagrams.
+
+## Files
+
+- `main.c` : The UDP server code.
+
+## Requirements
+
+- GCC or any C compiler
+- Linux or macOS (or WSL on Windows)
+
+## How to Compile and Run
+
+1. **Compile:**
+
+```bash
+gcc main.c -o udp_server
+</code></pre>
+<ol start="2">
+<li><strong>Run:</strong></li>
+</ol>
+<pre><code class="language-bash">./udp_server
+</code></pre>
+<p>It will start and wait for incoming UDP packets.</p>
+<h2 id="code-explanation-brief"><a class="header" href="#code-explanation-brief">Code Explanation (Brief)</a></h2>
+<ul>
+<li><strong>socket()</strong> – creates a UDP socket.</li>
+<li><strong>bind()</strong> – binds to <code>127.0.0.1:5501</code>.</li>
+<li><strong>recvfrom()</strong> – receives data from any UDP client.</li>
+<li><strong>printf()</strong> – prints the received message.</li>
+</ul>
+<h2 id="example-client-testing"><a class="header" href="#example-client-testing">Example Client (Testing)</a></h2>
+<p>To test quickly, use <code>netcat</code> as a UDP client:</p>
+<pre><code class="language-bash">echo "Hello Server" | nc -u 127.0.0.1 5501
+</code></pre>
+<p>Or write your own simple C client to send a datagram to port <code>5501</code>.</p>
+<h2 id="reference"><a class="header" href="#reference">Reference</a></h2>
+<p><a href="https://github.com/nikhilroxtomar/UDP-Client-Server-Program-in-C">UDP Client-Server Program in C</a></p>
+<hr />
+<h3 id="notes"><a class="header" href="#notes">Notes</a></h3>
+<ul>
+<li>Change <code>127.0.0.1</code> to <code>0.0.0.0</code> to bind on all interfaces.</li>
+<li>Always handle errors in production-grade code (<code>if (sockfd &lt; 0) { perror("socket failed"); exit(1); }</code> etc).</li>
+</ul>
+<hr />
+<p>Feel free to modify and extend this as needed for your networking practice or system programming portfolio.</p>
+<pre><code></code></pre>
+<div style="break-before: page; page-break-before: always;"></div><pre><code class="language-markdown"># Simple UDP Server in Node.js
+
+This is a **minimal UDP server** built using Node.js `dgram` module. It listens on `127.0.0.1:41234` and optionally replies back to the client.
+
+## Files
+
+- `server.js` : Contains the UDP server code.
+
+## Requirements
+
+- Node.js (v12+ recommended)
+- npm
+
+## How to Run
+
+1. **Install dependencies (if any)**
+
+This script uses only core Node.js modules, so no installation is required. But initialize your project for good practice:
+
+```bash
+npm init -y
+</code></pre>
+<ol start="2">
+<li><strong>Run the server</strong></li>
+</ol>
+<pre><code class="language-bash">node server.js
+</code></pre>
+<p>You should see:</p>
+<pre><code>UDP Server listening on 127.0.0.1:41234
+</code></pre>
+<h2 id="code-explanation-brief-1"><a class="header" href="#code-explanation-brief-1">Code Explanation (Brief)</a></h2>
+<ul>
+<li><strong>dgram.createSocket("udp4")</strong> – creates an IPv4 UDP socket.</li>
+<li><strong>server.on("message")</strong> – handles incoming datagrams.</li>
+<li><strong>server.send()</strong> – sends a reply back to the client.</li>
+<li><strong>server.bind()</strong> – binds the server to the specified port and host.</li>
+</ul>
+<h2 id="-testing-the-server"><a class="header" href="#-testing-the-server">📡 Testing the Server</a></h2>
+<h3 id="-using-netcat-nc"><a class="header" href="#-using-netcat-nc">🔧 Using netcat (nc)</a></h3>
+<p>Open a separate terminal and run:</p>
+<pre><code class="language-bash">echo "Hello from client" | nc -u 127.0.0.1 41234
+</code></pre>
+<p>You should see the server log the received message and send a reply.</p>
+<h3 id="-using-a-nodejs-udp-client"><a class="header" href="#-using-a-nodejs-udp-client">🔧 Using a Node.js UDP client</a></h3>
+<p>Create a simple <code>client.js</code>:</p>
+<pre><code class="language-js">import dgram from "dgram";
+
+const client = dgram.createSocket("udp4");
+const msg = Buffer.from("Hello server!");
+
+client.send(msg, 0, msg.length, 41234, "127.0.0.1", (err) =&gt; {
+    if (err) console.error(err);
+    else console.log("Message sent!");
+    client.close();
+});
+</code></pre>
+<p>Run it:</p>
+<pre><code class="language-bash">node client.js
+</code></pre>
+<h2 id="reference-1"><a class="header" href="#reference-1">Reference</a></h2>
+<ul>
+<li><a href="https://nodejs.org/api/dgram.html">Node.js dgram documentation</a></li>
+</ul>
+<hr />
+<h3 id="notes-1"><a class="header" href="#notes-1">Notes</a></h3>
+<ul>
+<li>For production use, handle errors and edge cases gracefully.</li>
+<li>Use <code>udp6</code> instead of <code>udp4</code> for IPv6 sockets.</li>
+<li>Adjust <code>HOST</code> to <code>0.0.0.0</code> if you want to accept messages from any network interface.</li>
+</ul>
+<hr />
+<p>Happy UDP hacking!</p>
+<pre><code></code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="url-shortener---go"><a class="header" href="#url-shortener---go">URL Shortener - Go</a></h1>
+<p>A simple URL shortening service built with Go and MySQL. This project allows users to generate short URLs and redirect to the original long URL using a unique key.</p>
+<h2 id="features-2"><a class="header" href="#features-2">Features</a></h2>
+<ul>
+<li>Generate short URLs with unique keys</li>
+<li>Redirect to the original URL</li>
+<li>MySQL integration for URL storage</li>
+<li>JSON-based HTTP API</li>
+<li>Environment variable support via <code>.env</code> file</li>
+</ul>
+<h2 id="project-structure-2"><a class="header" href="#project-structure-2">Project Structure</a></h2>
+<pre><code>UrlShortner-Go/
+├── config/            # Loads MySQL connection using env vars
+├── database/
+│   └── mysql.go       # MySQL operations for saving and retrieving URLs
+├── handlers/
+│   └── UrlHandler.go  # HTTP handlers for shortening and redirecting
+├── models/            # Request/response models
+├── utils/
+│   └── utils.go       # Random key generation
+├── .env               # Environment variables
+└── main.go            # Entry point of the server
+</code></pre>
+<h2 id="installation-2"><a class="header" href="#installation-2">Installation</a></h2>
+<ol>
+<li>
+<p>Clone the repository:</p>
+<pre><code class="language-bash">git clone https://github.com/0baydullah/UrlShortner-Go.git
+</code></pre>
+</li>
+<li>
+<p>Navigate to the project directory:</p>
+<pre><code class="language-bash">cd UrlShortner-Go
+</code></pre>
+</li>
+<li>
+<p>Set up your MySQL database and table:</p>
+<pre><code class="language-sql">CREATE DATABASE urlshortener;
+USE urlshortener;
+CREATE TABLE urls (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    short_key VARCHAR(255) NOT NULL UNIQUE,
+    original_url TEXT NOT NULL
+);
+</code></pre>
+</li>
+<li>
+<p>Create a <code>.env</code> file in the root directory:</p>
+<pre><code class="language-env">DB_USER=your_db_username
+DB_PASSWORD=your_db_password
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=urlshortener
+</code></pre>
+</li>
+<li>
+<p>Run the application:</p>
+<pre><code class="language-bash">go run main.go
+</code></pre>
+</li>
+</ol>
+<h2 id="usage-2"><a class="header" href="#usage-2">Usage</a></h2>
+<h3 id="shorten-a-url"><a class="header" href="#shorten-a-url">Shorten a URL</a></h3>
+<p>Send a <code>POST</code> request to <code>/shorten</code>:</p>
+<pre><code class="language-bash">curl -X POST http://localhost:8081/shorten -H "Content-Type: application/json" -d '{"url": "https://example.com"}'
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  "key": "abc123",
+  "url": "https://example.com",
+  "shortUrl": "http://localhost:8081/abc123"
+}
+</code></pre>
+<p>or If you want to  test it you can use <code>PostMan</code> too! ;-)</p>
+<h3 id="here-is-a-preview-from-postman-had-been-hosted-on-a-free-vps-maybe-expired-already"><a class="header" href="#here-is-a-preview-from-postman-had-been-hosted-on-a-free-vps-maybe-expired-already">Here is a preview from Postman (had been hosted on a free VPS, maybe expired already)</a></h3>
+<p><img src="https://github.com/0baydullah/UrlShortner-Go/blob/main/image.png?raw=true" alt="App Preview" /></p>
+<h3 id="redirect-to-original-url"><a class="header" href="#redirect-to-original-url">Redirect to Original URL</a></h3>
+<p>Visit the shortened URL:</p>
+<pre><code class="language-bash">http://localhost:8081/abc123
+</code></pre>
+<p>This will redirect to <code>https://example.com</code>.</p>
+<h2 id="contributing-2"><a class="header" href="#contributing-2">Contributing</a></h2>
+<p>Contributions are welcome! Feel free to open issues or submit pull requests.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="-কমপিটিটিভ-পরোগরামিং-গাইড-cp-guide-in-bengali"><a class="header" href="#-কমপিটিটিভ-পরোগরামিং-গাইড-cp-guide-in-bengali">🧠 কম্পিটিটিভ প্রোগ্রামিং গাইড (CP Guide in Bengali)</a></h1>
 <blockquote>
 <p>📘 <em>এই গাইডটি তৈরি করা হয়েছে বাংলায় CP শেখার সুবিধার্থে। টেকনিক্যাল টার্ম এবং কোড ইংরেজিতে রাখা হয়েছে যাতে ইন্টারন্যাশনাল স্ট্যান্ডার্ড ফলো করা যায়।</em></p>
