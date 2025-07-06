@@ -13,11 +13,22 @@ func createCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Hello, create category")
 }
 
+func updateCategoryHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "Hello, update category")
+}
+
+func deleteCategoryHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "Hello, delete category")
+}
+
+
 func main() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", helloHandler)
-	mux.HandleFunc("/category", createCategoryHandler)
+	mux.HandleFunc("/crateCategory", createCategoryHandler)
+	mux.HandleFunc("/updateCategory", updateCategoryHandler)
+	mux.HandleFunc("/deleteCategory", deleteCategoryHandler)
 
 	port := ":8080"
 	fmt.Println("Server is running on http://localhost" + port)
