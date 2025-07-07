@@ -1,28 +1,31 @@
 # 🧠 কম্পিটিটিভ প্রোগ্রামিং গাইড (CP Guide in Bengali)
 > 📘 _এই গাইডটি তৈরি করা হয়েছে বাংলায় CP শেখার সুবিধার্থে। টেকনিক্যাল টার্ম এবং কোড ইংরেজিতে রাখা হয়েছে যাতে ইন্টারন্যাশনাল স্ট্যান্ডার্ড ফলো করা যায়।_
 
+---
 
-## 📅 Discord session content
+## 🚀 Intro
 
-| সেশন     | তারিখ      | আলোচনা করা টপিকস                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | Instructor (Discord name) |
-|----------|------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|
-| সেশন ১   | ২০২৫-০৫-০৫ | 1. প্রবলেম সলভিং আর CP-এর ফিলোসফি<br>2. কেন আমরা CP করবো?<br>3. The Right Problem Solving Mindset<br>4. Exercise vs Problem                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | popcycle                   |
-| সেশন ২   | ২০২৫-০৫-০৭ | 1. Problem Solving mindset ঠিক করার দারুন কিছু উপায়<br>2. Strategy, tactics আর pattern চিনে নেওয়ার কৌশল<br>3. Mindset আর knowledge—দুটোরই importance<br>4. Basic math ভিত্তিক problem<br>5. Census-taker problem ও তার solution<br>6. কীভাবে একটা solid math foundation তৈরি করবেন                                                                                                                                                                                                                                                                                                    | popcycle                   |
-| সেশন ৩   | ২০২৫-০৫-১২ | 1. কিছু Golang conceptual exercise<br>2. Basic Math problems in CP → GCD, LCM, Prime check, Divisor, Modulo math, Factorial<br>3. Live coding এবং Q&A session                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | popcycle                   |
-| সেশন ৪   | ২০২৫-০৫-১৫ | 1. Nebula Clash 001 contest এর প্রব্লেম নিয়ে বিস্তারিত আলোচনা এবং upsolving<br>2. Problem Solving এর পিছনের idea, fastIO, concept এবং কিভাবে একটি problem approach করতে হয়<br>3. Problem solving এর জন্য সাধারণ কিছু math এবং algorithm                                                                                                                                                                                                                                                                                                                                                             | nayemul_islam              |
-| সেশন ৫   | ২০২৫-০৫-১৭ | 1. Complexity জিনিসটা আসলে কি?<br>2. দুই ধরণের complexity : time complexity এবং memory complexity<br>3. কেন complexity সম্পর্কে ধারণা থাকটা important<br>4. CP তে complexity কীভাবে কাজে লাগে<br>5. কীভাবে complexity সম্পর্কে জানার মাধ্যমে আমরা একটি algorithm কতটুকু efficient সে সম্পর্কে ধারণা পেতে পারি<br>6. complexity প্রকাশ করার বিভিন্ন Notation (যেমন Big O, Big omega, Big theta)<br>7. কীভাবে Notation গুলো কাজ করে এবং কীভাবে এই notation গুলোর মাধ্যমে complexity হিসেব করা যায়?<br>8. Big O calculate করার বিভিন্ন rules<br>9. বিভিন্ন ধরণের time complexity (O(1), O(logn), O(n), O(nlogn), O(n^2) ইত্যাদি)<br>10. বিভিন্ন ধরণের memory complexity<br>11. Recursive function, nested loop, array declaration এর complexity | MArhamAA                   |
-| সেশন ৬   | ২০২৫-০৫-১৯ | 1. Golang এ normal input এবং output method<br>2. `bufio` এবং `os` এর মাধ্যমে I/O handling<br>3. `.txt` file এবং অন্যান্য text file থেকে input এবং output handle করা<br>4. FastIO কি? buffered IO কেন fast?<br>5. buffer কি? buffered IO কীভাবে ভিতরে ভিতরে কাজ করে?<br>6. Buffered I/O vs unbuffered I/O<br>7. Buffered I/O inside Internal Memory<br>8. CP তে fastIO কেন necessary?                                                                                                                                                                                                                                                                         | popcycle                   |
-| সেশন ৭   | ২০২৫-০৫-২১ | 1. BruteForce কি এবং কেন BruteForce দরকার?<br>2. প্রত্যেকটা problem কি BruteForce দিয়ে solve করা উচিত?<br>3. BruteForce নিয়ে কি প্রথমেই ভাবা উচিত? কেন?<br>4. বিভিন্ন ধরণের problem BruteForce দিয়ে solve করার উদাহরণ                                                                                                                                                                                                                                                                                                                                                                                                          | MArhamAA                   |
-| সেশন ৮   | ২০২৫-০৫-২৪ | 1. FastIO in Golang part 2<br>2. FastIO template of Golang for CP<br>3. `defer` function এবং এটি কী করে?<br>4. Buffered I/O flush করার ক্ষেত্রে `defer` কীভাবে কাজ করে                                                                                                                                                                                                                                                                                                                                                                                                                                                      | popcycle                   |
-| সেশন ৯   | ২০২৫-০৫-২৬ | 1. Greedy technique আসলে কী?<br>2. আমাদের এটা কেন দরকার? brute force কি যথেষ্ট না?<br>3. বাস্তব problem-এ greedy technique দিয়ে কীভাবে approach করতে হয়<br>4. প্রথমে brute force চিন্তা করা → এরপর কীভাবে greedy দিয়ে optimize করা যায়                                                                                                                                                                                                                                                                                                                                                                              | toji                       |
-| সেশন ১০ | ২০২৫-০৫-২৮ | 1. Post contest আলোচনা<br>2. NC002 Problems Uplsolving<br>3. Q&A related to contest                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | MArhamAA, popcycle         |
-| সেশন ১১ | ২০২৫-০৬-০১ | 1. Linear search কী এবং naming convention-এর ব্যাপারটা<br>2. Binary search: এর implementation, complexity, এবং বিভিন্ন use case<br>3. Binary search ভিত্তিক practice problems                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | toji                       |
-| সেশন ১২ | ২০২৫-০৬-০২ | 1. Binary search part 2<br>2. Lower bound এবং Upper bound concepts<br>3. Binary Search on Answer technique<br>4. Floating point number এর উপর binary search<br>5. Binary search ভিত্তিক আরও কিছু practice problems                                                                                                                                                                                                                                                                                                                                                                                                                        | MArhamAA                   |
+এই গাইডটি **Golang দিয়ে Competitive Programming শেখার জন্য** একটি সহজ পথপ্রদর্শক।  
+আপনি যদি CP-তে নতুন হয়ে থাকেন বা Golang-কে CP-তে ব্যবহার করতে চান, তাহলে এই গাইড আপনার জন্যই! এখানে থাকছে:
 
+- Easy থেকে Hard লেভেলের categorized problems
+- Bengali explanation সহ curated exercises
+- Community-made contest problems এবং revision list
+- Golang-specific tips & fast I/O templates
 
+---
 
+## 🛠️ কিভাবে এই Guide ব্যাবহার করবেন
 
-> 💡 নতুন সেশন যুক্ত হতে থাকবে সময় অনুযায়ী।
+1. নিচে থাকা **Exercises** গুলো থেকে শুরু করুন Golang দিয়ে প্র‍্যাকটিস করতে।
+2. তারপর Problem List অনুযায়ী প্রতিদিন ২-৩টা করে CP Problem solve করুন।
+3. "Tag" দেখে বুঝে নিন কোনটা কোন contest/level এর অংশ।
+4. “UID” ব্যবহার করে solution submit এবং discuss করুন BGCE server এ।
+5. Extra Resource এবং Revision Topics অংশ ব্যাবহার করুন আপনার দক্ষতা বাড়ানোর জন্য।
+6. আমাদের CP সেশনগুলোতে কি কি topic নিয়ে আলোচনা হয়েছে এবং কোন কোন topic আপনি নিজে নিজে practice করবেন তা জানতে [Discord CP session log](https://nesohq.github.io/bgce-archive/warp/cp-session-log.html) দেখুন। 
+7. This is how we are moving forward [CP Roadmap](https://nesohq.github.io/bgce-archive/warp/roadmap.html)
+
+---
 
 #### Exercises to Practice with Golang
 
@@ -35,44 +38,54 @@
 - [ ] [Restricted](https://atcoder.jp/contests/abc063/tasks/abc063_a?lang=en) (dncpc2)
 - [ ] [Fitness](https://www.codechef.com/problems/FIT) (dncpc2)
 - [ ] [Programming Education](https://atcoder.jp/contests/abc112/tasks/abc112_a?lang=en) (dncpc5)
+- [ ] [Divide into 3](https://www.codechef.com/problems/DIVIDE3?tab=statement) (dncpc7) 
 
 > পরবর্তীতে আরও `exercise` add করা হবে। 
 ---
 
-## Problem list 
+## 🧮 Problem List
 
-#### Basic Mathematical problems 
-1. [Timus 1000](https://acm.timus.ru/problem.aspx?space=1&num=1000)
-2. [Timus 1409](https://acm.timus.ru/problem.aspx?space=1&num=1409)
-3. [Project Euler 1](https://projecteuler.net/problem=1)
-4. [Children and Candies](https://atcoder.jp/contests/abc043/tasks/abc043_a?lang=en) (dncpc1)
-5. [Cloudberry Jams](https://codeforces.com/problemset/problem/2086/A) (dncpc1)
-6. [Restuarant](https://atcoder.jp/contests/abc055/tasks/abc055_a?lang=en) (dncpc1)
-7. [Hashmat the Brave warrior](https://onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=996)
-8. [Between two integers](https://atcoder.jp/contests/abc061/tasks/abc061_a?lang=en) (dncpc2)
-9. [Domino Piling](https://codeforces.com/problemset/problem/50/A) (dncpc2)
-10. [Easy problem](https://codeforces.com/problemset/problem/2044/A) (dncpc3)
-11. [Election go brrr](https://atcoder.jp/contests/abc366/tasks/abc366_a?lang=en) (dncpc3)
-12. [A game of choice](https://codeforces.com/problemset/problem/959/A) (dncpc3)
-13. [Sandglass](https://atcoder.jp/contests/abc072/tasks/abc072_a?lang=en) (dncpc3)
-14. [Multiple of 2 and N](https://atcoder.jp/contests/abc102/tasks/abc102_a?lang=en) (dncpc4)
-15. [Atocoder Crackers](https://atcoder.jp/contests/abc105/tasks/abc105_a?lang=en) (dncpc4)
-16. [Soldier and Bananas](https://codeforces.com/problemset/problem/546/A) (dncpc4)
-17. [Vasya and Socks](https://codeforces.com/problemset/problem/460/A) (dncpc4)
-18. [Garden](https://atcoder.jp/contests/abc106/tasks/abc106_a?lang=en) (dncpc5)
-19. [Clock Conversion](https://codeforces.com/problemset/problem/1950/C) (dncpc5)
-20. [Plus Minus X](https://atcoder.jp/contests/abc137/tasks/abc137_a?lang=en) (dncpc6)
+### 🔢 Basic Mathematical Problems
 
+| #   | UID   | Title                         | Link                                                                 | Tag       |
+|-----|-------|-------------------------------|----------------------------------------------------------------------|-----------|
+| 1   | 4832  | Timus 1000                    | [Link](https://acm.timus.ru/problem.aspx?space=1&num=1000)           |           |
+| 2   | 7940  | Timus 1409                    | [Link](https://acm.timus.ru/problem.aspx?space=1&num=1409)           |           |
+| 3   | 1602  | Project Euler 1               | [Link](https://projecteuler.net/problem=1)                           |           |
+| 4   | 2314  | Children and Candies          | [Link](https://atcoder.jp/contests/abc043/tasks/abc043_a?lang=en)   | dncpc1    |
+| 5   | 6851  | Cloudberry Jams               | [Link](https://codeforces.com/problemset/problem/2086/A)            | dncpc1    |
+| 6   | 9473  | Restuarant                    | [Link](https://atcoder.jp/contests/abc055/tasks/abc055_a?lang=en)   | dncpc1    |
+| 7   | 5119  | Hashmat the Brave Warrior     | [Link](https://onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=996) |           |
+| 8   | 8640  | Between Two Integers          | [Link](https://atcoder.jp/contests/abc061/tasks/abc061_a?lang=en)   | dncpc2    |
+| 9   | 1208  | Domino Piling                 | [Link](https://codeforces.com/problemset/problem/50/A)              | dncpc2    |
+| 10  | 3765  | Easy Problem                  | [Link](https://codeforces.com/problemset/problem/2044/A)            | dncpc3    |
+| 11  | 9021  | Election Go Brrr              | [Link](https://atcoder.jp/contests/abc366/tasks/abc366_a?lang=en)   | dncpc3    |
+| 12  | 1459  | A Game of Choice              | [Link](https://codeforces.com/problemset/problem/959/A)             | dncpc3    |
+| 13  | 5184  | Sandglass                     | [Link](https://atcoder.jp/contests/abc072/tasks/abc072_a?lang=en)   | dncpc3    |
+| 14  | 7804  | Multiple of 2 and N           | [Link](https://atcoder.jp/contests/abc102/tasks/abc102_a?lang=en)   | dncpc4    |
+| 15  | 2691  | Atocoder Crackers             | [Link](https://atcoder.jp/contests/abc105/tasks/abc105_a?lang=en)   | dncpc4    |
+| 16  | 4302  | Soldier and Bananas           | [Link](https://codeforces.com/problemset/problem/546/A)             | dncpc4    |
+| 17  | 6789  | Vasya and Socks               | [Link](https://codeforces.com/problemset/problem/460/A)             | dncpc4    |
+| 18  | 9032  | Garden                        | [Link](https://atcoder.jp/contests/abc106/tasks/abc106_a?lang=en)   | dncpc5    |
+| 19  | 1025  | Clock Conversion              | [Link](https://codeforces.com/problemset/problem/1950/C)            | dncpc5    |
+| 20  | 5671  | Plus Minus X                  | [Link](https://atcoder.jp/contests/abc137/tasks/abc137_a?lang=en)   | dncpc6    |
+| 21  | 3421  | Square Year                   | [Link](https://codeforces.com/problemset/problem/2114/A)            | dncpc7    |
 
+---
 
-#### Beginner Friendly CP problems
-21. [Weird Algorithm](https://cses.fi/problemset/task/1068)
-22. [Concatenation of Array](https://leetcode.com/problems/concatenation-of-array/description/)
-23. [Sakurako's Exam](https://codeforces.com/problemset/problem/2008/A)
-24. [Fifty-Fifty](https://atcoder.jp/contests/abc132/tasks/abc132_a?lang=en) (dncpc6)
-25. [Good Kid](https://codeforces.com/problemset/problem/1873/B) (dncpc6)
-26. [Make it Big](https://toph.co/p/make-it-big) (dncpc6)
-27. [Three Doors](https://codeforces.com/problemset/problem/1709/A) (dncpc6)
+### 🧑‍💻 Beginner Friendly CP Problems
+
+| #   | UID   | Title                         | Link                                                                 | Tag       |
+|-----|-------|-------------------------------|----------------------------------------------------------------------|-----------|
+| 22  | 4598  | Weird Algorithm               | [Link](https://cses.fi/problemset/task/1068)                         |           |
+| 23  | 7334  | Concatenation of Array        | [Link](https://leetcode.com/problems/concatenation-of-array/description/) |        |
+| 24  | 1019  | Sakurako's Exam               | [Link](https://codeforces.com/problemset/problem/2008/A)            |           |
+| 25  | 5640  | Fifty-Fifty                   | [Link](https://atcoder.jp/contests/abc132/tasks/abc132_a?lang=en)   | dncpc6    |
+| 26  | 8123  | Good Kid                      | [Link](https://codeforces.com/problemset/problem/1873/B)            | dncpc6    |
+| 27  | 2047  | Make it Big                   | [Link](https://toph.co/p/make-it-big)                               | dncpc6    |
+| 28  | 6831  | Three Doors                   | [Link](https://codeforces.com/problemset/problem/1709/A)            | dncpc6    |
+| 29  | 9276  | Distance Table                | [Link](https://atcoder.jp/contests/abc411/tasks/abc411_b?lang=en)   | dncpc7    |
+| 30  | 3915  | Sushi for Two                 | [Link](https://codeforces.com/problemset/problem/1138/A)            | dncpc7    |
 
 
 
@@ -126,19 +139,13 @@
 
 ---
 
-## কিভাবে এই guide ব্যাবহার করবেন 
-1. প্রতিদিন discord এ দেওয়া exercises/problems গুলো solve করবেন।
-2. নিয়মিত আমাদের session এবং contest গুলোতে participate করুন। 
-3. সেশন লিস্ট নিয়মিত আপডেট করুন। 
-4. বেশি problem solve করা উদ্দেশ্য নয়, বরং ভালোভাবে বুঝে problem solving করবেন। 
-5. নিজের একটি github repo তৈরি করুন এবং এই guide এর problem solution গুলো সেখানে add করতে পারেন।
----
-
 > _এই গাইডের সাথে থাকুন, নিজের প্রগ্রেস ট্র্যাক করুন, আর শেখা চালিয়ে যান!_
 
 ## Events (full term)
 1. dncpc = Daily (Nebula-Clash) practice contest
 2. NC = Nebula Clash 
+
+---
 
 [**Author:** @ifrunruhin12
 **Date:** 2025-05-09
