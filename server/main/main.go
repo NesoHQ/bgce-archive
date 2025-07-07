@@ -5,14 +5,16 @@ import (
 	"net/http"
 )
 
-func helloHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Hello, World with ServeMux!")
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "Welcome to BGCE Archive!")
 }
 
 func main() {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/", helloHandler)
+	mux.HandleFunc("/", homeHandler)
+
+	mux.HandleFunc("/categories", categoryHandler)
 
 	port := ":8080"
 	fmt.Println("Server is running on http://localhost" + port)
