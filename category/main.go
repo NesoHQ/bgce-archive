@@ -21,14 +21,19 @@ func deleteCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Hello, delete category")
 }
 
+func renameCategoryHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "Hello, rename category")
+}
+
 
 func main() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", helloHandler)
-	mux.HandleFunc("/crateCategory", createCategoryHandler)
+	mux.HandleFunc("/createCategory", createCategoryHandler)
 	mux.HandleFunc("/updateCategory", updateCategoryHandler)
 	mux.HandleFunc("/deleteCategory", deleteCategoryHandler)
+	mux.HandleFunc("/renameCategory", renameCategoryHandler)
 
 	port := ":8080"
 	fmt.Println("Server is running on http://localhost" + port)
