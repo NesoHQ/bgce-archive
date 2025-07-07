@@ -1,4 +1,4 @@
-package main
+package categories
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"server/rbac"
 )
 
-func categoryHandler(w http.ResponseWriter, r *http.Request) {
+func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 	if !rbac.IsSuperAdmin(r) {
 		http.Error(w, "Forbidden: Super Admins only", http.StatusForbidden)
 		return

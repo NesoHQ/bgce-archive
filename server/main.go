@@ -3,18 +3,19 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"server/categories"
 )
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
+func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Welcome to BGCE Archive!")
 }
 
 func main() {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/", homeHandler)
+	mux.HandleFunc("/", HomeHandler)
 
-	mux.HandleFunc("/categories", categoryHandler)
+	mux.HandleFunc("/categories", categories.CategoryHandler)
 
 	port := ":8080"
 	fmt.Println("Server is running on http://localhost" + port)

@@ -9,10 +9,10 @@ This project serves as the foundation for category management, RBAC (Role-Based 
 
 ```bash
 /server
+├── main               # Main entry point for the server
 ├── go.mod             # Go module file (defines module path, dependencies)
 │
-├── /main              # All API handlers and the main server entry point
-│   ├── main.go        # Server bootstrap, routing setup
+├── /categories        # Category API handlers
 │   ├── categories.go  # HTTP handlers for category management (GET/POST/etc)
 │
 ├── /rbac              # Role-Based Access Control logic
@@ -36,7 +36,7 @@ go mod tidy
 
 ### 3. Run the server
 ```bash
-go run main/main.go
+go run main.go
 ```
 
 > ✅ Server runs on: `http://localhost:8080`
