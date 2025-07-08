@@ -16,9 +16,11 @@ func main() {
 
 	mux.HandleFunc("/", HomeHandler)
 
-	mux.HandleFunc("/categories", categories.CategoryHandler)
+	mux.HandleFunc("GET /categories", categories.CategoryHandler)
 
-	mux.HandleFunc("/categories/classnotes", classnotes.ClassnotesHandler)
+	mux.HandleFunc("GET /categories/classnotes", classnotes.ClassnotesHandler)
+	mux.HandleFunc("GET /categories/classnotes/{id}", classnotes.GetClassNote)
+	mux.HandleFunc("POST /categories/classnotes", classnotes.PostClassNote)
 
 	port := ":8080"
 	fmt.Println("Server is running on http://localhost" + port)
