@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+
 	"server/categories"
 	"server/categories/classnotes"
 )
@@ -19,8 +20,8 @@ func main() {
 	mux.HandleFunc("GET /categories", categories.CategoryHandler)
 
 	mux.HandleFunc("GET /categories/classnotes", classnotes.ClassnotesHandler)
-	mux.HandleFunc("GET /categories/classnotes/{id}", classnotes.GetClassNote)
-	mux.HandleFunc("POST /categories/classnotes", classnotes.PostClassNote)
+	mux.HandleFunc("GET /categories/classnotes/{id}", classnotes.GetClassnoteByID)
+	mux.HandleFunc("POST /categories/classnotes", classnotes.PostNewClassnote)
 
 	port := ":8080"
 	fmt.Println("Server is running on http://localhost" + port)
