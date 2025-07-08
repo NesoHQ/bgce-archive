@@ -86,6 +86,9 @@
 | 28  | 6831  | Three Doors                   | [Link](https://codeforces.com/problemset/problem/1709/A)            | dncpc6    |
 | 29  | 9276  | Distance Table                | [Link](https://atcoder.jp/contests/abc411/tasks/abc411_b?lang=en)   | dncpc7    |
 | 30  | 3915  | Sushi for Two                 | [Link](https://codeforces.com/problemset/problem/1138/A)            | dncpc7    |
+| 31 |  0313  | Ilya and Bank Account         | [Link](https://codeforces.com/problemset/problem/313/A)             |           |
+| 32 |  1676  | Equal Candies                 | [Link](https://codeforces.com/problemset/problem/1676/B)             |           |
+| 33 |  1295  | Find Numbers with Even Number of digits | [Link](https://leetcode.com/problems/find-numbers-with-even-number-of-digits/) |       |
 
 
 
