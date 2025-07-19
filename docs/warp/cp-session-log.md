@@ -15,8 +15,20 @@
 | সেশন ১১ | ২০২৫-০৬-০১ | 1. Linear search কী এবং naming convention-এর ব্যাপারটা<br>2. Binary search: এর implementation, complexity, এবং বিভিন্ন use case<br>3. Binary search ভিত্তিক practice problems                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | toji                       |
 | সেশন ১২ | ২০২৫-০৬-০২ | 1. Binary search part 2<br>2. Lower bound এবং Upper bound concepts<br>3. Binary Search on Answer technique<br>4. Floating point number এর উপর binary search<br>5. Binary search ভিত্তিক আরও কিছু practice problems                                                                                                                                                                                                                                                                                                                                                                                                                        | MArhamAA                   |
 | সেশন ১৩ | ২০২৫-০৭-০৭ | 1. পূর্ববর্তী CP sessions  review <br>2. পূর্ববর্তী সব টপিক revision <br> 3. CP problem submission guide                                                                                                                                                                                   | popcycle                   |
-
-
+| সেশন ১৪ | ২০২৫-০৭-১৪ |  1.Recursion theory (Firstly show Stack theory) <br> 2.Recursion is one type of bruteforce(Magic) <br> 3.Some basic problems using recursion <br> 4.Basic idea about memoization                                                                                                                                                                                                   | MArhamAA                        |
 
 
 > 💡 নতুন সেশন যুক্ত হতে থাকবে সময় অনুযায়ী।
+
+
+
+
+
+
+## 📚 CP Session Task
+
+| Session No. | Session Task                                                                                                                                                                                                                                                                                                                                 | Session Topic       |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| 13          | ✅ Solve all problems from [cp-guide.md](./cp-guide.md)                                                                                                                                                                                                                                                                                       | Revision & Practice |
+| 14          | 🔁 Solve the following recursion problems:<br>• [Tower of Hanoi (CSES)](https://cses.fi/problemset/task/2165)<br>• [Chef and String (CodeChef)](https://www.codechef.com/problems/CHRL1)<br>• [Monster Defeating (AtCoder)](https://atcoder.jp/contests/abc153/tasks/abc153_d)<br>• [Gray Code (CSES)](https://cses.fi/problemset/task/2205) | Recursion           |
+
