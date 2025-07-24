@@ -169,22 +169,44 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h3 id="-commit-strategy"><a class="header" href="#-commit-strategy">📌 COMMIT STRATEGY</a></h3>
-<h4 id="-format"><a class="header" href="#-format">✅ Format:</a></h4>
-<pre><code>[&lt;type&gt;] &lt;short-description&gt;
+                        <h3 id="-commit-strategy"><a class="header" href="#-commit-strategy">📌 <strong>COMMIT STRATEGY</strong></a></h3>
+<h4 id="-setup"><a class="header" href="#-setup">🔧 <strong>Setup</strong></a></h4>
+<p>Install <strong>Lefthook</strong> to enable Git commit hooks for enforcing commit standards:</p>
+<pre><code class="language-bash">go install github.com/evilmartians/lefthook@latest
 </code></pre>
-<h4 id="-types"><a class="header" href="#-types">💡 Types:</a></h4>
+<p>Then, in the project root: you do not need to execute this command as the file already exists!</p>
+<pre><code class="language-bash"># lefthook install
+</code></pre>
+<hr />
+<h4 id="-commit-message-format"><a class="header" href="#-commit-message-format">✅ <strong>Commit Message Format</strong></a></h4>
+<pre><code>[&lt;service&gt;] (&lt;type/feature-name&gt;): &lt;Capitalized short description&gt;
+</code></pre>
+<hr />
+<h4 id="-allowed-types"><a class="header" href="#-allowed-types">💡 <strong>Allowed Types</strong></a></h4>
 <ul>
-<li><code>feat</code>: New content or file</li>
-<li><code>fix</code>: Fixes formatting or broken links</li>
-<li><code>docs</code>: Changes to README, guides</li>
-<li><code>refactor</code>: Structural changes</li>
+<li><code>feat</code> – New feature or functionality</li>
+<li><code>fix</code> – Bug fix or issue correction</li>
+<li><code>patch</code> – Minor updates or hotfixes</li>
+<li><code>docs</code> – Documentation changes</li>
+<li><code>style</code> – Code style changes (formatting, linting)</li>
+<li><code>refactor</code> – Code restructuring without behavior change</li>
+<li><code>test</code> – Adding or updating tests</li>
+<li><code>chore</code> – Build tasks, CI configs, or other maintenance</li>
 </ul>
-<h4 id="-example-commits"><a class="header" href="#-example-commits">🧪 Example Commits:</a></h4>
-<pre><code>[feat] Add interview questions for GCP
-[fix] Correct broken link in course summary
-[docs] Add README to cli-tools
+<hr />
+<h4 id="-example-commits"><a class="header" href="#-example-commits">🧪 <strong>Example Commits</strong></a></h4>
+<pre><code>[inventory] (feat/add-product): Add product listing endpoint
+[auth] (fix/token-expiry): Correct token expiry issue
+[payment] (patch/update-paypal): Update PayPal integration
+[docs] (docs/readme): Update CLI tool usage instructions
 </code></pre>
+<hr />
+<p>✅ <strong>Notes for contributors:</strong></p>
+<ul>
+<li><strong>Service</strong>: Use the relevant service or package name in square brackets.</li>
+<li><strong>Type/feature-name</strong>: Specify the type and concise feature name in parentheses.</li>
+<li><strong>Description</strong>: Must start with an uppercase letter and clearly state the change.</li>
+</ul>
 <hr />
 
                     </main>
