@@ -17,9 +17,13 @@ jobs:
                   allowed_types="feat|fix|patch|docs|style|refactor|test|chore"
                   pattern="^\[([a-zA-Z0-9_-]+)\] \(($allowed_types)\/([a-zA-Z0-9_-]+)\): [A-Z].+"
                   for commit in $commits; do
-                    echo "Checking: $commit"
-                    if ! echo "$commit" | grep -qE "$pattern"; then
-                      echo "Invalid commit message: $commit"
+                  echo "Checking: $commit"
+                  if echo "$commit" | grep -qE "^Merge"; then
+                      echo "Skipping merge commit: $commit"
+                      continue
+                  fi
+                  if ! echo "$commit" | grep -qE "$pattern"; then
+                      echo "❌ Invalid commit message: $commit"
                       exit 1
-                    fi
+                  fi
                   done
