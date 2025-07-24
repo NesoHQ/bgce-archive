@@ -7,7 +7,7 @@ allowed_types="feat|fix|patch|docs|style|refactor|test|chore"
 
 pattern="^\[([a-zA-Z0-9_-]+)\] \(($allowed_types)\/([a-zA-Z0-9_-]+)\): [A-Z].+"
 
-echo "🔎 Checking commit message: $commit_msg"
+echo "Checking commit message: $commit_msg"
 
 if ! echo "$commit_msg" | grep -qE "$pattern"; then
   echo "❌ Commit message invalid!"
