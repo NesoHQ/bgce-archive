@@ -2,16 +2,8 @@
 
 #### 🔧 **Setup**
 
-Install **Lefthook** to enable Git commit hooks for enforcing commit standards:
-
 ```bash
-go install github.com/evilmartians/lefthook@latest
-```
-
-Then, in the project root: you do not need to execute this command as the file already exists!
-
-```bash
-# lefthook install
+make setup-commit-hook
 ```
 
 ---
