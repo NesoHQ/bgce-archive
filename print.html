@@ -10982,32 +10982,6 @@ go get github.com/Delta456/box-cli-maker/v2
 </ol>
 <h2 id="contributing"><a class="header" href="#contributing">Contributing</a></h2>
 <p>Contributions are welcome! Please feel free to submit a Pull Request.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="-simple-go-ecommerce"><a class="header" href="#-simple-go-ecommerce">🛒 Simple Go eCommerce</a></h1>
-<p>This is a basic eCommerce backend built using pure Go (Golang) without any external frameworks.</p>
-<h2 id="-features-1"><a class="header" href="#-features-1">🚀 Features</a></h2>
-<ul>
-<li>🧾 Product listing (<code>GET /products</code>)</li>
-<li>👋 Hello route (<code>GET /hello</code>)</li>
-<li>🙋 About route (<code>GET /about</code>)</li>
-<li>✅ CORS support for product route</li>
-<li>🛠️ Clean and simple Go code (uses <code>net/http</code>)</li>
-</ul>
-<h2 id="-api-endpoints"><a class="header" href="#-api-endpoints">📦 API Endpoints</a></h2>
-<div class="table-wrapper"><table><thead><tr><th>Method</th><th>Route</th><th>Description</th></tr></thead><tbody>
-<tr><td>GET</td><td>/hello</td><td>Returns "Hello World"</td></tr>
-<tr><td>GET</td><td>/about</td><td>Info about the developer</td></tr>
-<tr><td>GET</td><td>/products</td><td>Returns a list of products</td></tr>
-</tbody></table>
-</div>
-<h2 id="-example-product-json"><a class="header" href="#-example-product-json">🧪 Example Product JSON</a></h2>
-<pre><code class="language-json">{
-  "id": 1,
-  "title": "Orange",
-  "description": "Orange is red. I love orange.",
-  "price": 100,
-  "imageUrl": "https://www.dole.com/sites/default/files/media/2025-01/oranges.png"
-}
-</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><p>[<strong>Author:</strong> @hasanmubin
 <strong>Date:</strong> 2025-06-19
 <strong>Category:</strong> e.g., mini-projects/GitPulse
@@ -11017,7 +10991,7 @@ go get github.com/Delta456/box-cli-maker/v2
 <p>A simple command-line tool that fetches and displays the recent public activity of any GitHub user using the <a href="https://api.github.com/">GitHub Events API</a>.
 Built with Go.</p>
 <hr />
-<h2 id="-features-2"><a class="header" href="#-features-2">🚀 Features</a></h2>
+<h2 id="-features-1"><a class="header" href="#-features-1">🚀 Features</a></h2>
 <ul>
 <li>
 <p>Accepts GitHub username as a command-line argument</p>
@@ -11306,6 +11280,85 @@ x/1i $pc            # বর্তমান ইনস্ট্রাকশনট
 <pre><code class="language-bash">docker rm -f go-debug
 docker run -it --name go-debug jsiqbal/go-debug-ready
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="-bgce-server-backend-api"><a class="header" href="#-bgce-server-backend-api">🛰️ BGCE Server (Backend API)</a></h1>
+<p>Welcome to the <strong>backend server</strong> powering the BGCE (Best Golang Community Ever) archive and control system.<br />
+This project serves as the foundation for category management, RBAC (Role-Based Access Control), and future API integrations — all written in <strong>Golang</strong> with simplicity and scalability in mind.</p>
+<hr />
+<h2 id="-project-structure"><a class="header" href="#-project-structure">📁 Project Structure</a></h2>
+<pre><code class="language-bash">/server
+├── main               # Main entry point for the server
+├── go.mod             # Go module file (defines module path, dependencies)
+│
+├── /categories        # Category API handlers
+│   ├── categories.go  # HTTP handlers for category management (GET/POST/etc)
+│
+├── /rbac              # Role-Based Access Control logic
+│   ├── superadmin.go  # RBAC logic to allow/disallow actions based on role
+</code></pre>
+<hr />
+<h2 id="-getting-started"><a class="header" href="#-getting-started">🚀 Getting Started</a></h2>
+<h3 id="1-clone-the-repo--enter-the-server-directory"><a class="header" href="#1-clone-the-repo--enter-the-server-directory">1. Clone the repo &amp; enter the <code>/server</code> directory</a></h3>
+<pre><code class="language-bash">git clone https://github.com/yourusername/bgce-archive.git
+cd bgce-archive/server
+</code></pre>
+<h3 id="2-initialize-dependencies-if-needed"><a class="header" href="#2-initialize-dependencies-if-needed">2. Initialize dependencies (if needed)</a></h3>
+<pre><code class="language-bash">go mod tidy
+</code></pre>
+<h3 id="3-run-the-server"><a class="header" href="#3-run-the-server">3. Run the server</a></h3>
+<pre><code class="language-bash">go run main.go
+</code></pre>
+<blockquote>
+<p>✅ Server runs on: <code>http://localhost:8080</code></p>
+</blockquote>
+<hr />
+<h2 id="-role-based-access-control-rbac"><a class="header" href="#-role-based-access-control-rbac">🔐 Role-Based Access Control (RBAC)</a></h2>
+<p>For now, <strong>Super Admin</strong> check is a simple function in <code>rbac/superadmin.go</code>:</p>
+<pre><code class="language-go">func IsSuperAdmin(r *http.Request) bool
+</code></pre>
+<p>This will later be extended using JWT tokens, sessions, or other proper authentication systems.</p>
+<hr />
+<h2 id="-api-endpoints-wip"><a class="header" href="#-api-endpoints-wip">🧩 API Endpoints (WIP)</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Endpoint</th><th>Method</th><th>Description</th><th>Access</th></tr></thead><tbody>
+<tr><td><code>/</code></td><td>GET</td><td>Welcome route</td><td>Public</td></tr>
+<tr><td><code>/categories</code></td><td>GET</td><td>List all categories</td><td>Super Admin</td></tr>
+<tr><td><code>/categories</code></td><td>POST</td><td>Create a new category</td><td>Super Admin</td></tr>
+<tr><td><code>/categories</code></td><td>PUT</td><td>Update a category</td><td>Super Admin</td></tr>
+<tr><td><code>/categories</code></td><td>DELETE</td><td>Delete a category</td><td>Super Admin</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="-contributing"><a class="header" href="#-contributing">🤝 Contributing</a></h2>
+<p>We welcome PRs, ideas, and improvements! Here's how to get started:</p>
+<ol>
+<li><strong>Fork</strong> the repo</li>
+<li>Create a new branch using:
+<pre><code class="language-bash">git switch -c feature/your-feature-name
+</code></pre>
+</li>
+<li>Add your changes (modular, readable, minimal)</li>
+<li><strong>If adding route logic</strong>, place it under <code>/categories/</code></li>
+<li><strong>If adding role or auth logic</strong>, place it under <code>/rbac/</code></li>
+<li>Push and open a PR with a clear title and message</li>
+</ol>
+<blockquote>
+<p>📌 <em>Keep each PR focused — one feature or fix per PR, please!</em></p>
+</blockquote>
+<hr />
+<h2 id="-roadmap-wip-ideas"><a class="header" href="#-roadmap-wip-ideas">🔮 Roadmap (WIP Ideas)</a></h2>
+<ul>
+<li>✅ Clean route structure using <code>http.ServeMux</code></li>
+<li>🔐 Real token-based Super Admin checks (JWT/session)</li>
+<li>📦 Persistent DB (PostgreSQL or SQLite)</li>
+<li>🧩 Problem management endpoints</li>
+<li>📊 Admin dashboard (frontend)</li>
+<li>🔄 JSON response formatting</li>
+</ul>
+<hr />
+<h2 id="-maintained-by"><a class="header" href="#-maintained-by">🧑‍💻 Maintained By</a></h2>
+<h2 id="bgce-mod-team"><a class="header" href="#bgce-mod-team">BGCE Mod Team</a></h2>
+<blockquote>
+<p><em>If you break it, you fix it. If you build it, name it something cool.</em> 😎</p>
+</blockquote>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="todo-cli"><a class="header" href="#todo-cli">Todo CLI</a></h1>
 <p>A simple command-line interface (CLI) application for managing your to-do tasks, built with Go.</p>
 <h2 id="features-1"><a class="header" href="#features-1">Features</a></h2>
