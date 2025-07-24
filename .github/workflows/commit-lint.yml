@@ -1,0 +1,23 @@
+name: Commit Message Lint
+
+on:
+    pull_request:
+        types: [opened, edited, synchronize, reopened]
+
+jobs:
+    commitlint:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Validate commit messages
+              run: |
+                  commits=$(git log origin/main..HEAD --pretty=format:%s)
+                  allowed_types="feat|fix|patch|docs|style|refactor|test|chore"
+                  pattern="^\[([a-zA-Z0-9_-]+)\] \(($allowed_types)\/([a-zA-Z0-9_-]+)\): [A-Z].+"
+                  for commit in $commits; do
+                    if ! echo "$commit" | grep -qE "$pattern"; then
+                      echo "❌ Commit message invalid: $commit"
+                      exit 1
+                    fi
+                  done
