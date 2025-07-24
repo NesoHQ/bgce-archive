@@ -13,7 +13,7 @@ jobs:
                   fetch-tags: false
             - name: Check commit messages
               run: |
-                  commits=$(git log origin/main..HEAD --pretty=format:%s)
+                  commits=$(git log origin/master..HEAD --pretty=format:%s)
                   allowed_types="feat|fix|patch|docs|style|refactor|test|chore"
                   pattern="^\[([a-zA-Z0-9_-]+)\] \(($allowed_types)\/([a-zA-Z0-9_-]+)\): [A-Z].+"
                   for commit in $commits; do
