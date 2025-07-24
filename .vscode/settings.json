@@ -1,10 +1,11 @@
 {
-  "editor.formatOnSave": true,
-  "[go]": {
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "golang.go"
-  },
-  "gopls": {
-    "formatting.gofumpt": true
-  }
+    "[go]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "golang.go"
+    },
+    "gopls": {
+        "formatting.gofumpt": true
+    },
+    "makefile.configureOnOpen": false
 }
