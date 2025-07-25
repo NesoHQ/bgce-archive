@@ -1,24 +1,49 @@
-### 📌 COMMIT STRATEGY
+### 📌 **COMMIT STRATEGY**
 
-#### ✅ Format:
+#### 🔧 **Setup**
+
+```bash
+make setup-commit-hook
+```
+
+---
+
+#### ✅ **Commit Message Format**
 
 ```
-[<type>] <short-description>
+[<service>] (<type/feature-name>): <Capitalized short description>
 ```
 
-#### 💡 Types:
+---
 
-- `feat`: New content or file
-- `fix`: Fixes formatting or broken links
-- `docs`: Changes to README, guides
-- `refactor`: Structural changes
+#### 💡 **Allowed Types**
 
-#### 🧪 Example Commits:
+-   `feat` – New feature or functionality
+-   `fix` – Bug fix or issue correction
+-   `patch` – Minor updates or hotfixes
+-   `docs` – Documentation changes
+-   `style` – Code style changes (formatting, linting)
+-   `refactor` – Code restructuring without behavior change
+-   `test` – Adding or updating tests
+-   `chore` – Build tasks, CI configs, or other maintenance
+
+---
+
+#### 🧪 **Example Commits**
 
 ```
-[feat] Add interview questions for GCP
-[fix] Correct broken link in course summary
-[docs] Add README to cli-tools
+[inventory] (feat/add-product): Add product listing endpoint
+[auth] (fix/token-expiry): Correct token expiry issue
+[payment] (patch/update-paypal): Update PayPal integration
+[docs] (docs/readme): Update CLI tool usage instructions
 ```
+
+---
+
+✅ **Notes for contributors:**
+
+-   **Service**: Use the relevant service or package name in square brackets.
+-   **Type/feature-name**: Specify the type and concise feature name in parentheses.
+-   **Description**: Must start with an uppercase letter and clearly state the change.
 
 ---
