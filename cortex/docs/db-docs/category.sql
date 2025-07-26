@@ -15,7 +15,7 @@ CREATE TABLE "categories" (
   "meta" jsonb
 );
 
-CREATE TABLE "subcategories" (
+CREATE TABLE "sub_categories" (
   "id" integer PRIMARY KEY NOT NULL,
   "uuid" uuid UNIQUE NOT NULL,
   "slug" varchar UNIQUE NOT NULL,
