@@ -1,4 +1,3 @@
-````markdown
 # 🧾 API Docs for Category Service & Subcategory Service
 
 This document describes the endpoints, data models, and sample payloads for the category and subcategory microservices.
@@ -300,5 +299,3 @@ Example:
 ```
 
 ---
-
-```

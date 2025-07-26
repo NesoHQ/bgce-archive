@@ -1,4 +1,3 @@
-```markdown
 # 📊 DB Docs: Category & Subcategory Schema
 
 This directory contains the **database schema definitions** for the Category Service, formatted in `.dbml` for use with [dbdiagram.io](https://dbdiagram.io) or [dbdocs.io](https://dbdocs.io).
@@ -106,4 +105,3 @@ Both `categories` and `subcategories` include a `meta` column:
 | Schema Designer | @jsiqbal    |
 
 ---
-```
