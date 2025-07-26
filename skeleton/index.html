@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>File Upload</title>
+</head>
+
+<body>
+  <h2>Select and Upload File</h2>
+  <input type="file" id="fileInput" />
+  <button onclick="uploadFile()">Upload</button>
+
+  <script>
+    async function uploadFile() {
+      const input = document.getElementById('fileInput');
+      const file = input.files[0];
+      if (!file) {
+        alert("Please select a file");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("files", file); // key name should match backend expectation
+
+      try {
+        const response = await fetch("http://localhost:3345/api/v1/files", {
+          method: "POST",
+          body: formData
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          alert("Upload successful");
+          console.log(result);
+        } else {
+          const error = await response.text();
+          console.error("Upload failed:", error);
+        }
+      } catch (err) {
+        console.error("Network error:", err);
+      }
+    }
+  </script>
+</body>
+
+</html>
