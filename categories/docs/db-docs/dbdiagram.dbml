@@ -1,0 +1,39 @@
+Table categories {
+  id           integer [pk, not null]
+  uuid         uuid [not null, unique, note: "Categoory unique identifier for public use"]
+  slug         varchar [unique, not null, note: "Slug-like identifier, e.g., 'interview-qna'"]
+  label        varchar [not null, note: "Human-readable title"]
+  description  text    [note: "Detailed description"]
+  created_by   integer [not null, note: "User who created the category"]
+  approved_by  integer [note: "Admin who approved it"]
+  deleted_by   integer [note: "Admin who deleted it"]
+  created_at   timestamp [default: `now()`, not null]
+  updated_at   timestamp [default: `now()`, not null]
+  approved_at  timestamp [note: "When approved"]
+  deleted_at   timestamp [note: "When deleted"]
+  status       varchar [default: `'pending'`, note: "pending, approved, rejected, deleted"]
+  meta         jsonb [note: "Flexible metadata for storing future dynamic values"]
+
+  Note: "Top-level category table"
+}
+
+Table subcategories {
+  id           integer [pk, not null]
+  uuid         uuid [not null, unique, note: "Subcategory unique identifier for public use"]
+  slug         varchar [unique, not null, note: "Slug ID like 'basic-interview-qna'"]
+  category_id  integer [not null, ref: > categories.id]
+  label        varchar [not null, note: "Subcategory label"]
+  description  text    [note: "Short summary"]
+  maintainer   varchar [note: "GitHub handle of maintainer"]
+  created_by   integer [not null]
+  approved_by  integer
+  deleted_by   integer
+  created_at   timestamp [default: `now()`, not null]
+  updated_at   timestamp [default: `now()`, not null]
+  approved_at  timestamp
+  deleted_at   timestamp
+  status       varchar [default: `'pending'`, note: "pending, approved, rejected, deleted"]
+  meta         jsonb [note: "Flexible metadata for storing future dynamic values"]
+
+  Note: "Subcategories under a given category"
+}
