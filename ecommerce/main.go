@@ -29,7 +29,7 @@ func getProducts(w http.ResponseWriter, r *http.Request) {
 	handlePreflightReq(w, r)
 
 	if r.Method != "GET" { // r.Method = post, put, patch, delete
-		http.Error(w, "Please give me GET request", 400)
+		http.Error(w, "Please send a GET request", 400)
 		return 
 	}
 
@@ -41,7 +41,7 @@ func createProduct(w http.ResponseWriter, r *http.Request){
 	handlePreflightReq(w, r)
 
 	if r.Method != "POST" { // r.Method = get, put, patch, delete
-		http.Error(w, "Please give me POST request", 400)
+		http.Error(w, "Please send a POST request", 400)
 		return 
 	}
 
@@ -51,7 +51,7 @@ func createProduct(w http.ResponseWriter, r *http.Request){
 	err := decoder.Decode(&newProduct)
 	if err != nil {
 		fmt.Println(err)
-		http.Error(w, "Please give me valid json", 400)
+		http.Error(w, "Please send a valid JSON body", 400)
 		return 
 	}
 
@@ -93,7 +93,7 @@ func main() {
 
 	mux.HandleFunc("/create-products", createProduct)
 	
-	fmt.Println("Server running on :8080")
+	fmt.Println("Server running on port :8080")
 
 	err := http.ListenAndServe(":8080", mux) //" Failed to start the server"
 	if err != nil {
@@ -121,7 +121,7 @@ func init() {
 	prd3 := Product{
 		ID: 3,
 		Title: "Banana",
-		Description: "Banana is boroing. I feel bored eating banana.",
+		Description: "Banana is boring. I feel bored eating banana.",
 		Price: 5,
 		ImgUrl: "https://www.allrecipes.com/thmb/lc7nSL9L5zMHXz9t6PMAVm9biNM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/ar-new-banana-adobe-ar-2x1-917fdde58d194b529b41042ebff1c031.jpg",
 	}
