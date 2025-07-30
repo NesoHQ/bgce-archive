@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Pr - BGCE ARCHIVE</title>
+        <title>Translation Guide - BGCE ARCHIVE</title>
 
 
         <!-- Custom HTML head -->
@@ -169,37 +169,147 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h3 id="-pull-request-template"><a class="header" href="#-pull-request-template">✅ PULL REQUEST TEMPLATE</a></h3>
-<pre><code class="language-md">### 📘 Description
-
-What this PR adds/fixes/improves.
-
-### 📂 Related Issue
-
-Closes #[issue-number]
-
-### 🚀 Changes Made
-
-- Added/Updated [category/file-name.md]
-- Fixed formatting/link issues
-
-### ✅ Checklist
-
-- [ ] Follows contribution guidelines
-- [ ] Uses correct Markdown format
-- [ ] Tested rendering in preview
-</code></pre>
-<hr />
+                        <h1 id="-bgce-translation-guide-simple--clear-bangla-style"><a class="header" href="#-bgce-translation-guide-simple--clear-bangla-style">📘 BGCE Translation Guide (Simple &amp; Clear Bangla Style)</a></h1>
+<p>This is how we’ll translate stuff for the BGCE book to make sure it's beginner-friendly, chill, and clear for Bengali devs. To ensure consistency, clarity, and accessibility, follow these guidelines while translating technical content to Bengali for the BGCE book:</p>
+<h2 id="retain-english-for-key-technical-terms"><a class="header" href="#retain-english-for-key-technical-terms">Retain English for Key Technical Terms</a></h2>
+<ul>
+<li>
+<p>Always use English for programming keywords, tools, and common dev jargon.</p>
+</li>
+<li>
+<p>Examples:</p>
+<ul>
+<li>
+<p>✅ code (❌ কোড)</p>
+</li>
+<li>
+<p>✅ closure (❌ ক্লোজার)</p>
+</li>
+<li>
+<p>✅ visualization (❌ ভিজ্যুয়ালাইজেশন)</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>⚠️ Use discretion — if the English term is very commonly used in Bengali dev circles, retain it.</p>
+<h2 id="prefer-natural-language-over-literal-translation"><a class="header" href="#prefer-natural-language-over-literal-translation">Prefer Natural Language Over Literal Translation</a></h2>
+<ul>
+<li>
+<p>Avoid overly formal or uncommon Bengali words.</p>
+</li>
+<li>
+<p>Translate meaning, not word-for-word.</p>
+</li>
+<li>
+<p>Example:</p>
+<ul>
+<li>
+<p>❌ "স্ট্যাক বনাম হিপ"</p>
+</li>
+<li>
+<p>✅ "Stack vs Heap" or "স্ট্যাক vs হিপ"</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="cli-and-code-blocks-must-stay-in-english"><a class="header" href="#cli-and-code-blocks-must-stay-in-english">CLI and Code Blocks Must Stay in English</a></h2>
+<ul>
+<li>
+<p>Never translate code snippets, terminal commands, or code block outputs.</p>
+</li>
+<li>
+<p>Example:</p>
+<ul>
+<li>
+<p>❌ git push → গিট পুশ</p>
+</li>
+<li>
+<p>✅ Leave git push as-is.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="dont-translate-word-for-word-make-it-feel-natural"><a class="header" href="#dont-translate-word-for-word-make-it-feel-natural">Don’t translate word-for-word, make it feel natural</a></h2>
+<ul>
+<li>
+<p>Say it the way you'd explain to a friend.</p>
+</li>
+<li>
+<p>Example:</p>
+<ul>
+<li>English:</li>
+</ul>
+<blockquote>
+<p>"If a variable is used outside a function (like in a returned closure), it moves to the heap."</p>
+</blockquote>
+<ul>
+<li>✅ Good Bangla:</li>
+</ul>
+<blockquote>
+<p>“যদি কোনো ভেরিয়েবল ফাংশনের বাইরে ইউজ হয় (যেমন রিটার্ন করা কোনো ক্লোজার-এর ভিতরে), তখন সেটা হিপে চলে যায়।”</p>
+</blockquote>
+<ul>
+<li>❌ Bad Bangla:</li>
+</ul>
+<blockquote>
+<p>“যদি কোনো ভেরিয়েবল ফাংশনের বাইরে (যেমন একটি রিটার্ন হওয়া ক্লোজারে) ব্যবহৃত হয়, তবে সেটি হিপে স্থানান্তরিত হয়।”</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="add-extra-words-if-needed-cause-clarity--literal"><a class="header" href="#add-extra-words-if-needed-cause-clarity--literal">Add extra words if needed cause clarity &gt; literal</a></h2>
+<ul>
+<li>
+<p>Sometimes adding 2–3 extra words makes things way easier to understand. Do that.</p>
+</li>
+<li>
+<p>Example:</p>
+<ul>
+<li>
+<p>English: "Stack and Heap"</p>
+</li>
+<li>
+<p>Bangla: “স্ট্যাক আর হিপ কীভাবে কাজ করে”</p>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Small add-ons = big clarity</p>
+</blockquote>
+<h2 id="no-bookish-or-rare-bengali-words"><a class="header" href="#no-bookish-or-rare-bengali-words">No bookish or rare Bengali words</a></h2>
+<ul>
+<li>
+<p>Don’t use words people don’t even hear in movies or the street.</p>
+</li>
+<li>
+<p>Instead, use how devs actually talk.</p>
+</li>
+</ul>
+<h2 id="ui-terms-buttons-tool-names---keep-original-english"><a class="header" href="#ui-terms-buttons-tool-names---keep-original-english">UI terms, buttons, tool names - keep original English</a></h2>
+<ul>
+<li>
+<p>Example:</p>
+<ul>
+<li>✅ "Click the <code>Run</code> button" → keep <code>Run</code> in English</li>
+</ul>
+</li>
+</ul>
+<h2 id="markdown-formatting-stays-same"><a class="header" href="#markdown-formatting-stays-same">Markdown formatting stays same</a></h2>
+<ul>
+<li>Don’t break bullet points, <code>code formatting</code>, bold text, etc.</li>
+</ul>
+<p><strong>🎯 Goal</strong>: বাংলা হবে এমন, যেটা একজন নতুন ডেভেলপার পড়ে হাসে না বরং বুঝে।
+Simple, clear, and helpful. No extra drama.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../contribution-guide/NO-CODE.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../contribution-guide/PR.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../contribution-guide/TRANSLATION-GUIDE.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../contribution-guide/contributors.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -209,11 +319,11 @@ Closes #[issue-number]
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../contribution-guide/NO-CODE.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../contribution-guide/PR.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../contribution-guide/TRANSLATION-GUIDE.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../contribution-guide/contributors.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
