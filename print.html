@@ -5633,6 +5633,827 @@ Post:
 <p>উদাহরণস্বরূপ, user form পূরণ করে submit করলে, তা backend API-এর মাধ্যমে প্রক্রিয়াজাত হয় এবং ফলাফল ফিরিয়ে আনা হয়।</p>
 </blockquote>
 <p>[Author : @shahriar-em0n  Date: 2025-07-30 Category: interview-qa/class-wise ]</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="class-46---go-runtime"><a class="header" href="#class-46---go-runtime">Class 46 : 🐹 Go Runtime</a></h1>
+<h2 id="-guide-to-ram-kernel-space-vs-user-space"><a class="header" href="#-guide-to-ram-kernel-space-vs-user-space">🧠 Guide to RAM: Kernel Space vs User Space</a></h2>
+<p>কম্পিউটার চালু হলে RAM (Random Access Memory) কে দুইটা ভাগে ভাগ করা হয়:</p>
+<ul>
+<li>🛡️ <strong>Kernel Space</strong></li>
+<li>👨‍💻 <strong>User Space</strong></li>
+</ul>
+<h2 id="-kernel-space"><a class="header" href="#-kernel-space">🛡️ Kernel Space:</a></h2>
+<p>এটা Operating System (OS) এর নিজের জন্য allocated space</p>
+<p>এখানে থাকে:</p>
+<ul>
+<li>OS এর মূল কোড (kernel code)</li>
+<li>kernel data structures</li>
+<li>page table (memory mapping এর জন্য)</li>
+</ul>
+<blockquote>
+<p>Kernel সব কিছু access করতে পারে।</p>
+</blockquote>
+<h3 id="-why-its-protected"><a class="header" href="#-why-its-protected">🔐 Why it's protected?</a></h3>
+<ul>
+<li>যাতে user program গুলো kernel এর sensitive অংশে ভুল করে বা ইচ্ছা করে access করতে না পারে।</li>
+<li>Security আর stability এর জন্য।</li>
+</ul>
+<h3 id="-access-from-user-programs"><a class="header" href="#-access-from-user-programs">🧩 Access from user programs</a></h3>
+<ul>
+<li>User program যদি OS এর help চায়, তখন system call ব্যবহার করে (যেমন <code>read()</code>, <code>write()</code>, <code>open()</code>).</li>
+<li>তখন একটা software interrupt (যেমন <code>0x80</code>) তৈরি হয়।</li>
+<li>এতে CPU <em>user mode</em> থেকে <em>kernel mode</em> এ যায়, kernel কাজটা করে দিয়ে আবার ফিরে আসে।</li>
+</ul>
+<h3 id="-kernel-stack"><a class="header" href="#-kernel-stack">🧵 Kernel Stack</a></h3>
+<ul>
+<li>যখন kernel কাজ করে, তখন একটা kernel stack ব্যবহার করে।</li>
+<li>এটা সব process মিলে share করে।</li>
+</ul>
+<h2 id="-user-space"><a class="header" href="#-user-space">👨‍💻 User Space:</a></h2>
+<p>RAM এর এই space → user application (যেমন browser, notepad) এর জন্য।</p>
+<p>প্রতিটা process তার নিজের একটা <em>virtual memory</em> পায়।</p>
+<p>এর মধ্যে থাকে:</p>
+<ul>
+<li><strong>Code:</strong> প্রোগ্রামের instruction</li>
+<li><strong>Data:</strong> global বা static variables</li>
+<li><strong>Heap:</strong> dynamic memory allocation (যেমন <code>malloc</code>)</li>
+<li><strong>Stack:</strong> function call আর local variables</li>
+</ul>
+<blockquote>
+<p>⚠️ এই space থেকে kernel space সরাসরি access করা যায় না।</p>
+</blockquote>
+<h2 id="-system-call"><a class="header" href="#-system-call">🧩 System Call</a></h2>
+<ul>
+<li>System Call হলো একধরনের function call</li>
+<li>এর মাধ্যমে কোন user program, Operating System এর kernel থেকে কোন service চায়</li>
+<li>System Call এর সাহায্য user mode থেকে kernel mode এ সুইচ করে OS এর বিশেষ কাজগুলো করার অনুমতি দেয়</li>
+</ul>
+<h3 id="-user-mode-vs-kernel-mode"><a class="header" href="#-user-mode-vs-kernel-mode">⚙️ User Mode vs Kernel Mode</a></h3>
+<ul>
+<li>সাধারণভাবে program চলে user mode এ, যেখানে resource access সীমিত থাকে।</li>
+<li>কোন special কাজ (যেমন file read/write, process তৈরি) করতে হলে system call দিতে হয়, তখন program kernel mode এ যায়।</li>
+</ul>
+<h2 id="-intro-to-go-runtime"><a class="header" href="#-intro-to-go-runtime">✨ Intro to Go Runtime</a></h2>
+<pre><code class="language-bash">go build main.go
+</code></pre>
+<p>Go compiler:</p>
+<ul>
+<li>main.go ফাইলটা compile করে</li>
+<li>তারপর একটা binary executable file তৈরি করে - সাধারণভাবে সেটা হয় <code>main</code> নামে (Linux/Unix-এ)</li>
+</ul>
+<pre><code class="language-bash">./main
+</code></pre>
+<p>একটা process create হয়</p>
+<p><strong>🔁 সংক্ষেপে flow:</strong></p>
+<pre><code class="language-plaintext">go build main.go   →  main (binary file)
+./main             →  OS creates a process
+                   →  program runs
+</code></pre>
+<h3 id="-main-stack-এবং-stack-frame"><a class="header" href="#-main-stack-এবং-stack-frame">📦 Main Stack এবং Stack Frame</a></h3>
+<ul>
+<li>Main thread এর জন্য একটি stack তৈরি হয় - এটাকে বলে main stack।</li>
+<li>Go runtime এর function গুলোর জন্য এই main stack এ stack frames তৈরি হয়।</li>
+<li>Main thread → execute → go runtime stack</li>
+</ul>
+<p><strong>🔹 Stack Frame:</strong>
+প্রতিটা function call এর জন্য একটা stack frame তৈরি হয়।</p>
+<p>Stack frame এর মধ্যে থাকে:</p>
+<ul>
+<li>function এর local variables,</li>
+<li>return address (function শেষে কোথায় ফিরে যাবে),</li>
+<li>কিছু runtime bookkeeping data।</li>
+</ul>
+<p><strong>🔹Go Runtime -</strong></p>
+<ul>
+<li>Memory allocate</li>
+<li>Set up → Stack &amp; Heap</li>
+<li>Initialize → Go Scheduler</li>
+<li>Go Runtime → System Call → Kernel → <code>epoll_create</code></li>
+</ul>
+<h3 id="-what-is-epoll-in-linux"><a class="header" href="#-what-is-epoll-in-linux">🌀 What is epoll in Linux?</a></h3>
+<ul>
+<li><code>epoll</code> হলো Linux kernel এর একটি I/O <em>event notification system</em></li>
+<li>এটি ব্যবহার করা হয় একসাথে অনেকগুলো <em>file descriptor (fd)</em> এর ওপর efficiently নজর রাখার জন্য।</li>
+</ul>
+<blockquote>
+<p>এটি <code>select()</code> বা <code>poll()</code> এর থেকে আরও scalable, efficient, এবং faster।</p>
+</blockquote>
+<p>Linux-এর epoll এর মতো high-performance I/O event notification mechanisms অন্য OS-গুলোতেও আছে</p>
+<h4 id="-macos-darwinbsd--kqueue"><a class="header" href="#-macos-darwinbsd--kqueue">🖥️ MacOS (Darwin/BSD) ➤ kqueue</a></h4>
+<ul>
+<li>Equivalent of epoll in macOS is kqueue.</li>
+<li>এটি BSD-based systems (macOS, FreeBSD, OpenBSD) এ ব্যবহৃত হয়।</li>
+</ul>
+<h4 id="-windows--iocp-io-completion-ports"><a class="header" href="#-windows--iocp-io-completion-ports">🪟 Windows ➤ IOCP (I/O Completion Ports)</a></h4>
+<ul>
+<li>Windows-এর equivalent হল ➤ IOCP (I/O Completion Ports)।</li>
+</ul>
+<p><strong>🔹 IOCP-এর কাজ:</strong></p>
+<ul>
+<li>Asynchronous I/O operations handle করতে ব্যবহৃত হয়।</li>
+<li>Efficient এবং scalable, especially high-performance servers-এর জন্য।</li>
+</ul>
+<h3 id="-epoll-কবে-দরকার-হয়"><a class="header" href="#-epoll-কবে-দরকার-হয়">🧠 epoll কবে দরকার হয়?</a></h3>
+<ul>
+<li>Network socket</li>
+<li>File</li>
+<li>Pipe</li>
+</ul>
+<p>ইত্যাদি একসাথে monitor করতে এবং কোনটা read/write এর জন্য ready হয়েছে</p>
+<pre><code class="language-plaintext">epfd = epoll_create1(0);                // epoll instance তৈরি
+epoll_ctl(epfd, ADD, sockfd, &amp;event);   // কোন socket watch করবো?
+epoll_wait(epfd, events, MAX, timeout); // wait করবো কখন data আসবে
+</code></pre>
+<h3 id="-epoll-এর-জনয-বযবহৃত-৩টি-main-syscall"><a class="header" href="#-epoll-এর-জনয-বযবহৃত-৩টি-main-syscall">🔧 epoll এর জন্য ব্যবহৃত ৩টি main syscall</a></h3>
+<p><strong><code>epoll_create</code> / <code>epoll_create1</code></strong></p>
+<ul>
+<li>একটি নতুন epoll instance তৈরি করে এবং একটি file descriptor (fd) রিটার্ন করে।</li>
+<li>এই fd কে ব্যবহার করে আপনি পরবর্তীতে ইভেন্ট monitor করবেন।</li>
+</ul>
+<p><strong><code>epoll_ctl</code></strong></p>
+<ul>
+<li>epoll instance এ কোন file descriptor monitor করতে হবে সেটা বলে দেয়।</li>
+<li>অর্থাৎ: add / modify / delete operation।</li>
+</ul>
+<p><strong><code>epoll_wait</code></strong></p>
+<ul>
+<li>এটি block করে (অপেক্ষা করে) যতক্ষণ না কোন monitored file descriptor থেকে I/O event আসে।</li>
+<li>যখন আসে, তখন সেই event return করে দেয়।</li>
+</ul>
+<h3 id="-scenario-epoll-based-non-blocking-file-read-in-linux"><a class="header" href="#-scenario-epoll-based-non-blocking-file-read-in-linux">🏷️ Scenario: epoll-based Non-blocking File Read in Linux</a></h3>
+<p><strong>Process &amp; Threads</strong></p>
+<ul>
+<li>P1: T1, T2</li>
+<li>P2: T1</li>
+<li>P3: T1, T2, T3</li>
+</ul>
+<p>P1-T1 একটি ফাইল পড়তে চায়, অর্থাৎ I/O operation করতে চায়।</p>
+<p>আমরা ধরছি এটা non-blocking I/O এবং epoll ব্যবহৃত হচ্ছে (Linux system)।</p>
+<h4 id="১-t1-ফাইল-পড়তে-চায়"><a class="header" href="#১-t1-ফাইল-পড়তে-চায়">১️⃣ T1 ফাইল পড়তে চায়</a></h4>
+<ul>
+<li>T1 kernel-এ read request পাঠায়, কিন্তু ফাইল তখনও রেডি না।</li>
+<li>তাই T1 বলে, "ফাইল রেডি হলে আমাকে জানিও" — non-blocking mode</li>
+</ul>
+<h4 id="2-t1-syscall-করে--epoll_ctl"><a class="header" href="#2-t1-syscall-করে--epoll_ctl">2️⃣ T1 syscall করে → epoll_ctl</a></h4>
+<ul>
+<li>এটা দিয়ে kernel-কে জানানো হয়:</li>
+<li>"এই ফাইলের জন্য আমি অপেক্ষা করবো। ফাইলটা read করতে পারলেই আমাকে ডাকো।"</li>
+</ul>
+<h4 id="3-kernel-t1-কে-ঘুম-পাড়িয়ে-দেয়"><a class="header" href="#3-kernel-t1-কে-ঘুম-পাড়িয়ে-দেয়">3️⃣ Kernel T1 কে ঘুম পাড়িয়ে দেয়</a></h4>
+<ul>
+<li>যেহেতু ফাইল এখনো রেডি না, তাই kernel T1 কে sleep/wait করিয়ে দেয়।</li>
+<li>T1 wait queue তে চলে যায়</li>
+<li>তখন P1-এর অন্য থ্রেড T2, বা অন্য প্রসেসের থ্রেডগুলো স্বাভাবিকভাবে কাজ করে</li>
+</ul>
+<h4 id="4-kernel-ফাইল-চেক-করতে-থাকে"><a class="header" href="#4-kernel-ফাইল-চেক-করতে-থাকে">4️⃣ kernel ফাইল চেক করতে থাকে</a></h4>
+<ul>
+<li>kernel backend-এ ফাইল ready কিনা সেটা monitor করে।</li>
+<li>যখন ফাইলটা readable হয়ে যায়, তখন kernel ফাইলটা load করে, এবং ফাইলের জন্য file descriptor তৈরি করে</li>
+</ul>
+<h4 id="5-kernel-epoll-কে-notify-করে"><a class="header" href="#5-kernel-epoll-কে-notify-করে">5️⃣ kernel epoll কে notify করে</a></h4>
+<ul>
+<li>kernel epoll_wait কে বলে: "এই file descriptor এখন ready"</li>
+<li>epoll_wait তখন সেই FD কে ready list-এ রাখে</li>
+</ul>
+<h4 id="6-epoll_wait-thread-কে-জাগিয়ে-তোলে"><a class="header" href="#6-epoll_wait-thread-কে-জাগিয়ে-তোলে">6️⃣ epoll_wait Thread কে জাগিয়ে তোলে</a></h4>
+<p><em>epoll_wait এর কাজ:</em></p>
+<ul>
+<li>যারা অপেক্ষা করছিল, তাদের জানিয়ে দেয়া "তোমার ফাইল রেডি"</li>
+<li>T1 এখন wake up হয়</li>
+</ul>
+<h4 id="7-t1-এখন-readfd-দিয়ে-ফাইল-পড়ে"><a class="header" href="#7-t1-এখন-readfd-দিয়ে-ফাইল-পড়ে">7️⃣ T1 এখন read(fd) দিয়ে ফাইল পড়ে</a></h4>
+<ul>
+<li>এবার T1 ফাইলটি read করে নেয় file descriptor ব্যবহার করে</li>
+<li>File descriptor একটি token এর মতো কাজ করে — এটি বলে দেয় kernel-এর কোন জায়গা থেকে ফাইল পড়তে হবে</li>
+</ul>
+<h3 id="-file-descriptor"><a class="header" href="#-file-descriptor">📦 File descriptor</a></h3>
+<ul>
+<li>File descriptor হচ্ছে kernel-এর একটি token বা ID যা file/socket-এর represent করে।</li>
+<li>User-space access করতে পারে না, কিন্তু kernel আর Go runtime, file/socket কে চিনে ফেলে এই FD দিয়ে।</li>
+</ul>
+<h3 id="-back-to-go-runtime-story"><a class="header" href="#-back-to-go-runtime-story">🚀 Back to Go Runtime Story</a></h3>
+<p><strong>1. Go Runtime শুরুতেই কী করে?</strong></p>
+<ul>
+<li>Go runtime নিজের মধ্যে একটা epoll instance তৈরি করে (epoll_create syscall ব্যবহার করে)।</li>
+<li>যখন epoll তৈরি করে, তখন kernel-কে বলে দেয় কতগুলো file descriptor (FD) একসাথে পড়তে চায়
+<ul>
+<li>Go Runtime kernel-কে বলে দেয় 100 file descriptor (FD) একসাথে পড়তে চায়</li>
+<li>Max 100 FD read করার জন্য <code>epoll_ctl</code> send করা যাবে kernel এর কাছে</li>
+<li>100 FD list আকারে epoll_wait thread কে দিয়ে দিবে</li>
+<li><code>epoll_wait</code> thread FD list Go runtime কে দিয়ে দিবে</li>
+</ul>
+</li>
+<li>এই instance handle করে সব network I/O বা file I/O অপারেশন।</li>
+<li>এরপর Go runtime একটি আলাদা OS thread তৈরি করে যেখানে <code>epoll_wait</code> বসে থাকে। এই থ্রেডকে বলা যায় "Netpoller Thread"।</li>
+</ul>
+<p><strong>2. একটি goroutine file/socket read করতে চায়</strong></p>
+<ul>
+<li>main goroutine (যেমন <code>go func() { conn.Read() }</code>) socket থেকে কিছু পড়তে চায়।</li>
+<li>যদি data তখনই available না থাকে, Go runtime:
+<ul>
+<li>ওই goroutine কে block না করে park (ঘুম পাড়িয়ে) দেয়।</li>
+<li>একইসাথে, সেই socket বা file descriptor কে epoll instance-এ register করে রাখে (<code>epoll_ctl</code> দিয়ে)।</li>
+</ul>
+</li>
+</ul>
+<p><strong>3. epoll_wait কী করে?</strong></p>
+<ul>
+<li>আলাদা Netpoller Thread সবসময় epoll_wait syscall চালিয়ে ঘুমিয়ে থাকে।</li>
+<li>যখন kernel detect করে যে socket/data ready, তখন সেই Netpoller Thread কে wake করে দিয়ে data দেয়।</li>
+<li>এরপর Netpoller জানায় যে fd ready।</li>
+</ul>
+<p><strong>4. Go Runtime পুনরায় goroutine চালু করে</strong></p>
+<ul>
+<li>Go runtime বুঝে যায় যে যে goroutine file/socket read করতে চেয়েছিল তার data এসে গেছে।</li>
+<li>তাকে আবার runnable করে দেয়, এবং data পড়া শুরু হয়।</li>
+</ul>
+<h3 id="-setting-up-garbage-collector-gc"><a class="header" href="#-setting-up-garbage-collector-gc">⚙️ Setting Up Garbage Collector (GC)</a></h3>
+<ul>
+<li>Go runtime GC চালানোর জন্য আলাদা OS thread ব্যবহার করে, যাতে প্রোগ্রামের মূল কাজ বিঘ্ন না ঘটে</li>
+<li>thread গুলো background-এ silently কাজ করে memory clean রাখে</li>
+<li>Go Runtime পুরোপুরি GC thread control করে</li>
+</ul>
+<h3 id="-go-scheduling"><a class="header" href="#-go-scheduling">🧠 Go Scheduling</a></h3>
+<p>Go runtime M:P:G model scheduling follow করে, যেখানে</p>
+<ul>
+<li>M = Machine (OS-level Thread) — যেটা বাস্তবে CPU-তে কাজ চালায়।</li>
+<li>P = Processor (Logical Processor) — এটি goroutine run করার জন্য প্রয়োজনীয় execution context ধরে রাখে, যেমন: local run queue, stack, scheduler info ইত্যাদি।</li>
+<li>G = Goroutine — আমরা যেসব Go function/logic concurrently চালাই, এগুলোকে Go runtime “goroutine” নামে চালায়।</li>
+</ul>
+<h4 id="-go-scheduler-initialization"><a class="header" href="#-go-scheduler-initialization">🏗️ Go Scheduler Initialization</a></h4>
+<p><strong>M (Machine, বা OS Thread) তৈরি</strong></p>
+<p>Go runtime শুরুতেই exactly vCPU সংখ্যক machine thread (M) তৈরির জন্য OS কে request করে।</p>
+<ul>
+<li>1 core → 2 vCPU → 2 M</li>
+<li>2 core → 4 vCPU → 4 M</li>
+</ul>
+<p><strong>P (Logical Processor) তৈরি</strong></p>
+<p>🔹 Go runtime M সংখ্যক "Logical Processor" তৈরি করে, যাকে P বলা হয়</p>
+<ul>
+<li>4 M : 4 P</li>
+</ul>
+<p>🔹 এই P গুলো দেখতে অনেকটা Virtual CPU (vCPU) এর মতো</p>
+<p>🔹 কিন্তু এগুলো hardware vCPU না, বরং Go runtime এর internal scheduling unit</p>
+<p><strong>G (Goroutine) তৈরি</strong></p>
+<p>🔸 Go runtime-এর সবচেয়ে lightweight execution unit হচ্ছে Goroutine (G)</p>
+<p>🔸 প্রতিটি <code>go someFunction()</code> কল করলে নতুন একটা goroutine তৈরি হয়</p>
+<h3 id="-go-scheduler-1m--1p--2g-diagram"><a class="header" href="#-go-scheduler-1m--1p--2g-diagram">🧩 Go Scheduler: 1M : 1P : 2G Diagram</a></h3>
+<p>মনে করি, 1M:1P:2G — এবং মনে হচ্ছে 1P দুইটা goroutine একসাথে চালাচ্ছে, আর 1M চালাচ্ছে সেই 1P-কে</p>
+<pre><code class="language-markdown">                        ┌──────────────┐
+                        │   Machine M  │  ← OS Thread (Executes G via P)
+                        └──────┬───────┘
+                               │
+                               ▼
+                        ┌──────────────┐
+                        │ Logical P    │  ← Holds G run queue
+                        └──────┬───────┘
+                               │
+                ┌──────────────┴──────────────┐
+                ▼                             ▼
+        ┌──────────────┐             ┌──────────────┐
+        │ Goroutine G1 │             │ Goroutine G2 │
+        └──────────────┘             └──────────────┘
+</code></pre>
+<h3 id="-1-core-scenario-in-go-scheduler"><a class="header" href="#-1-core-scenario-in-go-scheduler">🧠 1 Core Scenario in Go Scheduler</a></h3>
+<h4 id="-initialization-phase"><a class="header" href="#-initialization-phase">✅ Initialization Phase:</a></h4>
+<ul>
+<li>OS থেকে পাওয়া যায় → 1 Core ⇒ 2 vCPU</li>
+<li>তাই Go runtime তৈরি করে:
+<ul>
+<li>2 Machine Thread (M)</li>
+<li>2 Logical Processor (P)</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-markdown">          🧠 Physical Core (1)
+                │
+        ╔═══════╧════════╗
+        ▼                ▼
+     M1 (Thread)      M2 (Thread)
+       │                 │
+       ▼                 ▼
+    ┌─────┐           ┌─────┐
+    │  P1 │           │  P2 │
+    └─┬───┘           └─┬───┘
+      │                 │
+
+┌───▼───┐ ┌───▼───┐
+│ G1,G2 │ │ G3,G4 │ ← Each P has its G queue
+└───────┘ └───────┘
+</code></pre>
+<h3 id="-run-queue"><a class="header" href="#-run-queue">🧪 Run Queue</a></h3>
+<p>Go এর scheduler-এ ২ ধরনের run queue থাকে</p>
+<h3 id="-১-local-run-queue-per-p"><a class="header" href="#-১-local-run-queue-per-p">🧵 ১. Local Run Queue (per P)</a></h3>
+<p>প্রতিটি Logical Processor (P) এর নিজস্ব একটি Run Queue থাকে, যেখানে goroutine (G) গুলো রাখা হয়।</p>
+<h4 id="-কীভাবে-কাজ-করে"><a class="header" href="#-কীভাবে-কাজ-করে">🧩 কীভাবে কাজ করে:</a></h4>
+<ul>
+<li>প্রতিটি P একটি fixed-size circular run queue মেইনটেইন করে যা ring এর মতো</li>
+<li>প্রতিটি Local Run Queue এর slot 256 → 256 goroutine</li>
+<li>প্রতিটি P তার queue এর G গুলোকে FIFO ভিত্তিতে চালায় (First-In-First-Out).</li>
+<li>যেই P বর্তমানে M দ্বারা চালিত হচ্ছে, সেই P তার queue থেকে goroutine G নিয়ে চালায়।</li>
+<li>যদি কোন G ব্লক করে (I/O, sleep etc), তাহলে P আবার queue থেকে নতুন G চালায়।</li>
+<li>যদি P এর queue খালি হয়ে যায়, তাহলে:
+<ul>
+<li>সে <code>work stealing</code> করে — অন্য P এর queue থেকে G চুরি করে নেয়।</li>
+</ul>
+</li>
+</ul>
+<h3 id="-২-global-run-queue"><a class="header" href="#-২-global-run-queue">🌍 ২. Global Run Queue</a></h3>
+<p>যেসব goroutine-কে কোনো নির্দিষ্ট P-তে assign করা যায় না, সেগুলো Global Run Queue-তে রাখা হয়।</p>
+<ul>
+<li>System-wide queue, সব P access করতে পারে।</li>
+<li>Locking দরকার পড়ে, তাই একটু ধীর।</li>
+<li>যখন কোনো P-র local queue খালি হয়, তখন সে Global queue থেকে কাজ নেয়।</li>
+</ul>
+<blockquote>
+<p>🔐 Locking হচ্ছে এমন একটা ব্যবস্থা, যেটা দিয়ে একই সময় একাধিক goroutine যেন একসাথে একই জিনিসে হাত না দিতে পারে, সেটা নিশ্চিত করা হয়।</p>
+</blockquote>
+<ul>
+<li>
+<p>newly created goroutines যে local run queue তে জায়গা পাবে বসে যাবে।</p>
+</li>
+<li>
+<p>logical processor free থাকলে local run queue থেকে goroutine নিয়ে execute করতে থাকে।</p>
+</li>
+<li>
+<p>প্রতিটি local run queue একটি করে goroutine execute করে এবং slot গুলোতে 256 টি করে goroutines থাকলে newly created goroutines গুলো global run queue তে গিয়ে বসে</p>
+</li>
+<li>
+<p>যদি local run queue খালি হয়ে যায়, তাহলে সে অন্য P এর queue থেকে half goroutines নিয়ে নেয় (this is called <code>Work Stealing</code>).</p>
+</li>
+<li>
+<p>কোন processor free হলে এবং এর local run queue তে কোন goroutine না থাকলে, এবং অন্য logical processor এর local run queue তেও goroutines না থাকলে (এক্ষেত্রে work stealing করতে পারেনা) এটি global run queue থেকে goroutines নিয়ে execute করে</p>
+</li>
+</ul>
+<h3 id="-execution-of-maingo"><a class="header" href="#-execution-of-maingo">🔹 Execution of <code>main.go</code></a></h3>
+<pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	fmt.Fprintln(w, "hello world")
+}
+
+func aboutHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "About page")
+}
+
+func main() {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", handler)
+	mux.HandleFunc("/about", aboutHandler)
+
+	fmt.Println("Server running on :8080")
+	err := http.ListenAndServe(":8080", mux)
+	if err != nil {
+		fmt.Println("Error starting server", err)
+	}
+}
+</code></pre>
+<pre><code class="language-bash">go build main.go
+./main
+</code></pre>
+<h4 id="-go-program-memory-layout"><a class="header" href="#-go-program-memory-layout">📦 Go Program Memory Layout</a></h4>
+<pre><code class="language-markdown">                        +----------------------------+
+                        |        Code Segment        |
+                        |----------------------------|
+                        | - func handler             |
+                        | - func aboutHandler        |
+                        | - func main                |
+                        | - imported fmt, net/http   |
+                        +----------------------------+
+
+                        +----------------------------+
+                        |       Data Segment         |
+                        |----------------------------|
+                        | - Static/global data       |
+                        | - Function/method metadata |
+                        | - String constants         |
+                        |   e.g., "hello world"      |
+                        |         "About page"       |
+                        |         ":8080"            |
+                        +----------------------------+
+
+                        +----------------------------+
+                        |           Heap             |
+                        |----------------------------|
+                        | - Dynamically allocated    |
+                        |   memory during runtime    |
+                        | - mux := http.NewServeMux()|
+                        | - Each request's data      |
+                        | - Goroutines' data         |
+                        +----------------------------+
+
+                        +----------------------------+
+                        |           Stack            |
+                        |----------------------------|
+                        | - Go Runtime Code          |
+                        |                            |
+                        +----------------------------+
+</code></pre>
+<h3 id="-go-http-server-execution"><a class="header" href="#-go-http-server-execution">🌀 Go HTTP Server Execution</a></h3>
+<p><strong>🔹 ১. Go রানটাইম চালু হওয়ার শুরুতে:</strong></p>
+<ul>
+<li>Go প্রোগ্রাম চালু হলে:
+<ul>
+<li>প্রথমে <strong>init()</strong> ফাংশনগুলো (যদি থাকে) execute হয়।</li>
+<li>এরপর memory layout অনুযায়ী code segment, data segment, ইত্যাদি সেটআপ হয়।</li>
+</ul>
+</li>
+</ul>
+<p><strong>🔹 ২. Main Thread &amp; Stack Setup</strong></p>
+<ul>
+<li>Go runtime একটা main OS thread তৈরি করে।</li>
+<li>এই থ্রেডের জন্য একটা main stack allocate করে।</li>
+<li>এই stack-এ runtime code ও অন্যান্য execution চলবে।</li>
+</ul>
+<p><strong>🔹 ৩. Main Goroutine তৈরি</strong></p>
+<ul>
+<li>Go automatically একটা main goroutine তৈরি করে।</li>
+<li>এর initial stack size হয় 2KB (heap-এ allocate করা হয়)।</li>
+<li>এই goroutine থাকবে local run queue-তে।</li>
+</ul>
+<p><strong>🔹 ৪. Scheduler এবং Processor</strong></p>
+<ul>
+<li>Go runtime-এ আছে:
+<ul>
+<li>M (Machine = Thread)</li>
+<li>P (Processor = Logical executor)</li>
+<li>G (Goroutine)</li>
+</ul>
+</li>
+<li>যখন Go start হয়, main goroutine local run queue তে enqueue হয়।</li>
+<li>একটি P (logical processor) active থাকে — শুধু সে কাজ করে কারণ এই মুহূর্তে একমাত্র main goroutine-টাই active।</li>
+<li>অন্য P গুলো sleep করে থাকবে যদি আর কোনো goroutine না থাকে।</li>
+</ul>
+<p><strong>🔹 ৫. main() Function Execution শুরু</strong></p>
+<ul>
+<li>Main goroutine-এর ভিতর:
+<ul>
+<li>main() function-এর জন্য একটা stack frame তৈরি হয়।</li>
+<li>তারপর main() ফাংশনের ভিতরের কোড execute হতে থাকে।</li>
+</ul>
+</li>
+</ul>
+<p><strong>🔹 ৬. Router Creation</strong></p>
+<ul>
+<li>http.NewServeMux() কল করা হয়:
+<ul>
+<li>এটি একটি ServeMux object তৈরি করে।</li>
+<li>এই object টি main goroutine-এর stack frame এ থাকে।</li>
+</ul>
+</li>
+</ul>
+<p><strong>🔹 ৭. Route Register</strong></p>
+<ul>
+<li>mux.Handle("/", handler):
+<ul>
+<li>Mux object-এর ভিতরে route pattern ও handler function register হয়।</li>
+<li>এগুলো map আকারে ServeMux struct-এ store হয়।</li>
+</ul>
+</li>
+</ul>
+<p><strong>🔹 ৮. Server Start</strong></p>
+<ul>
+<li>http.ListenAndServe(":8080", mux):
+<ul>
+<li>এটা main goroutine থেকে call হয়।</li>
+<li>এর জন্য একটি নতুন stack frame তৈরি হয়।</li>
+</ul>
+</li>
+</ul>
+<p><strong>🔹 ৯. Internal serve() Call</strong></p>
+<ul>
+<li>ListenAndServe() এর ভিতর:
+<ul>
+<li>srv.Serve(l net.Listener) function call হয়।</li>
+<li>এর জন্য আরেকটি stack frame তৈরি হয়।</li>
+</ul>
+</li>
+</ul>
+<p><strong>🔂 🔁 ১০. Server-এর Infinite Loop</strong></p>
+<ul>
+<li>Serve() function-এর ভিতরে থাকে একটি infinite for loop:
+<ul>
+<li>যেটা প্রতি iteration-এ করে:
+<ul>
+<li>Accept() করে নতুন connection।</li>
+<li>প্রতিটি connection এর জন্য নতুন goroutine তৈরি করে।</li>
+<li>সেই goroutine handle করে HTTP request-response।</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-markdown">Program Start
+│
+├─&gt; Execute init()
+├─&gt; Setup code/data segment
+├─&gt; Create main thread + main stack
+├─&gt; Create main goroutine (2KB heap stack)
+│
+└─&gt; main goroutine enqueued → local run queue → executed by P
+
+Main Goroutine:
+│
+├─&gt; main() stack frame created
+│ ├─&gt; mux := http.NewServeMux()
+│ ├─&gt; mux.Handle("/", handler)
+│ └─&gt; http.ListenAndServe(":8080", mux)
+│ └─&gt; srv.Serve(listener)
+│ └─&gt; infinite for loop
+│ └─&gt; accept conn → new goroutine → handle request
+</code></pre>
+<pre><code class="language-go">for {
+    rw, err := l.Accept()
+    go c.serve(connCtx)
+}
+</code></pre>
+<h3 id="-go-http-server-accepts-connection-and-handles-it"><a class="header" href="#-go-http-server-accepts-connection-and-handles-it">🧠 Go HTTP Server accepts connection and handles it</a></h3>
+<p><strong>🔹 ১. l.Accept() কল হয়</strong></p>
+<ul>
+<li>এটি একটি network socket accept call।</li>
+<li>এর জন্য একটি নতুন stack frame তৈরি হয়।</li>
+<li>এর কাজ হচ্ছে:
+<ul>
+<li>নতুন কেউ connect করতে চাইলে, তার সাথে communication শুরু করা।</li>
+</ul>
+</li>
+</ul>
+<p><strong>🔹 ২. Accept() কী করে?</strong></p>
+<ul>
+<li>main goroutine → Accept() call করে → এটি Go runtime কে বলে:
+<ul>
+<li>“আমাকে একটা socket দাও, যাতে আমি নতুন connection handle করতে পারি।”</li>
+<li>Go runtime তখন দেখে, “আমার কাছে কি socket আগে থেকেই ready আছে?”</li>
+</ul>
+</li>
+</ul>
+<p><strong>🔹 ৩. Socket না থাকলে কী হয়?</strong></p>
+<ul>
+<li>যদি socket না থাকে:
+<ul>
+<li>Go runtime → epoll_ctl() call করে → kernel কে বলে:
+<ul>
+<li>“তুমি একটা socket তৈরি করো এবং future-এ ready হলে আমাকে জানিও।”</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>এই কাজটা Go-এর netpoll library এর মাধ্যমে করা হয়।</li>
+</ul>
+<p><strong>🔹 ৪. epoll_ctl → kernel</strong></p>
+<ul>
+<li>epoll_ctl() একটা asynchronous system call:
+<ul>
+<li>মানে এটা main goroutine কে block করে না।</li>
+<li>Go runtime meanwhile অন্যান্য কাজ চালাতে পারে।</li>
+</ul>
+</li>
+</ul>
+<p><strong>🔹 ৫. Linux kernel কী করে?</strong></p>
+<ul>
+<li>Linux-এ সবকিছু file হিসেবে treat করা হয় (socket, file, device — সবকিছু)।</li>
+<li>Kernel একটি socket তৈরি করে — এটা এক প্রান্ত যা দিয়ে data পাঠানো ও গ্রহণ করা যায় (like pipe)।</li>
+<li>এই socket-এর জন্য kernel একটি file descriptor (FD) দেয়।
+<ul>
+<li>যেমন, ধরো FD = 5</li>
+</ul>
+</li>
+</ul>
+<p><strong>🔹 ৬. Main Thread Sleep করে</strong></p>
+<ul>
+<li>main goroutine তখন sleep করে থাকে, কারণ সে অপেক্ষা করছে নতুন socket connection-এর জন্য।</li>
+<li>কিন্তু এই সময়েও Go runtime বন্ধ হয় না — অন্যান্য goroutine গুলো চালু থাকতে পারে।</li>
+</ul>
+<p><strong>🔹 ৭. New Connection এলে</strong></p>
+<ul>
+<li>কেউ যখন connect করে:
+<ul>
+<li>Kernel বলে: “এই socket (FD 5) now ready!”</li>
+<li>Go runtime এর netpoller জেগে উঠে (via epoll_wait) এবং সেই connection গ্রহণ করে।</li>
+</ul>
+</li>
+</ul>
+<p><strong>🔹 ৮. New goroutine handle করে</strong></p>
+<ul>
+<li>তারপর Go runtime:
+<ul>
+<li><code>go c.serve(connCtx)</code> কল করে</li>
+<li>নতুন goroutine তৈরি হয় → এটি সেই connection এর request/response handle করে</li>
+</ul>
+</li>
+</ul>
+<div class="table-wrapper"><table><thead><tr><th>Step</th><th>Description</th></tr></thead><tbody>
+<tr><td>1️⃣</td><td><code>Accept()</code> call → নতুন connection চাই</td></tr>
+<tr><td>2️⃣</td><td>Go runtime checks → socket available?</td></tr>
+<tr><td>3️⃣</td><td>না থাকলে → <code>epoll_ctl()</code> → kernel socket তৈরি</td></tr>
+<tr><td>4️⃣</td><td>Kernel → socket তৈরি করে (e.g. FD = 5)</td></tr>
+<tr><td>5️⃣</td><td>main goroutine sleeps → non-blocking epoll</td></tr>
+<tr><td>6️⃣</td><td>New connection এলে → <code>epoll_wait</code> wakes Go runtime</td></tr>
+<tr><td>7️⃣</td><td><code>go c.serve()</code> → new goroutine handles request</td></tr>
+</tbody></table>
+</div>
+<h3 id="-যখন-একটি-http-request-করা-হয--ভিতরের-জগৎ-go-http-server--os--nic--kernel"><a class="header" href="#-যখন-একটি-http-request-করা-হয--ভিতরের-জগৎ-go-http-server--os--nic--kernel">🌐 যখন একটি HTTP Request করা হয় — ভিতরের জগৎ (Go HTTP Server + OS + NIC + Kernel)</a></h3>
+<p><strong>🔹 ১. ব্রাউজারে আমরা URL দিই (যেমন: http://localhost:8080/)</strong></p>
+<ul>
+<li>এই request প্রথমে যায় router → router → server router এর দিকে (DNS resolve ধরে নেওয়া হয়েছে)।</li>
+</ul>
+<p><strong>🔹 ২. Server এর Network Interface</strong></p>
+<ul>
+<li>Server-side এর Network Interface Controller (NIC) — হতে পারে Ethernet Cable বা Wi-Fi Adapter — এই request ধরে।</li>
+<li>এই NIC data গুলো লেখে তার NIC Receive Buffer (RAM এর একটা অংশ) এ।</li>
+</ul>
+<p>**🔹 ৩. NIC Interrupt **</p>
+<ul>
+<li>যেই মুহূর্তে NIC data পায়, সে তখন Interrupt Signal পাঠায় Kernel কে।</li>
+<li>Kernel তখন এসে NIC Receive Buffer থেকে data পড়ে।</li>
+</ul>
+<p><strong>🔹 ৪. Kernel → Socket Receive Buffer</strong></p>
+<ul>
+<li>Kernel data কে write করে Socket Receive Buffer এ (যেটা File Descriptor fd 5 এর সাথে যুক্ত)।</li>
+</ul>
+<p><strong>🔹 ৫. Kernel → fd 5 Ready</strong></p>
+<ul>
+<li>এরপর Kernel fd 5 কে ready for read হিসেবে mark করে।</li>
+</ul>
+<p><strong>🔹 ৬. epoll_wait() → Wake Up</strong></p>
+<ul>
+<li>যেহেতু Go runtime epoll_wait() দিয়ে অপেক্ষা করছিল, kernel এখন:
+<ul>
+<li>সেই sleeping epoll_wait() thread কে wake করে।</li>
+<li>এবং বলে: “fd 5 এখন ready।”</li>
+</ul>
+</li>
+</ul>
+<p><strong>🔹 ৭. epoll_wait → Go Runtime</strong></p>
+<ul>
+<li>epoll_wait() এই fd 5 কে Go runtime এর কাছে পাঠায়।</li>
+</ul>
+<p><strong>🔹 ৮. Go Runtime → Sleeping Goroutines</strong></p>
+<ul>
+<li>Go runtime দেখে, “এই fd 5 এর জন্য কোনো goroutine আগে থেকে ঘুমিয়ে ছিলো?”</li>
+<li>যদি থাকে, তবে সেই goroutine কে wake করে।</li>
+<li>এরপর Go runtime এর scheduler সেই goroutine কে Local Run Queue তে রাখে।</li>
+<li>একটি Logical Processor (P) সেই goroutine টি চালানোর জন্য একটি dedicated OS thread (M) পায়।</li>
+</ul>
+<p><strong>🔹 🔁 Execution শুরু</strong></p>
+<ul>
+<li>সেই Logical Processor এখন main goroutine execute করে।</li>
+<li>Go runtime fd 5 কে main goroutine এর কাছে পাঠায়।</li>
+</ul>
+<p><strong>🔹 🔍 Data Read হয়</strong></p>
+<ul>
+<li>এখন main goroutine fd 5 থেকে data পড়ে</li>
+<li>socket receive buffer থেকে data আসে</li>
+<li>rw → data store হয়</li>
+</ul>
+<p><strong>🔹 🚀 Serve করার জন্য নতুন goroutine তৈরি</strong></p>
+<ul>
+<li>এরপর Go runtime <code>go c.serve(connCtx)</code> কল করে<br />
+-নতুন একটা goroutine তৈরি হয়</li>
+</ul>
+<p>এই goroutine টি rw তে থাকা data ব্যবহার করে HTTP request handle করে।</p>
+<p><strong>🔄 পরবর্তী request-এর জন্য অপেক্ষা</strong></p>
+<ul>
+<li>এরপর main goroutine আবার <code>l.Accept()</code> এ যায়।</li>
+<li>Go runtime জানে যে আগেই socket (fd 5) তৈরি হয়েছে।</li>
+<li>সে এখন new incoming request এর জন্য অপেক্ষা করে।</li>
+</ul>
+<p><strong>🔁 নতুন data এলে আবারো একই cycle</strong></p>
+<ul>
+<li>
+<p>NIC → kernel → socket receive buffer → mark fd ready → wake epoll_wait</p>
+</li>
+<li>
+<p>Go runtime → wake goroutine → read → serve</p>
+</li>
+</ul>
+<p>এভাবেই একটি HTTP server concurrency + efficiency সহকারে thousands of connections handle করতে পারে।</p>
+<pre><code class="language-markdown">Client Request (Browser)
+↓
+Router → Server NIC → NIC Buffer (RAM)
+↓ (Interrupt)
+Linux Kernel → Copy to Socket Buffer (fd 5)
+↓
+Mark fd 5 ready → Wake epoll_wait()
+↓
+Go Runtime → Finds sleeping goroutine
+↓
+Wake up → Scheduler → Local Run Queue → OS Thread
+↓
+Execute main goroutine
+↓
+main goroutine reads from fd 5 → rw = l.Accept()
+↓
+go c.serve(connCtx) → spawn goroutine to handle
+↓
+main goroutine again waits for next request...
+</code></pre>
+<h3 id="-newly-spawned-goroutine"><a class="header" href="#-newly-spawned-goroutine">📦 Newly Spawned goroutine</a></h3>
+<ul>
+<li>যখন <code>go c.serve(connCtx)</code> এর মাধ্যমে একটি নতুন goroutine spawn করা হয়,
+তখন একটি নতুন stack তৈরি হয়, এবং এই stack টি heap memory এর মধ্যে সংরক্ষিত হয়।</li>
+<li>Go তে goroutine এর stack ছোট (প্রথমে 2KB), কিন্তু এটি dynamic ভাবে বাড়তে পারে।</li>
+<li>এই goroutine টি তারপর local run queue তে যুক্ত হয়, যেখানে অনেক goroutine লাইন ধরে অপেক্ষা করে।</li>
+<li>প্রতিটি logical processor (P) এর সাথে একটি dedicated OS thread (M) mapped থাকে। এই logical processor (P) সেই local run queue থেকে goroutine টিকে তুলে নেয় এবং execution শুরু করে।</li>
+</ul>
+<blockquote>
+<p>🧵 goroutine spawn = “নতুন একটি lightweight thread তৈরি করে সেটাকে চালু করা।”</p>
+</blockquote>
+<h3 id="-mux-এবং-handler-execution-ধাপ"><a class="header" href="#-mux-এবং-handler-execution-ধাপ">✅ mux এবং handler execution ধাপ:</a></h3>
+<ul>
+<li>এর আগে server এর মধ্যে mux (যেমন <code>http.NewServeMux()</code>) তৈরি করা হয়েছে এবং সেখানে <code>HandleFunc()</code> এর মাধ্যমে route ও handler function register করা হয়েছে।</li>
+<li>goroutine ওই router-এর মধ্যে খুঁজে দেখে, request-এর URL path /about এর মতো কোন route এর সাথে match করে কিনা।</li>
+<li>নতুন goroutine যখন চালু হয়, তখন request-এর URL path, header, এবং অন্যান্য metadata দেখে বোঝার চেষ্টা করে, কোন route বা path টি মিলে যাচ্ছে।</li>
+<li>যখন একটি HTTP request আসে, তখন router চেক করে সেই URL path এর সাথে কোন pattern match করছে এবং সেই অনুযায়ী handler function execute করে।
+<ul>
+<li>যেমন goroutine ওই router-এর মধ্যে খুঁজে দেখে, request-এর URL path <code>/about</code> এর মতো কোন route এর সাথে match করে কিনা।</li>
+<li><code>/about</code> path এর জন্য <code>aboutHandler()</code> নামের handler function register করা আছে।</li>
+</ul>
+</li>
+<li>handler match হবার পর, সেই matched handler function এর জন্য একটি নতুন stack frame তৈরি হয়, যাতে ওই ফাংশনটি তার কোড execute করতে পারে।
+<ul>
+<li>যখন <code>aboutHandler()</code> চালু হয়:
+<ul>
+<li>তার জন্য একটি নতুন stack frame তৈরি হয়, যাতে ফাংশনের ভিতরের কোড execute করা যায়।</li>
+<li>এই ফাংশন <code>w (response writer)</code> &amp; <code>fprintln</code> এর মাধ্যমে socket এর কাছে <code>"About page"</code> write করে।</li>
+<li>socket send buffer এ syscall এর মাধ্যমে data store হয়।</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="-nic-এ-ডেটা-যাওয়ার-পরসেস"><a class="header" href="#-nic-এ-ডেটা-যাওয়ার-পরসেস">🧠 NIC-এ ডেটা যাওয়ার প্রসেস</a></h3>
+<ul>
+<li><strong>Go app থেকে socket</strong>
+<ul>
+<li>fmt.Fprintln(w, "About page") → Go runtime ResponseWriter এর ভিতরে Write() method call করে → অবশেষে <code>syscall.Write()</code> এর মাধ্যমে kernel <em>socket send buffer</em> এ data জমা হয়।</li>
+<li><code>ResponseWriter.Write()</code> → অবশেষে Go syscall layer-এ গিয়ে syscall.Write() call হয়।</li>
+<li><code>syscall.Write()</code> এর মাধ্যমে data kernel space-এ যায় এবং Socket Send Buffer এ জমা হয়।</li>
+<li>Kernel তখন socket FD (File Descriptor) অনুযায়ী check করে data ready কিনা।</li>
+</ul>
+</li>
+<li><strong>Kernel থেকে NIC</strong>
+<ul>
+<li>Kernel-এর network stack সেই data কে প্যাকেট করে (TCP/IP header সহ) NIC-এর <em>TX (Transmit) ring buffer</em>-এ লেখা হয় (এটা <em>hardware circular queue</em>)।</li>
+</ul>
+</li>
+<li><strong>NIC প্যাকেট নেয় এবং Physical Layer-এ পাঠায়</strong>
+<ul>
+<li>NIC Controller → DMA (Direct Memory Access) দিয়ে data ring buffer থেকে পড়ে → electromagnetic signal আকারে Ethernet cable / WiFi দিয়ে router/switch-এর দিকে পাঠায়।</li>
+</ul>
+</li>
+<li><strong>Router hopping</strong>
+<ul>
+<li>একাধিক router, switch এবং network node পার হয়ে destination client (user-এর PC বা mobile) পর্যন্ত পৌঁছায়।</li>
+</ul>
+</li>
+<li><strong>Client receives</strong>
+<ul>
+<li>Client এর NIC → OS → Browser → renders <strong>"About page"</strong></li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-plaintext">+--------------------+               +-----------------+
+|  Go Application    |               |     Kernel      |
+|--------------------|               |-----------------|
+| fmt.Fprintln(w,…)  |               |                 |
+|   ↓                |               | syscall.Write() |
+| ResponseWriter     |               |   ↓             |
+|   ↓                |               | Socket Buffer   |
++--------------------+               |   ↓             |
+                                     | NIC Driver      |
+                                     +--------↓--------+
+                                              |
+                           +------------------↓-------------------+
+                           |       NIC TX Ring Buffer (DMA)       |
+                           +------------------↓-------------------+
+                                              |
+                                 Electromagnetic Signal
+                                              ↓
+                                        Ethernet/WiFi
+                                              ↓
+                                           Router
+                                              ↓
+                                          Client PC
+                                        "About page"
+
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><strong>Socket</strong></td><td>2-way data pipe, communication endpoint</td></tr>
+<tr><td><strong>File Descriptor (FD)</strong></td><td>kernel-assigned number for tracking sockets/files</td></tr>
+<tr><td><strong>epoll_ctl</strong></td><td>kernel কে বলি — “এই socket ready হলে আমাকে জানিও”</td></tr>
+<tr><td><strong>epoll_wait</strong></td><td>Go runtime waits here — non-blocking</td></tr>
+<tr><td><strong>goroutine</strong></td><td>Go-এর ultra-light thread — request handle করে</td></tr>
+</tbody></table>
+</div>
+<p>[<strong>Author:</strong> @nazma98
+<strong>Date:</strong> 2025-07-30
+<strong>Category:</strong> interview-qa/class-wise
+]</p>
 <div style="break-before: page; page-break-before: always;"></div><h2 id="topic-wise"><a class="header" href="#topic-wise">Topic wise</a></h2>
 <div style="break-before: page; page-break-before: always;"></div><p>[<strong>Author:</strong> @mdimamhosen
 <strong>Date:</strong> 2025-04-19
