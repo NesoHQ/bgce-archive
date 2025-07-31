@@ -21,18 +21,18 @@ type Apm struct {
 }
 
 type Config struct {
-	Version     string `mapstructure:"VERSION"                           validate:"required"`
-	Mode        Mode   `mapstructure:"MODE"                              validate:"required"`
-	ServiceName string `mapstructure:"SERVICE_NAME"                      validate:"required"`
-	HttpPort    int    `mapstructure:"HTTP_PORT"                         validate:"required"`
-	// MigrationSource   string `mapstructure:"MIGRATION_SOURCE"                  validate:"required"`
-	// JwtSecret         string `mapstructure:"JWT_SECRET"               validate:"required"`
-	// RabbitmqURL       string `mapstructure:"RABBITMQ_URL" validate:"required"`
-	// RmqReconnectDelay int    `mapstructure:"RMQ_RECONNECT_DELAY" validate:"required"`
-	// RmqRetryInterval  int    `mapstructure:"RMQ_RETRY_INTERVAL" validate:"required"`
-	// ReadCortexDB   DBConfig
-	// WriteCortexDB  DBConfig
-	// Apm               *Apm
+	Version           string `mapstructure:"VERSION"                           validate:"required"`
+	Mode              Mode   `mapstructure:"MODE"                              validate:"required"`
+	ServiceName       string `mapstructure:"SERVICE_NAME"                      validate:"required"`
+	HttpPort          int    `mapstructure:"HTTP_PORT"                         validate:"required"`
+	MigrationSource   string `mapstructure:"MIGRATION_SOURCE"                  validate:"required"`
+	JwtSecret         string `mapstructure:"JWT_SECRET"               validate:"required"`
+	RabbitmqURL       string `mapstructure:"RABBITMQ_URL" validate:"required"`
+	RmqReconnectDelay int    `mapstructure:"RMQ_RECONNECT_DELAY" validate:"required"`
+	RmqRetryInterval  int    `mapstructure:"RMQ_RETRY_INTERVAL" validate:"required"`
+	ReadCortexDB      DBConfig
+	WriteCortexDB     DBConfig
+	Apm               *Apm
 }
 
 var config *Config

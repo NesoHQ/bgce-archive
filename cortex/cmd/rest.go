@@ -5,12 +5,16 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"cortex/apm"
 	category "cortex/category"
 	"cortex/config"
 	"cortex/logger"
+	"cortex/rabbitmq"
+	"cortex/repo"
 	"cortex/rest"
 	"cortex/rest/handlers"
 	"cortex/rest/middlewares"
+	"cortex/rest/utils"
 )
 
 var serverRestCmd = &cobra.Command{
@@ -22,43 +26,43 @@ var serverRestCmd = &cobra.Command{
 func serveRest(cmd *cobra.Command, args []string) error {
 	cnf := config.GetConfig()
 
-	// apm.InitAPM(*cnf.Apm)
+	apm.InitAPM(*cnf.Apm)
 
-	// utils.InitValidator()
+	utils.InitValidator()
 
-	// logger.SetupLogger(cnf.ServiceName)
+	logger.SetupLogger(cnf.ServiceName)
 
-	// rmq := rabbitmq.NewRMQ(cnf)
-	// defer rmq.Client.Stop()
-	// _ = repo.GetQueryBuilder() // this is the psql that will be passed down to repo
+	rmq := rabbitmq.NewRMQ(cnf)
+	defer rmq.Client.Stop()
+	_ = repo.GetQueryBuilder() // this is the psql that will be passed down to repo
 
-	// readCortexDB, err := repo.GetDbConnection(cnf.ReadCortexDB)
-	// if err != nil {
-	// 	slog.Error("Failed to connect to read cortex database:", logger.Extra(map[string]any{
-	// 		"error": err.Error(),
-	// 	}))
-	// 	return err
-	// }
-	// defer repo.CloseDB(readCortexDB)
+	readCortexDB, err := repo.GetDbConnection(cnf.ReadCortexDB)
+	if err != nil {
+		slog.Error("Failed to connect to read cortex database:", logger.Extra(map[string]any{
+			"error": err.Error(),
+		}))
+		return err
+	}
+	defer repo.CloseDB(readCortexDB)
 
-	// writeCortexDB, err := repo.GetDbConnection(cnf.WriteCortexDB)
-	// if err != nil {
-	// 	slog.Error("Failed to connect to write cortex database:", logger.Extra(map[string]any{
-	// 		"error": err.Error(),
-	// 	}))
-	// 	return err
-	// }
-	// defer repo.CloseDB(writeCortexDB)
+	writeCortexDB, err := repo.GetDbConnection(cnf.WriteCortexDB)
+	if err != nil {
+		slog.Error("Failed to connect to write cortex database:", logger.Extra(map[string]any{
+			"error": err.Error(),
+		}))
+		return err
+	}
+	defer repo.CloseDB(writeCortexDB)
 
-	// err = repo.MigrateDB(writeCortexDB, cnf.MigrationSource)
-	// if err != nil {
-	// 	slog.Error("Failed to migrate database:", logger.Extra(map[string]any{
-	// 		"error": err.Error(),
-	// 	}))
-	// 	return err
-	// }
+	err = repo.MigrateDB(writeCortexDB, cnf.MigrationSource)
+	if err != nil {
+		slog.Error("Failed to migrate database:", logger.Extra(map[string]any{
+			"error": err.Error(),
+		}))
+		return err
+	}
 
-	cortexSvc := category.NewService(cnf)
+	cortexSvc := category.NewService(cnf, rmq)
 
 	handlers := handlers.NewHandler(
 		cnf,

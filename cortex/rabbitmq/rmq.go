@@ -2,6 +2,7 @@ package rabbitmq
 
 import (
 	"cortex/config"
+	"time"
 )
 
 type RMQ struct {
@@ -9,14 +10,13 @@ type RMQ struct {
 }
 
 func NewRMQ(cnf *config.Config) *RMQ {
-	// Init(ConnectionOptions{
-	// 	URL:                        cnf.RabbitmqURL,
-	// 	ReconnectInterval:          time.Duration(cnf.RmqReconnectDelay) * time.Second,
-	// 	FailedMessageRetryInterval: time.Duration(cnf.RmqRetryInterval) * time.Second,
-	// })
+	Init(ConnectionOptions{
+		URL:                        cnf.RabbitmqURL,
+		ReconnectInterval:          time.Duration(cnf.RmqReconnectDelay) * time.Second,
+		FailedMessageRetryInterval: time.Duration(cnf.RmqRetryInterval) * time.Second,
+	})
 
-	// return &RMQ{
-	// 	Client: GetClient(),
-	// }
-	return nil
+	return &RMQ{
+		Client: GetClient(),
+	}
 }
