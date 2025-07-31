@@ -6,16 +6,19 @@ import (
 )
 
 type service struct {
-	cnf *config.Config
-	rmq *rabbitmq.RMQ
+	cnf       *config.Config
+	rmq       *rabbitmq.RMQ
+	ctgryRepo CtgryRepo
 }
 
 func NewService(
 	cnf *config.Config,
 	rmq *rabbitmq.RMQ,
+	ctgryRepo CtgryRepo,
 ) Service {
 	return &service{
-		cnf: cnf,
-		rmq: rmq,
+		cnf:       cnf,
+		rmq:       rmq,
+		ctgryRepo: ctgryRepo,
 	}
 }

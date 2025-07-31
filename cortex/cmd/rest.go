@@ -34,7 +34,7 @@ func serveRest(cmd *cobra.Command, args []string) error {
 
 	rmq := rabbitmq.NewRMQ(cnf)
 	defer rmq.Client.Stop()
-	_ = repo.GetQueryBuilder() // this is the psql that will be passed down to repo
+	psql := repo.GetQueryBuilder() // this is the psql that will be passed down to repo
 
 	readCortexDB, err := repo.GetDbConnection(cnf.ReadCortexDB)
 	if err != nil {
@@ -62,7 +62,9 @@ func serveRest(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	cortexSvc := category.NewService(cnf, rmq)
+	ctgryRepo := repo.NewCtgryRepo(readCortexDB, writeCortexDB, psql)
+
+	cortexSvc := category.NewService(cnf, rmq, ctgryRepo)
 
 	handlers := handlers.NewHandler(
 		cnf,

@@ -7,16 +7,23 @@ import (
 	"github.com/google/uuid"
 )
 
+const (
+	StatusPending  = "pending"
+	StatusApproved = "approved"
+	StatusRejected = "rejected"
+	StatusDeleted  = "deleted"
+)
+
 type Category struct {
-	ID          int             `json:"id,omitempty"`
+	ID          uint            `json:"id,omitempty"`
 	UUID        uuid.UUID       `json:"uuid"`
 	Slug        string          `json:"slug"`
 	Label       string          `json:"label"`
 	Description string          `json:"description,omitempty"`
-	CreatedBy   int             `json:"created_by"`
-	UpdatedBy   *int            `json:"updated_by,omitempty"`
-	ApprovedBy  *int            `json:"approved_by,omitempty"`
-	DeletedBy   *int            `json:"deleted_by,omitempty"`
+	CreatedBy   uint            `json:"created_by"`
+	UpdatedBy   *uint           `json:"updated_by,omitempty"`
+	ApprovedBy  *uint           `json:"approved_by,omitempty"`
+	DeletedBy   *uint           `json:"deleted_by,omitempty"`
 	CreatedAt   time.Time       `json:"created_at"`
 	UpdatedAt   time.Time       `json:"updated_at"`
 	ApprovedAt  *time.Time      `json:"approved_at,omitempty"`
@@ -29,30 +36,30 @@ type CreateCategoryModel struct {
 	Slug        string
 	Label       string
 	Description string
-	CreatedBy   int
+	CreatedBy   uint
 	Meta        json.RawMessage
 }
 
 type UpdateCategoryModel struct {
-	ID          int
+	ID          uint
 	Slug        *string
 	Label       *string
 	Description *string
-	ApprovedBy  *int
-	DeletedBy   *int
+	ApprovedBy  *uint
+	DeletedBy   *uint
 	Status      *string
 	Meta        json.RawMessage
 	UpdatedAt   time.Time
 }
 
 type DeleteCategoryModel struct {
-	ID        int
-	DeletedBy int
+	ID        uint
+	DeletedBy uint
 	DeletedAt time.Time
 }
 
 type GetCategoryModel struct {
-	ID    *int
+	ID    *uint
 	UUID  *uuid.UUID
 	Slug  *string
 	Label *string

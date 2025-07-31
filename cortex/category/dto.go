@@ -10,12 +10,12 @@ type CreateCategoryReqParams struct {
 	Slug        string          `json:"slug" validate:"required"`
 	Label       string          `json:"label" validate:"required"`
 	Description string          `json:"description,omitempty"`
-	CreatedBy   int             `json:"created_by" validate:"required"`
+	CreatedBy   uint             `json:"created_by" validate:"required"`
 	Meta        json.RawMessage `json:"meta,omitempty"`
 }
 
 type GetCategoryReqParams struct {
-	ID    *int       `json:"id,omitempty"`
+	ID    *uint       `json:"id,omitempty"`
 	UUID  *uuid.UUID `json:"uuid,omitempty"`
 	Slug  *string    `json:"slug,omitempty"`
 	Label *string    `json:"label,omitempty"`
@@ -27,8 +27,8 @@ type UpdateCategoryReqParams struct {
 	Slug        *string         `json:"slug,omitempty"`
 	Label       *string         `json:"label,omitempty"`
 	Description *string         `json:"description,omitempty"`
-	ApprovedBy  *int            `json:"approved_by,omitempty"`
-	DeletedBy   *int            `json:"deleted_by,omitempty"`
+	ApprovedBy  *uint            `json:"approved_by,omitempty"`
+	DeletedBy   *uint            `json:"deleted_by,omitempty"`
 	Status      *string         `json:"status,omitempty"`
 	Meta        json.RawMessage `json:"meta,omitempty"`
 }

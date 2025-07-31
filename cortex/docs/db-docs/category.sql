@@ -1,6 +1,6 @@
 CREATE TABLE "categories" (
-  "id" integer PRIMARY KEY NOT NULL,
-  "uuid" uuid UNIQUE NOT NULL,
+  "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "uuid" UUID NOT NULL DEFAULT gen_random_uuid(),
   "slug" varchar UNIQUE NOT NULL,
   "label" varchar NOT NULL,
   "description" text,
@@ -17,8 +17,8 @@ CREATE TABLE "categories" (
 );
 
 CREATE TABLE "sub_categories" (
-  "id" integer PRIMARY KEY NOT NULL,
-  "uuid" uuid UNIQUE NOT NULL,
+  "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "uuid" UUID NOT NULL DEFAULT gen_random_uuid(),
   "slug" varchar UNIQUE NOT NULL,
   "category_id" integer NOT NULL,
   "label" varchar NOT NULL,

@@ -41,7 +41,8 @@ func (server *Server) Start() {
 
 	mux := http.NewServeMux()
 
-	server.initRoutes(mux, manager)
+	server.initCtgryRoutes(mux, manager)
+	server.initSubCtgryRoutes(mux, manager)
 
 	handler := middlewares.EnableCors(mux)
 
