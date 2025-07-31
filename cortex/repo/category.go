@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	sq "github.com/Masterminds/squirrel"
@@ -32,39 +33,41 @@ func NewCtgryRepo(readDb, writeDb *sqlx.DB, psql sq.StatementBuilderType) CtgryR
 	}
 }
 
-func (r *ctgryRepo) Insert(ctx context.Context, category category.Category) error {
-	query := r.psql.Insert(r.tableName).
+func (r *ctgryRepo) Insert(ctx context.Context, cat category.Category) error {
+	query := r.psql.
+		Insert(r.tableName).
 		Columns("slug", "label", "description", "created_by", "created_at", "updated_at", "status", "meta").
 		Values(
-			category.Slug,
-			category.Label,
-			category.Description,
-			category.CreatedBy,
-			category.CreatedAt,
-			category.UpdatedAt,
-			category.Status,
-			category.Meta,
+			cat.Slug,
+			cat.Label,
+			cat.Description,
+			cat.CreatedBy,
+			cat.CreatedAt,
+			cat.UpdatedAt,
+			cat.Status,
+			cat.Meta,
 		).
 		Suffix("RETURNING id, uuid")
 
-	stmt, args, err := query.ToSql()
+	sqlStr, args, err := query.ToSql()
 	if err != nil {
 		return fmt.Errorf("failed to build insert SQL: %w", err)
 	}
 
-	err = r.writeDb.QueryRowContext(ctx, stmt, args...).Scan(&category.ID, &category.UUID)
+	err = r.writeDb.QueryRowContext(ctx, sqlStr, args...).Scan(&cat.ID, &cat.UUID)
 	if err != nil {
-		if pqErr, ok := err.(*pq.Error); ok {
+		var pqErr *pq.Error
+		if errors.As(err, &pqErr) {
 			switch pqErr.Code {
 			case "23505":
 				if pqErr.Constraint == "categories_slug_key" {
 					return customerrors.ErrSlugExists
 				}
-				return fmt.Errorf("unique constraint violation on categories: %w", err)
+				return fmt.Errorf("unique constraint violation: %w", err)
 			case "23502":
 				return fmt.Errorf("missing required field: %w", err)
 			default:
-				return fmt.Errorf("database error during insert: %w", err)
+				return fmt.Errorf("database insert error: %w", err)
 			}
 		}
 		return fmt.Errorf("failed to insert category: %w", err)
