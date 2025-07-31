@@ -43,3 +43,6 @@ build: install-deps
 	go build -o ${TARGET} ${MAIN}
 
 start: build run-server
+
+test:
+	go test -v ./...
