@@ -3,13 +3,13 @@ TARGET:=main
 SERVER_CMD:=./${TARGET} serve-rest
 PROTOC_DEST:=./
 PROTOC_FLAGS:=--go_out=${PROTOC_DEST} --go_opt=paths=source_relative --go-grpc_out=${PROTOC_DEST} --go-grpc_opt=paths=source_relative
-USER_PROTO_FILES:=./grpc/user/user.proto
+CORTEX_PROTO_FILES:=./grpc/cortex/cortex.proto
 
 # example migration create command -
 # migrate create -ext sql -seq -dir migrations create-some-table
 
 build-proto:
-	protoc ${PROTOC_FLAGS} ${USER_PROTO_FILES}
+	protoc ${PROTOC_FLAGS} ${CORTEX_PROTO_FILES}
 
 run-server:
 	${SERVER_CMD}
