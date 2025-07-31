@@ -60,6 +60,7 @@ Manages top-level content classification, such as topic groupings (e.g., "Interv
     "description": "Technical interview questions categorized by difficulty and topic",
     "created_by": 1,
     "approved_by": 2,
+    "updated_by": null,
     "deleted_by": null,
     "created_at": "2025-07-24T10:00:00Z",
     "updated_at": "2025-07-26T12:00:00Z",
@@ -72,7 +73,6 @@ Manages top-level content classification, such as topic groupings (e.g., "Interv
     }
 }
 ```
-````
 
 ---
 
@@ -133,6 +133,7 @@ Defines subcategories under a given parent category — e.g., "Basic Golang Inte
     "maintainer": "@ifrunruhin12",
     "created_by": 1,
     "approved_by": 2,
+    "updated_by": null,
     "deleted_by": null,
     "created_at": "2025-07-24T10:00:00Z",
     "updated_at": "2025-07-26T12:30:00Z",
@@ -299,3 +300,4 @@ Example:
 ```
 
 ---
+```

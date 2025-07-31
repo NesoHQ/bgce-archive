@@ -24,6 +24,7 @@ Top-level content categorization table.
 | `description` | text      |                            | Full description                                |
 | `created_by`  | integer   | Not Null                   | Creator (User ID)                               |
 | `approved_by` | integer   |                            | Admin approver                                  |
+| `updated_by`  | integer   | Not Null                   | Updater (User ID)                               |
 | `deleted_by`  | integer   |                            | Admin deleter                                   |
 | `created_at`  | timestamp | Default: `now()`, Not Null | Creation time                                   |
 | `updated_at`  | timestamp | Default: `now()`, Not Null | Last update time                                |
@@ -49,6 +50,7 @@ Represents subdivisions under a `category`.
 | `maintainer`  | varchar   |                                         | GitHub handle (e.g., `@yourname`)            |
 | `created_by`  | integer   | Not Null                                | Creator                                      |
 | `approved_by` | integer   |                                         | Admin approver                               |
+| `updated_by`  | integer   | Not Null                                | Updater (User ID)                            |
 | `deleted_by`  | integer   |                                         | Admin deleter                                |
 | `created_at`  | timestamp | Default: `now()`, Not Null              | Creation time                                |
 | `updated_at`  | timestamp | Default: `now()`, Not Null              | Last update time                             |

@@ -10,6 +10,7 @@ CREATE TABLE sub_categories (
   maintainer varchar,
   created_by integer NOT NULL,
   approved_by integer,
+  updated_by integer,
   deleted_by integer,
   created_at timestamp NOT NULL DEFAULT (now()),
   updated_at timestamp NOT NULL DEFAULT (now()),

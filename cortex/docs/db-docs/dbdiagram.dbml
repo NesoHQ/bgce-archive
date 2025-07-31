@@ -6,6 +6,7 @@ Table categories {
   description  text    [note: "Detailed description"]
   created_by   integer [not null, note: "User who created the category"]
   approved_by  integer [note: "Admin who approved it"]
+  updated_by   integer [note: "Admin who updated it"]
   deleted_by   integer [note: "Admin who deleted it"]
   created_at   timestamp [default: `now()`, not null]
   updated_at   timestamp [default: `now()`, not null]
@@ -27,6 +28,7 @@ Table subcategories {
   maintainer   varchar [note: "GitHub handle of maintainer"]
   created_by   integer [not null]
   approved_by  integer
+  updated_by   integer [note: "Admin who updated it"]
   deleted_by   integer
   created_at   timestamp [default: `now()`, not null]
   updated_at   timestamp [default: `now()`, not null]
