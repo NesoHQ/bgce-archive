@@ -66,7 +66,7 @@ Represents subdivisions under a `category`.
 To visualize this schema:
 
 1. Go to [dbdiagram.io](https://dbdiagram.io).
-2. Paste the contents of `category-service.dbml`.
+2. Paste the contents of `dbdiagram.dbml`.
 3. You’ll see an interactive ER diagram.
 
 ---

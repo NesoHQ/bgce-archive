@@ -16,7 +16,7 @@ import (
 
 func TestCreateCategory(t *testing.T) {
 	utils.InitValidator()
-	mockSvc := new(mock_handler.MockCategoryService)
+	mockSvc := new(mock_handler.CategoryService)
 
 	h := &handlers.Handlers{
 		CtgrySvc: mockSvc,

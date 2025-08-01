@@ -5,8 +5,8 @@ import (
 	"time"
 )
 
-func (s *service) CreateCategory(ctx context.Context, model CreateCategoryModel) error {
-	return s.ctgryRepo.Insert(ctx, Category{
+func (svc *service) CreateCategory(ctx context.Context, model CreateCategoryModel) error {
+	return svc.ctgryRepo.Insert(ctx, Category{
 		Slug:        model.Slug,
 		Label:       model.Label,
 		Description: model.Description,

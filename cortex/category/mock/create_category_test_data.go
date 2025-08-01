@@ -17,7 +17,7 @@ type CreateCategory struct {
 	ExpectedError error
 }
 
-func CreateCategoryTestData(t *testing.T, mockCategoryRepo *MockCategoryRepo) []CreateCategory {
+func CreateCategoryTestData(t *testing.T, mockCategoryRepo *CategoryRepo) []CreateCategory {
 	metaMap := map[string]any{"foo": "bar"}
 	metaJSON, err := json.Marshal(metaMap)
 	if err != nil {

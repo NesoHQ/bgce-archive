@@ -8,11 +8,11 @@ import (
 	"cortex/category"
 )
 
-type MockCategoryRepo struct {
+type CategoryRepo struct {
 	mock.Mock
 }
 
-func (m *MockCategoryRepo) Insert(ctx context.Context, cat category.Category) error {
+func (m *CategoryRepo) Insert(ctx context.Context, cat category.Category) error {
 	args := m.Called(ctx, cat)
 	return args.Error(0)
 }

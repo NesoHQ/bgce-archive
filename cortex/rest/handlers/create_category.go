@@ -19,8 +19,6 @@ type CreateCategoryReq struct {
 	Meta        json.RawMessage `json:"meta,omitempty"`
 }
 
-var categories []category.Category
-
 func (handlers *Handlers) CreateCategory(w http.ResponseWriter, r *http.Request) {
 	var req CreateCategoryReq
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {

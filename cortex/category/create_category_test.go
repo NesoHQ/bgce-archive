@@ -11,7 +11,7 @@ import (
 )
 
 func TestCreateCategory(t *testing.T) {
-	mockRepo := new(mock_category.MockCategoryRepo)
+	mockRepo := new(mock_category.CategoryRepo)
 	svc := category.NewService(nil, nil, mockRepo)
 
 	for _, tc := range mock_category.CreateCategoryTestData(t, mockRepo) {
