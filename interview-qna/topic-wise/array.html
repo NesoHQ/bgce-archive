@@ -169,46 +169,46 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>[<strong>Author:</strong> @mdimamhosen
+                        <p>[<strong>Author:</strong> @mdimamhosen, @mahabubulhasibshawon
 <strong>Date:</strong> 2025-04-19
 <strong>Category:</strong> interview-qa/arrays
 <strong>Tags:</strong> [go, arrays, functions]
 ]</p>
-<h1 id="arrays-in-go"><a class="header" href="#arrays-in-go">Arrays in Go</a></h1>
-<h2 id="declaring-arrays"><a class="header" href="#declaring-arrays">Declaring Arrays</a></h2>
-<p>You can declare an array in Go using the following syntax:</p>
+<h1 id="go-তে-array"><a class="header" href="#go-তে-array">Go তে Array</a></h1>
+<h2 id="array-declare-করা"><a class="header" href="#array-declare-করা">Array declare করা</a></h2>
+<p>Go-তে নিচের syntax ব্যবহার করে array declare করা যায়:</p>
 <pre><code class="language-go">var arrayName [size]elementType
 </code></pre>
-<p>Example:</p>
+<p>উদাহরণ:</p>
 <pre><code class="language-go">var numbers [5]int
 </code></pre>
-<h2 id="initializing-arrays"><a class="header" href="#initializing-arrays">Initializing Arrays</a></h2>
-<p>Arrays can be initialized at the time of declaration:</p>
+<h2 id="arrays--initialize-করা"><a class="header" href="#arrays--initialize-করা">Arrays  initialize করা</a></h2>
+<p>Array declare করার সময় Array initialize করা যেতে পারে:</p>
 <pre><code class="language-go">var numbers = [5]int{1, 2, 3, 4, 5}
 </code></pre>
-<p>Or you can use the shorthand notation:</p>
+<p>অথবা short-hand notation ব্যবহার করতে পারেন:</p>
 <pre><code class="language-go">numbers := [5]int{1, 2, 3, 4, 5}
 </code></pre>
-<h2 id="accessing-array-elements"><a class="header" href="#accessing-array-elements">Accessing Array Elements</a></h2>
-<p>Array elements are accessed using the index, which starts from 0:</p>
+<h2 id="array-element-access-করা"><a class="header" href="#array-element-access-করা">Array element access করা</a></h2>
+<p>Array এর element index ব্যবহার করে access করা যায়, যেটি 0 থেকে শুরু হয়:</p>
 <pre><code class="language-go">fmt.Println(numbers[0]) // Output: 1
 </code></pre>
-<h2 id="iterating-over-arrays"><a class="header" href="#iterating-over-arrays">Iterating Over Arrays</a></h2>
-<p>You can iterate over arrays using a <code>for</code> loop:</p>
+<h2 id="array-তে-loop-run-করা"><a class="header" href="#array-তে-loop-run-করা">Array তে loop run করা</a></h2>
+<p><code>for</code> loop ব্যবহার করে Array উপর loop run করা যায়:</p>
 <pre><code class="language-go">for i := 0; i &lt; len(numbers); i++ {
     fmt.Println(numbers[i])
 }
 </code></pre>
-<p>Or using the <code>range</code> keyword:</p>
+<p>অথবা <code>range</code> keyword ব্যবহার করতে পারেন:</p>
 <pre><code class="language-go">for index, value := range numbers {
     fmt.Println(index, value)
 }
 </code></pre>
 <h2 id="multidimensional-arrays"><a class="header" href="#multidimensional-arrays">Multidimensional Arrays</a></h2>
-<p>Go supports multidimensional arrays. A two-dimensional array is declared as follows:</p>
+<p>Go multidimensional array সাপোর্ট করে। একটি two-dimensional array নিচেরভাবে declare করা হয়:</p>
 <pre><code class="language-go">var matrix [3][3]int
 </code></pre>
-<p>Example:</p>
+<p>উদাহরণ:</p>
 <pre><code class="language-go">matrix := [3][3]int{
     {1, 2, 3},
     {4, 5, 6},
@@ -216,32 +216,31 @@
 }
 </code></pre>
 <h2 id="array-of-arrays"><a class="header" href="#array-of-arrays">Array of Arrays</a></h2>
-<p>You can also create an array of arrays:</p>
-<pre><code class="language-go">var arrayOfArrays [2][3]int
-</code></pre>
-<p>Example:</p>
-<pre><code class="language-go">arrayOfArrays := [2][3]int{
-    {1, 2, 3},
-    {4, 5, 6},
+<p>array of arrays হলো এমন একটি data structure, যেখানে একটি array প্রতিটি element আরেকটি array বা slice। এটি সাধারণত variable সাইজের 2D data রাখার জন্য ব্যবহৃত হয়, যেমন প্রতিটি row তে ভিন্ন ভিন্ন element থাকতে পারে।</p>
+<p>উদাহরণ:</p>
+<pre><code class="language-go">arrayOfArrays := [][]int{
+    {1, 2},
+    {3, 4, 5},
+    {6},
 }
 </code></pre>
-<h2 id="passing-arrays-to-functions"><a class="header" href="#passing-arrays-to-functions">Passing Arrays to Functions</a></h2>
-<p>Arrays can be passed to functions by value, meaning the function receives a copy of the array:</p>
+<h2 id="ফাংশনে-arrays-পাঠানো"><a class="header" href="#ফাংশনে-arrays-পাঠানো">ফাংশনে Arrays পাঠানো</a></h2>
+<p>Go-তে array ফাংশনে পাঠানো হয় value হিসেবে, অর্থাৎ ফাংশনটি array এর একটি copy পায়:</p>
 <pre><code class="language-go">func printArray(arr [5]int) {
     for i := 0; i &lt; len(arr); i++ {
         fmt.Println(arr[i])
     }
 }
 </code></pre>
-<p>To modify the original array, you can pass a pointer to the array:</p>
+<p>মূল array পরিবর্তন করতে হলে, আপনাকে array এর pointer পাঠাতে হবে:</p>
 <pre><code class="language-go">func modifyArray(arr *[5]int) {
     arr[0] = 100
 }
 </code></pre>
 <h2 id="frequently-asked-questions"><a class="header" href="#frequently-asked-questions">Frequently Asked Questions</a></h2>
-<h3 id="q1-how-can-i-find-the-length-of-an-array-in-go"><a class="header" href="#q1-how-can-i-find-the-length-of-an-array-in-go">Q1: How can I find the length of an array in Go?</a></h3>
-<p>You can use the built-in <code>len()</code> function to find the length of an array.</p>
-<p>Example:</p>
+<h3 id="q1-go-তে-কিভাবে-array-এর-দৈরঘয-নিরধারণ-করব"><a class="header" href="#q1-go-তে-কিভাবে-array-এর-দৈরঘয-নিরধারণ-করব">Q1: Go-তে কিভাবে array এর দৈর্ঘ্য নির্ধারণ করব?</a></h3>
+<p>array এর  দৈর্ঘ্য নির্ধারণ করতে len() built-in function ব্যবহার করুন।</p>
+<p>উদাহরণ:</p>
 <pre><code class="language-go">package main
 
 import "fmt"
@@ -251,9 +250,9 @@ func main() {
     fmt.Println("Length of the array:", len(arr)) // Output: 5
 }
 </code></pre>
-<h3 id="q2-how-do-i-copy-an-array-in-go"><a class="header" href="#q2-how-do-i-copy-an-array-in-go">Q2: How do I copy an array in Go?</a></h3>
-<p>In Go, you can copy an array by simply assigning it to another array of the same type and size.</p>
-<p>Example:</p>
+<h3 id="q2-go-তে-কিভাবে-একটি-array-copy-করব"><a class="header" href="#q2-go-তে-কিভাবে-একটি-array-copy-করব">Q2: Go-তে কিভাবে একটি array copy করব?</a></h3>
+<p>Go-তে array copy করার জন্য আপনি সেটিকে একই type এবং size এর অন্য array তে assign করতে পারেন।</p>
+<p>উদাহরণ:</p>
 <pre><code class="language-go">package main
 
 import "fmt"
@@ -265,9 +264,9 @@ func main() {
     fmt.Println("Copy:", copy)         // Output: [1 2 3]
 }
 </code></pre>
-<h3 id="q3-how-can-i-pass-an-array-to-a-function-without-copying-it"><a class="header" href="#q3-how-can-i-pass-an-array-to-a-function-without-copying-it">Q3: How can I pass an array to a function without copying it?</a></h3>
-<p>To avoid copying, you can pass a pointer to the array.</p>
-<p>Example:</p>
+<h3 id="q3-কিভাবে-copy-না-করে-function-এ-array-পাঠিয়ে-সেটিকে-পরিবরতন-করা-যায়"><a class="header" href="#q3-কিভাবে-copy-না-করে-function-এ-array-পাঠিয়ে-সেটিকে-পরিবরতন-করা-যায়">Q3: কিভাবে copy না করে function এ array পাঠিয়ে সেটিকে পরিবর্তন করা যায়?</a></h3>
+<p>copy না করে পরিবর্তন করতে চাইলে array এর pointer পাঠান।</p>
+<p>উদাহরণ:</p>
 <pre><code class="language-go">package main
 
 import "fmt"
@@ -282,7 +281,7 @@ func main() {
     fmt.Println("Modified array:", arr) // Output: [42 2 3]
 }
 </code></pre>
-<h3 id="example-code-to-test-maingo"><a class="header" href="#example-code-to-test-maingo">Example code to test: main.go</a></h3>
+<h3 id="test-করার-জনয-উদাহরণ-maingo"><a class="header" href="#test-করার-জনয-উদাহরণ-maingo">test করার জন্য উদাহরণ: main.go</a></h3>
 <pre><code class="language-go">package main
 
 import "fmt"

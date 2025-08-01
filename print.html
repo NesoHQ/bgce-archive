@@ -6455,46 +6455,46 @@ main goroutine again waits for next request...
 <strong>Category:</strong> interview-qa/class-wise
 ]</p>
 <div style="break-before: page; page-break-before: always;"></div><h2 id="topic-wise"><a class="header" href="#topic-wise">Topic wise</a></h2>
-<div style="break-before: page; page-break-before: always;"></div><p>[<strong>Author:</strong> @mdimamhosen
+<div style="break-before: page; page-break-before: always;"></div><p>[<strong>Author:</strong> @mdimamhosen, @mahabubulhasibshawon
 <strong>Date:</strong> 2025-04-19
 <strong>Category:</strong> interview-qa/arrays
 <strong>Tags:</strong> [go, arrays, functions]
 ]</p>
-<h1 id="arrays-in-go"><a class="header" href="#arrays-in-go">Arrays in Go</a></h1>
-<h2 id="declaring-arrays"><a class="header" href="#declaring-arrays">Declaring Arrays</a></h2>
-<p>You can declare an array in Go using the following syntax:</p>
+<h1 id="go-তে-array"><a class="header" href="#go-তে-array">Go তে Array</a></h1>
+<h2 id="array-declare-করা"><a class="header" href="#array-declare-করা">Array declare করা</a></h2>
+<p>Go-তে নিচের syntax ব্যবহার করে array declare করা যায়:</p>
 <pre><code class="language-go">var arrayName [size]elementType
 </code></pre>
-<p>Example:</p>
+<p>উদাহরণ:</p>
 <pre><code class="language-go">var numbers [5]int
 </code></pre>
-<h2 id="initializing-arrays"><a class="header" href="#initializing-arrays">Initializing Arrays</a></h2>
-<p>Arrays can be initialized at the time of declaration:</p>
+<h2 id="arrays--initialize-করা"><a class="header" href="#arrays--initialize-করা">Arrays  initialize করা</a></h2>
+<p>Array declare করার সময় Array initialize করা যেতে পারে:</p>
 <pre><code class="language-go">var numbers = [5]int{1, 2, 3, 4, 5}
 </code></pre>
-<p>Or you can use the shorthand notation:</p>
+<p>অথবা short-hand notation ব্যবহার করতে পারেন:</p>
 <pre><code class="language-go">numbers := [5]int{1, 2, 3, 4, 5}
 </code></pre>
-<h2 id="accessing-array-elements"><a class="header" href="#accessing-array-elements">Accessing Array Elements</a></h2>
-<p>Array elements are accessed using the index, which starts from 0:</p>
+<h2 id="array-element-access-করা"><a class="header" href="#array-element-access-করা">Array element access করা</a></h2>
+<p>Array এর element index ব্যবহার করে access করা যায়, যেটি 0 থেকে শুরু হয়:</p>
 <pre><code class="language-go">fmt.Println(numbers[0]) // Output: 1
 </code></pre>
-<h2 id="iterating-over-arrays"><a class="header" href="#iterating-over-arrays">Iterating Over Arrays</a></h2>
-<p>You can iterate over arrays using a <code>for</code> loop:</p>
+<h2 id="array-তে-loop-run-করা"><a class="header" href="#array-তে-loop-run-করা">Array তে loop run করা</a></h2>
+<p><code>for</code> loop ব্যবহার করে Array উপর loop run করা যায়:</p>
 <pre><code class="language-go">for i := 0; i &lt; len(numbers); i++ {
     fmt.Println(numbers[i])
 }
 </code></pre>
-<p>Or using the <code>range</code> keyword:</p>
+<p>অথবা <code>range</code> keyword ব্যবহার করতে পারেন:</p>
 <pre><code class="language-go">for index, value := range numbers {
     fmt.Println(index, value)
 }
 </code></pre>
 <h2 id="multidimensional-arrays"><a class="header" href="#multidimensional-arrays">Multidimensional Arrays</a></h2>
-<p>Go supports multidimensional arrays. A two-dimensional array is declared as follows:</p>
+<p>Go multidimensional array সাপোর্ট করে। একটি two-dimensional array নিচেরভাবে declare করা হয়:</p>
 <pre><code class="language-go">var matrix [3][3]int
 </code></pre>
-<p>Example:</p>
+<p>উদাহরণ:</p>
 <pre><code class="language-go">matrix := [3][3]int{
     {1, 2, 3},
     {4, 5, 6},
@@ -6502,32 +6502,31 @@ main goroutine again waits for next request...
 }
 </code></pre>
 <h2 id="array-of-arrays"><a class="header" href="#array-of-arrays">Array of Arrays</a></h2>
-<p>You can also create an array of arrays:</p>
-<pre><code class="language-go">var arrayOfArrays [2][3]int
-</code></pre>
-<p>Example:</p>
-<pre><code class="language-go">arrayOfArrays := [2][3]int{
-    {1, 2, 3},
-    {4, 5, 6},
+<p>array of arrays হলো এমন একটি data structure, যেখানে একটি array প্রতিটি element আরেকটি array বা slice। এটি সাধারণত variable সাইজের 2D data রাখার জন্য ব্যবহৃত হয়, যেমন প্রতিটি row তে ভিন্ন ভিন্ন element থাকতে পারে।</p>
+<p>উদাহরণ:</p>
+<pre><code class="language-go">arrayOfArrays := [][]int{
+    {1, 2},
+    {3, 4, 5},
+    {6},
 }
 </code></pre>
-<h2 id="passing-arrays-to-functions"><a class="header" href="#passing-arrays-to-functions">Passing Arrays to Functions</a></h2>
-<p>Arrays can be passed to functions by value, meaning the function receives a copy of the array:</p>
+<h2 id="ফাংশনে-arrays-পাঠানো"><a class="header" href="#ফাংশনে-arrays-পাঠানো">ফাংশনে Arrays পাঠানো</a></h2>
+<p>Go-তে array ফাংশনে পাঠানো হয় value হিসেবে, অর্থাৎ ফাংশনটি array এর একটি copy পায়:</p>
 <pre><code class="language-go">func printArray(arr [5]int) {
     for i := 0; i &lt; len(arr); i++ {
         fmt.Println(arr[i])
     }
 }
 </code></pre>
-<p>To modify the original array, you can pass a pointer to the array:</p>
+<p>মূল array পরিবর্তন করতে হলে, আপনাকে array এর pointer পাঠাতে হবে:</p>
 <pre><code class="language-go">func modifyArray(arr *[5]int) {
     arr[0] = 100
 }
 </code></pre>
 <h2 id="frequently-asked-questions"><a class="header" href="#frequently-asked-questions">Frequently Asked Questions</a></h2>
-<h3 id="q1-how-can-i-find-the-length-of-an-array-in-go"><a class="header" href="#q1-how-can-i-find-the-length-of-an-array-in-go">Q1: How can I find the length of an array in Go?</a></h3>
-<p>You can use the built-in <code>len()</code> function to find the length of an array.</p>
-<p>Example:</p>
+<h3 id="q1-go-তে-কিভাবে-array-এর-দৈরঘয-নিরধারণ-করব"><a class="header" href="#q1-go-তে-কিভাবে-array-এর-দৈরঘয-নিরধারণ-করব">Q1: Go-তে কিভাবে array এর দৈর্ঘ্য নির্ধারণ করব?</a></h3>
+<p>array এর  দৈর্ঘ্য নির্ধারণ করতে len() built-in function ব্যবহার করুন।</p>
+<p>উদাহরণ:</p>
 <pre><code class="language-go">package main
 
 import "fmt"
@@ -6537,9 +6536,9 @@ func main() {
     fmt.Println("Length of the array:", len(arr)) // Output: 5
 }
 </code></pre>
-<h3 id="q2-how-do-i-copy-an-array-in-go"><a class="header" href="#q2-how-do-i-copy-an-array-in-go">Q2: How do I copy an array in Go?</a></h3>
-<p>In Go, you can copy an array by simply assigning it to another array of the same type and size.</p>
-<p>Example:</p>
+<h3 id="q2-go-তে-কিভাবে-একটি-array-copy-করব"><a class="header" href="#q2-go-তে-কিভাবে-একটি-array-copy-করব">Q2: Go-তে কিভাবে একটি array copy করব?</a></h3>
+<p>Go-তে array copy করার জন্য আপনি সেটিকে একই type এবং size এর অন্য array তে assign করতে পারেন।</p>
+<p>উদাহরণ:</p>
 <pre><code class="language-go">package main
 
 import "fmt"
@@ -6551,9 +6550,9 @@ func main() {
     fmt.Println("Copy:", copy)         // Output: [1 2 3]
 }
 </code></pre>
-<h3 id="q3-how-can-i-pass-an-array-to-a-function-without-copying-it"><a class="header" href="#q3-how-can-i-pass-an-array-to-a-function-without-copying-it">Q3: How can I pass an array to a function without copying it?</a></h3>
-<p>To avoid copying, you can pass a pointer to the array.</p>
-<p>Example:</p>
+<h3 id="q3-কিভাবে-copy-না-করে-function-এ-array-পাঠিয়ে-সেটিকে-পরিবরতন-করা-যায়"><a class="header" href="#q3-কিভাবে-copy-না-করে-function-এ-array-পাঠিয়ে-সেটিকে-পরিবরতন-করা-যায়">Q3: কিভাবে copy না করে function এ array পাঠিয়ে সেটিকে পরিবর্তন করা যায়?</a></h3>
+<p>copy না করে পরিবর্তন করতে চাইলে array এর pointer পাঠান।</p>
+<p>উদাহরণ:</p>
 <pre><code class="language-go">package main
 
 import "fmt"
@@ -6568,7 +6567,7 @@ func main() {
     fmt.Println("Modified array:", arr) // Output: [42 2 3]
 }
 </code></pre>
-<h3 id="example-code-to-test-maingo"><a class="header" href="#example-code-to-test-maingo">Example code to test: main.go</a></h3>
+<h3 id="test-করার-জনয-উদাহরণ-maingo"><a class="header" href="#test-করার-জনয-উদাহরণ-maingo">test করার জন্য উদাহরণ: main.go</a></h3>
 <pre><code class="language-go">package main
 
 import "fmt"
@@ -6662,11 +6661,12 @@ func main() {
     })
 }
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><p>[<strong>Author:</strong> @mdimamhosen
+<div style="break-before: page; page-break-before: always;"></div><p>[<strong>Author:</strong> @mdimamhosen, @mahabubulhasibshawon
 <strong>Date:</strong> 2025-04-22
 <strong>Category:</strong> interview-qa/arrays
 <strong>Tags:</strong> [go, clousers, functions]
 ]</p>
+<h1 id="closure"><a class="header" href="#closure">Closure</a></h1>
 <h2 id="-program-code-example"><a class="header" href="#-program-code-example">🔁 Program Code Example</a></h2>
 <pre><code class="language-go">package main
 
@@ -6710,22 +6710,22 @@ func init() {
 }
 </code></pre>
 <hr />
-<h2 id="-code-execution-phases"><a class="header" href="#-code-execution-phases">⚙️ Code Execution Phases</a></h2>
-<h3 id="-phase-1-compilation"><a class="header" href="#-phase-1-compilation">🧩 Phase 1: Compilation</a></h3>
+<h2 id="-code-execution-ধাপসমূহ"><a class="header" href="#-code-execution-ধাপসমূহ">⚙️ Code Execution ধাপসমূহ</a></h2>
+<h3 id="-ধাপ-১-compilation"><a class="header" href="#-ধাপ-১-compilation">🧩 ধাপ ১: Compilation</a></h3>
 <ul>
-<li>Compile and generate the binary:</li>
+<li>Compile করে binary তৈরি করুন:</li>
 </ul>
 <pre><code class="language-bash">go build main.go
 </code></pre>
-<h3 id="-phase-2-execution"><a class="header" href="#-phase-2-execution">🚀 Phase 2: Execution</a></h3>
+<h3 id="-ধাপ-২-execution"><a class="header" href="#-ধাপ-২-execution">🚀 ধাপ ২: Execution</a></h3>
 <ul>
-<li>Run the binary:</li>
+<li>Binary run করুন:</li>
 </ul>
 <pre><code class="language-bash">./main
 </code></pre>
-<h2 id="-closures-in-go"><a class="header" href="#-closures-in-go">🔒 Closures in Go</a></h2>
-<h3 id="-what-is-a-closure"><a class="header" href="#-what-is-a-closure">✅ What is a Closure?</a></h3>
-<p>A closure is a function <strong>defined within another function</strong> and <strong>has access to the outer function's variables</strong> even after the outer function has finished executing.</p>
+<h2 id="-go-তে-closures"><a class="header" href="#-go-তে-closures">🔒 Go-তে Closures</a></h2>
+<h3 id="-closure-কী"><a class="header" href="#-closure-কী">✅ Closure কী?</a></h3>
+<p>Closure হলো এমন একটি funtion, <strong>যা অন্য একটি funtion এর ভিতরে define করা হয়</strong> এবং <strong>যা তার নিজের scope ছাড়াও তার outer scope</strong> থাকা <strong>variable গুলোকে</strong> মনে রাখে এবং ব্যবহার করতে পারে, এমনকি সেই outer scope টি execute হওয়া শেষ হয়ে গেলেও।</p>
 <pre><code class="language-go">func Outer() func() {
     money := 100
     show := func() {
@@ -6736,35 +6736,89 @@ func init() {
 }
 </code></pre>
 <ul>
-<li><code>money</code> is captured by the inner function.</li>
-<li>On each call to the returned function, <code>money</code> is updated.</li>
+<li><code>money</code> variable টি inner function দ্বারা capture করা হয়।</li>
+<li>প্রতিবার call করলে <code>money</code> update হয়।</li>
 </ul>
 <h3 id="-multiple-closures"><a class="header" href="#-multiple-closures">✅ Multiple Closures</a></h3>
 <ul>
-<li>Each call to <code>Outer()</code> creates a new instance of <code>money</code>, isolated from others.</li>
+<li>প্রতিবার <code>Outer()</code> call করলে নতুন <code>money</code> instance তৈরি হয়, যা অন্যগুলোর থেকে আলাদা।</li>
 </ul>
 <hr />
-<h2 id="-output-explanation"><a class="header" href="#-output-explanation">🧠 Output Explanation</a></h2>
+<h2 id="-output-বযাখযা"><a class="header" href="#-output-বযাখযা">🧠 Output ব্যাখ্যা</a></h2>
 <pre><code class="language-go">init() runs first: ============ Begin ============
 
-Outer function
-Age: 20
-Money: 130
-Money: 160
-=========================
-Outer function
-Age: 20
-Money: 130
+Outer function  
+Age: 20  
+Money: 130  
+Money: 160  
+=========================  
+Outer function  
+Age: 20  
+Money: 130  
 Money: 160
 </code></pre>
 <ul>
-<li>Two closures are created, each with its own instance of <code>money</code>.</li>
-<li>They do not interfere with each other.</li>
+<li>দুইটি closure তৈরি হয়েছে, প্রতিটির নিজস্ব <code>money</code> instance আছে।</li>
+<li>এরা একে অপরকে প্রভাবিত করে না।</li>
+</ul>
+<hr />
+<h3 id="-memory-segment-বিশলেষণ"><a class="header" href="#-memory-segment-বিশলেষণ">🧱 Memory segment বিশ্লেষণ</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>segment</th><th>কী সংরক্ষণ করে</th></tr></thead><tbody>
+<tr><td>Code segment</td><td>compile করা নির্দেশাবলী এবং constant (<code>a</code>, <code>main</code>, <code>call</code>, <code>Outer</code>, <code>init</code>, <code>show</code>)</td></tr>
+<tr><td>Data segment</td><td>Global variable <code>b</code></td></tr>
+<tr><td>Stack</td><td>Local variable (<code>age</code>), function call frame</td></tr>
+<tr><td>Heap</td><td>Closer ও Escaping variable (<code>money</code>)</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="-visualization"><a class="header" href="#-visualization">🧠 Visualization</a></h2>
+<h3 id="cli-style-memory-বিনযাস"><a class="header" href="#cli-style-memory-বিনযাস">CLI-style Memory বিন্যাস</a></h3>
+<pre><code>┌──────────────────────────────┐
+│        Code segment          │
+│------------------------------│
+│ const a = 10,                │
+│ func main, call, Outer, init │
+│ show (anonymous function)    │
+└──────────────────────────────┘
+          ↓
+┌──────────────────────────────┐
+│        Data segment         │
+│------------------------------│
+│ var b = 20                   │
+└──────────────────────────────┘
+          ↓
+┌──────────────────────────────┐
+│           Stack              │
+│------------------------------│
+│ Outer() frame                │
+│   age = 20                   │
+│   return address             │
+└──────────────────────────────┘
+          ↓
+┌──────────────────────────────┐
+│            Heap               │
+│------------------------------│
+│ money = 100 (inc)            │
+│ money = 130 (after inc())    │
+│ money = 160 (after inc())    │
+│                              │
+│ money = 100 (inc1)           │
+│ money = 130 (after inc1())   │
+│ money = 160 (after inc1())   │
+└──────────────────────────────┘
+</code></pre>
+<hr />
+<h3 id="-বযাখযা-4"><a class="header" href="#-বযাখযা-4">🧠 ব্যাখ্যা:</a></h3>
+<ul>
+<li><code>a</code> ও <code>b</code> Global — তাই <code>a</code> Code segment (const), আর <code>b</code> Data segment এ যায়।</li>
+<li><code>age</code> একটি Local variable, এবং কেবল <code>Outer</code> function ব্যবহৃত — Stack থাকে।</li>
+<li><code>money</code> একটি Closer এর অংশ, কারণ <code>show()</code> function এর মধ্যে ব্যবহৃত ও return করা হচ্ছে — তাই এটি <strong>Heap এ</strong> সংরক্ষিত।</li>
+<li>প্রতিবার <code>Outer()</code> call হলে, নতুন <code>money</code> variable Heap তৈরি হয়, আলাদা করে (<code>inc</code>, <code>inc1</code>)।</li>
 </ul>
 <hr />
 <h2 id="-types-of-closures"><a class="header" href="#-types-of-closures">🔍 Types of Closures</a></h2>
 <h3 id="1-closure-with-outer-variable"><a class="header" href="#1-closure-with-outer-variable">1. <strong>Closure with Outer Variable</strong></a></h3>
-<p><strong>Question:</strong> Write a Go program that demonstrates how a closure can access and modify a variable from the outer function.</p>
+<p><strong>প্রশ্ন:</strong> একটি Go program লিখুন যা দেখায় কীভাবে closure outer function থেকে variable access ও modify করতে পারে।</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -6784,14 +6838,14 @@ func main() {
     closure() // Output: 12
 }
 </code></pre>
-<p><strong>Explanation:</strong></p>
+<p><strong>ব্যাখ্যা:</strong></p>
 <ul>
-<li>The <code>outer</code> function creates a closure that captures and modifies the <code>x</code> variable.</li>
-<li>Every time the closure is called, the value of <code>x</code> is incremented.</li>
+<li><code>outer</code> function একটি closure তৈরি করে যা <code>x</code> ভেরিয়েবল capture করে এবং modify করে।</li>
+<li>প্রতিবার call করলে <code>x</code> এর মান বাড়ে।</li>
 </ul>
 <hr />
 <h3 id="2-multiple-closures-with-separate-states"><a class="header" href="#2-multiple-closures-with-separate-states">2. <strong>Multiple Closures with Separate States</strong></a></h3>
-<p><strong>Question:</strong> Demonstrate how multiple closures created in the same function each maintain their own state.</p>
+<p><strong>প্রশ্ন:</strong> দেখান কীভাবে একই function এ তৈরি হওয়া একাধিক closures তাদের নিজস্ব state ধরে রাখে।</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -6815,14 +6869,14 @@ func main() {
     fmt.Println(counter2()) // Output: 2
 }
 </code></pre>
-<p><strong>Explanation:</strong></p>
+<p><strong>ব্যাখ্যা:</strong></p>
 <ul>
-<li><code>counter1</code> and <code>counter2</code> each maintain their own state because they are independent closures.</li>
-<li>Each counter starts at 0 and increments on each call.</li>
+<li><code>counter1</code> এবং <code>counter2</code> প্রতিটিই আলাদা closure, যাদের নিজস্ব <code>counter</code> state রয়েছে।</li>
+<li>এরা একে অপরকে প্রভাবিত করে না।</li>
 </ul>
 <hr />
 <h3 id="3-closure-with-parameters"><a class="header" href="#3-closure-with-parameters">3. <strong>Closure with Parameters</strong></a></h3>
-<p><strong>Question:</strong> Write a closure that accepts parameters and demonstrates how closures can be passed arguments.</p>
+<p><strong>প্রশ্ন:</strong> এমন একটি closure লিখুন যা parameter accept করে এবং দেখায় যে closures কীভাবে arguments ব্যবহার করতে পারে।</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -6842,14 +6896,14 @@ func main() {
     fmt.Println(triple(5))  // Output: 15
 }
 </code></pre>
-<p><strong>Explanation:</strong></p>
+<p><strong>ব্যাখ্যা:</strong></p>
 <ul>
-<li>The closure <code>multiplier</code> takes a <code>factor</code> argument and returns a function that multiplies a number by that factor.</li>
-<li>Each closure (<code>double</code>, <code>triple</code>) uses its own <code>factor</code> value to perform the operation.</li>
+<li><code>multiplier</code> নামের closure <code>factor</code> parameter accept করে এবং একটি function return করে যা <code>n</code> কে <code>factor</code> দিয়ে গুণ করে।</li>
+<li><code>double</code> এবং <code>triple</code> আলাদা আলাদা factor ব্যবহার করে।</li>
 </ul>
 <hr />
 <h3 id="4-closures-with-deferred-execution"><a class="header" href="#4-closures-with-deferred-execution">4. <strong>Closures with Deferred Execution</strong></a></h3>
-<p><strong>Question:</strong> How can closures be used in Go with deferred execution, and what happens when the closure accesses variables after the outer function returns?</p>
+<p><strong>প্রশ্ন:</strong> Go-তে closures কীভাবে deferred execution এর সঙ্গে ব্যবহার করা যায় এবং outer function শেষ হওয়ার পর variable access করলে কী ঘটে?</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -6864,14 +6918,14 @@ func main() {
     fmt.Println("Inside main:", a)
 }
 </code></pre>
-<p><strong>Explanation:</strong></p>
+<p><strong>ব্যাখ্যা:</strong></p>
 <ul>
-<li>Even though <code>a</code> is modified inside <code>main</code>, the deferred closure captures the value of <code>a</code> at the time the defer statement was encountered by passing it as a parameter.</li>
-<li>The closure prints the value of <code>a</code> that was captured before it was modified.</li>
+<li>যদিও <code>main</code> এ <code>a</code> পরিবর্তিত হয়েছে, deferred closure-এ <code>a</code> এর যে মান পাঠানো হয়েছে সেটাই print হবে।</li>
+<li>কারণ <code>a</code> parameter হিসেবে capture করা হয়েছে, reference নয়।</li>
 </ul>
 <hr />
 <h3 id="5-closure-capturing-loop-variable"><a class="header" href="#5-closure-capturing-loop-variable">5. <strong>Closure Capturing Loop Variable</strong></a></h3>
-<p><strong>Question:</strong> Write a Go program that demonstrates a common pitfall when using closures inside loops. The closure captures the loop variable incorrectly.</p>
+<p><strong>প্রশ্ন:</strong> একটি Go program লিখুন যা দেখায় কীভাবে closure loop variable ভুলভাবে capture করে।</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -6891,12 +6945,13 @@ func main() {
     }
 }
 </code></pre>
-<p><strong>Explanation:</strong></p>
+<p><strong>ব্যাখ্যা:</strong></p>
 <ul>
-<li>All closures capture the same <code>i</code> variable. At the time of closure execution, <code>i</code> is 3 (the value after the loop ends).</li>
-<li>To fix this, you need to pass <code>i</code> as a parameter to the closure:</li>
+<li>সব closures একই <code>i</code> variable capture করে।</li>
+<li>loop শেষ হওয়ার পরে <code>i</code> এর মান হয় 3, তাই সব output হয় 3।</li>
+<li>এটা ঠিক করার জন্য এর <code>i</code> মান parameter হিসাবে closures এ পাঠাতে হবে।</li>
 </ul>
-<p><strong>Fixed Code:</strong></p>
+<p><strong>সঠিক code:</strong></p>
 <pre><code class="language-go">package main
 
 import "fmt"
@@ -6918,7 +6973,7 @@ func main() {
 </code></pre>
 <hr />
 <h3 id="6-closures-with-function-arguments"><a class="header" href="#6-closures-with-function-arguments">6. <strong>Closures with Function Arguments</strong></a></h3>
-<p><strong>Question:</strong> Create a closure that adds two numbers and demonstrates how closures can capture arguments passed to the inner function.</p>
+<p><strong>প্রশ্ন:</strong> এমন একটি closure তৈরি করুন যা দুটি সংখ্যা যোগ করে এবং দেখায় কীভাবে closures argument capture করে।</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -6936,14 +6991,14 @@ func main() {
     fmt.Println(add5(10)) // Output: 15
 }
 </code></pre>
-<p><strong>Explanation:</strong></p>
+<p><strong>ব্যাখ্যা:</strong></p>
 <ul>
-<li>The outer function <code>adder</code> captures <code>a</code> and returns a closure that adds <code>a</code> to the argument <code>b</code>.</li>
-<li>The closure <code>add5</code> remembers <code>a = 5</code> and adds it to the argument passed to it.</li>
+<li><code>adder</code> function <code>a</code> কে capture করে এবং <code>b</code> এর সাথে যোগ করে।</li>
+<li><code>add5</code> closure <code>a = 5</code> মনে রাখে এবং তার সাথে নতুন <code>b</code> যোগ করে।</li>
 </ul>
 <hr />
 <h3 id="7-closures-with-a-function-factory"><a class="header" href="#7-closures-with-a-function-factory">7. <strong>Closures with a Function Factory</strong></a></h3>
-<p><strong>Question:</strong> Implement a closure that acts as a function factory, returning different mathematical operations based on the argument passed to the factory.</p>
+<p><strong>প্রশ্ন:</strong> একটি closure তৈরি করুন যা function factory হিসেবে কাজ করে এবং pass করা argument অনুসারে বিভিন্ন mathematical operation return করে।</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -6977,14 +7032,14 @@ func main() {
     fmt.Println(multiply(3, 4))  // Output: 12
 }
 </code></pre>
-<p><strong>Explanation:</strong></p>
+<p><strong>ব্যাখ্যা:</strong></p>
 <ul>
-<li>The <code>operationFactory</code> returns different closures based on the operator passed.</li>
-<li>Each closure performs a corresponding mathematical operation.</li>
+<li><code>operationFactory</code> pass করা operator অনুযায়ী একটি closure return করে।</li>
+<li>প্রতিটি closure নির্দিষ্ট operation সম্পাদন করে।</li>
 </ul>
 <hr />
 <h3 id="8-closures-with-state-preservation"><a class="header" href="#8-closures-with-state-preservation">8. <strong>Closures with State Preservation</strong></a></h3>
-<p><strong>Question:</strong> Write a closure that preserves state across multiple invocations (like a simple counter) and explain its working.</p>
+<p><strong>প্রশ্ন:</strong> এমন একটি closure লিখুন যা বারবার call করার পরও তার state সংরক্ষণ করে (যেমন একটি simple counter)</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -7007,13 +7062,14 @@ func main() {
     fmt.Println(c2()) // Output: 1
 }
 </code></pre>
-<p><strong>Explanation:</strong></p>
+<p><strong>ব্যাখ্যা:</strong></p>
 <ul>
-<li>Each call to <code>counter</code> returns a closure that maintains a unique <code>count</code> variable, preserving state across invocations.</li>
+<li>প্রতিটি <code>counter()</code> call একটি নতুন <code>count</code> variable সহ closure তৈরি করে।</li>
+<li><code>c1</code> এবং <code>c2</code> আলাদা আলাদা state সংরক্ষণ করে।</li>
 </ul>
 <hr />
 <h3 id="9-closure-with-function-composition"><a class="header" href="#9-closure-with-function-composition">9. <strong>Closure with Function Composition</strong></a></h3>
-<p><strong>Question:</strong> Create a Go program that demonstrates function composition using closures.</p>
+<p><strong>প্রশ্ন:</strong> একটি Go প্রোগ্রাম তৈরি করুন যা closures ব্যবহার করে function composition demonstrate করে।</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -7038,26 +7094,19 @@ func main() {
     fmt.Println(composed(3)) // Output: 16 (3 + 5 = 8, 8 * 2 = 16)
 }
 </code></pre>
-<p><strong>Explanation:</strong></p>
+<p><strong>ব্যাখ্যা:</strong></p>
 <ul>
-<li>The <code>compose</code> function takes two functions (<code>f</code> and <code>g</code>) and returns a new function that applies <code>g</code> first, then applies <code>f</code> to the result.</li>
-<li>The result is a composition of <code>double</code> and <code>addFive</code>.</li>
+<li><code>compose</code> function দুটি function <code>f</code> এবং <code>g</code> accept করে এবং একটি নতুন function return করে যা <code>g(x)</code> এর ওপর <code>f()</code> apply করে।</li>
+<li>এখানে <code>double(addFive(3))</code> =&gt; <code>double(8)</code> =&gt; <code>16</code></li>
 </ul>
 <hr />
-<pre><code class="language-markdown"># Go Closures - 20 Questions with Code Examples and Explanations
-
-This document contains 20 questions related to closures in Go, along with code examples and detailed explanations.
-
----
-
-### 1. **What is a closure in Go?**
-
-**Question:** Define what a closure is in Go with an example.
-
-**Code:**
-
-```go
-package main
+<h1 id="go-closures---code-উদাহরণ-ও-বযাখযাসহ-২০টি-পরশন"><a class="header" href="#go-closures---code-উদাহরণ-ও-বযাখযাসহ-২০টি-পরশন">Go Closures - code উদাহরণ ও ব্যাখ্যাসহ ২০টি প্রশ্ন</a></h1>
+<p>এই document Go-এর closures নিয়ে ২০টি প্রশ্ন, code উদাহরণ এবং বিস্তারিত ব্যাখ্যা রয়েছে।</p>
+<hr />
+<h3 id="1-go-তে-closure-কী"><a class="header" href="#1-go-তে-closure-কী">1. <strong>Go-তে closure কী?</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> Go-এ closure কী তা ব্যাখ্যা করুন একটি উদাহরণসহ।</p>
+<p><strong>Code:</strong></p>
+<pre><code class="language-go">package main
 
 import "fmt"
 
@@ -7071,13 +7120,12 @@ func main() {
     closure := outer()
     closure()
 }
-```
 </code></pre>
-<p><strong>Explanation:</strong><br />
-A closure is a function that captures the variables from its surrounding context. In the example, the inner function returned by <code>outer</code> is a closure, as it can access the environment in which it was created.</p>
+<p><strong>ব্যাখ্যা:</strong><br />
+একটি closure এমন একটি function যা তার চারপাশের scope থেকে variable ধরে রাখতে পারে। উপরের উদাহরণে <code>outer</code> function যেটি return করছে সেটি একটি closure, কারণ এটি তার তৈরি হওয়া environment-এর context access করতে পারে।</p>
 <hr />
-<h3 id="2-how-does-a-closure-access-variables-from-its-outer-function"><a class="header" href="#2-how-does-a-closure-access-variables-from-its-outer-function">2. <strong>How does a closure access variables from its outer function?</strong></a></h3>
-<p><strong>Question:</strong> Show how a closure can access and modify variables in the outer function.</p>
+<h3 id="2-একটি-closure-কীভাবে-outer-function-এর-variable-access-করে"><a class="header" href="#2-একটি-closure-কীভাবে-outer-function-এর-variable-access-করে">2. <strong>একটি closure কীভাবে outer function-এর variable access করে?</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> দেখান কিভাবে একটি closure outer variable access ও modify করতে পারে।</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -7097,11 +7145,11 @@ func main() {
     closure() // Output: 12
 }
 </code></pre>
-<p><strong>Explanation:</strong><br />
-The closure captures the <code>x</code> variable from the <code>outer</code> function and modifies it each time it is invoked.</p>
+<p><strong>ব্যাখ্যা:</strong><br />
+এই closure outer <code>x</code> variable ধরে রাখে এবং প্রতিবার call করার সময় তাকে modify করে।</p>
 <hr />
-<h3 id="3-what-happens-when-closures-access-variables-from-a-loop"><a class="header" href="#3-what-happens-when-closures-access-variables-from-a-loop">3. <strong>What happens when closures access variables from a loop?</strong></a></h3>
-<p><strong>Question:</strong> Demonstrate the common mistake with closures capturing loop variables.</p>
+<h3 id="3-closure-যখন-loop-এর-variable-access-করে-তখন-কী-হয়"><a class="header" href="#3-closure-যখন-loop-এর-variable-access-করে-তখন-কী-হয়">3. <strong>closure যখন loop-এর variable access করে তখন কী হয়?</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> closure দ্বারা loop variable capture করার সময় কী ধরনের ভুল হতে পারে তা দেখান।</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -7121,11 +7169,11 @@ func main() {
     }
 }
 </code></pre>
-<p><strong>Explanation:</strong><br />
-All closures capture the same <code>i</code> variable, and when executed, they all print <code>3</code>. This happens because the closure captures a reference to the variable <code>i</code>, not its value at the time of closure creation.</p>
+<p><strong>ব্যাখ্যা:</strong><br />
+এখানে সবগুলো closure একই <code>i</code> variable ধরে রাখে, তাই প্রত্যেকটা closure call করার সময় <code>3</code> print হয়। কারণ loop শেষ হবার পর <code>i</code> এর final value 3 হয়ে যায়, এবং closure সেই reference-টাই ধরে রাখে।</p>
 <hr />
-<h3 id="4-how-can-you-fix-the-loop-closure-problem"><a class="header" href="#4-how-can-you-fix-the-loop-closure-problem">4. <strong>How can you fix the loop closure problem?</strong></a></h3>
-<p><strong>Question:</strong> How can you avoid closures capturing the same variable in a loop?</p>
+<h3 id="4-loop-closure-সমসযা-কীভাবে-সমাধান-করবেন"><a class="header" href="#4-loop-closure-সমসযা-কীভাবে-সমাধান-করবেন">4. <strong>loop closure সমস্যা কীভাবে সমাধান করবেন?</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> loop-এর প্রতিটি iteration-এ আলাদা variable কিভাবে capture করবেন?</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -7146,11 +7194,11 @@ func main() {
     }
 }
 </code></pre>
-<p><strong>Explanation:</strong><br />
-By introducing a new variable <code>i</code> in the loop, each closure captures a separate value of <code>i</code>, resulting in <code>0</code>, <code>1</code>, and <code>2</code> being printed.</p>
+<p><strong>ব্যাখ্যা:</strong><br />
+<code>i := i</code> দিয়ে প্রতি iteration-এ নতুন <code>i</code> তৈরি হওয়ায়, closure গুলো ভিন্ন ভিন্ন value ধরে রাখে এবং আলাদা আলাদা output দেয়: <code>0</code>, <code>1</code>, <code>2</code>।</p>
 <hr />
-<h3 id="5-closures-as-function-parameters"><a class="header" href="#5-closures-as-function-parameters">5. <strong>Closures as Function Parameters</strong></a></h3>
-<p><strong>Question:</strong> How do you pass a closure as an argument to another function?</p>
+<h3 id="5-function-parameter-হিসেবে-closure"><a class="header" href="#5-function-parameter-হিসেবে-closure">5. <strong>Function parameter হিসেবে closure</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> কিভাবে closure-কে অন্য function-এ argument হিসেবে pass করবেন?</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -7167,11 +7215,11 @@ func main() {
     applyClosure(closure)
 }
 </code></pre>
-<p><strong>Explanation:</strong><br />
-You can pass a closure as an argument to another function. In this example, <code>applyClosure</code> accepts a closure and invokes it.</p>
+<p><strong>ব্যাখ্যা:</strong><br />
+closure-কে কোনো function-এর argument হিসেবে pass করা যায়। এখানে <code>applyClosure</code> function-টি একটি closure নেয় এবং তাকে execute করে।</p>
 <hr />
-<h3 id="6-closures-with-parameters"><a class="header" href="#6-closures-with-parameters">6. <strong>Closures with Parameters</strong></a></h3>
-<p><strong>Question:</strong> Write a closure that accepts a parameter and demonstrates how closures work with arguments.</p>
+<h3 id="6-parameter-সহ-closure"><a class="header" href="#6-parameter-সহ-closure">6. <strong>parameter সহ closure</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> একটি closure লিখুন যেটি একটি parameter নেয় ?</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -7188,11 +7236,11 @@ func main() {
     fmt.Println(double(4)) // Output: 8
 }
 </code></pre>
-<p><strong>Explanation:</strong><br />
-The closure <code>multiplier</code> takes a parameter <code>factor</code> and returns a function that multiplies the given number <code>n</code> by <code>factor</code>.</p>
+<p><strong>ব্যাখ্যা:</strong><br />
+এই closure <code>factor</code> ধরে রাখে এবং return করা function <code>n</code> এর সাথে তাকে গুণ করে। এইভাবে <code>double(4)</code> output দেয় <code>8</code>।</p>
 <hr />
-<h3 id="7-closures-with-function-return-values"><a class="header" href="#7-closures-with-function-return-values">7. <strong>Closures with Function Return Values</strong></a></h3>
-<p><strong>Question:</strong> How do closures work when they return values?</p>
+<h3 id="7-closure-যখন-value-return-করে"><a class="header" href="#7-closure-যখন-value-return-করে">7. <strong>closure যখন value return করে</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> দেখান কিভাবে closure return value দেয়।</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -7209,11 +7257,11 @@ func main() {
     fmt.Println(addFive(3)) // Output: 8
 }
 </code></pre>
-<p><strong>Explanation:</strong><br />
-The closure captures the <code>a</code> variable and uses it when adding <code>b</code> in the returned function.</p>
+<p><strong>ব্যাখ্যা:</strong><br />
+এই closure <code>a</code> ধরে রাখে এবং প্রতিবার নতুন input <code>b</code> এর সাথে তা যোগ করে result return করে।</p>
 <hr />
-<h3 id="8-returning-a-closure-from-a-function"><a class="header" href="#8-returning-a-closure-from-a-function">8. <strong>Returning a Closure from a Function</strong></a></h3>
-<p><strong>Question:</strong> Demonstrate how to return a closure from a function.</p>
+<h3 id="8-একটি-function-থেকে-closure-return-করা"><a class="header" href="#8-একটি-function-থেকে-closure-return-করা">8. <strong>একটি function থেকে closure return করা</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> দেখান কিভাবে একটি function closure return করতে পারে।</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -7235,11 +7283,11 @@ func main() {
     fmt.Println(counter2()) // Output: 1
 }
 </code></pre>
-<p><strong>Explanation:</strong><br />
-Each call to <code>createCounter</code> creates a new closure, which maintains its own counter state.</p>
+<p><strong>ব্যাখ্যা:</strong><br />
+<code>createCounter</code> প্রত্যেকবার call করলে নতুন একটি closure return করে যার নিজস্ব <code>counter</code> থাকে।</p>
 <hr />
-<h3 id="9-closure-with-state-preservation"><a class="header" href="#9-closure-with-state-preservation">9. <strong>Closure with State Preservation</strong></a></h3>
-<p><strong>Question:</strong> Write a closure that remembers its previous state across calls.</p>
+<h3 id="9-closure-যেটি-তার-পূরববরতী-state-মনে-রাখে"><a class="header" href="#9-closure-যেটি-তার-পূরববরতী-state-মনে-রাখে">9. <strong>closure যেটি তার পূর্ববর্তী state মনে রাখে</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> এমন একটি closure লিখুন যা আগের state ধরে রাখতে পারে।</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -7262,11 +7310,11 @@ func main() {
     fmt.Println(c2()) // Output: 1
 }
 </code></pre>
-<p><strong>Explanation:</strong><br />
-A closure retains its own state, meaning each call to <code>counter</code> results in separate states for <code>c1</code> and <code>c2</code>.</p>
+<p><strong>ব্যাখ্যা:</strong><br />
+প্রতিটি closure আলাদা <code>count</code> ধরে রাখে। তাই <code>c1</code> এবং <code>c2</code> এর মধ্যে একে অপরের সাথে কোনো সম্পর্ক নেই।</p>
 <hr />
-<h3 id="10-closures-and-anonymous-functions"><a class="header" href="#10-closures-and-anonymous-functions">10. <strong>Closures and Anonymous Functions</strong></a></h3>
-<p><strong>Question:</strong> How can closures be used with anonymous functions?</p>
+<h3 id="10-closure-এবং-anonymous-function"><a class="header" href="#10-closure-এবং-anonymous-function">10. <strong>closure এবং anonymous function</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> কিভাবে anonymous function ব্যবহার করে closure তৈরি করা যায়?</p>
 <p><strong>Code:</strong></p>
 <pre><code class="language-go">package main
 
@@ -7280,8 +7328,222 @@ func main() {
     closure() // Output: Captured value: 5
 }
 </code></pre>
-<p><strong>Explanation:</strong><br />
-Anonymous functions can be used as closures. In this case, the anonymous function captures the variable <code>a</code>.</p>
+<p><strong>ব্যাখ্যা:</strong><br />
+anonymous function closure হিসেবে কাজ করতে পারে। এখানে <code>a</code> variable টি capture করে রেখেছে function টা।</p>
+<hr />
+<hr />
+<h3 id="11-closure-দিয়ে-lazy-evaluation"><a class="header" href="#11-closure-দিয়ে-lazy-evaluation">11. <strong>Closure দিয়ে lazy evaluation</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> কিভাবে closure ব্যবহার করে lazy evaluation করা যায়?</p>
+<p><strong>Code:</strong></p>
+<pre><code class="language-go">package main
+
+import "fmt"
+
+func lazySum(a, b int) func() int {
+    return func() int {
+        return a + b
+    }
+}
+
+func main() {
+    sum := lazySum(3, 4)
+    fmt.Println("Doing something else...")
+    fmt.Println("Now evaluating sum:", sum())
+}
+</code></pre>
+<p><strong>ব্যাখ্যা:</strong><br />
+এই উদাহরণে, <code>lazySum</code> function টি actual calculation defer করে রাখে যতক্ষণ না <code>sum()</code> call করা হয়।</p>
+<hr />
+<h3 id="12-closure-বযবহার-করে-filter-function-তৈরি-করা"><a class="header" href="#12-closure-বযবহার-করে-filter-function-তৈরি-করা">12. <strong>Closure ব্যবহার করে filter function তৈরি করা</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> কিভাবে closure ব্যবহার করে একটি filter function তৈরি করা যায়?</p>
+<p><strong>Code:</strong></p>
+<pre><code class="language-go">package main
+
+import "fmt"
+
+func filter(data []int, predicate func(int) bool) []int {
+    result := []int{}
+    for _, v := range data {
+        if predicate(v) {
+            result = append(result, v)
+        }
+    }
+    return result
+}
+
+func main() {
+    nums := []int{1, 2, 3, 4, 5}
+    even := func(n int) bool {
+        return n%2 == 0
+    }
+    fmt.Println(filter(nums, even)) // Output: [2 4]
+}
+</code></pre>
+<p><strong>ব্যাখ্যা:</strong><br />
+<code>filter</code> function টি একটি closure নেয় যেটি প্রতিটি item evaluate করে। এখানে, <code>even</code> একটি closure যা শুধু জোড় সংখ্যা বেছে নেয়।</p>
+<hr />
+<h3 id="13-closure-দিয়ে-memoization"><a class="header" href="#13-closure-দিয়ে-memoization">13. <strong>Closure দিয়ে memoization</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> কিভাবে closure ব্যবহার করে memoization implement করা যায়?</p>
+<p><strong>Code:</strong></p>
+<pre><code class="language-go">package main
+
+import "fmt"
+
+func memoize() func(int) int {
+    cache := map[int]int{}
+    return func(n int) int {
+        if val, ok := cache[n]; ok {
+            return val
+        }
+        result := n * n
+        cache[n] = result
+        return result
+    }
+}
+
+func main() {
+    square := memoize()
+    fmt.Println(square(4)) // Output: 16
+    fmt.Println(square(4)) // Cached output: 16
+}
+</code></pre>
+<p><strong>ব্যাখ্যা:</strong><br />
+এই closure একটি map-এর মাধ্যমে আগে হিসাব করা ফলাফল মনে রাখে। একই input দিলে সে পুরোনো result ব্যবহার করে।</p>
+<hr />
+<h3 id="14-closure-দিয়ে-callback-implement-করা"><a class="header" href="#14-closure-দিয়ে-callback-implement-করা">14. <strong>Closure দিয়ে callback implement করা</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> কিভাবে closure ব্যবহার করে callback তৈরি করা যায়?</p>
+<p><strong>Code:</strong></p>
+<pre><code class="language-go">package main
+
+import "fmt"
+
+func doSomething(callback func(string)) {
+    callback("Hello from callback")
+}
+
+func main() {
+    doSomething(func(msg string) {
+        fmt.Println(msg)
+    })
+}
+</code></pre>
+<p><strong>ব্যাখ্যা:</strong><br />
+closure callback হিসেবে কাজ করছে যা <code>doSomething</code> function থেকে invoke হচ্ছে।</p>
+<hr />
+<h3 id="15-closure-এবং-goroutine"><a class="header" href="#15-closure-এবং-goroutine">15. <strong>Closure এবং goroutine</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> closure কিভাবে goroutine এর মধ্যে ব্যবহার করা যায়?</p>
+<p><strong>Code:</strong></p>
+<pre><code class="language-go">package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func main() {
+    for i := 0; i &lt; 3; i++ {
+        i := i
+        go func() {
+            fmt.Println(i)
+        }()
+    }
+    time.Sleep(1 * time.Second)
+}
+</code></pre>
+<p><strong>ব্যাখ্যা:</strong><br />
+closure গুলো goroutine এর মধ্যে চলেছে। <code>i := i</code> দিয়ে প্রতি iteration-এ আলাদা value ensure করা হয়েছে।</p>
+<hr />
+<h3 id="16-closure-scope-এর-পরভাব"><a class="header" href="#16-closure-scope-এর-পরভাব">16. <strong>Closure scope এর প্রভাব</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> একটি closure কিভাবে ভিন্ন scope এ ভিন্ন আচরণ করে?</p>
+<p><strong>Code:</strong></p>
+<pre><code class="language-go">package main
+
+import "fmt"
+
+func main() {
+    x := 5
+    {
+        x := 10
+        closure := func() {
+            fmt.Println(x)
+        }
+        closure() // Output: 10
+    }
+}
+</code></pre>
+<p><strong>ব্যাখ্যা:</strong><br />
+closure সেই scope-এর variable ধরে যেখানে এটি define হয়েছে। এখানে closure <code>x := 10</code> এর value ধরে রেখেছে।</p>
+<hr />
+<h3 id="17-closure-এ-pointer-capture-করা"><a class="header" href="#17-closure-এ-pointer-capture-করা">17. <strong>Closure-এ pointer capture করা</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> কিভাবে closure pointer capture করে ?</p>
+<p><strong>Code:</strong></p>
+<pre><code class="language-go">package main
+
+import "fmt"
+
+func main() {
+    x := 10
+    ptr := &amp;x
+
+    closure := func() {
+        fmt.Println(*ptr)
+    }
+
+    x = 20
+    closure() // Output: 20
+}
+</code></pre>
+<p><strong>ব্যাখ্যা:</strong><br />
+closure একটি pointer ধরে রাখলে, variable-এর যে কোনো পরিবর্তন সে reflect করবে কারণ address ধরেই access হয়।</p>
+<hr />
+<h3 id="18-closure-reference-vs-value-capture"><a class="header" href="#18-closure-reference-vs-value-capture">18. <strong>Closure reference vs value capture</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> Go-তে closure variable কে reference না value হিসাবে ধরে রাখে?</p>
+<p><strong>Code:</strong></p>
+<pre><code class="language-go">package main
+
+import "fmt"
+
+func main() {
+    x := 10
+    closure := func(val int) {
+        fmt.Println(val)
+    }
+
+    x = 20
+    closure(x) // Output: 20
+}
+</code></pre>
+<p><strong>ব্যাখ্যা:</strong><br />
+যখন আপনি closure-এ variable pass করেন (যেমন <code>val int</code>), তখন সেটি value হিসাবে যায়। তবে যদি variable capture করা হয় closure scope-এ, সেটা reference এর মতো behave করে।</p>
+<hr />
+<h3 id="19-closure-এবং-defer"><a class="header" href="#19-closure-এবং-defer">19. <strong>Closure এবং defer</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> closure কিভাবে defer statement এর সঙ্গে কাজ করে?</p>
+<p><strong>Code:</strong></p>
+<pre><code class="language-go">package main
+
+import "fmt"
+
+func main() {
+    for i := 0; i &lt; 3; i++ {
+        i := i
+        defer func() {
+            fmt.Println(i)
+        }()
+    }
+}
+</code></pre>
+<p><strong>ব্যাখ্যা:</strong><br />
+সব <code>defer</code> statement পরে একসাথে execute হয় (LIFO)। এখানে <code>i := i</code> দিয়ে প্রতিটি closure আলাদা value capture করে।</p>
+<hr />
+<h3 id="20-closure-debugging-এর-টিপস"><a class="header" href="#20-closure-debugging-এর-টিপস">20. <strong>Closure debugging এর টিপস</strong></a></h3>
+<p><strong>প্রশ্ন:</strong> closure ব্যবহার করার সময় common debugging সমস্যা ও সমাধান কী?</p>
+<p><strong>Explanation (no code):</strong></p>
+<ul>
+<li>loop variable capture করলে সব closure একই variable reference ধরে রাখতে পারে (সমস্যা)। সমাধান: নতুন variable declare করে capture করা।</li>
+<li>closure asynchronous context (যেমন goroutine) এ ব্যবহার করলে, race condition তৈরি হতে পারে। সমাধান: value copy করে capture করা।</li>
+<li>closure capturing unexpected state? সরাসরি log print করুন বা debugger দিয়ে scoped variable inspect করুন।</li>
+</ul>
+<hr />
 <div style="break-before: page; page-break-before: always;"></div><p>[<strong>Author:</strong> @mdimamhosen
 <strong>Date:</strong> 2025-04-19
 <strong>Category:</strong> e.g., interview-qa/topic_name
