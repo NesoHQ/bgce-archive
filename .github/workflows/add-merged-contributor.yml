@@ -55,14 +55,13 @@ jobs:
             - name: Regenerate README for existing contributor
               if: steps.check_rc.outputs.found == 'true' && steps.check_readme.outputs.in_readme == 'false'
               run: |
-                  BOT_BRANCH="chore/allcontributors-update-${{ steps.contributor.outputs.name }}-${{ github.run_id }}"
                   all-contributors generate
                   git config user.name "all-contributors[bot]"
                   git config user.email "all-contributors[bot]@users.noreply.github.com"
-                  git checkout -b "$BOT_BRANCH"
+                  git checkout -b chore/add-${{ steps.contributor.outputs.name }}-to-readme
                   git add README.md
                   git commit -m "docs: add ${{ steps.contributor.outputs.name }} to contributors list"
-                  git push origin "$BOT_BRANCH"
+                  git push origin chore/add-${{ steps.contributor.outputs.name }}-to-readme
 
             - name: Create PR for existing contributor
               if: steps.check_rc.outputs.found == 'true' && steps.check_readme.outputs.in_readme == 'false'
@@ -72,22 +71,22 @@ jobs:
                   commit-message: "docs: add ${{ steps.contributor.outputs.name }} to contributors list"
                   title: "docs: add ${{ steps.contributor.outputs.name }} to contributors list"
                   body: "This PR adds ${{ steps.contributor.outputs.name }} to the contributors list in README."
-                  branch: chore/allcontributors-update-${{ steps.contributor.outputs.name }}-${{ github.run_id }}
+                  branch: chore/add-${{ steps.contributor.outputs.name }}-to-readme
+                  base: master
 
             # 🔹 If contributor is missing from .all-contributorsrc (and README too)
             - name: Add missing contributor to config and README
               if: steps.check_rc.outputs.found == 'false'
               run: |
                   login="${{ steps.contributor.outputs.name }}"
-                  BOT_BRANCH="chore/allcontributors-add-${login}-${{ github.run_id }}"
                   all-contributors add "$login" code
                   all-contributors generate
                   git config user.name "all-contributors[bot]"
                   git config user.email "all-contributors[bot]@users.noreply.github.com"
-                  git checkout -b "$BOT_BRANCH"
+                  git checkout -b chore/add-${login}-contributor
                   git add .all-contributorsrc README.md
                   git commit -m "docs: add $login as contributor"
-                  git push origin "$BOT_BRANCH"
+                  git push origin chore/add-${login}-contributor
 
             - name: Create PR for missing contributor
               if: steps.check_rc.outputs.found == 'false'
@@ -97,4 +96,5 @@ jobs:
                   commit-message: "docs: add ${{ steps.contributor.outputs.name }} as contributor"
                   title: "docs: add ${{ steps.contributor.outputs.name }} as contributor"
                   body: "This PR adds ${{ steps.contributor.outputs.name }} to .all-contributorsrc and README."
-                  branch: chore/allcontributors-add-${{ steps.contributor.outputs.name }}-${{ github.run_id }}
+                  branch: chore/add-${{ steps.contributor.outputs.name }}-contributor
+                  base: master
