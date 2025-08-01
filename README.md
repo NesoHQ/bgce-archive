@@ -21,13 +21,13 @@ The **Golang Community Vault** is not just an archive, it's a vibrant, evolving 
 
 ### 📁 **Folder Structure**
 
-| 📂 Folder   | 🏷️ Type         | 📌 Description                                                                   |
-| ----------- | --------------- | -------------------------------------------------------------------------------- |
-| `cortex`    | Microservice    | Handles **category** and **sub-category** domain logic.                          |
-| `docs`      | Documentation   | Contains project documentation, UI assets, and archive metadata.                 |
-| `ecommerce` | Youtube project | **e-commerce** Go project tutored by @uitshabib in youtube.                      |
-| `skripts`   | Scaffolding     | Collection of reusable automation or setup scripts for project scaffolding.      |
-| `skeleton`  | Template        | The **base starter** template to initialize new Go services in the BGCE archive. |
+| 📂 Folder   | 🏷️ Type       | 📌 Description                                                              |
+| ----------- | ------------- | --------------------------------------------------------------------------- |
+| `cortex`    | Microservice  | Handles **category** and **sub-category** domain logic.                     |
+| `docs`      | Documentation | Contains project documentation, UI assets, and archive metadata.            |
+| `ecommerce` | YT project    | **e-commerce** Go project tutored by @uitshabib in youtube.                 |
+| `skripts`   | Scaffolding   | Collection of reusable automation or setup scripts for project scaffolding. |
+| `skeleton`  | Template      | The **base starter** template to initialize new Go services in BGCE.        |
 
 ---
 
