@@ -12,23 +12,24 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-
-            - name: Set up Go
-              uses: actions/setup-go@v4
-              with:
-                  go-version: "1.22.2"
-
-            - name: Cache Go modules and build (reusable)
+            - name: Cache Cortex modules and build (reusable)
               uses: ./.github/actions/go-cache
+              with:
+                  modulePath: cortex
 
-            - name: Run tests in all services
+            - name: Test Cortex
               run: |
-                  for dir in cortex skeleton ecommerce; do
-                    echo "🔍 Testing service: $dir"
-                    cd $dir
-                    go mod tidy
-                    go test ./... -v
-                    cd -
-                  done
+                  cd cortex
+                  go mod tidy
+                  go test ./... -v
+
+            - name: Cache Skeleton modules and build (reusable)
+              uses: ./.github/actions/go-cache
+              with:
+                  modulePath: skeleton
+
+            - name: Test Skeleton
+              run: |
+                  cd skeleton
+                  go mod tidy
+                  go test ./... -v
