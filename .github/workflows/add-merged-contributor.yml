@@ -1,5 +1,9 @@
 name: Update README with contributors after PR merge
 
+permissions:
+    contents: write
+    pull-requests: write
+
 on:
     pull_request:
         types: [closed]
