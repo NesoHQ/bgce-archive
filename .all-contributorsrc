@@ -3,8 +3,23 @@
   "projectOwner": "NesoHQ",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "files": ["README.md"],
+  "files": [
+    "README.md"
+  ],
   "imageSize": 100,
   "commit": true,
-  "contributors": []
+  "contributors": [
+    {
+      "login": "mahabubulhasibshawon",
+      "name": "Mahabub Ul Hasib Shawon",
+      "avatar_url": "https://avatars.githubusercontent.com/u/96023468?v=4",
+      "profile": "https://github.com/mahabubulhasibshawon",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributorsPerLine": 7
 }
