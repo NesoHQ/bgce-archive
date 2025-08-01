@@ -1,4 +1,4 @@
-name: Go Tests [CORTEX]
+name: Go Tests
 
 on:
     push:
@@ -8,20 +8,24 @@ on:
 
 jobs:
     test:
-        name: Run Go Tests in cortex service
+        name: Run Go Tests in ${{ matrix.service }} service
         runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                service: [cortex, skeleton] # Add more services here as needed
 
         steps:
             - name: ⬇️ Checkout
               uses: actions/checkout@v3
 
-            - name: Cache Cortex modules and build (reusable)
+            - name: Cache Go modules and build (reusable)
               uses: ./.github/actions/go-cache
               with:
-                  modulePath: cortex
+                  modulePath: ${{ matrix.service }}
 
-            - name: Test Cortex
+            - name: Run Go tests
               run: |
-                  cd cortex
+                  cd ${{ matrix.service }}
                   go mod tidy
                   go test ./... -v
