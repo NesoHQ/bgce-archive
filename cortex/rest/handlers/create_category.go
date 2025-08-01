@@ -15,7 +15,7 @@ type CreateCategoryReq struct {
 	Slug        string          `json:"slug" validate:"required"`
 	Label       string          `json:"label" validate:"required"`
 	Description string          `json:"description,omitempty"`
-	CreatedBy   uint            `json:"created_by" validate:"required"`
+	CreatedBy   uint            `json:"created_by" validate:"required"` // This will come from the JWT token
 	Meta        json.RawMessage `json:"meta,omitempty"`
 }
 
