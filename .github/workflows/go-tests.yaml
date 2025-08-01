@@ -20,6 +20,9 @@ jobs:
               with:
                   go-version: "1.22.2"
 
+            - name: Cache Go modules and build (reusable)
+              uses: ./.github/actions/go-cache
+
             - name: Run tests in all services
               run: |
                   for dir in cortex skeleton ecommerce; do

@@ -16,7 +16,7 @@ jobs:
               uses: actions/checkout@v3
 
             - name: 💾 Setup Cache & Install mdBook
-              uses: ./.github/actions/cache
+              uses: ./.github/actions/cargo-mdbook-cache
 
             - name: 📝 Generate SUMMARY.md and index docs
               run: |
