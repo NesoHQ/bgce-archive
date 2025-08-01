@@ -2,12 +2,6 @@ name: "Cache Go modules and build"
 
 description: "Caches Go build cache and modules"
 
-inputs:
-    modulePath:
-        description: "Relative path to the go.sum file"
-        required: true
-        default: ""
-
 runs:
     using: "composite"
     steps:
@@ -17,6 +11,6 @@ runs:
               path: |
                   ~/.cache/go-build
                   ~/go/pkg/mod
-              key: ${{ runner.os }}-go-${{ hashFiles(format('{0}/go.sum', inputs.modulePath)) }}
+              key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
               restore-keys: |
                   ${{ runner.os }}-go-
