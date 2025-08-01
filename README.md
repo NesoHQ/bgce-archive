@@ -60,6 +60,19 @@ Join the **Best Golang Community Ever** and become part of something bigger than
 Thanks goes to these wonderful people:
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mahabubulhasibshawon"><img src="https://avatars.githubusercontent.com/u/96023468?v=4?s=100" width="100px;" alt="Mahabub Ul Hasib Shawon"/><br /><sub><b>Mahabub Ul Hasib Shawon</b></sub></a><br /><a href="https://github.com/NesoHQ/bgce-archive/commits?author=mahabubulhasibshawon" title="Documentation">📖</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.
