@@ -47,7 +47,8 @@ jobs:
                     echo "in_readme=false" >> $GITHUB_OUTPUT
                   fi
 
-            - name: Add contributor to README.md
+            # 🔹 If contributor is already in .all-contributorsrc but missing from README
+            - name: Regenerate README for existing contributor
               if: steps.check_rc.outputs.found == 'true' && steps.check_readme.outputs.in_readme == 'false'
               run: |
                   all-contributors generate
@@ -58,7 +59,7 @@ jobs:
                   git commit -m "docs: add ${{ steps.contributor.outputs.name }} to contributors list"
                   git push origin chore/add-${{ steps.contributor.outputs.name }}-to-readme
 
-            - name: Create Pull Request
+            - name: Create PR for existing contributor
               if: steps.check_rc.outputs.found == 'true' && steps.check_readme.outputs.in_readme == 'false'
               uses: peter-evans/create-pull-request@v6
               with:
@@ -67,3 +68,27 @@ jobs:
                   title: "docs: add ${{ steps.contributor.outputs.name }} to contributors list"
                   body: "This PR adds ${{ steps.contributor.outputs.name }} to the contributors list in README."
                   branch: chore/add-${{ steps.contributor.outputs.name }}-to-readme
+
+            # 🔹 If contributor is missing from .all-contributorsrc (and README too)
+            - name: Add missing contributor to config and README
+              if: steps.check_rc.outputs.found == 'false'
+              run: |
+                  login="${{ steps.contributor.outputs.name }}"
+                  all-contributors add "$login" code
+                  all-contributors generate
+                  git config user.name "all-contributors[bot]"
+                  git config user.email "all-contributors[bot]@users.noreply.github.com"
+                  git checkout -b chore/add-${login}-contributor
+                  git add .all-contributorsrc README.md
+                  git commit -m "docs: add $login as contributor"
+                  git push origin chore/add-${login}-contributor
+
+            - name: Create PR for missing contributor
+              if: steps.check_rc.outputs.found == 'false'
+              uses: peter-evans/create-pull-request@v6
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  commit-message: "docs: add ${{ steps.contributor.outputs.name }} as contributor"
+                  title: "docs: add ${{ steps.contributor.outputs.name }} as contributor"
+                  body: "This PR adds ${{ steps.contributor.outputs.name }} to .all-contributorsrc and README."
+                  branch: chore/add-${{ steps.contributor.outputs.name }}-contributor
