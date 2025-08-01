@@ -34,27 +34,28 @@ func serveRest(cmd *cobra.Command, args []string) error {
 
 	rmq := rabbitmq.NewRMQ(cnf)
 	defer rmq.Client.Stop()
-	psql := repo.GetQueryBuilder() // this is the psql that will be passed down to repo
+	
+	psql := repo.GetQueryBuilder()
 
-	readCortexDB, err := repo.GetDbConnection(cnf.ReadCortexDB)
+	readBgceDB, err := repo.GetDbConnection(cnf.ReadBgceDB)
 	if err != nil {
-		slog.Error("Failed to connect to read cortex database:", logger.Extra(map[string]any{
+		slog.Error("Failed to connect to read bgce database:", logger.Extra(map[string]any{
 			"error": err.Error(),
 		}))
 		return err
 	}
-	defer repo.CloseDB(readCortexDB)
+	defer repo.CloseDB(readBgceDB)
 
-	writeCortexDB, err := repo.GetDbConnection(cnf.WriteCortexDB)
+	writeBgceDB, err := repo.GetDbConnection(cnf.WriteBgceDB)
 	if err != nil {
-		slog.Error("Failed to connect to write cortex database:", logger.Extra(map[string]any{
+		slog.Error("Failed to connect to write bgce database:", logger.Extra(map[string]any{
 			"error": err.Error(),
 		}))
 		return err
 	}
-	defer repo.CloseDB(writeCortexDB)
+	defer repo.CloseDB(writeBgceDB)
 
-	err = repo.MigrateDB(writeCortexDB, cnf.MigrationSource)
+	err = repo.MigrateDB(writeBgceDB, cnf.MigrationSource)
 	if err != nil {
 		slog.Error("Failed to migrate database:", logger.Extra(map[string]any{
 			"error": err.Error(),
@@ -62,13 +63,13 @@ func serveRest(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	ctgryRepo := repo.NewCtgryRepo(readCortexDB, writeCortexDB, psql)
+	ctgryRepo := repo.NewCtgryRepo(readBgceDB, writeBgceDB, psql)
 
-	cortexSvc := category.NewService(cnf, rmq, ctgryRepo)
+	ctgrySvc := category.NewService(cnf, rmq, ctgryRepo)
 
 	handlers := handlers.NewHandler(
 		cnf,
-		cortexSvc,
+		ctgrySvc,
 	)
 
 	middlewares := middlewares.NewMiddleware(cnf)

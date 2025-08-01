@@ -1,11 +1,11 @@
-package category_test
+package mock_category
 
 import (
 	"context"
 
-	"cortex/category"
-
 	"github.com/stretchr/testify/mock"
+
+	"cortex/category"
 )
 
 type MockCategoryRepo struct {

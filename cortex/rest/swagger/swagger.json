@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.1",
     "info": {
-        "title": "Cycle Count Coordinator API",
-        "description": "API for managing cycle count requests and adjustments.",
+        "title": "[Cortex]: Category service APIs",
+        "description": "API for managing categories and sub categories.",
         "version": "1.0.0"
     },
     "servers": [
@@ -11,16 +11,69 @@
             "description": "Local"
         },
         {
-            "url": "http://192.168.169.58:5008",
+            "url": "http://",
             "description": "Development"
         },
         {
-            "url": "http://192.168.169.58:5003",
+            "url": "http://",
             "description": "Staging"
         }
     ],
-    "paths": {},
-
+    "paths": {
+        "/api/v1/categories": {
+            "post": {
+                "summary": "Create a new category",
+                "description": "Creates a new category with slug, label, description, creator info, and optional metadata.",
+                "tags": ["Categories"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateCategoryReq"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Category created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Invalid input",
+                        "content": {
+                            "application/json": {
+                                "$ref": "#/components/schemas/ErrorResponse"
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict - Category slug already exists",
+                        "content": {
+                            "application/json": {
+                                "$ref": "#/components/schemas/ErrorResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "$ref": "#/components/schemas/ErrorResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
     "components": {
         "securitySchemes": {
             "BearerAuth": {
@@ -30,6 +83,41 @@
             }
         },
         "schemas": {
+            "CreateCategoryReq": {
+                "type": "object",
+                "properties": {
+                    "slug": {
+                        "type": "string",
+                        "example": "electronics",
+                        "description": "Unique slug identifier for the category"
+                    },
+                    "label": {
+                        "type": "string",
+                        "example": "Electronics",
+                        "description": "Human readable label"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "All electronic devices and gadgets",
+                        "description": "Optional description of the category"
+                    },
+                    "created_by": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "User ID who creates the category"
+                    },
+                    "meta": {
+                        "type": "object",
+                        "description": "Optional JSON metadata",
+                        "nullable": true,
+                        "additionalProperties": true,
+                        "example": {
+                            "some_key": "some_value"
+                        }
+                    }
+                },
+                "required": ["slug", "label", "created_by"]
+            },
             "ErrorResponse": {
                 "type": "object",
                 "properties": {
@@ -44,6 +132,24 @@
                     "errors": {
                         "type": ["object", "null"],
                         "example": null
+                    }
+                }
+            },
+            "SuccessResponse": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": ["object", "null"],
+                        "nullable": true,
+                        "example": null
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Category created successfully"
+                    },
+                    "status": {
+                        "type": "boolean",
+                        "example": true
                     }
                 }
             }

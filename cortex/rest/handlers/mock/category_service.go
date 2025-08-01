@@ -1,11 +1,11 @@
-package handlers_test
+package mock_handler
 
 import (
 	"context"
 
-	"cortex/category"
-
 	"github.com/stretchr/testify/mock"
+
+	"cortex/category"
 )
 
 type MockCategoryService struct {

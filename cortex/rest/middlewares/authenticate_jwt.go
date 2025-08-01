@@ -60,8 +60,7 @@ func (m *Middlewares) AuthenticateJWT(next http.Handler) http.Handler {
 			tokenStr,
 			&claims,
 			func(t *jwt.Token) (interface{}, error) {
-				// return []byte(m.Cnf.JwtSecret), nil
-				return nil, nil
+				return []byte(m.Cnf.JwtSecret), nil
 			},
 		)
 		if err != nil {

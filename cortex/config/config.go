@@ -30,8 +30,8 @@ type Config struct {
 	RabbitmqURL       string `mapstructure:"RABBITMQ_URL" validate:"required"`
 	RmqReconnectDelay int    `mapstructure:"RMQ_RECONNECT_DELAY" validate:"required"`
 	RmqRetryInterval  int    `mapstructure:"RMQ_RETRY_INTERVAL" validate:"required"`
-	ReadCortexDB      DBConfig
-	WriteCortexDB     DBConfig
+	ReadBgceDB      DBConfig
+	WriteBgceDB     DBConfig
 	Apm               *Apm
 }
 
