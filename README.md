@@ -19,7 +19,16 @@ The **Golang Community Vault** is not just an archive, it's a vibrant, evolving 
 
 ---
 
-## IMPORTANT: check out our book for detailed info: [ARCHIVE-DOCS](https://nesohq.github.io/bgce-archive/) <<<
+### 📁 **Folder Structure**
+
+| 📂 Folder Name | 🏷️ Type     | 📌 Description                                                                 |
+| -------------- | ------------ | ------------------------------------------------------------------------------ |
+| `cortex`       | Microservice | A microservice that handles **category** and **sub-category** domain logic.    |
+| `skeleton`     | Template     | A **starter template** used to initialize new Go services in the BGCE archive. |
+
+---
+
+## IMPORTANT: check out our book for detailed info: [ARCHIVE-DOCS](https://nesohq.github.io/bgce-archive/)
 
 ## 💬 **Stay Connected & Grow With Us!**
 
