@@ -88,17 +88,17 @@
                 "properties": {
                     "slug": {
                         "type": "string",
-                        "example": "electronics",
+                        "example": "interview-qna",
                         "description": "Unique slug identifier for the category"
                     },
                     "label": {
                         "type": "string",
-                        "example": "Electronics",
+                        "example": "Interview",
                         "description": "Human readable label"
                     },
                     "description": {
                         "type": "string",
-                        "example": "All electronic devices and gadgets",
+                        "example": "Interview category to manage all interview related sub categories",
                         "description": "Optional description of the category"
                     },
                     "created_by": {
@@ -112,7 +112,9 @@
                         "nullable": true,
                         "additionalProperties": true,
                         "example": {
-                            "some_key": "some_value"
+                            "tags": ["qna", "interview", "exam"],
+                            "icon": "📱",
+                            "regex": "/?*"
                         }
                     }
                 },
