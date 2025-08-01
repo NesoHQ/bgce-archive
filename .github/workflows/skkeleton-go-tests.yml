@@ -8,23 +8,12 @@ on:
 
 jobs:
     test:
-        name: Run Go Tests
+        name: Run Go Tests in skeleton service
         runs-on: ubuntu-latest
 
         steps:
             - name: ⬇️ Checkout
               uses: actions/checkout@v3
-
-            - name: Cache Cortex modules and build (reusable)
-              uses: ./.github/actions/go-cache
-              with:
-                  modulePath: cortex
-
-            - name: Test Cortex
-              run: |
-                  cd cortex
-                  go mod tidy
-                  go test ./... -v
 
             - name: Cache Skeleton modules and build (reusable)
               uses: ./.github/actions/go-cache

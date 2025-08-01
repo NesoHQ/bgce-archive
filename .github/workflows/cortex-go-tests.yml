@@ -1,0 +1,27 @@
+name: Go Tests
+
+on:
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
+
+jobs:
+    test:
+        name: Run Go Tests in cortex service
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: ⬇️ Checkout
+              uses: actions/checkout@v3
+
+            - name: Cache Cortex modules and build (reusable)
+              uses: ./.github/actions/go-cache
+              with:
+                  modulePath: cortex
+
+            - name: Test Cortex
+              run: |
+                  cd cortex
+                  go mod tidy
+                  go test ./... -v
