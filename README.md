@@ -74,7 +74,8 @@ The **Golang Community Vault** is more than a repository — it's a shared learn
 
 - 📌 Share notes, articles, diagrams, or projects
 - 🧱 Help improve templates, scripts, or automation
-- 🌐 Contribute to the [static site](https://nesohq.github.io/bgce-archive/) or help shape the future **Web Vault**
+- 🌐 Contribute to the [BGCE archive book](https://nesohq.github.io/bgce-archive/) or help shape the future **Web Vault**
+- 🌐 Contribute to the **BGCE archive** Repository microservices
 
 See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for more info.
 
