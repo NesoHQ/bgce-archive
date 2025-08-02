@@ -68,3 +68,5 @@ Join the **Best Golang Community Ever** and become part of something bigger than
 ---
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/NesoHQ/bgce-archive)](https://goreportcard.com/report/github.com/NesoHQ/bgce-archive)
+
+[![License: CC BY-NC 4.0](https://img.shields.io/github/license/NesoHQ/bgce-archive)](https://github.com/NesoHQ/bgce-archive/blob/main/LICENSE)
