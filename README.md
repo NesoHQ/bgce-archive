@@ -1,4 +1,4 @@
-# BGCE Archive – Best Go Community Ever 🐹
+# BGCE Archive – Best GoLang Community Ever 🐹
 
 ![GitHub stars](https://img.shields.io/github/stars/NesoHQ/bgce-archive?style=social) [![Commit Lint](https://github.com/NesoHQ/bgce-archive/actions/workflows/commit-lint.yml/badge.svg)](https://github.com/NesoHQ/bgce-archive/actions/workflows/commit-lint.yml)
 [![Docs](https://github.com/NesoHQ/bgce-archive/actions/workflows/docs.yml/badge.svg)](https://github.com/NesoHQ/bgce-archive/actions/workflows/docs.yml)
