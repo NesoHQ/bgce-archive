@@ -1,72 +1,81 @@
-# 🌐 **Golang Community Vault**
+# BGCE Archive – Best Go Community Ever 🐹
 
-<div style="width:100%;" text-align="center">
-  <img src="./docs/ui/bgce.svg" alt="BGCE-ARCHIVE" style="width:100%;max-width:100%;display:block;margin:auto;" />
-</div>
+[![Commit Lint](https://github.com/NesoHQ/bgce-archive/actions/workflows/commit-lint.yml/badge.svg)](https://github.com/NesoHQ/bgce-archive/actions/workflows/commit-lint.yml)
+[![Docs](https://github.com/NesoHQ/bgce-archive/actions/workflows/docs.yml/badge.svg)](https://github.com/NesoHQ/bgce-archive/actions/workflows/docs.yml)
+[![Go Tests](https://github.com/NesoHQ/bgce-archive/actions/workflows/go-tests.yml/badge.svg)](https://github.com/NesoHQ/bgce-archive/actions/workflows/go-tests.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/NesoHQ/bgce-archive)](https://goreportcard.com/report/github.com/NesoHQ/bgce-archive)
+[![License: CC BY-NC 4.0](https://img.shields.io/github/license/NesoHQ/bgce-archive)](https://github.com/NesoHQ/bgce-archive/blob/main/LICENSE)
+![GitHub stars](https://img.shields.io/github/stars/NesoHQ/bgce-archive?style=social)
 
-Welcome to **Golang Community Vault**, a community-driven digital archive designed to collect, organize, and preserve the vast knowledge, resources, and experiences from the Go programming ecosystem and beyond. Whether you're a beginner, job seeker, seasoned contributor, or mentor — **this is the place** where we give and receive knowledge.
-
----
-
-## 🎯 **Project Purpose**
-
-The **Golang Community Vault** is not just an archive, it's a vibrant, evolving repository that serves:
-
-- 📚 **Preservation** of valuable community-generated content.
-- 🤝 **Collaboration** to promote open knowledge sharing and growth.
-- 🔎 **Job Seekers & Learners** can gain insights from real-world experiences.
-- 🧠 **Centralized Resources** to gather knowledge and tools scattered across the web.
+> A living digital archive to preserve the best from the Go community — notes, templates, projects, and stories.
 
 ---
 
-### 📁 **Folder Structure**
+## 🌐 Golang Community Vault
 
-| 📂 Folder   | 🏷️ Type       | 📌 Description                                                           |
-| ----------- | ------------- | ------------------------------------------------------------------------ |
-| `cortex`    | Microservice  | Handles **category** and **sub-category** domain logic.                  |
-| `docs`      | Documentation | Contains project documentation, UI assets, and archive metadata.         |
-| `ecommerce` | YT project    | **e-commerce** Go project tutored by @uitshabib in youtube.              |
-| `scripts`   | Scaffolding   | Collection of reusable automation/setup scripts for project scaffolding. |
-| `skeleton`  | Template      | The **base starter** template to initialize new Go services in BGCE.     |
+<p align="center">
+  <img src="./docs/ui/bgce.svg" alt="BGCE-ARCHIVE" style="max-width:100%;" />
+</p>
 
----
+Welcome to **Golang Community Vault**, a community-driven archive to collect, organize, and preserve knowledge, tools, and stories from the Go ecosystem.
 
-## IMPORTANT: check out our book for detailed info: [ARCHIVE-DOCS](https://nesohq.github.io/bgce-archive/)
-
-## 💬 **Stay Connected & Grow With Us!**
-
-We believe in **community-driven learning**. Whether you're here to contribute, collaborate, or just explore — your presence makes a difference. 💛
-
-Join the **Best Golang Community Ever** and become part of something bigger than just code!
+Whether you're a beginner, job seeker, seasoned contributor, or mentor — **this is where we grow together**.
 
 ---
 
-### 🌐 **Connect With Us**
+## 🎯 Purpose
 
-| 🌟 Platform            | 📌 Join Link                                                                                                                                           |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 💬 **Discord**         | [Join the Go Community on Discord](https://discord.gg/xUVYrGaXS3) – Real-time discussions, questions, support, and collab rooms.                       |
-| 📘 **Facebook Group**  | [Join the Go Facebook Community](https://www.facebook.com/groups/1118405403169990) – Casual Q&As, success stories, community posts, and announcements. |
-| 🎥 **YouTube Channel** | [Subscribe to GoWithHabib](https://www.youtube.com/@gowithhabib) – Deep dives, tutorials, interviews, and community videos.                            |
+The **Golang Community Vault** is more than a repository — it's a shared learning platform:
 
----
-
-### 🤝 **Get Involved**
-
-✅ Share your stories, notes, code, or insights  
-✅ Help with templates, docs, automation, or structure  
-✅ Collaborate on our **static site** or **web vault**  
-✅ Be part of building something that helps thousands
+- 📚 Preserve community-generated knowledge and code
+- 🤝 Promote open, collaborative learning
+- 🔎 Help job seekers learn from real-world resources
+- 🧠 Gather scattered content into a single, organized place
 
 ---
 
-### ✨ **Together, We Learn & Grow**
+## 📁 Folder Structure
+
+| Folder      | Type          | Description                                              |
+| ----------- | ------------- | -------------------------------------------------------- |
+| `cortex`    | Microservice  | Handles **category** and **sub-category** domain logic   |
+| `docs`      | Documentation | Project docs, UI assets, and archive metadata            |
+| `ecommerce` | YT Project    | Go e-commerce app from @uitshabib's YouTube tutorials    |
+| `scripts`   | Scaffold      | Reusable setup scripts for Go microservice projects      |
+| `skeleton`  | Template      | Base starter template to launch new services inside BGCE |
+
+---
+
+## 📚 Read the Book
+
+📖 **Full documentation available at:**  
+🔗 [https://nesohq.github.io/bgce-archive/](https://nesohq.github.io/bgce-archive/)
+
+---
+
+## 💬 Stay Connected
+
+| Platform           | Join Link                                                                                                          |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| 💬 Discord         | [Join our Discord](https://discord.gg/xUVYrGaXS3) — real-time discussions and support                              |
+| 📘 Fb Group  | [Join the FB Group](https://www.facebook.com/groups/1118405403169990) — success stories, posts, and community news |
+| 🎥 Yt Channel | [GoWithHabib](https://www.youtube.com/@gowithhabib) — tutorials, deep dives, and community videos                  |
+
+---
+
+## 🤝 How to Contribute
+
+- 📌 Share notes, articles, diagrams, or projects
+- 🧱 Help improve templates, scripts, or automation
+- 🌐 Contribute to the [static site](https://nesohq.github.io/bgce-archive/) or help shape the future **Web Vault**
+
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for more info.
+
+---
+
+## ✨ Together, We Learn & Grow
 
 > _“Code fades. Community lasts.”_  
-> Let’s archive knowledge, share what we’ve learned, and help the next generation of Gophers grow. 🐹🚀
+> Archive knowledge. Share experiences. Help the next generation of Gophers thrive.
 
 ---
-
-[![Go Report Card](https://goreportcard.com/badge/github.com/NesoHQ/bgce-archive)](https://goreportcard.com/report/github.com/NesoHQ/bgce-archive)
-
-[![License: CC BY-NC 4.0](https://img.shields.io/github/license/NesoHQ/bgce-archive)](https://github.com/NesoHQ/bgce-archive/blob/main/LICENSE)
