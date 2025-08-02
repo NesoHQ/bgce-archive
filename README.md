@@ -1,6 +1,6 @@
 # BGCE Archive – Best Go Community Ever 🐹
 
-[![Commit Lint](https://github.com/NesoHQ/bgce-archive/actions/workflows/commit-lint.yml/badge.svg)](https://github.com/NesoHQ/bgce-archive/actions/workflows/commit-lint.yml)
+![GitHub stars](https://img.shields.io/github/stars/NesoHQ/bgce-archive?style=social) [![Commit Lint](https://github.com/NesoHQ/bgce-archive/actions/workflows/commit-lint.yml/badge.svg)](https://github.com/NesoHQ/bgce-archive/actions/workflows/commit-lint.yml)
 [![Docs](https://github.com/NesoHQ/bgce-archive/actions/workflows/docs.yml/badge.svg)](https://github.com/NesoHQ/bgce-archive/actions/workflows/docs.yml)
 [![Go Tests](https://github.com/NesoHQ/bgce-archive/actions/workflows/go-tests.yml/badge.svg)](https://github.com/NesoHQ/bgce-archive/actions/workflows/go-tests.yml)
 
@@ -12,12 +12,7 @@
 
 ### Go Report Cards (per module)
 
-[![Go Report Card - cortex](https://goreportcard.com/badge/github.com/NesoHQ/bgce-archive/cortex)](https://goreportcard.com/report/github.com/NesoHQ/bgce-archive/cortex)  
-[![Go Report Card - ecommerce](https://goreportcard.com/badge/github.com/NesoHQ/bgce-archive/ecommerce)](https://goreportcard.com/report/github.com/NesoHQ/bgce-archive/ecommerce)  
-[![Go Report Card - skeleton](https://goreportcard.com/badge/github.com/NesoHQ/bgce-archive/skeleton)](https://goreportcard.com/report/github.com/NesoHQ/bgce-archive/skeleton)
-
-[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
-![GitHub stars](https://img.shields.io/github/stars/NesoHQ/bgce-archive?style=social)
+[![Go Report Card - cortex](https://goreportcard.com/badge/github.com/NesoHQ/bgce-archive/cortex)](https://goreportcard.com/report/github.com/NesoHQ/bgce-archive/cortex) [![Go Report Card - ecommerce](https://goreportcard.com/badge/github.com/NesoHQ/bgce-archive/ecommerce)](https://goreportcard.com/report/github.com/NesoHQ/bgce-archive/ecommerce) [![Go Report Card - skeleton](https://goreportcard.com/badge/github.com/NesoHQ/bgce-archive/skeleton)](https://goreportcard.com/report/github.com/NesoHQ/bgce-archive/skeleton)
 
 > A living digital archive to preserve the best from the Go community — notes, templates, projects, and stories.
 
@@ -91,3 +86,17 @@ See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for more info.
 > Archive knowledge. Share experiences. Help the next generation of Gophers thrive.
 
 ---
+
+## License
+
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+
+This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).
+
+You may share, copy, redistribute, and adapt the material for **non-commercial** purposes only. You must give appropriate credit to BGCE Archive / NesoHQ and indicate if changes were made. Commercial use is prohibited.
+
+See full license details at [creativecommons.org/licenses/by-nc/4.0](https://creativecommons.org/licenses/by-nc/4.0/).
+
+---
+
+_© 2025 NesoHQ_
