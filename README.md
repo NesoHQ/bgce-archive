@@ -3,7 +3,19 @@
 [![Commit Lint](https://github.com/NesoHQ/bgce-archive/actions/workflows/commit-lint.yml/badge.svg)](https://github.com/NesoHQ/bgce-archive/actions/workflows/commit-lint.yml)
 [![Docs](https://github.com/NesoHQ/bgce-archive/actions/workflows/docs.yml/badge.svg)](https://github.com/NesoHQ/bgce-archive/actions/workflows/docs.yml)
 [![Go Tests](https://github.com/NesoHQ/bgce-archive/actions/workflows/go-tests.yml/badge.svg)](https://github.com/NesoHQ/bgce-archive/actions/workflows/go-tests.yml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/NesoHQ/bgce-archive)](https://goreportcard.com/report/github.com/NesoHQ/bgce-archive)
+
+<!--
+  Note: Go Report Card currently only scans one module.
+  Since this repo is a monorepo with multiple Go modules,
+  please check report cards per microservice individually.
+-->
+
+### Go Report Cards (per module)
+
+[![Go Report Card - cortex](https://goreportcard.com/badge/github.com/NesoHQ/bgce-archive/cortex)](https://goreportcard.com/report/github.com/NesoHQ/bgce-archive/cortex)  
+[![Go Report Card - ecommerce](https://goreportcard.com/badge/github.com/NesoHQ/bgce-archive/ecommerce)](https://goreportcard.com/report/github.com/NesoHQ/bgce-archive/ecommerce)  
+[![Go Report Card - skeleton](https://goreportcard.com/badge/github.com/NesoHQ/bgce-archive/skeleton)](https://goreportcard.com/report/github.com/NesoHQ/bgce-archive/skeleton)
+
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 ![GitHub stars](https://img.shields.io/github/stars/NesoHQ/bgce-archive?style=social)
 
