@@ -4,7 +4,7 @@
 [![Docs](https://github.com/NesoHQ/bgce-archive/actions/workflows/docs.yml/badge.svg)](https://github.com/NesoHQ/bgce-archive/actions/workflows/docs.yml)
 [![Go Tests](https://github.com/NesoHQ/bgce-archive/actions/workflows/go-tests.yml/badge.svg)](https://github.com/NesoHQ/bgce-archive/actions/workflows/go-tests.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/NesoHQ/bgce-archive)](https://goreportcard.com/report/github.com/NesoHQ/bgce-archive)
-[![License: CC BY-NC 4.0](https://img.shields.io/github/license/NesoHQ/bgce-archive)](https://github.com/NesoHQ/bgce-archive/blob/main/LICENSE)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 ![GitHub stars](https://img.shields.io/github/stars/NesoHQ/bgce-archive?style=social)
 
 > A living digital archive to preserve the best from the Go community — notes, templates, projects, and stories.
@@ -55,10 +55,10 @@ The **Golang Community Vault** is more than a repository — it's a shared learn
 
 ## 💬 Stay Connected
 
-| Platform           | Join Link                                                                                                          |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| 💬 Discord         | [Join our Discord](https://discord.gg/xUVYrGaXS3) — real-time discussions and support                              |
-| 📘 Fb Group  | [Join the FB Group](https://www.facebook.com/groups/1118405403169990) — success stories, posts, and community news |
+| Platform      | Join Link                                                                                                          |
+| ------------- | ------------------------------------------------------------------------------------------------------------------ |
+| 💬 Discord    | [Join our Discord](https://discord.gg/xUVYrGaXS3) — real-time discussions and support                              |
+| 📘 Fb Group   | [Join the FB Group](https://www.facebook.com/groups/1118405403169990) — success stories, posts, and community news |
 | 🎥 Yt Channel | [GoWithHabib](https://www.youtube.com/@gowithhabib) — tutorials, deep dives, and community videos                  |
 
 ---
