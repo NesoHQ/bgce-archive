@@ -66,3 +66,5 @@ Join the **Best Golang Community Ever** and become part of something bigger than
 > Let’s archive knowledge, share what we’ve learned, and help the next generation of Gophers grow. 🐹🚀
 
 ---
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/NesoHQ/bgce-archive)](https://goreportcard.com/report/github.com/NesoHQ/bgce-archive)
