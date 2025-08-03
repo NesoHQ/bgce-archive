@@ -139,7 +139,7 @@ Deferred: 1
 
 ---
 
-#### 📛 Variable Capture Trap (Closure)
+#### 🔒 `Defer` behaviour for closures
 
 ```go
 func closureDefer() {
@@ -154,35 +154,14 @@ func closureDefer() {
 🖨️ Output:
 
 ```
-Deferred: 4
-Deferred: 4
-Deferred: 4
-```
-
-😵‍💫 কেন?
-
-কারণ closure-এ `i` capture হচ্ছে by reference — প্রতিবার একই i এর address!
-
-👉 Fix:
-
-```go
-func fixedClosureDefer() {
-    for i := 1; i <= 3; i++ {
-        val := i
-        defer func() {
-            fmt.Println("Deferred:", val)
-        }()
-    }
-}
-```
-
-🖨️ Output:
-
-```
 Deferred: 3
 Deferred: 2
 Deferred: 1
 ```
+
+😵‍💫 কেন?
+
+কারণ defer-এর ক্ষেত্রে ফাংশনে ব্যবহৃত ভ্যারিয়েবল গুলো ইমিডিয়েটলি ডিটেক্ট হয় এবং ডেফার স্টাকে সেভাবেই সেভড থাকে
 
 ---
 
@@ -234,7 +213,6 @@ func safe() {
 | Internal structure | Linked List with Stack behavior          |
 | Named return       | `defer` can modify it                    |
 | Unnamed return     | `defer` can’t modify it                  |
-| Variable capture   | Closure captures by reference — careful! |
 | Use cases          | File close, Mutex unlock, Panic recovery |
 
 ---
@@ -257,4 +235,4 @@ Go-এর `defer` যত ছোট দেখতে, তত গভীর তা�
 - Resource leak রোধ
 - কম Bug
 
-শুধু syntax জানলেই হবে না — এর ভিতরের Stack-মাথা, Return-trap, এবং Variable-capture খেলাও বোঝা জরুরি।
+শুধু syntax জানলেই হবে না — এর ভিতরের Stack-মাথা, Return-trap খেলাও বোঝা জরুরি।
