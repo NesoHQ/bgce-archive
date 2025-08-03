@@ -1,8 +1,10 @@
-[**Author:** @mdimamhosen
+[**Author:** @mdimamhosen, @mahabubulhasibshawon
 **Date:** 2025-04-22
 **Category:** interview-qa/arrays
 **Tags:** [go, clousers, functions]
 ]
+
+# Closure
 
 ## 🔁 Program Code Example
 
@@ -51,29 +53,29 @@ func init() {
 
 ---
 
-## ⚙️ Code Execution Phases
+## ⚙️ Code Execution ধাপসমূহ
 
-### 🧩 Phase 1: Compilation
+### 🧩 ধাপ ১: Compilation
 
-- Compile and generate the binary:
+* Compile করে binary তৈরি করুন:
 
 ```bash
 go build main.go
 ```
 
-### 🚀 Phase 2: Execution
+### 🚀 ধাপ ২: Execution
 
-- Run the binary:
+* Binary run করুন:
 
 ```bash
 ./main
 ```
 
-## 🔒 Closures in Go
+## 🔒 Go-তে Closures
 
-### ✅ What is a Closure?
+### ✅ Closure কী?
 
-A closure is a function **defined within another function** and **has access to the outer function's variables** even after the outer function has finished executing.
+Closure হলো এমন একটি funtion, **যা অন্য একটি funtion এর ভিতরে define করা হয়** এবং **যা তার নিজের scope ছাড়াও তার outer scope** থাকা **variable গুলোকে** মনে রাখে এবং ব্যবহার করতে পারে, এমনকি সেই outer scope টি execute হওয়া শেষ হয়ে গেলেও।
 
 ```go
 func Outer() func() {
@@ -86,41 +88,104 @@ func Outer() func() {
 }
 ```
 
-- `money` is captured by the inner function.
-- On each call to the returned function, `money` is updated.
+* `money` variable টি inner function দ্বারা capture করা হয়।
+* প্রতিবার call করলে `money` update হয়।
 
 ### ✅ Multiple Closures
 
-- Each call to `Outer()` creates a new instance of `money`, isolated from others.
+* প্রতিবার `Outer()` call করলে নতুন `money` instance তৈরি হয়, যা অন্যগুলোর থেকে আলাদা।
 
 ---
 
-## 🧠 Output Explanation
+## 🧠 Output ব্যাখ্যা
 
 ```go
 init() runs first: ============ Begin ============
 
-Outer function
-Age: 20
-Money: 130
-Money: 160
-=========================
-Outer function
-Age: 20
-Money: 130
+Outer function  
+Age: 20  
+Money: 130  
+Money: 160  
+=========================  
+Outer function  
+Age: 20  
+Money: 130  
 Money: 160
 ```
 
-- Two closures are created, each with its own instance of `money`.
-- They do not interfere with each other.
+* দুইটি closure তৈরি হয়েছে, প্রতিটির নিজস্ব `money` instance আছে।
+* এরা একে অপরকে প্রভাবিত করে না।
 
 ---
 
-## 🔍 Types of Closures
+### 🧱 Memory segment বিশ্লেষণ
+
+| segment      | কী সংরক্ষণ করে                                                                         |
+| ------------- | -------------------------------------------------------------------------------------- |
+| Code segment  | compile করা নির্দেশাবলী এবং constant (`a`, `main`, `call`, `Outer`, `init`, `show`) |
+| Data segment | Global variable `b`                                                                  |
+| Stack       | Local variable (`age`), function call frame                                                |
+| Heap           | Closer ও Escaping variable (`money`)                                                 |
+
+---
+
+## 🧠 Visualization
+
+### CLI-style Memory বিন্যাস
+
+```
+┌──────────────────────────────┐
+│        Code segment          │
+│------------------------------│
+│ const a = 10,                │
+│ func main, call, Outer, init │
+│ show (anonymous function)    │
+└──────────────────────────────┘
+          ↓
+┌──────────────────────────────┐
+│        Data segment         │
+│------------------------------│
+│ var b = 20                   │
+└──────────────────────────────┘
+          ↓
+┌──────────────────────────────┐
+│           Stack              │
+│------------------------------│
+│ Outer() frame                │
+│   age = 20                   │
+│   return address             │
+└──────────────────────────────┘
+          ↓
+┌──────────────────────────────┐
+│            Heap               │
+│------------------------------│
+│ money = 100 (inc)            │
+│ money = 130 (after inc())    │
+│ money = 160 (after inc())    │
+│                              │
+│ money = 100 (inc1)           │
+│ money = 130 (after inc1())   │
+│ money = 160 (after inc1())   │
+└──────────────────────────────┘
+```
+
+---
+
+### 🧠 ব্যাখ্যা:
+
+* `a` ও `b` Global — তাই `a` Code segment (const), আর `b` Data segment এ যায়।
+* `age` একটি Local variable, এবং কেবল `Outer` function ব্যবহৃত — Stack থাকে।
+* `money` একটি Closer এর অংশ, কারণ `show()` function এর মধ্যে ব্যবহৃত ও return করা হচ্ছে — তাই এটি **Heap এ** সংরক্ষিত।
+* প্রতিবার `Outer()` call হলে, নতুন `money` variable Heap তৈরি হয়, আলাদা করে (`inc`, `inc1`)।
+
+
+---
+
+## 🔍 Types of Closures 
 
 ### 1. **Closure with Outer Variable**
 
-**Question:** Write a Go program that demonstrates how a closure can access and modify a variable from the outer function.
+**প্রশ্ন:** একটি Go program লিখুন যা দেখায় কীভাবে closure outer function থেকে variable access ও modify করতে পারে।
 
 **Code:**
 
@@ -144,16 +209,16 @@ func main() {
 }
 ```
 
-**Explanation:**
+**ব্যাখ্যা:**
 
-- The `outer` function creates a closure that captures and modifies the `x` variable.
-- Every time the closure is called, the value of `x` is incremented.
+* `outer` function একটি closure তৈরি করে যা `x` ভেরিয়েবল capture করে এবং modify করে।
+* প্রতিবার call করলে `x` এর মান বাড়ে।
 
 ---
 
 ### 2. **Multiple Closures with Separate States**
 
-**Question:** Demonstrate how multiple closures created in the same function each maintain their own state.
+**প্রশ্ন:** দেখান কীভাবে একই function এ তৈরি হওয়া একাধিক closures তাদের নিজস্ব state ধরে রাখে।
 
 **Code:**
 
@@ -181,16 +246,16 @@ func main() {
 }
 ```
 
-**Explanation:**
+**ব্যাখ্যা:**
 
-- `counter1` and `counter2` each maintain their own state because they are independent closures.
-- Each counter starts at 0 and increments on each call.
+* `counter1` এবং `counter2` প্রতিটিই আলাদা closure, যাদের নিজস্ব `counter` state রয়েছে।
+* এরা একে অপরকে প্রভাবিত করে না।
 
 ---
 
 ### 3. **Closure with Parameters**
 
-**Question:** Write a closure that accepts parameters and demonstrates how closures can be passed arguments.
+**প্রশ্ন:** এমন একটি closure লিখুন যা parameter accept করে এবং দেখায় যে closures কীভাবে arguments ব্যবহার করতে পারে।
 
 **Code:**
 
@@ -214,16 +279,16 @@ func main() {
 }
 ```
 
-**Explanation:**
+**ব্যাখ্যা:**
 
-- The closure `multiplier` takes a `factor` argument and returns a function that multiplies a number by that factor.
-- Each closure (`double`, `triple`) uses its own `factor` value to perform the operation.
+* `multiplier` নামের closure `factor` parameter accept করে এবং একটি function return করে যা `n` কে `factor` দিয়ে গুণ করে।
+* `double` এবং `triple` আলাদা আলাদা factor ব্যবহার করে।
 
 ---
 
 ### 4. **Closures with Deferred Execution**
 
-**Question:** How can closures be used in Go with deferred execution, and what happens when the closure accesses variables after the outer function returns?
+**প্রশ্ন:** Go-তে closures কীভাবে deferred execution এর সঙ্গে ব্যবহার করা যায় এবং outer function শেষ হওয়ার পর variable access করলে কী ঘটে?
 
 **Code:**
 
@@ -242,16 +307,16 @@ func main() {
 }
 ```
 
-**Explanation:**
+**ব্যাখ্যা:**
 
-- Even though `a` is modified inside `main`, the deferred closure captures the value of `a` at the time the defer statement was encountered by passing it as a parameter.
-- The closure prints the value of `a` that was captured before it was modified.
+* যদিও `main` এ `a` পরিবর্তিত হয়েছে, deferred closure-এ `a` এর যে মান পাঠানো হয়েছে সেটাই print হবে।
+* কারণ `a` parameter হিসেবে capture করা হয়েছে, reference নয়।
 
 ---
 
 ### 5. **Closure Capturing Loop Variable**
 
-**Question:** Write a Go program that demonstrates a common pitfall when using closures inside loops. The closure captures the loop variable incorrectly.
+**প্রশ্ন:** একটি Go program লিখুন যা দেখায় কীভাবে closure loop variable ভুলভাবে capture করে।
 
 **Code:**
 
@@ -275,12 +340,13 @@ func main() {
 }
 ```
 
-**Explanation:**
+**ব্যাখ্যা:**
 
-- All closures capture the same `i` variable. At the time of closure execution, `i` is 3 (the value after the loop ends).
-- To fix this, you need to pass `i` as a parameter to the closure:
+* সব closures একই `i` variable capture করে।
+* loop শেষ হওয়ার পরে `i` এর মান হয় 3, তাই সব output হয় 3।
+* এটা ঠিক করার জন্য এর `i` মান parameter হিসাবে closures এ পাঠাতে হবে।
 
-**Fixed Code:**
+**সঠিক code:**
 
 ```go
 package main
@@ -307,7 +373,7 @@ func main() {
 
 ### 6. **Closures with Function Arguments**
 
-**Question:** Create a closure that adds two numbers and demonstrates how closures can capture arguments passed to the inner function.
+**প্রশ্ন:** এমন একটি closure তৈরি করুন যা দুটি সংখ্যা যোগ করে এবং দেখায় কীভাবে closures argument capture করে।
 
 **Code:**
 
@@ -329,16 +395,16 @@ func main() {
 }
 ```
 
-**Explanation:**
+**ব্যাখ্যা:**
 
-- The outer function `adder` captures `a` and returns a closure that adds `a` to the argument `b`.
-- The closure `add5` remembers `a = 5` and adds it to the argument passed to it.
+* `adder` function `a` কে capture করে এবং `b` এর সাথে যোগ করে।
+* `add5` closure `a = 5` মনে রাখে এবং তার সাথে নতুন `b` যোগ করে।
 
 ---
 
 ### 7. **Closures with a Function Factory**
 
-**Question:** Implement a closure that acts as a function factory, returning different mathematical operations based on the argument passed to the factory.
+**প্রশ্ন:** একটি closure তৈরি করুন যা function factory হিসেবে কাজ করে এবং pass করা argument অনুসারে বিভিন্ন mathematical operation return করে।
 
 **Code:**
 
@@ -376,16 +442,16 @@ func main() {
 }
 ```
 
-**Explanation:**
+**ব্যাখ্যা:**
 
-- The `operationFactory` returns different closures based on the operator passed.
-- Each closure performs a corresponding mathematical operation.
+* `operationFactory` pass করা operator অনুযায়ী একটি closure return করে।
+* প্রতিটি closure নির্দিষ্ট operation সম্পাদন করে।
 
 ---
 
 ### 8. **Closures with State Preservation**
 
-**Question:** Write a closure that preserves state across multiple invocations (like a simple counter) and explain its working.
+**প্রশ্ন:** এমন একটি closure লিখুন যা বারবার call করার পরও তার state সংরক্ষণ করে (যেমন একটি simple counter) 
 
 **Code:**
 
@@ -412,15 +478,16 @@ func main() {
 }
 ```
 
-**Explanation:**
+**ব্যাখ্যা:**
 
-- Each call to `counter` returns a closure that maintains a unique `count` variable, preserving state across invocations.
+* প্রতিটি `counter()` call একটি নতুন `count` variable সহ closure তৈরি করে।
+* `c1` এবং `c2` আলাদা আলাদা state সংরক্ষণ করে।
 
 ---
 
 ### 9. **Closure with Function Composition**
 
-**Question:** Create a Go program that demonstrates function composition using closures.
+**প্রশ্ন:** একটি Go প্রোগ্রাম তৈরি করুন যা closures ব্যবহার করে function composition demonstrate করে।
 
 **Code:**
 
@@ -449,23 +516,21 @@ func main() {
 }
 ```
 
-**Explanation:**
+**ব্যাখ্যা:**
 
-- The `compose` function takes two functions (`f` and `g`) and returns a new function that applies `g` first, then applies `f` to the result.
-- The result is a composition of `double` and `addFive`.
+* `compose` function দুটি function `f` এবং `g` accept করে এবং একটি নতুন function return করে যা `g(x)` এর ওপর `f()` apply করে।
+* এখানে `double(addFive(3))` => `double(8)` => `16`
+
+---
+# Go Closures - code উদাহরণ ও ব্যাখ্যাসহ ২০টি প্রশ্ন
+
+এই document Go-এর closures নিয়ে ২০টি প্রশ্ন, code উদাহরণ এবং বিস্তারিত ব্যাখ্যা রয়েছে।
 
 ---
 
-````markdown
-# Go Closures - 20 Questions with Code Examples and Explanations
+### 1. **Go-তে closure কী?**
 
-This document contains 20 questions related to closures in Go, along with code examples and detailed explanations.
-
----
-
-### 1. **What is a closure in Go?**
-
-**Question:** Define what a closure is in Go with an example.
+**প্রশ্ন:** Go-এ closure কী তা ব্যাখ্যা করুন একটি উদাহরণসহ।
 
 **Code:**
 
@@ -485,16 +550,15 @@ func main() {
     closure()
 }
 ```
-````
 
-**Explanation:**  
-A closure is a function that captures the variables from its surrounding context. In the example, the inner function returned by `outer` is a closure, as it can access the environment in which it was created.
+**ব্যাখ্যা:**  
+একটি closure এমন একটি function যা তার চারপাশের scope থেকে variable ধরে রাখতে পারে। উপরের উদাহরণে `outer` function যেটি return করছে সেটি একটি closure, কারণ এটি তার তৈরি হওয়া environment-এর context access করতে পারে।
 
 ---
 
-### 2. **How does a closure access variables from its outer function?**
+### 2. **একটি closure কীভাবে outer function-এর variable access করে?**
 
-**Question:** Show how a closure can access and modify variables in the outer function.
+**প্রশ্ন:** দেখান কিভাবে একটি closure outer variable access ও modify করতে পারে।
 
 **Code:**
 
@@ -518,14 +582,14 @@ func main() {
 }
 ```
 
-**Explanation:**  
-The closure captures the `x` variable from the `outer` function and modifies it each time it is invoked.
+**ব্যাখ্যা:**  
+এই closure outer `x` variable ধরে রাখে এবং প্রতিবার call করার সময় তাকে modify করে।
 
 ---
 
-### 3. **What happens when closures access variables from a loop?**
+### 3. **closure যখন loop-এর variable access করে তখন কী হয়?**
 
-**Question:** Demonstrate the common mistake with closures capturing loop variables.
+**প্রশ্ন:** closure দ্বারা loop variable capture করার সময় কী ধরনের ভুল হতে পারে তা দেখান।
 
 **Code:**
 
@@ -549,14 +613,14 @@ func main() {
 }
 ```
 
-**Explanation:**  
-All closures capture the same `i` variable, and when executed, they all print `3`. This happens because the closure captures a reference to the variable `i`, not its value at the time of closure creation.
+**ব্যাখ্যা:**  
+এখানে সবগুলো closure একই `i` variable ধরে রাখে, তাই প্রত্যেকটা closure call করার সময় `3` print হয়। কারণ loop শেষ হবার পর `i` এর final value 3 হয়ে যায়, এবং closure সেই reference-টাই ধরে রাখে।
 
 ---
 
-### 4. **How can you fix the loop closure problem?**
+### 4. **loop closure সমস্যা কীভাবে সমাধান করবেন?**
 
-**Question:** How can you avoid closures capturing the same variable in a loop?
+**প্রশ্ন:** loop-এর প্রতিটি iteration-এ আলাদা variable কিভাবে capture করবেন?
 
 **Code:**
 
@@ -581,14 +645,14 @@ func main() {
 }
 ```
 
-**Explanation:**  
-By introducing a new variable `i` in the loop, each closure captures a separate value of `i`, resulting in `0`, `1`, and `2` being printed.
+**ব্যাখ্যা:**  
+`i := i` দিয়ে প্রতি iteration-এ নতুন `i` তৈরি হওয়ায়, closure গুলো ভিন্ন ভিন্ন value ধরে রাখে এবং আলাদা আলাদা output দেয়: `0`, `1`, `2`।
 
 ---
 
-### 5. **Closures as Function Parameters**
+### 5. **Function parameter হিসেবে closure**
 
-**Question:** How do you pass a closure as an argument to another function?
+**প্রশ্ন:** কিভাবে closure-কে অন্য function-এ argument হিসেবে pass করবেন?
 
 **Code:**
 
@@ -609,14 +673,14 @@ func main() {
 }
 ```
 
-**Explanation:**  
-You can pass a closure as an argument to another function. In this example, `applyClosure` accepts a closure and invokes it.
+**ব্যাখ্যা:**  
+closure-কে কোনো function-এর argument হিসেবে pass করা যায়। এখানে `applyClosure` function-টি একটি closure নেয় এবং তাকে execute করে।
 
 ---
 
-### 6. **Closures with Parameters**
+### 6. **parameter সহ closure**
 
-**Question:** Write a closure that accepts a parameter and demonstrates how closures work with arguments.
+**প্রশ্ন:** একটি closure লিখুন যেটি একটি parameter নেয় ?
 
 **Code:**
 
@@ -637,14 +701,14 @@ func main() {
 }
 ```
 
-**Explanation:**  
-The closure `multiplier` takes a parameter `factor` and returns a function that multiplies the given number `n` by `factor`.
+**ব্যাখ্যা:**  
+এই closure `factor` ধরে রাখে এবং return করা function `n` এর সাথে তাকে গুণ করে। এইভাবে `double(4)` output দেয় `8`।
 
 ---
 
-### 7. **Closures with Function Return Values**
+### 7. **closure যখন value return করে**
 
-**Question:** How do closures work when they return values?
+**প্রশ্ন:** দেখান কিভাবে closure return value দেয়।
 
 **Code:**
 
@@ -665,14 +729,14 @@ func main() {
 }
 ```
 
-**Explanation:**  
-The closure captures the `a` variable and uses it when adding `b` in the returned function.
+**ব্যাখ্যা:**  
+এই closure `a` ধরে রাখে এবং প্রতিবার নতুন input `b` এর সাথে তা যোগ করে result return করে।
 
 ---
 
-### 8. **Returning a Closure from a Function**
+### 8. **একটি function থেকে closure return করা**
 
-**Question:** Demonstrate how to return a closure from a function.
+**প্রশ্ন:** দেখান কিভাবে একটি function closure return করতে পারে।
 
 **Code:**
 
@@ -698,14 +762,14 @@ func main() {
 }
 ```
 
-**Explanation:**  
-Each call to `createCounter` creates a new closure, which maintains its own counter state.
+**ব্যাখ্যা:**  
+`createCounter` প্রত্যেকবার call করলে নতুন একটি closure return করে যার নিজস্ব `counter` থাকে।
 
 ---
 
-### 9. **Closure with State Preservation**
+### 9. **closure যেটি তার পূর্ববর্তী state মনে রাখে**
 
-**Question:** Write a closure that remembers its previous state across calls.
+**প্রশ্ন:** এমন একটি closure লিখুন যা আগের state ধরে রাখতে পারে।
 
 **Code:**
 
@@ -732,14 +796,14 @@ func main() {
 }
 ```
 
-**Explanation:**  
-A closure retains its own state, meaning each call to `counter` results in separate states for `c1` and `c2`.
+**ব্যাখ্যা:**  
+প্রতিটি closure আলাদা `count` ধরে রাখে। তাই `c1` এবং `c2` এর মধ্যে একে অপরের সাথে কোনো সম্পর্ক নেই।
 
 ---
 
-### 10. **Closures and Anonymous Functions**
+### 10. **closure এবং anonymous function**
 
-**Question:** How can closures be used with anonymous functions?
+**প্রশ্ন:** কিভাবে anonymous function ব্যবহার করে closure তৈরি করা যায়?
 
 **Code:**
 
@@ -757,5 +821,285 @@ func main() {
 }
 ```
 
-**Explanation:**  
-Anonymous functions can be used as closures. In this case, the anonymous function captures the variable `a`.
+**ব্যাখ্যা:**  
+anonymous function closure হিসেবে কাজ করতে পারে। এখানে `a` variable টি capture করে রেখেছে function টা।
+
+---
+---
+
+### 11. **Closure দিয়ে lazy evaluation**
+
+**প্রশ্ন:** কিভাবে closure ব্যবহার করে lazy evaluation করা যায়?
+
+**Code:**
+
+```go
+package main
+
+import "fmt"
+
+func lazySum(a, b int) func() int {
+    return func() int {
+        return a + b
+    }
+}
+
+func main() {
+    sum := lazySum(3, 4)
+    fmt.Println("Doing something else...")
+    fmt.Println("Now evaluating sum:", sum())
+}
+```
+
+**ব্যাখ্যা:**  
+এই উদাহরণে, `lazySum` function টি actual calculation defer করে রাখে যতক্ষণ না `sum()` call করা হয়।
+
+---
+
+### 12. **Closure ব্যবহার করে filter function তৈরি করা**
+
+**প্রশ্ন:** কিভাবে closure ব্যবহার করে একটি filter function তৈরি করা যায়?
+
+**Code:**
+
+```go
+package main
+
+import "fmt"
+
+func filter(data []int, predicate func(int) bool) []int {
+    result := []int{}
+    for _, v := range data {
+        if predicate(v) {
+            result = append(result, v)
+        }
+    }
+    return result
+}
+
+func main() {
+    nums := []int{1, 2, 3, 4, 5}
+    even := func(n int) bool {
+        return n%2 == 0
+    }
+    fmt.Println(filter(nums, even)) // Output: [2 4]
+}
+```
+
+**ব্যাখ্যা:**  
+`filter` function টি একটি closure নেয় যেটি প্রতিটি item evaluate করে। এখানে, `even` একটি closure যা শুধু জোড় সংখ্যা বেছে নেয়।
+
+---
+
+### 13. **Closure দিয়ে memoization**
+
+**প্রশ্ন:** কিভাবে closure ব্যবহার করে memoization implement করা যায়?
+
+**Code:**
+
+```go
+package main
+
+import "fmt"
+
+func memoize() func(int) int {
+    cache := map[int]int{}
+    return func(n int) int {
+        if val, ok := cache[n]; ok {
+            return val
+        }
+        result := n * n
+        cache[n] = result
+        return result
+    }
+}
+
+func main() {
+    square := memoize()
+    fmt.Println(square(4)) // Output: 16
+    fmt.Println(square(4)) // Cached output: 16
+}
+```
+
+**ব্যাখ্যা:**  
+এই closure একটি map-এর মাধ্যমে আগে হিসাব করা ফলাফল মনে রাখে। একই input দিলে সে পুরোনো result ব্যবহার করে।
+
+---
+
+### 14. **Closure দিয়ে callback implement করা**
+
+**প্রশ্ন:** কিভাবে closure ব্যবহার করে callback তৈরি করা যায়?
+
+**Code:**
+
+```go
+package main
+
+import "fmt"
+
+func doSomething(callback func(string)) {
+    callback("Hello from callback")
+}
+
+func main() {
+    doSomething(func(msg string) {
+        fmt.Println(msg)
+    })
+}
+```
+
+**ব্যাখ্যা:**  
+closure callback হিসেবে কাজ করছে যা `doSomething` function থেকে invoke হচ্ছে।
+
+---
+
+### 15. **Closure এবং goroutine**
+
+**প্রশ্ন:** closure কিভাবে goroutine এর মধ্যে ব্যবহার করা যায়?
+
+**Code:**
+
+```go
+package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func main() {
+    for i := 0; i < 3; i++ {
+        i := i
+        go func() {
+            fmt.Println(i)
+        }()
+    }
+    time.Sleep(1 * time.Second)
+}
+```
+
+**ব্যাখ্যা:**  
+closure গুলো goroutine এর মধ্যে চলেছে। `i := i` দিয়ে প্রতি iteration-এ আলাদা value ensure করা হয়েছে।
+
+---
+
+### 16. **Closure scope এর প্রভাব**
+
+**প্রশ্ন:** একটি closure কিভাবে ভিন্ন scope এ ভিন্ন আচরণ করে?
+
+**Code:**
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    x := 5
+    {
+        x := 10
+        closure := func() {
+            fmt.Println(x)
+        }
+        closure() // Output: 10
+    }
+}
+```
+
+**ব্যাখ্যা:**  
+closure সেই scope-এর variable ধরে যেখানে এটি define হয়েছে। এখানে closure `x := 10` এর value ধরে রেখেছে।
+
+---
+
+### 17. **Closure-এ pointer capture করা**
+
+**প্রশ্ন:** কিভাবে closure pointer capture করে ?
+
+**Code:**
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    x := 10
+    ptr := &x
+
+    closure := func() {
+        fmt.Println(*ptr)
+    }
+
+    x = 20
+    closure() // Output: 20
+}
+```
+
+**ব্যাখ্যা:**  
+closure একটি pointer ধরে রাখলে, variable-এর যে কোনো পরিবর্তন সে reflect করবে কারণ address ধরেই access হয়।
+
+---
+
+### 18. **Closure reference vs value capture**
+
+**প্রশ্ন:** Go-তে closure variable কে reference না value হিসাবে ধরে রাখে?
+
+**Code:**
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    x := 10
+    closure := func(val int) {
+        fmt.Println(val)
+    }
+
+    x = 20
+    closure(x) // Output: 20
+}
+```
+
+**ব্যাখ্যা:**  
+যখন আপনি closure-এ variable pass করেন (যেমন `val int`), তখন সেটি value হিসাবে যায়। তবে যদি variable capture করা হয় closure scope-এ, সেটা reference এর মতো behave করে।
+
+---
+
+### 19. **Closure এবং defer**
+
+**প্রশ্ন:** closure কিভাবে defer statement এর সঙ্গে কাজ করে?
+
+**Code:**
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    for i := 0; i < 3; i++ {
+        i := i
+        defer func() {
+            fmt.Println(i)
+        }()
+    }
+}
+```
+
+**ব্যাখ্যা:**  
+সব `defer` statement পরে একসাথে execute হয় (LIFO)। এখানে `i := i` দিয়ে প্রতিটি closure আলাদা value capture করে।
+
+---
+
+### 20. **Closure debugging এর টিপস**
+
+**প্রশ্ন:** closure ব্যবহার করার সময় common debugging সমস্যা ও সমাধান কী?
+
+**Explanation (no code):**  
+- loop variable capture করলে সব closure একই variable reference ধরে রাখতে পারে (সমস্যা)। সমাধান: নতুন variable declare করে capture করা।
+- closure asynchronous context (যেমন goroutine) এ ব্যবহার করলে, race condition তৈরি হতে পারে। সমাধান: value copy করে capture করা।
+- closure capturing unexpected state? সরাসরি log print করুন বা debugger দিয়ে scoped variable inspect করুন।
+
+---

@@ -25,32 +25,23 @@ type Product struct {
 var productList []Product
 
 func getProducts(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin",  "*")
-	w.Header().Set("Content-Type", "application/json")
+	handleCors(w)
+	handlePreflightReq(w, r)
 
 	if r.Method != "GET" { // r.Method = post, put, patch, delete
-		http.Error(w, "Please give me GET request", 400)
+		http.Error(w, "Please send a GET request", 400)
 		return 
 	}
 
-	encoder := json.NewEncoder(w)
-
-	encoder.Encode(productList)
+	sendData(w, productList, 200)
 }
 
 func createProduct(w http.ResponseWriter, r *http.Request){
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST")
-	w.Header().Set("Access-Control-Headers", "Content-Type")
-	w.Header().Set("Content-Type", "application/json")
-
-	if r.Method == "OPTIONS" {
-		w.WriteHeader(200)
-		return
-	}
+	handleCors(w)
+	handlePreflightReq(w, r)
 
 	if r.Method != "POST" { // r.Method = get, put, patch, delete
-		http.Error(w, "Please give me POST request", 400)
+		http.Error(w, "Please send a POST request", 400)
 		return 
 	}
 
@@ -60,7 +51,7 @@ func createProduct(w http.ResponseWriter, r *http.Request){
 	err := decoder.Decode(&newProduct)
 	if err != nil {
 		fmt.Println(err)
-		http.Error(w, "Please give me valid json", 400)
+		http.Error(w, "Please send a valid JSON body", 400)
 		return 
 	}
 
@@ -68,9 +59,27 @@ func createProduct(w http.ResponseWriter, r *http.Request){
 
 	productList = append(productList, newProduct)
 
-	w.WriteHeader(201)
+	sendData(w, newProduct, 201)	
+}
+
+func handleCors(w http.ResponseWriter){
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+	w.Header().Set("Access-Control-Headers", "Content-Type, Habib")
+	w.Header().Set("Content-Type", "application/json")
+	
+}
+
+func handlePreflightReq(w http.ResponseWriter, r *http.Request){
+	if r.Method == "OPTIONS" {
+		w.WriteHeader(200)
+	}
+}
+
+func sendData(w http.ResponseWriter, data interface{}, statusCode int) {
+	w.WriteHeader(statusCode)
 	encoder := json.NewEncoder(w)
-	encoder.Encode(newProduct)
+	encoder.Encode(data)
 }
 
 func main() {
@@ -84,7 +93,7 @@ func main() {
 
 	mux.HandleFunc("/create-products", createProduct)
 	
-	fmt.Println("Server running on :8080")
+	fmt.Println("Server running on port :8080")
 
 	err := http.ListenAndServe(":8080", mux) //" Failed to start the server"
 	if err != nil {
@@ -112,7 +121,7 @@ func init() {
 	prd3 := Product{
 		ID: 3,
 		Title: "Banana",
-		Description: "Banana is boroing. I feel bored eating banana.",
+		Description: "Banana is boring. I feel bored eating banana.",
 		Price: 5,
 		ImgUrl: "https://www.allrecipes.com/thmb/lc7nSL9L5zMHXz9t6PMAVm9biNM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/ar-new-banana-adobe-ar-2x1-917fdde58d194b529b41042ebff1c031.jpg",
 	}
