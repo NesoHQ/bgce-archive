@@ -169,50 +169,44 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>[<strong>Author:</strong> @mdimamhosen
+                        <p>[<strong>Author:</strong> @mdimamhosen, @n8fury
 <strong>Date:</strong> 2025-04-19
 <strong>Category:</strong> interview-qa/boolean
 <strong>Tags:</strong> [go, boolean, data-types]
 ]</p>
-<h1 id="a-boolean-data-type-can-either-be-true-or-false"><a class="header" href="#a-boolean-data-type-can-either-be-true-or-false">A boolean data-type can either be "TRUE" or "FALSE"</a></h1>
+<h1 id="একটি-boolean-data-type-হয-true-অথবা-false-হতে-পারে"><a class="header" href="#একটি-boolean-data-type-হয-true-অথবা-false-হতে-পারে">একটি boolean data-type হয় "TRUE" অথবা "FALSE" হতে পারে</a></h1>
 <pre><code class="language-go">package main
-
 import "fmt"
-
 func main() {
-	isGolangPL := true
-	isHtmlPL := false
-	fmt.Println(isGolangPL)
-	fmt.Println(isHtmlPL)
+ isGolangPL := true
+ isHtmlPL := false
+ fmt.Println(isGolangPL)
+ fmt.Println(isHtmlPL)
 }
 </code></pre>
 <h2 id="frequently-asked-questions"><a class="header" href="#frequently-asked-questions">Frequently Asked Questions</a></h2>
-<h3 id="q1-how-can-i-use-boolean-values-in-conditional-statements"><a class="header" href="#q1-how-can-i-use-boolean-values-in-conditional-statements">Q1: How can I use boolean values in conditional statements?</a></h3>
-<p><strong>Answer:</strong> Boolean values are often used in conditional statements to control the flow of a program. For example:</p>
+<h3 id="q1-conditional-statement-এ-boolean-value-কিভাবে-বযবহার-করব"><a class="header" href="#q1-conditional-statement-এ-boolean-value-কিভাবে-বযবহার-করব">Q1: conditional statement এ boolean value কিভাবে ব্যবহার করব?</a></h3>
+<p><strong>উত্তর:</strong> Boolean value সাধারণত conditional statement এ program এর flow control করার জন্য ব্যবহার করা হয়। উদাহরণ:</p>
 <pre><code class="language-go">package main
-
 import "fmt"
-
 func main() {
-	isEven := true
-	if isEven {
-		fmt.Println("The number is even.")
-	} else {
-		fmt.Println("The number is odd.")
-	}
+ isEven := true
+ if isEven {
+  fmt.Println("The number is even.")
+ } else {
+  fmt.Println("The number is odd.")
+ }
 }
 </code></pre>
-<h3 id="q2-can-boolean-values-be-compared-directly"><a class="header" href="#q2-can-boolean-values-be-compared-directly">Q2: Can boolean values be compared directly?</a></h3>
-<p><strong>Answer:</strong> Yes, boolean values can be compared directly using comparison operators. For example:</p>
+<h3 id="q2-boolean-value-গুলো-কি-সরাসরি-compare-করা-যায"><a class="header" href="#q2-boolean-value-গুলো-কি-সরাসরি-compare-করা-যায">Q2: boolean value গুলো কি সরাসরি compare করা যায়?</a></h3>
+<p><strong>উত্তর:</strong> হ্যাঁ, boolean value গুলো comparison operator ব্যবহার করে সরাসরি compare করা যায়। উদাহরণ:</p>
 <pre><code class="language-go">package main
-
 import "fmt"
-
 func main() {
-	isTrue := true
-	isFalse := false
-	fmt.Println(isTrue == isFalse) // Output: false
-	fmt.Println(isTrue != isFalse) // Output: true
+ isTrue := true
+ isFalse := false
+ fmt.Println(isTrue == isFalse) // আউটপুট: false
+ fmt.Println(isTrue != isFalse) // আউটপুট: true
 }
 </code></pre>
 
