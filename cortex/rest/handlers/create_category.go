@@ -8,6 +8,7 @@ import (
 	"cortex/category"
 	"cortex/logger"
 	customerrors "cortex/pkg/custom_errors"
+	"cortex/rest/middlewares"
 	"cortex/rest/utils"
 )
 
@@ -15,11 +16,17 @@ type CreateCategoryReq struct {
 	Slug        string          `json:"slug" validate:"required"`
 	Label       string          `json:"label" validate:"required"`
 	Description string          `json:"description,omitempty"`
-	CreatedBy   uint            `json:"created_by" validate:"required"` // This will come from the JWT token
 	Meta        json.RawMessage `json:"meta,omitempty"`
 }
 
 func (handlers *Handlers) CreateCategory(w http.ResponseWriter, r *http.Request) {
+	userID := middlewares.GetUserId(r)
+	if userID == 0 {
+		slog.ErrorContext(r.Context(), "User ID not found in token", logger.Extra(nil))
+		utils.SendError(w, http.StatusBadRequest, "Bad request", nil)
+		return
+	}
+
 	var req CreateCategoryReq
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		slog.ErrorContext(
@@ -47,11 +54,11 @@ func (handlers *Handlers) CreateCategory(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	ctgry := category.CreateCategoryModel{
+	ctgry := category.CreateCategoryParams{
 		Slug:        req.Slug,
 		Label:       req.Label,
 		Description: req.Description,
-		CreatedBy:   req.CreatedBy,
+		CreatedBy:   userID,
 		Meta:        req.Meta,
 	}
 

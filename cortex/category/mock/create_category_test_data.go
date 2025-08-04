@@ -12,7 +12,7 @@ import (
 
 type CreateCategory struct {
 	Name          string
-	Model         category.CreateCategoryModel
+	Model         category.CreateCategoryParams
 	MockSetup     func()
 	ExpectedError error
 }
@@ -24,7 +24,7 @@ func CreateCategoryTestData(t *testing.T, mockCategoryRepo *CategoryRepo) []Crea
 		t.Fatalf("failed to marshal meta json: %v", err)
 	}
 
-	baseModel := category.CreateCategoryModel{
+	baseModel := category.CreateCategoryParams{
 		Slug:        "slug-test",
 		Label:       "Label",
 		Description: "desc",

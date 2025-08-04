@@ -5,15 +5,15 @@ import (
 	"time"
 )
 
-func (svc *service) CreateCategory(ctx context.Context, model CreateCategoryModel) error {
+func (svc *service) CreateCategory(ctx context.Context, params CreateCategoryParams) error {
 	return svc.ctgryRepo.Insert(ctx, Category{
-		Slug:        model.Slug,
-		Label:       model.Label,
-		Description: model.Description,
-		CreatedBy:   model.CreatedBy,
+		Slug:        params.Slug,
+		Label:       params.Label,
+		Description: params.Description,
+		CreatedBy:   params.CreatedBy,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 		Status:      StatusPending,
-		Meta:        model.Meta,
+		Meta:        params.Meta,
 	})
 }

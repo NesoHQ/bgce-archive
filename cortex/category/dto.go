@@ -2,33 +2,39 @@ package category
 
 import (
 	"encoding/json"
+	"time"
 
 	"github.com/google/uuid"
 )
 
-type CreateCategoryReqParams struct {
-	Slug        string          `json:"slug" validate:"required"`
-	Label       string          `json:"label" validate:"required"`
-	Description string          `json:"description,omitempty"`
-	CreatedBy   uint             `json:"created_by" validate:"required"`
-	Meta        json.RawMessage `json:"meta,omitempty"`
+type CreateCategoryParams struct {
+	Slug        string
+	Label       string
+	Description string
+	CreatedBy   int
+	Meta        json.RawMessage
 }
 
-type GetCategoryReqParams struct {
-	ID    *uint       `json:"id,omitempty"`
-	UUID  *uuid.UUID `json:"uuid,omitempty"`
-	Slug  *string    `json:"slug,omitempty"`
-	Label *string    `json:"label,omitempty"`
-	// You could add pagination or filter fields if necessary
+type UpdateCategoryParams struct {
+	ID          uint
+	Slug        *string
+	Label       *string
+	Description *string
+	ApprovedBy  *uint
+	DeletedBy   *uint
+	Status      *string
+	Meta        json.RawMessage
 }
 
-type UpdateCategoryReqParams struct {
-	UUID        uuid.UUID       `json:"uuid" validate:"required"`
-	Slug        *string         `json:"slug,omitempty"`
-	Label       *string         `json:"label,omitempty"`
-	Description *string         `json:"description,omitempty"`
-	ApprovedBy  *uint            `json:"approved_by,omitempty"`
-	DeletedBy   *uint            `json:"deleted_by,omitempty"`
-	Status      *string         `json:"status,omitempty"`
-	Meta        json.RawMessage `json:"meta,omitempty"`
+type DeleteCategoryParams struct {
+	ID        uint
+	DeletedBy uint
+	DeletedAt time.Time
+}
+
+type GetCategoryFilter struct {
+	ID    *uint
+	UUID  *uuid.UUID
+	Slug  *string
+	Label *string
 }
