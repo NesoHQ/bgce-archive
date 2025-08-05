@@ -2,6 +2,7 @@ package handlers_test
 
 import (
 	"bytes"
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -11,6 +12,7 @@ import (
 
 	"cortex/rest/handlers"
 	mock_handler "cortex/rest/handlers/mock"
+	"cortex/rest/middlewares"
 	"cortex/rest/utils"
 )
 
@@ -26,11 +28,14 @@ func TestCreateCategory(t *testing.T) {
 		t.Run(tc.Name, func(t *testing.T) {
 			mockSvc.ExpectedCalls = nil
 
-			mockSvc.On("CreateCategory", mock.Anything, mock.Anything).Return(tc.MockReturnErr).Once()
+			if tc.MockReturnErr != nil || (tc.WantStatusCode == 200 || tc.WantStatusCode == 409 || tc.WantStatusCode == 500) {
+				mockSvc.On("CreateCategory", mock.Anything, mock.Anything).Return(tc.MockReturnErr).Once()
+			}
 
 			req := httptest.NewRequest(http.MethodPost, "/api/v1/categories", strings.NewReader(tc.RequestBody))
-			w := httptest.NewRecorder()
+			req = injectUserID(req, 1) 
 
+			w := httptest.NewRecorder()
 			h.CreateCategory(w, req)
 
 			resp := w.Result()
@@ -47,14 +52,16 @@ func TestCreateCategory(t *testing.T) {
 			}
 
 			bodyStr := bodyBytes.String()
-
 			if !strings.Contains(bodyStr, tc.WantResponse) {
 				t.Errorf("expected response to contain %q, got %q", tc.WantResponse, bodyStr)
 			}
 
-			if tc.MockReturnErr != nil {
-				mockSvc.AssertExpectations(t)
-			}
+			mockSvc.AssertExpectations(t)
 		})
 	}
+}
+
+func injectUserID(r *http.Request, userID int) *http.Request {
+	ctx := context.WithValue(r.Context(), middlewares.UserIdKey, userID)
+	return r.WithContext(ctx)
 }

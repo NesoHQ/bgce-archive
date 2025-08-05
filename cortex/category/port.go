@@ -3,7 +3,7 @@ package category
 import "context"
 
 type Service interface {
-	CreateCategory(ctx context.Context, params CreateCategoryModel) error
+	CreateCategory(ctx context.Context, params CreateCategoryParams) error
 	// GetCategory(ctx context.Context, params GetCategoryReqParams) (*Category, error)
 	// UpdateCategory(ctx context.Context, params UpdateCategoryReqParams) error
 	// DeleteCategory(ctx context.Context, id uint) error
