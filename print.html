@@ -4887,7 +4887,7 @@ Deferred: 1
 </code></pre>
 <p>📌 প্রতিবার loop এ <code>defer</code> নতুন করে register হয়। তাই stack অনুযায়ী উল্টোভাবে execute হয়।</p>
 <hr />
-<h4 id="-variable-capture-trap-closure"><a class="header" href="#-variable-capture-trap-closure">📛 Variable Capture Trap (Closure)</a></h4>
+<h4 id="-defer-behaviour-for-closures"><a class="header" href="#-defer-behaviour-for-closures">🔒 <code>Defer</code> behaviour for closures</a></h4>
 <pre><code class="language-go">func closureDefer() {
     for i := 1; i &lt;= 3; i++ {
         defer func() {
@@ -4897,27 +4897,12 @@ Deferred: 1
 }
 </code></pre>
 <p>🖨️ Output:</p>
-<pre><code>Deferred: 4
-Deferred: 4
-Deferred: 4
-</code></pre>
-<p>😵‍💫 কেন?</p>
-<p>কারণ closure-এ <code>i</code> capture হচ্ছে by reference — প্রতিবার একই i এর address!</p>
-<p>👉 Fix:</p>
-<pre><code class="language-go">func fixedClosureDefer() {
-    for i := 1; i &lt;= 3; i++ {
-        val := i
-        defer func() {
-            fmt.Println("Deferred:", val)
-        }()
-    }
-}
-</code></pre>
-<p>🖨️ Output:</p>
 <pre><code>Deferred: 3
 Deferred: 2
 Deferred: 1
 </code></pre>
+<p>😵‍💫 কেন?</p>
+<p>কারণ defer-এর ক্ষেত্রে ফাংশনে ব্যবহৃত ভ্যারিয়েবল গুলো ইমিডিয়েটলি ডিটেক্ট হয় এবং ডেফার স্টাকে সেভাবেই সেভড থাকে</p>
 <hr />
 <h3 id="-practical-use-cases"><a class="header" href="#-practical-use-cases">🛠️ Practical Use Cases</a></h3>
 <ol>
@@ -4960,7 +4945,6 @@ defer mu.Unlock()
 <tr><td>Internal structure</td><td>Linked List with Stack behavior</td></tr>
 <tr><td>Named return</td><td><code>defer</code> can modify it</td></tr>
 <tr><td>Unnamed return</td><td><code>defer</code> can’t modify it</td></tr>
-<tr><td>Variable capture</td><td>Closure captures by reference — careful!</td></tr>
 <tr><td>Use cases</td><td>File close, Mutex unlock, Panic recovery</td></tr>
 </tbody></table>
 </div>
@@ -4980,7 +4964,7 @@ defer mu.Unlock()
 <li>Resource leak রোধ</li>
 <li>কম Bug</li>
 </ul>
-<p>শুধু syntax জানলেই হবে না — এর ভিতরের Stack-মাথা, Return-trap, এবং Variable-capture খেলাও বোঝা জরুরি।</p>
+<p>শুধু syntax জানলেই হবে না — এর ভিতরের Stack-মাথা, Return-trap খেলাও বোঝা জরুরি।</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="-class-41--separate-stack-for-separate-thread"><a class="header" href="#-class-41--separate-stack-for-separate-thread">🧵 Class 41 : Separate Stack For Separate Thread</a></h1>
 <h2 id="-recap"><a class="header" href="#-recap">🔁 Recap</a></h2>
 <ul>
