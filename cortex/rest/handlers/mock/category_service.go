@@ -16,3 +16,8 @@ func (m *CategoryService) CreateCategory(ctx context.Context, model category.Cre
 	args := m.Called(ctx, model)
 	return args.Error(0)
 }
+
+func (m *CategoryService) DeleteCategory(ctx context.Context, uuid string) error {
+	args := m.Called(ctx, uuid)
+	return args.Error(0)
+}

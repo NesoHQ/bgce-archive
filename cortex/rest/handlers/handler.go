@@ -24,7 +24,6 @@ func NewHandler(
 
 func (h *Handlers) GetCategoryByID(w http.ResponseWriter, r *http.Request) {}
 func (h *Handlers) UpdateCategory(w http.ResponseWriter, r *http.Request)  {}
-func (h *Handlers) DeleteCategory(w http.ResponseWriter, r *http.Request)  {}
 
 func (h *Handlers) CreateSubCategory(w http.ResponseWriter, r *http.Request)  {}
 func (h *Handlers) GetSubCategoryList(w http.ResponseWriter, r *http.Request) {}

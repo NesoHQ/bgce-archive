@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
@@ -71,6 +72,31 @@ func (r *ctgryRepo) Insert(ctx context.Context, cat category.Category) error {
 			}
 		}
 		return fmt.Errorf("failed to insert category: %w", err)
+	}
+
+	return nil
+}
+
+func (r *ctgryRepo) Delete(ctx context.Context, uuid string) error {
+	query := r.psql.Update(r.tableName).Set("deleted_at", time.Now()).Set("status", "deleted").Where(sq.Eq{"uuid": uuid})
+
+	sqlStr, args, err := query.ToSql()
+	if err != nil {
+		return fmt.Errorf("failed to build delete SQL: %w", err)
+	}
+
+	result, err := r.writeDb.ExecContext(ctx, sqlStr, args...)
+	if err != nil {
+		return fmt.Errorf("failed to execute delete query: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to get rows affected: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return customerrors.ErrCategoryNotFound
 	}
 
 	return nil
