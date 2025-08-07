@@ -1,50 +1,50 @@
-[**Author:** @mdimamhosen
+[**Author:** @mdimamhosen, @mahabubulhasibshawon
 **Date:** 2025-04-19
 **Category:** interview-qa/arrays
 **Tags:** [go, arrays, functions]
 ]
 
-# Arrays in Go
+# Go তে Array
 
-## Declaring Arrays
+## Array declare করা
 
-You can declare an array in Go using the following syntax:
+Go-তে নিচের syntax ব্যবহার করে array declare করা যায়:
 
 ```go
 var arrayName [size]elementType
 ```
 
-Example:
+উদাহরণ:
 
 ```go
 var numbers [5]int
 ```
 
-## Initializing Arrays
+## Arrays  initialize করা
 
-Arrays can be initialized at the time of declaration:
+Array declare করার সময় Array initialize করা যেতে পারে:
 
 ```go
 var numbers = [5]int{1, 2, 3, 4, 5}
 ```
 
-Or you can use the shorthand notation:
+অথবা short-hand notation ব্যবহার করতে পারেন:
 
 ```go
 numbers := [5]int{1, 2, 3, 4, 5}
 ```
 
-## Accessing Array Elements
+## Array element access করা
 
-Array elements are accessed using the index, which starts from 0:
+Array এর element index ব্যবহার করে access করা যায়, যেটি 0 থেকে শুরু হয়:
 
 ```go
 fmt.Println(numbers[0]) // Output: 1
 ```
 
-## Iterating Over Arrays
+## Array তে loop run করা
 
-You can iterate over arrays using a `for` loop:
+`for` loop ব্যবহার করে Array উপর loop run করা যায়:
 
 ```go
 for i := 0; i < len(numbers); i++ {
@@ -52,7 +52,7 @@ for i := 0; i < len(numbers); i++ {
 }
 ```
 
-Or using the `range` keyword:
+অথবা `range` keyword ব্যবহার করতে পারেন:
 
 ```go
 for index, value := range numbers {
@@ -62,13 +62,13 @@ for index, value := range numbers {
 
 ## Multidimensional Arrays
 
-Go supports multidimensional arrays. A two-dimensional array is declared as follows:
+Go multidimensional array সাপোর্ট করে। একটি two-dimensional array নিচেরভাবে declare করা হয়:
 
 ```go
 var matrix [3][3]int
 ```
 
-Example:
+উদাহরণ:
 
 ```go
 matrix := [3][3]int{
@@ -80,24 +80,22 @@ matrix := [3][3]int{
 
 ## Array of Arrays
 
-You can also create an array of arrays:
+array of arrays হলো এমন একটি data structure, যেখানে একটি array প্রতিটি element আরেকটি array বা slice। এটি সাধারণত variable সাইজের 2D data রাখার জন্য ব্যবহৃত হয়, যেমন প্রতিটি row তে ভিন্ন ভিন্ন element থাকতে পারে।
+
+
+উদাহরণ:
 
 ```go
-var arrayOfArrays [2][3]int
-```
-
-Example:
-
-```go
-arrayOfArrays := [2][3]int{
-    {1, 2, 3},
-    {4, 5, 6},
+arrayOfArrays := [][]int{
+    {1, 2},
+    {3, 4, 5},
+    {6},
 }
 ```
 
-## Passing Arrays to Functions
+## ফাংশনে Arrays পাঠানো
 
-Arrays can be passed to functions by value, meaning the function receives a copy of the array:
+Go-তে array ফাংশনে পাঠানো হয় value হিসেবে, অর্থাৎ ফাংশনটি array এর একটি copy পায়:
 
 ```go
 func printArray(arr [5]int) {
@@ -107,7 +105,7 @@ func printArray(arr [5]int) {
 }
 ```
 
-To modify the original array, you can pass a pointer to the array:
+মূল array পরিবর্তন করতে হলে, আপনাকে array এর pointer পাঠাতে হবে:
 
 ```go
 func modifyArray(arr *[5]int) {
@@ -117,11 +115,11 @@ func modifyArray(arr *[5]int) {
 
 ## Frequently Asked Questions
 
-### Q1: How can I find the length of an array in Go?
+### Q1: Go-তে কিভাবে array এর দৈর্ঘ্য নির্ধারণ করব?
 
-You can use the built-in `len()` function to find the length of an array.
+array এর  দৈর্ঘ্য নির্ধারণ করতে len() built-in function ব্যবহার করুন।
 
-Example:
+উদাহরণ:
 
 ```go
 package main
@@ -134,11 +132,11 @@ func main() {
 }
 ```
 
-### Q2: How do I copy an array in Go?
+### Q2: Go-তে কিভাবে একটি array copy করব?
 
-In Go, you can copy an array by simply assigning it to another array of the same type and size.
+Go-তে array copy করার জন্য আপনি সেটিকে একই type এবং size এর অন্য array তে assign করতে পারেন।
 
-Example:
+উদাহরণ:
 
 ```go
 package main
@@ -153,11 +151,11 @@ func main() {
 }
 ```
 
-### Q3: How can I pass an array to a function without copying it?
+### Q3: কিভাবে copy না করে function এ array পাঠিয়ে সেটিকে পরিবর্তন করা যায়?
 
-To avoid copying, you can pass a pointer to the array.
+copy না করে পরিবর্তন করতে চাইলে array এর pointer পাঠান।
 
-Example:
+উদাহরণ:
 
 ```go
 package main
@@ -175,7 +173,7 @@ func main() {
 }
 ```
 
-### Example code to test: main.go
+### test করার জন্য উদাহরণ: main.go
 
 ```go
 package main
