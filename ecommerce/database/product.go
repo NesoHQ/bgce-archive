@@ -59,9 +59,9 @@ func init() {
 	// 	ImgUrl: "https://snaped.fns.usda.gov/sites/default/files/styles/crop_ratio_7_5/public/seasonal-produce/2018-05/strawberries.jpg.webp?itok=B4LFd4vV",
 	// }
 
-	productList = append(productList, prd1)
-	productList = append(productList, prd2)
-	productList = append(productList, prd3)
+	ProductList = append(ProductList, prd1)
+	ProductList = append(ProductList, prd2)
+	ProductList = append(ProductList, prd3)
 	// productList = append(productList, prd4)
 	// productList = append(productList, prd5)
 	// productList = append(productList, prd6)

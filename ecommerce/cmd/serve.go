@@ -7,7 +7,7 @@ import (
 	"ecommerce/handlers"
 )
 
-func main() {
+func Serve() {
 	mux := http.NewServeMux()
 
 	mux.Handle("GET /products", http.HandlerFunc(handlers.GetProducts))
