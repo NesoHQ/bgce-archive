@@ -2,10 +2,12 @@ package repo
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"fmt"
 
 	sq "github.com/Masterminds/squirrel"
+	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
 
@@ -74,4 +76,60 @@ func (r *ctgryRepo) Insert(ctx context.Context, cat category.Category) error {
 	}
 
 	return nil
+}
+
+func (r *ctgryRepo) Get(ctx context.Context, categoryUUID uuid.UUID) (*category.Category, error) {
+	var cat category.Category
+
+	query := r.psql.
+		Select(
+			"id",
+			"uuid",
+			"slug",
+			"label",
+			"description",
+			"created_by",
+			"updated_by",
+			"approved_by",
+			"deleted_by",
+			"created_at",
+			"updated_at",
+			"approved_at",
+			"deleted_at",
+			"status",
+			"meta",
+		).
+		From(r.tableName).
+		Where(sq.Eq{"uuid": categoryUUID})
+
+	sqlStr, args, err := query.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("failed to build get SQL: %w", err)
+	}
+
+	err = r.readDb.QueryRowContext(ctx, sqlStr, args...).Scan(
+		&cat.ID,
+		&cat.UUID,
+		&cat.Slug,
+		&cat.Label,
+		&cat.Description,
+		&cat.CreatedBy,
+		&cat.UpdatedBy,
+		&cat.ApprovedBy,
+		&cat.DeletedBy,
+		&cat.CreatedAt,
+		&cat.UpdatedAt,
+		&cat.ApprovedAt,
+		&cat.DeletedAt,
+		&cat.Status,
+		&cat.Meta,
+	)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, fmt.Errorf("category not found: %w", err)
+		}
+		return nil, fmt.Errorf("failed to fetch category: %w", err)
+	}
+
+	return &cat, nil
 }

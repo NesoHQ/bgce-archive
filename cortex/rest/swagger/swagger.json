@@ -24,7 +24,9 @@
             "post": {
                 "summary": "Create a new category",
                 "description": "Creates a new category with slug, label, description, creator info, and optional metadata.",
-                "tags": ["Categories"],
+                "tags": [
+                    "Categories"
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -72,6 +74,118 @@
                     }
                 }
             }
+        },
+        "/api/v1/categories/{id}": {
+            "get": {
+                "summary": "Get a category by UUID",
+                "description": "Retrieves a specific category by its UUID identifier.",
+                "tags": [
+                    "Categories"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "UUID of the category to retrieve",
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "550e8400-e29b-41d4-a716-446655440000"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category found successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Category found successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/CategoryResponse"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Invalid UUID format",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "status": false,
+                                    "message": "Invalid category UUID",
+                                    "error": "invalid UUID length: 11"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Invalid or missing token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "status": false,
+                                    "message": "Invalid or missing token.",
+                                    "error": "Token not valid"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found - Category does not exist",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "status": false,
+                                    "message": "Category not found.",
+                                    "error": "Category UUID not found."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "status": false,
+                                    "message": "Internal Server Error",
+                                    "error": "Internal Server Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -112,13 +226,21 @@
                         "nullable": true,
                         "additionalProperties": true,
                         "example": {
-                            "tags": ["qna", "interview", "exam"],
+                            "tags": [
+                                "qna",
+                                "interview",
+                                "exam"
+                            ],
                             "icon": "📱",
                             "regex": "/?*"
                         }
                     }
                 },
-                "required": ["slug", "label", "created_by"]
+                "required": [
+                    "slug",
+                    "label",
+                    "created_by"
+                ]
             },
             "ErrorResponse": {
                 "type": "object",
@@ -132,7 +254,10 @@
                         "example": false
                     },
                     "errors": {
-                        "type": ["object", "null"],
+                        "type": [
+                            "object",
+                            "null"
+                        ],
                         "example": null
                     }
                 }
@@ -141,7 +266,10 @@
                 "type": "object",
                 "properties": {
                     "data": {
-                        "type": ["object", "null"],
+                        "type": [
+                            "object",
+                            "null"
+                        ],
                         "nullable": true,
                         "example": null
                     },
@@ -152,6 +280,74 @@
                     "status": {
                         "type": "boolean",
                         "example": true
+                    }
+                }
+            },
+            "CategoryResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "Unique numeric ID of the category"
+                    },
+                    "uuid": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "d5c38aff-bf92-4efb-9682-51f806e0ae1d",
+                        "description": "Universally unique identifier for the category"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "interview-qna",
+                        "description": "Unique slug identifier for the category"
+                    },
+                    "label": {
+                        "type": "string",
+                        "example": "Interview",
+                        "description": "Human readable label for the category"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Interview category to manage all interview related sub categories",
+                        "description": "Optional description of the category"
+                    },
+                    "created_by": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "User ID who created the category"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-08-06T21:30:13.591407Z",
+                        "description": "Timestamp when the category was created"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-08-06T21:30:13.591407Z",
+                        "description": "Timestamp when the category was last updated"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "pending",
+                        "description": "Current status of the category"
+                    },
+                    "meta": {
+                        "type": "object",
+                        "description": "Optional metadata related to the category",
+                        "nullable": true,
+                        "additionalProperties": true,
+                        "example": {
+                            "icon": "📱",
+                            "tags": [
+                                "qna",
+                                "interview",
+                                "exam"
+                            ],
+                            "regex": "/?*"
+                        }
                     }
                 }
             }

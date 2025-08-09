@@ -27,7 +27,7 @@ func (server *Server) initCtgryRoutes(mux *http.ServeMux, manager *middlewares.M
 		"GET /api/v1/categories/{id}",
 		manager.With(
 			http.HandlerFunc(server.handlers.GetCategoryByID),
-			// server.middlewares.AuthenticateJWT,
+			server.middlewares.AuthenticateJWT,
 		),
 	)
 
