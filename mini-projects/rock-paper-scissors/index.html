@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Program Counter - BGCE ARCHIVE</title>
+        <title>Rock Paper Scissors - BGCE ARCHIVE</title>
 
 
         <!-- Custom HTML head -->
@@ -169,79 +169,130 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h3 id="-go-debugging-playground--docker-এর-মাধযমে-ইনটারযাকটিভ-gdb"><a class="header" href="#-go-debugging-playground--docker-এর-মাধযমে-ইনটারযাকটিভ-gdb">🐳 Go Debugging Playground – Docker-এর মাধ্যমে ইন্টার‍্যাকটিভ GDB</a></h3>
-<p>এই Docker ইমেজটি দিয়ে তুমি খুব সহজেই Go প্রোগ্রাম কম্পাইল এবং <code>gdb</code> দিয়ে স্টেপ-বাই-স্টেপ ডিবাগ করতে পারবে।</p>
+                        <h1 id="-rock-paper-scissors-lizard-spock-go-edition"><a class="header" href="#-rock-paper-scissors-lizard-spock-go-edition">✊📄✂️🦎🖖 Rock-Paper-Scissors-Lizard-Spock (Go Edition)</a></h1>
+<blockquote>
+<p>A terminal-based game of <strong>Rock, Paper, Scissors, Lizard, Spock</strong> — written entirely in Go.<br />
+Inspired by <em>The Big Bang Theory</em> and designed to reduce the number of ties from the classic Rock-Paper-Scissors.</p>
+</blockquote>
 <hr />
-<h3 id="-শুরু-করার-নিযম"><a class="header" href="#-শুরু-করার-নিযম">🚀 শুরু করার নিয়ম</a></h3>
-<h4 id="১-docker-hub-থেকে-ইমেজ-ডাউনলোড-করো"><a class="header" href="#১-docker-hub-থেকে-ইমেজ-ডাউনলোড-করো">১. Docker Hub থেকে ইমেজ ডাউনলোড করো:</a></h4>
-<pre><code class="language-bash">docker pull jsiqbal/go-debug-ready
-</code></pre>
-<hr />
-<h4 id="২-কনটেইনার-রান-করাও"><a class="header" href="#২-কনটেইনার-রান-করাও">২. কন্টেইনার রান করাও:</a></h4>
-<pre><code class="language-bash">docker run -it --name go-debug jsiqbal/go-debug-ready
-</code></pre>
-<hr />
-<h3 id="-কনটেইনারের-ভিতরে-যা-করতে-হবে"><a class="header" href="#-কনটেইনারের-ভিতরে-যা-করতে-হবে">🧠 কন্টেইনারের ভিতরে যা করতে হবে</a></h3>
-<p>কন্টেইনারে ঢুকে এই ধাপগুলো অনুসরণ করো:</p>
-<h4 id="৩-go-পরোগরামের-ফোলডারে-যাও"><a class="header" href="#৩-go-পরোগরামের-ফোলডারে-যাও">৩. Go প্রোগ্রামের ফোল্ডারে যাও:</a></h4>
-<pre><code class="language-bash">cd /app
-</code></pre>
-<h4 id="৪-কোড-দেখো-বা-এডিট-করো"><a class="header" href="#৪-কোড-দেখো-বা-এডিট-করো">৪. কোড দেখো বা এডিট করো:</a></h4>
-<pre><code class="language-bash">nano add.go
-</code></pre>
-<p>কোডটা দেখতে এরকম:</p>
-<pre><code class="language-go">package main
-
-import "fmt"
-
-func add(a, b int) int {
-	return a + b
-}
-
-func main() {
-	result := add(3, 5)
-	fmt.Println("Result:", result)
-}
-</code></pre>
-<hr />
-<h4 id="৫-go-বাইনারি-ডিবাগিং-ইনফো-সহ-বানাও"><a class="header" href="#৫-go-বাইনারি-ডিবাগিং-ইনফো-সহ-বানাও">৫. Go বাইনারি ডিবাগিং ইনফো সহ বানাও:</a></h4>
-<pre><code class="language-bash">go build -gcflags="all=-N -l" -o add add.go
-</code></pre>
-<p>🛠️ ব্যাখ্যা:</p>
+<h2 id="-game-modes"><a class="header" href="#-game-modes">🎮 Game Modes</a></h2>
+<p>This version supports:</p>
 <ul>
-<li><code>-N</code>: অপটিমাইজেশন বন্ধ</li>
-<li><code>-l</code>: ইনলাইনের মত টেকনিক বন্ধ</li>
+<li><strong>Classic Mode</strong>: Rock-Paper-Scissors</li>
+<li><strong>Extended Mode</strong>: Rock-Paper-Scissors-Lizard-Spock</li>
+</ul>
+<p>The computer picks its move randomly, and you battle it out in the terminal.</p>
+<hr />
+<h2 id="-rules"><a class="header" href="#-rules">🧩 Rules</a></h2>
+<blockquote>
+<p><em>As explained by Sheldon Cooper:</em></p>
+</blockquote>
+<ul>
+<li>Scissors cuts Paper</li>
+<li>Paper covers Rock</li>
+<li>Rock crushes Lizard</li>
+<li>Lizard poisons Spock</li>
+<li>Spock smashes Scissors</li>
+<li>Scissors decapitates Lizard</li>
+<li>Lizard eats Paper</li>
+<li>Paper disproves Spock</li>
+<li>Spock vaporizes Rock</li>
+<li>Rock crushes Scissors</li>
 </ul>
 <hr />
-<h4 id="৬-gdb-চালাও-এবং-ডিবাগ-শুরু-করো"><a class="header" href="#৬-gdb-চালাও-এবং-ডিবাগ-শুরু-করো">৬. GDB চালাও এবং ডিবাগ শুরু করো:</a></h4>
-<pre><code class="language-bash">gdb ./add
+<h2 id="-ascii-art"><a class="header" href="#-ascii-art">📸 ASCII Art</a></h2>
+<p>Each move comes with its own ASCII art for maximum nerd satisfaction:</p>
+<pre><code>Rock:      _______
+        ---'   ____)
+              (_____)
+              (_____)
+              (____)
+        ---.__(___)
+
+Paper:      _______
+        ---'    ____)____
+                   ______)
+                  _______)
+                 _______)
+        ---.__________)
 </code></pre>
-<p>GDB চালু হলে লিখো:</p>
-<pre><code class="language-gdb">break main.main     # main ফাংশনে ব্রেকপয়েন্ট দাও
-run                 # প্রোগ্রাম চালাও
-n                   # পরের লাইনে যাও
-info locals         # লোকাল ভেরিয়েবলগুলো দেখো
-info registers      # CPU রেজিস্টারগুলো দেখো
-x/1i $pc            # বর্তমান ইনস্ট্রাকশনটা কী দেখো
+<p>…and more for <strong>Scissors</strong>, <strong>Lizard</strong>, and <strong>Spock</strong>.</p>
+<hr />
+<h2 id="-how-to-run"><a class="header" href="#-how-to-run">🚀 How to Run</a></h2>
+<ol>
+<li>
+<p><strong>Clone the repo:</strong></p>
+<pre><code class="language-bash">git clone https://github.com/yourusername/rpsls-go.git
+cd rpsls-go
+</code></pre>
+</li>
+<li>
+<p><strong>Run the game:</strong></p>
+<pre><code class="language-bash">go run main.go
+</code></pre>
+</li>
+</ol>
+<hr />
+<h2 id="-features"><a class="header" href="#-features">🛠 Features</a></h2>
+<ul>
+<li>Fully interactive terminal gameplay</li>
+<li>Input validation (no more typos ruining your match)</li>
+<li>Fun ASCII art for each move</li>
+<li>Randomized computer opponent</li>
+<li>Looping draw condition (keep going until there's a winner)</li>
+</ul>
+<hr />
+<h2 id="-example-gameplay"><a class="header" href="#-example-gameplay">📌 Example Gameplay</a></h2>
+<pre><code>Choose your move:
+Rock
+    _______
+---'   ____)
+      (_____)
+      (_____)
+      (____)
+---.__(___)
+
+Paper
+     _______
+---'    ____)____
+           ______)
+          _______)
+         _______)
+---.__________)
+
+... (more ASCII moves) ...
+
+Welcome to the game of Rock, Paper, Scissors, Lizard, Spock
+Do you want to read the rules? [y/n]: y
+
+Sheldon explains:
+Scissors cuts Paper, Paper covers Rock, Rock crushes Lizard, ...
+
+Enter your move (Rock, Paper, Scissors, Lizard, Spock): Spock
+You chose: Spock
+Computer chose: Lizard
+You lost! Hahaha, you suck!
 </code></pre>
 <hr />
-<h3 id="-আবার-চালু-করতে-চাইলে"><a class="header" href="#-আবার-চালু-করতে-চাইলে">🔁 আবার চালু করতে চাইলে:</a></h3>
-<pre><code class="language-bash">docker start -ai go-debug
-</code></pre>
-<p>না চাইলে পুরো নতুন করে চালাও:</p>
-<pre><code class="language-bash">docker rm -f go-debug
-docker run -it --name go-debug jsiqbal/go-debug-ready
-</code></pre>
+<h2 id="-license"><a class="header" href="#-license">📜 License</a></h2>
+<p>MIT License — feel free to fork, modify, and enjoy.</p>
+<hr />
+<h2 id="-credits"><a class="header" href="#-credits">💡 Credits</a></h2>
+<ul>
+<li>Inspired by <em>The Big Bang Theory</em></li>
+<li>ASCII Art adapted from various open-source snippets</li>
+</ul>
+<hr />
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../mini-projects/jsonparser/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../mini-projects/program-counter/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../../mini-projects/rock-paper-scissors/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../mini-projects/test-server/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -251,11 +302,11 @@ docker run -it --name go-debug jsiqbal/go-debug-ready
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../mini-projects/jsonparser/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../mini-projects/program-counter/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../../mini-projects/rock-paper-scissors/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../mini-projects/test-server/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
