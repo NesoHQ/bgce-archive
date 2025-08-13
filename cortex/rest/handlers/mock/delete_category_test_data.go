@@ -1,9 +1,10 @@
 package mock_handler
 
 import (
-	customerrors "cortex/pkg/custom_errors"
 	"errors"
 	"net/http"
+
+	customerrors "cortex/pkg/custom_errors"
 
 	"github.com/google/uuid"
 )
@@ -21,7 +22,7 @@ func DeleteCategoryTestData() []DeleteCategory {
 			Name:           "success",
 			ID:             uuid.NewString(),
 			MockReturnErr:  nil,
-			WantStatusCode: http.StatusNoContent,
+			WantStatusCode: http.StatusOK,
 		},
 		{
 			Name:           "category not found",
