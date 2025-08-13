@@ -27,8 +27,7 @@ func (handlers *Handlers) DeleteCategory(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	// maybe StatusNoContent kichu write kore na
-	utils.SendJson(w, http.StatusNoContent, map[string]any{
+	utils.SendJson(w, http.StatusOK, map[string]any{
 		"data":    nil,
 		"message": "Category deleted successfully",
 		"status":  true,

@@ -89,7 +89,7 @@
                     }
                 ],
                 "responses": {
-                    "204": {
+                    "200": {
                         "description": "Category deleted successfully",
                         "content": {
                             "application/json": {
