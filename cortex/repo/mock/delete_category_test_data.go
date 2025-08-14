@@ -1,6 +1,7 @@
 package mock_repo
 
 import (
+	"database/sql"
 	"errors"
 
 	"github.com/DATA-DOG/go-sqlmock"
@@ -35,8 +36,27 @@ func DeleteCategoryTestData(mock sqlmock.Sqlmock) []DeleteCategory {
 				mock.ExpectExec(`UPDATE categories SET deleted_at = \$1, status = \$2 WHERE uuid = \$3`).
 					WithArgs(sqlmock.AnyArg(), "deleted", sqlmock.AnyArg()).
 					WillReturnResult(sqlmock.NewResult(0, 0))
+
+				mock.ExpectQuery(`SELECT deleted_at IS NOT NULL FROM categories WHERE uuid = \$1`).
+					WithArgs(sqlmock.AnyArg()).
+					WillReturnError(sql.ErrNoRows)
 			},
 			WantErr: customerrors.ErrCategoryNotFound,
+		},
+		{
+			Name: "Category already deleted",
+			ID:   uuid.NewString(),
+			SetupMock: func() {
+				mock.ExpectExec(`UPDATE categories SET deleted_at = \$1, status = \$2 WHERE uuid = \$3`).
+					WithArgs(sqlmock.AnyArg(), "deleted", sqlmock.AnyArg()).
+					WillReturnResult(sqlmock.NewResult(0, 0))
+
+				mock.ExpectQuery(`SELECT deleted_at IS NOT NULL FROM categories WHERE uuid = \$1`).
+					WithArgs(sqlmock.AnyArg()).
+					WillReturnRows(sqlmock.NewRows([]string{"deleted_at IS NOT NULL"}).
+						AddRow(true))
+			},
+			WantErr: customerrors.ErrCategoryAlreadyDeleted,
 		},
 		{
 			Name: "other db error",

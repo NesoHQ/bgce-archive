@@ -15,6 +15,10 @@ func (handlers *Handlers) DeleteCategory(w http.ResponseWriter, r *http.Request)
 	err := handlers.CtgrySvc.DeleteCategory(r.Context(), categoryUUID)
 	if err == customerrors.ErrCategoryNotFound {
 		utils.SendError(w, http.StatusNotFound, customerrors.ErrCategoryNotFound.Error(), nil)
+		return
+	} else if err == customerrors.ErrCategoryAlreadyDeleted {
+		utils.SendError(w, http.StatusConflict, customerrors.ErrCategoryAlreadyDeleted.Error(), nil)
+		return
 	} else if err != nil {
 		slog.ErrorContext(
 			r.Context(),
