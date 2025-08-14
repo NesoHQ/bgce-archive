@@ -99,6 +99,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request - Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "Category not found",
                         "content": {

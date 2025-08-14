@@ -23,7 +23,9 @@ func TestDeleteCategory(t *testing.T) {
 		t.Run(tc.Name, func(t *testing.T) {
 			mockSvc.ExpectedCalls = nil
 
-			mockSvc.On("DeleteCategory", mock.Anything, tc.ID).Return(tc.MockReturnErr).Once()
+			if tc.WantStatusCode != http.StatusBadRequest {
+				mockSvc.On("DeleteCategory", mock.Anything, tc.ID).Return(tc.MockReturnErr).Once()
+			}
 
 			url := fmt.Sprintf("/api/v1/categories/%v", tc.ID)
 			req := httptest.NewRequest(http.MethodDelete, url, nil)

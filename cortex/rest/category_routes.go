@@ -43,7 +43,7 @@ func (server *Server) initCtgryRoutes(mux *http.ServeMux, manager *middlewares.M
 		"DELETE /api/v1/categories/{id}",
 		manager.With(
 			http.HandlerFunc(server.handlers.DeleteCategory),
-			// server.middlewares.AuthenticateJWT,
+			server.middlewares.AuthenticateJWT,
 		),
 	)
 }

@@ -110,8 +110,8 @@ func (r *ctgryRepo) Delete(ctx context.Context, uuid string) error {
 			return fmt.Errorf("failed to build delete SQL: %w", err)
 		}
 
-		var flag bool                                                     // remove this and try
-		err = r.writeDb.QueryRowContext(ctx, sqlStr, args...).Scan(&flag) // remove &flag and try
+		var flag bool
+		err = r.writeDb.QueryRowContext(ctx, sqlStr, args...).Scan(&flag)
 		if err == sql.ErrNoRows {
 			return customerrors.ErrCategoryNotFound
 		} else if err != nil {

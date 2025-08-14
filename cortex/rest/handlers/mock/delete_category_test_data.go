@@ -25,6 +25,18 @@ func DeleteCategoryTestData() []DeleteCategory {
 			WantStatusCode: http.StatusOK,
 		},
 		{
+			Name:           "empty uuid",
+			ID:             "",
+			MockReturnErr:  nil,
+			WantStatusCode: http.StatusBadRequest,
+		},
+		{
+			Name:           "invalid uuid",
+			ID:             "xyz",
+			MockReturnErr:  nil,
+			WantStatusCode: http.StatusBadRequest,
+		},
+		{
 			Name:           "category not found",
 			ID:             uuid.NewString(),
 			MockReturnErr:  customerrors.ErrCategoryNotFound,
