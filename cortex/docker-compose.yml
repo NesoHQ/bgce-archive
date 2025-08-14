@@ -1,6 +1,6 @@
 name: cortex
 services:
-    cycle_count_coordinator:
+    bgce_cortex:
         image: nesohq/cortex
         container_name: categories
         build:
@@ -30,7 +30,7 @@ services:
             # Read cortex DB
             READ_CORTEX_DB_HOST: 10.70.33.230
             READ_CORTEX_DB_PORT: 5432
-            READ_CORTEX_DB_NAME: cortex
+            READ_CORTEX_DB_NAME: bgce
             READ_CORTEX_DB_USER: postgres
             READ_CORTEX_DB_PASSWORD: postgres
             READ_CORTEX_DB_MAX_IDLE_TIME_IN_MINUTES: 60
@@ -41,7 +41,7 @@ services:
             # Write cortex DB
             WRITE_CORTEX_DB_HOST: 10.70.33.230
             WRITE_CORTEX_DB_PORT: 5432
-            WRITE_CORTEX_DB_NAME: cortex
+            WRITE_CORTEX_DB_NAME: bgce
             WRITE_CORTEX_DB_USER: postgres
             WRITE_CORTEX_DB_PASSWORD: postgres
             WRITE_CORTEX_DB_MAX_IDLE_TIME_IN_MINUTES: 60
