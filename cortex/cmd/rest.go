@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"cortex/apm"
+	"cortex/cache"
 	category "cortex/category"
 	"cortex/config"
 	"cortex/logger"
@@ -15,6 +16,7 @@ import (
 	"cortex/rest/handlers"
 	"cortex/rest/middlewares"
 	"cortex/rest/utils"
+	"cortex/settings"
 )
 
 var serverRestCmd = &cobra.Command{
@@ -63,16 +65,39 @@ func serveRest(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	readRedisClient, err := cache.NewRedisClient(cnf.ReadRedisURL, cnf.EnableRedisTLSMode)
+	if err != nil {
+		slog.Error("Unable to create redis read client", logger.Extra(map[string]any{
+			"error": err.Error(),
+		}))
+		return err
+	}
+	defer readRedisClient.Close()
+
+	writeRedisClient, err := cache.NewRedisClient(cnf.WriteRedisURL, cnf.EnableRedisTLSMode)
+	if err != nil {
+		slog.Error("Unable to create redis write client", logger.Extra(map[string]any{
+			"error": err.Error(),
+		}))
+		return err
+	}
+	defer writeRedisClient.Close()
+
+	redisCache := cache.NewCache(readRedisClient, writeRedisClient)
+	slog.Info("Redis client is connected.")
+
+	settings := settings.GetSettings(cnf)
+
 	ctgryRepo := repo.NewCtgryRepo(readBgceDB, writeBgceDB, psql)
 
-	ctgrySvc := category.NewService(cnf, rmq, ctgryRepo, nil)
+	ctgrySvc := category.NewService(cnf, rmq, ctgryRepo, redisCache)
 
 	handlers := handlers.NewHandler(
 		cnf,
 		ctgrySvc,
 	)
 
-	middlewares := middlewares.NewMiddleware(cnf, nil, nil)
+	middlewares := middlewares.NewMiddleware(cnf, redisCache, settings)
 
 	server, err := rest.NewServer(middlewares, cnf, handlers)
 	if err != nil {

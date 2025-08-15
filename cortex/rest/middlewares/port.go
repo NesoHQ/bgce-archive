@@ -3,7 +3,7 @@ package middlewares
 import "context"
 
 type Cache interface {
-	Get(ctx context.Context, key string) (bool, error)
+	Get(ctx context.Context, key string) (string, error)
 	RedisEnabledKey() string
 }
 

@@ -22,5 +22,6 @@ func NewService(
 		cnf:       cnf,
 		rmq:       rmq,
 		ctgryRepo: ctgryRepo,
+		cache:     cache,
 	}
 }

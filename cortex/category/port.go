@@ -2,6 +2,7 @@ package category
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -23,13 +24,12 @@ type CtgryRepo interface {
 }
 
 type Cache interface {
-	UseCache(ctx context.Context) (bool, error)
-	SIsMember(ctx context.Context, key string, member any) (bool, error)
-	SAdd(ctx context.Context, key string, members ...any) error
+	SIsMember(ctx context.Context, key, member string) (bool, error)
+	SAdd(ctx context.Context, key string, expiration time.Duration, members ...any) error
 	SlugsKey() string
-	Set(ctx context.Context, key string, value any) error
-	SetJSON(ctx context.Context, key string, value any) error
-	ZAddEmpty(ctx context.Context, key string) error
+	Set(ctx context.Context, key string, value any, expiration time.Duration) error
+	SetJSON(ctx context.Context, key string, value any, expiration time.Duration) error
+	ZAdd(ctx context.Context, key string, expiration time.Duration, members ...any) error
 	CategoryUUIDKey(uuid uuid.UUID) string
 	CategoryObjectKey(uuid uuid.UUID) string
 	CategoryTopPostsKey(uuid uuid.UUID) string

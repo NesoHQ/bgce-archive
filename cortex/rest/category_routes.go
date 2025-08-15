@@ -11,6 +11,7 @@ func (server *Server) initCtgryRoutes(mux *http.ServeMux, manager *middlewares.M
 		"POST /api/v1/categories",
 		manager.With(
 			http.HandlerFunc(server.handlers.CreateCategory),
+			server.middlewares.RedisToggle,
 			server.middlewares.AuthenticateJWT,
 		),
 	)

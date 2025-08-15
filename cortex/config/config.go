@@ -21,18 +21,21 @@ type Apm struct {
 }
 
 type Config struct {
-	Version           string `mapstructure:"VERSION"                           validate:"required"`
-	Mode              Mode   `mapstructure:"MODE"                              validate:"required"`
-	ServiceName       string `mapstructure:"SERVICE_NAME"                      validate:"required"`
-	HttpPort          int    `mapstructure:"HTTP_PORT"                         validate:"required"`
-	MigrationSource   string `mapstructure:"MIGRATION_SOURCE"                  validate:"required"`
-	JwtSecret         string `mapstructure:"JWT_SECRET"               validate:"required"`
-	RabbitmqURL       string `mapstructure:"RABBITMQ_URL" validate:"required"`
-	RmqReconnectDelay int    `mapstructure:"RMQ_RECONNECT_DELAY" validate:"required"`
-	RmqRetryInterval  int    `mapstructure:"RMQ_RETRY_INTERVAL" validate:"required"`
-	ReadBgceDB      DBConfig
-	WriteBgceDB     DBConfig
-	Apm               *Apm
+	Version            string `mapstructure:"VERSION"                           validate:"required"`
+	Mode               Mode   `mapstructure:"MODE"                              validate:"required"`
+	ServiceName        string `mapstructure:"SERVICE_NAME"                      validate:"required"`
+	HttpPort           int    `mapstructure:"HTTP_PORT"                         validate:"required"`
+	MigrationSource    string `mapstructure:"MIGRATION_SOURCE"                  validate:"required"`
+	EnableRedisTLSMode bool   `mapstructure:"ENABLE_REDIS_TLS_MODE"`
+	ReadRedisURL       string `mapstructure:"READ_REDIS_URL"           validate:"required"`
+	WriteRedisURL      string `mapstructure:"WRITE_REDIS_URL"          validate:"required"`
+	JwtSecret          string `mapstructure:"JWT_SECRET"               validate:"required"`
+	RabbitmqURL        string `mapstructure:"RABBITMQ_URL" validate:"required"`
+	RmqReconnectDelay  int    `mapstructure:"RMQ_RECONNECT_DELAY" validate:"required"`
+	RmqRetryInterval   int    `mapstructure:"RMQ_RETRY_INTERVAL" validate:"required"`
+	ReadBgceDB         DBConfig
+	WriteBgceDB        DBConfig
+	Apm                *Apm
 }
 
 var config *Config

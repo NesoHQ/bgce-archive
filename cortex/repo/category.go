@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"fmt"
 	"time"
@@ -127,6 +128,39 @@ func (r *ctgryRepo) Delete(ctx context.Context, uuid string) error {
 	return nil
 }
 
-func (r *ctgryRepo) Get(ctx context.Context, flters category.GetCategoryFilter) (*category.Category, error) {
-	return nil, nil
+func (r *ctgryRepo) Get(ctx context.Context, filters category.GetCategoryFilter) (*category.Category, error) {
+	query := r.psql.Select(
+		"id", "uuid", "slug", "label", "description", "created_by", "updated_by",
+		"approved_by", "deleted_by", "created_at", "updated_at", "approved_at",
+		"deleted_at", "status", "meta",
+	).From(r.tableName)
+
+	if filters.ID != nil {
+		query = query.Where(sq.Eq{"id": filters.ID})
+	}
+	if filters.UUID != nil {
+		query = query.Where(sq.Eq{"uuid": filters.UUID})
+	}
+	if filters.Slug != nil {
+		query = query.Where(sq.Eq{"slug": filters.Slug})
+	}
+	if filters.Status != nil {
+		query = query.Where(sq.Eq{"status": filters.Status})
+	}
+
+	sqlStr, args, err := query.ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("failed to build select SQL: %w", err)
+	}
+
+	var cat category.Category
+	err = r.readDb.GetContext(ctx, &cat, sqlStr, args...)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, customerrors.ErrCategoryNotFound
+		}
+		return nil, fmt.Errorf("failed to query category: %w", err)
+	}
+
+	return &cat, nil
 }

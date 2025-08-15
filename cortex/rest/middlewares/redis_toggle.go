@@ -4,6 +4,7 @@ import (
 	"context"
 	"log/slog"
 	"net/http"
+	"strconv"
 )
 
 const (
@@ -16,7 +17,7 @@ func (m *Middlewares) RedisToggle(next http.Handler) http.Handler {
 
 		val, err := m.cache.Get(r.Context(), m.cache.RedisEnabledKey())
 		if err == nil {
-			enabled = val
+			enabled, _ = strconv.ParseBool(val)
 		} else {
 			enabled, err = m.cortexSettings.UseRedisCache(r.Context())
 			if err != nil {

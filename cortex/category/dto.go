@@ -33,10 +33,11 @@ type DeleteCategoryParams struct {
 }
 
 type GetCategoryFilter struct {
-	ID    *uint
-	UUID  *uuid.UUID
-	Slug  *string
-	Label *string
+	ID     *uint
+	UUID   *uuid.UUID
+	Slug   *string
+	Label  *string
+	Status *string
 
 	IncludeSubcategories bool
 	IncludeTopPosts      bool
