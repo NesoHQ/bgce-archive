@@ -22,6 +22,18 @@ func (svc *service) CreateCategory(ctx context.Context, params CreateCategoryPar
 		}
 	}
 
+	existingCat, err := svc.ctgryRepo.Get(ctx, GetCategoryFilter{
+		Slug: &params.Slug,
+	})
+	if err != nil && err != customerrors.ErrCategoryNotFound {
+		return fmt.Errorf("failed to check existing category: %w", err)
+	}
+
+	if existingCat != nil {
+		svc.cacheCategory(ctx, existingCat)
+		return customerrors.ErrSlugExists
+	}
+
 	cat, err := svc.ctgryRepo.Insert(ctx, Category{
 		Slug:        params.Slug,
 		Label:       params.Label,
@@ -40,26 +52,32 @@ func (svc *service) CreateCategory(ctx context.Context, params CreateCategoryPar
 		return fmt.Errorf("inserted category is nil")
 	}
 
-	if useRedis {
-		if err := svc.cache.SAdd(ctx, svc.cache.SlugsKey(), params.Slug); err != nil {
-			slog.Warn("Failed to add slug to cache", "error", err)
-		}
-
-		pkKey := svc.cache.CategoryUUIDKey(cat.UUID)
-		if err := svc.cache.Set(ctx, pkKey, cat.ID); err != nil {
-			slog.Warn("Failed to store category primary key in cache", "error", err)
-		}
-
-		catJSONKey := svc.cache.CategoryObjectKey(cat.UUID)
-		if err := svc.cache.SetJSON(ctx, catJSONKey, cat); err != nil {
-			slog.Warn("Failed to store category object in cache", "error", err)
-		}
-
-		topPostsKey := svc.cache.CategoryTopPostsKey(cat.UUID)
-		if err := svc.cache.ZAddEmpty(ctx, topPostsKey); err != nil {
-			slog.Warn("Failed to initialize empty top posts ZSET", "error", err)
-		}
-	}
+	svc.cacheCategory(ctx, cat)
 
 	return nil
+}
+
+func (svc *service) cacheCategory(ctx context.Context, cat *Category) {
+	if cat == nil || !middlewares.IsRedisEnabled(ctx) {
+		return
+	}
+
+	if err := svc.cache.SAdd(ctx, svc.cache.SlugsKey(), cat.Slug); err != nil {
+		slog.Warn("Failed to add slug to cache", "error", err)
+	}
+
+	pkKey := svc.cache.CategoryUUIDKey(cat.UUID)
+	if err := svc.cache.Set(ctx, pkKey, cat.ID); err != nil {
+		slog.Warn("Failed to store category primary key in cache", "error", err)
+	}
+
+	catJSONKey := svc.cache.CategoryObjectKey(cat.UUID)
+	if err := svc.cache.SetJSON(ctx, catJSONKey, cat); err != nil {
+		slog.Warn("Failed to store category object in cache", "error", err)
+	}
+
+	topPostsKey := svc.cache.CategoryTopPostsKey(cat.UUID)
+	if err := svc.cache.ZAddEmpty(ctx, topPostsKey); err != nil {
+		slog.Warn("Failed to initialize empty top posts ZSET", "error", err)
+	}
 }

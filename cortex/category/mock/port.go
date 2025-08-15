@@ -21,3 +21,8 @@ func (m *CategoryRepo) Delete(ctx context.Context, uuid string) error {
 	args := m.Called(ctx, uuid)
 	return args.Error(0)
 }
+
+func (m *CategoryRepo) Get(ctx context.Context, filters category.GetCategoryFilter) (*category.Category, error) {
+	args := m.Called(ctx, filters)
+	return nil, args.Error(0)
+}

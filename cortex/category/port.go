@@ -16,7 +16,7 @@ type Service interface {
 
 type CtgryRepo interface {
 	Insert(ctx context.Context, category Category) (*Category, error)
-	// Get(ctx context.Context, id uint) (*Category, error)
+	Get(ctx context.Context, flters GetCategoryFilter) (*Category, error)
 	// Update(ctx context.Context, category Category) error
 	Delete(ctx context.Context, uuid string) error
 	// GetAll(ctx context.Context, params GetCategoryReqParams) ([]Category, error)

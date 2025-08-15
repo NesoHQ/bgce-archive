@@ -37,4 +37,13 @@ type GetCategoryFilter struct {
 	UUID  *uuid.UUID
 	Slug  *string
 	Label *string
+
+	IncludeSubcategories bool
+	IncludeTopPosts      bool
+
+	Limit  *int
+	Offset *int
+
+	SortBy    *string
+	SortOrder *string
 }

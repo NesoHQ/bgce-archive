@@ -126,3 +126,7 @@ func (r *ctgryRepo) Delete(ctx context.Context, uuid string) error {
 
 	return nil
 }
+
+func (r *ctgryRepo) Get(ctx context.Context, flters category.GetCategoryFilter) (*category.Category, error) {
+	return nil, nil
+}
