@@ -2,6 +2,8 @@ package category
 
 import (
 	"context"
+
+	"github.com/google/uuid"
 )
 
 type Service interface {
@@ -13,9 +15,22 @@ type Service interface {
 }
 
 type CtgryRepo interface {
-	Insert(ctx context.Context, category Category) error
+	Insert(ctx context.Context, category Category) (*Category, error)
 	// Get(ctx context.Context, id uint) (*Category, error)
 	// Update(ctx context.Context, category Category) error
 	Delete(ctx context.Context, uuid string) error
 	// GetAll(ctx context.Context, params GetCategoryReqParams) ([]Category, error)
+}
+
+type Cache interface {
+	UseCache(ctx context.Context) (bool, error)
+	SIsMember(ctx context.Context, key string, member any) (bool, error)
+	SAdd(ctx context.Context, key string, members ...any) error
+	SlugsKey() string
+	Set(ctx context.Context, key string, value any) error
+	SetJSON(ctx context.Context, key string, value any) error
+	ZAddEmpty(ctx context.Context, key string) error
+	CategoryUUIDKey(uuid uuid.UUID) string
+	CategoryObjectKey(uuid uuid.UUID) string
+	CategoryTopPostsKey(uuid uuid.UUID) string
 }

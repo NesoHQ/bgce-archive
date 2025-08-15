@@ -12,9 +12,9 @@ type CategoryRepo struct {
 	mock.Mock
 }
 
-func (m *CategoryRepo) Insert(ctx context.Context, cat category.Category) error {
+func (m *CategoryRepo) Insert(ctx context.Context, cat category.Category) (*category.Category, error) {
 	args := m.Called(ctx, cat)
-	return args.Error(0)
+	return nil, args.Error(0)
 }
 
 func (m *CategoryRepo) Delete(ctx context.Context, uuid string) error {

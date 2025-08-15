@@ -34,7 +34,7 @@ func serveRest(cmd *cobra.Command, args []string) error {
 
 	rmq := rabbitmq.NewRMQ(cnf)
 	defer rmq.Client.Stop()
-	
+
 	psql := repo.GetQueryBuilder()
 
 	readBgceDB, err := repo.GetDbConnection(cnf.ReadBgceDB)
@@ -65,14 +65,14 @@ func serveRest(cmd *cobra.Command, args []string) error {
 
 	ctgryRepo := repo.NewCtgryRepo(readBgceDB, writeBgceDB, psql)
 
-	ctgrySvc := category.NewService(cnf, rmq, ctgryRepo)
+	ctgrySvc := category.NewService(cnf, rmq, ctgryRepo, nil)
 
 	handlers := handlers.NewHandler(
 		cnf,
 		ctgrySvc,
 	)
 
-	middlewares := middlewares.NewMiddleware(cnf)
+	middlewares := middlewares.NewMiddleware(cnf, nil, nil)
 
 	server, err := rest.NewServer(middlewares, cnf, handlers)
 	if err != nil {
