@@ -23,12 +23,15 @@ func loadConfig() error {
 	viper.AutomaticEnv()
 
 	config = &Config{
-		Version:         viper.GetString("VERSION"),
-		Mode:            Mode(viper.GetString("MODE")),
-		ServiceName:     viper.GetString("SERVICE_NAME"),
-		HttpPort:        viper.GetInt("HTTP_PORT"),
-		MigrationSource: viper.GetString("MIGRATION_SOURCE"),
-		JwtSecret:       viper.GetString("JWT_SECRET"),
+		Version:            viper.GetString("VERSION"),
+		Mode:               Mode(viper.GetString("MODE")),
+		ServiceName:        viper.GetString("SERVICE_NAME"),
+		HttpPort:           viper.GetInt("HTTP_PORT"),
+		MigrationSource:    viper.GetString("MIGRATION_SOURCE"),
+		EnableRedisTLSMode: viper.GetBool("ENABLE_REDIS_TLS_MODE"),
+		ReadRedisURL:       viper.GetString("READ_REDIS_URL"),
+		WriteRedisURL:      viper.GetString("WRITE_REDIS_URL"),
+		JwtSecret:          viper.GetString("JWT_SECRET"),
 		Apm: &Apm{
 			ServiceName: viper.GetString("APM_SERVICE_NAME"),
 			ServerURL:   viper.GetString("APM_SERVER_URL"),

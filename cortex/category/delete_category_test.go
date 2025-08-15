@@ -13,7 +13,7 @@ import (
 
 func TestDeleteCategory(t *testing.T) {
 	mockRepo := new(mock_category.CategoryRepo)
-	svc := category.NewService(nil, nil, mockRepo)
+	svc := category.NewService(nil, nil, mockRepo, nil)
 
 	for _, tc := range mock_category.DeleteCategoryTestData() {
 		t.Run(tc.Name, func(t *testing.T) {

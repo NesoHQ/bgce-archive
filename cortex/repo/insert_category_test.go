@@ -44,7 +44,7 @@ func TestInsertCategory(t *testing.T) {
 				Meta:        nil,
 			}
 
-			err := ctgryRepo.Insert(context.Background(), cat)
+			_, err := ctgryRepo.Insert(context.Background(), cat)
 
 			if tc.WantErr == nil && err != nil {
 				t.Fatalf("expected no error, got %v", err)

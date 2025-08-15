@@ -1,0 +1,28 @@
+package mock_category
+
+import (
+	"context"
+
+	"github.com/stretchr/testify/mock"
+
+	"cortex/category"
+)
+
+type CategoryRepo struct {
+	mock.Mock
+}
+
+func (m *CategoryRepo) Insert(ctx context.Context, cat category.Category) (*category.Category, error) {
+	args := m.Called(ctx, cat)
+	return nil, args.Error(0)
+}
+
+func (m *CategoryRepo) Delete(ctx context.Context, uuid string) error {
+	args := m.Called(ctx, uuid)
+	return args.Error(0)
+}
+
+func (m *CategoryRepo) Get(ctx context.Context, filters category.GetCategoryFilter) (*category.Category, error) {
+	args := m.Called(ctx, filters)
+	return nil, args.Error(0)
+}
