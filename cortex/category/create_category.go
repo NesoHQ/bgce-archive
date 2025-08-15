@@ -30,7 +30,9 @@ func (svc *service) CreateCategory(ctx context.Context, params CreateCategoryPar
 	}
 
 	if existingCat != nil {
-		svc.cacheCategory(ctx, existingCat)
+		if useRedis {
+			go svc.cacheCategoryAsync(ctx, existingCat)
+		}
 		return customerrors.ErrSlugExists
 	}
 
@@ -52,32 +54,33 @@ func (svc *service) CreateCategory(ctx context.Context, params CreateCategoryPar
 		return fmt.Errorf("inserted category is nil")
 	}
 
-	svc.cacheCategory(ctx, cat)
+	if useRedis {
+		go svc.cacheCategoryAsync(ctx, cat)
+	}
 
 	return nil
 }
 
-func (svc *service) cacheCategory(ctx context.Context, cat *Category) {
-	if cat == nil || !middlewares.IsRedisEnabled(ctx) {
-		return
-	}
+func (svc *service) cacheCategoryAsync(ctx context.Context, cat *Category) {
+	cacheCtx, cancel := context.WithTimeout(ctx, 2*time.Second)
+	defer cancel()
 
-	if err := svc.cache.SAdd(ctx, svc.cache.SlugsKey(), cat.Slug); err != nil {
+	if err := svc.cache.SAdd(cacheCtx, svc.cache.SlugsKey(), cat.Slug); err != nil {
 		slog.Warn("Failed to add slug to cache", "error", err)
 	}
 
 	pkKey := svc.cache.CategoryUUIDKey(cat.UUID)
-	if err := svc.cache.Set(ctx, pkKey, cat.ID); err != nil {
+	if err := svc.cache.Set(cacheCtx, pkKey, cat.ID); err != nil {
 		slog.Warn("Failed to store category primary key in cache", "error", err)
 	}
 
 	catJSONKey := svc.cache.CategoryObjectKey(cat.UUID)
-	if err := svc.cache.SetJSON(ctx, catJSONKey, cat); err != nil {
+	if err := svc.cache.SetJSON(cacheCtx, catJSONKey, cat); err != nil {
 		slog.Warn("Failed to store category object in cache", "error", err)
 	}
 
 	topPostsKey := svc.cache.CategoryTopPostsKey(cat.UUID)
-	if err := svc.cache.ZAddEmpty(ctx, topPostsKey); err != nil {
+	if err := svc.cache.ZAddEmpty(cacheCtx, topPostsKey); err != nil {
 		slog.Warn("Failed to initialize empty top posts ZSET", "error", err)
 	}
 }
