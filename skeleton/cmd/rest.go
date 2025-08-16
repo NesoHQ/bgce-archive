@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	category "servicetemplate/category"
+	// category "servicetemplate/category"
 	"servicetemplate/config"
 	"servicetemplate/logger"
 	"servicetemplate/rest"
@@ -58,11 +58,11 @@ func serveRest(cmd *cobra.Command, args []string) error {
 	// 	return err
 	// }
 
-	exampleSvc := category.NewService(cnf)
+	// exampleSvc := category.NewService(cnf)
 
 	handlers := handlers.NewHandler(
 		cnf,
-		exampleSvc,
+		// exampleSvc,
 	)
 
 	middlewares := middlewares.NewMiddleware(cnf)
