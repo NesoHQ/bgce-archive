@@ -14,7 +14,10 @@ type CategoryRepo struct {
 
 func (m *CategoryRepo) Insert(ctx context.Context, cat category.Category) (*category.Category, error) {
 	args := m.Called(ctx, cat)
-	return nil, args.Error(0)
+	if cat, ok := args.Get(0).(*category.Category); ok {
+		return cat, args.Error(1)
+	}
+	return nil, args.Error(1)
 }
 
 func (m *CategoryRepo) Delete(ctx context.Context, uuid string) error {
@@ -24,5 +27,8 @@ func (m *CategoryRepo) Delete(ctx context.Context, uuid string) error {
 
 func (m *CategoryRepo) Get(ctx context.Context, filters category.GetCategoryFilter) (*category.Category, error) {
 	args := m.Called(ctx, filters)
-	return nil, args.Error(0)
+	if cat, ok := args.Get(0).(*category.Category); ok {
+		return cat, args.Error(1)
+	}
+	return nil, args.Error(1)
 }
