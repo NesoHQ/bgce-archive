@@ -4,10 +4,13 @@ import (
 	"encoding/json"
 	"errors"
 	"testing"
+	"time"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/mock"
 
 	"cortex/category"
+	customerrors "cortex/pkg/custom_errors"
 )
 
 type CreateCategory struct {
@@ -32,11 +35,29 @@ func CreateCategoryTestData(t *testing.T, mockCategoryRepo *CategoryRepo) []Crea
 		Meta:        metaJSON,
 	}
 
+	demoCategory := &category.Category{
+		ID:          1,
+		UUID:        uuid.New(),
+		Slug:        baseModel.Slug,
+		Label:       baseModel.Label,
+		Description: baseModel.Description,
+		CreatedBy:   baseModel.CreatedBy,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+		Status:      category.StatusPending,
+		Meta:        baseModel.Meta,
+	}
+
 	Tests := []CreateCategory{
 		{
 			Name:  "success",
 			Model: baseModel,
 			MockSetup: func() {
+				mockCategoryRepo.
+					On("Get", mock.Anything, mock.Anything).
+					Return(nil, customerrors.ErrCategoryNotFound).
+					Once()
+
 				mockCategoryRepo.
 					On("Insert", mock.Anything, mock.MatchedBy(func(c category.Category) bool {
 						if c.Slug != baseModel.Slug ||
@@ -55,18 +76,34 @@ func CreateCategoryTestData(t *testing.T, mockCategoryRepo *CategoryRepo) []Crea
 						val, ok := meta["foo"]
 						return ok && val == "bar"
 					})).
-					Return(nil).
+					Return(demoCategory, nil).
 					Once()
 			},
 			ExpectedError: nil,
+		},
+		{
+			Name:  "Slug already exists",
+			Model: baseModel,
+			MockSetup: func() {
+				mockCategoryRepo.
+					On("Get", mock.Anything, mock.Anything).
+					Return(demoCategory, nil).
+					Once()
+			},
+			ExpectedError: customerrors.ErrSlugExists,
 		},
 		{
 			Name:  "insert failure",
 			Model: baseModel,
 			MockSetup: func() {
 				mockCategoryRepo.
+					On("Get", mock.Anything, mock.Anything).
+					Return(nil, customerrors.ErrCategoryNotFound).
+					Once()
+
+				mockCategoryRepo.
 					On("Insert", mock.Anything, mock.AnythingOfType("category.Category")).
-					Return(errors.New("insert failed")).
+					Return(nil, errors.New("insert failed")).
 					Once()
 			},
 			ExpectedError: errors.New("insert failed"),
