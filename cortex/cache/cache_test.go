@@ -2,50 +2,47 @@ package cache
 
 import (
 	"context"
-	"os"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	mock_cache "cortex/cache/mock"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestRedisSetGet(t *testing.T) {
-	redisURL := os.Getenv("WRITE_REDIS_URL")
-	if redisURL == "" {
-		redisURL = "redis://:password@localhost:6379"
-	}
+	mockClient := new(mock_cache.Client)
 
-	client, err := NewRedisClient(redisURL, false)
-	assert.NoError(t, err)
-	assert.NotNil(t, client)
+	for _, tc := range mock_cache.CacheTestData(t, mockClient) {
+		t.Run(tc.Name, func(t *testing.T) {
+			mockClient.ExpectedCalls = nil
+			tc.MockSetup()
 
-	cache := NewCache(client, client)
+			err := mockClient.Set(context.Background(), tc.Key, tc.Value, 0)
+			if tc.SetError != nil {
+				require.EqualError(t, err, tc.SetError.Error())
+				return
+			} else {
+				require.NoError(t, err)
+			}
 
-	type testCase struct {
-		key   string
-		value string
-	}
+			result, err := mockClient.Get(context.Background(), tc.Key)
+			if tc.GetError != nil {
+				require.EqualError(t, err, tc.GetError.Error())
+				return
+			} else {
+				require.NoError(t, err)
+				require.Equal(t, tc.Value, result)
+			}
 
-	tests := []testCase{
-		{key: "test:case:1", value: "hello"},
-		{key: "test:case:2", value: "world"},
-		{key: "test:case:3", value: "123"},
-		{key: "test:case:4", value: ""},
-	}
+			err = mockClient.Del(context.Background(), tc.Key)
+			if tc.DelError != nil {
+				require.EqualError(t, err, tc.DelError.Error())
+				return
+			} else {
+				require.NoError(t, err)
+			}
 
-	ctx := context.Background()
-
-	for _, tc := range tests {
-		t.Run(tc.key, func(t *testing.T) {
-			err := client.Set(ctx, tc.key, tc.value, 0).Err()
-			assert.NoError(t, err)
-
-			result, err := client.Get(ctx, tc.key).Result()
-			assert.NoError(t, err)
-			assert.Equal(t, tc.value, result)
-
-			_ = client.Del(ctx, tc.key).Err()
+			mockClient.AssertExpectations(t)
 		})
 	}
-
-	_ = cache
 }
