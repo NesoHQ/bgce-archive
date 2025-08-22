@@ -1,6 +1,6 @@
 # 🧾 API Docs for Category Service & Subcategory Service
 
-This document describes the endpoints, data models, and sample payloads for the category and subcategory microservices.
+This document describes the features, purpose, endpoints, data models, and sample payloads for the category and subcategory microservices.
 
 ---
 
@@ -18,6 +18,7 @@ This document describes the endpoints, data models, and sample payloads for the 
 | Independent service   | Does not depend on other microservices.                                 |
 | Timestamp tracking    | Stores `created_at`, `updated_at` fields for traceability.              |
 | Metadata support      | Stores additional dynamic metadata using `jsonb`.                       |
+| Redis                 | Uses Redis for caching layer.                                           |
 
 ---
 
@@ -46,7 +47,11 @@ Manages top-level content classification, such as topic groupings (e.g., "Interv
 
 ### 📦 Dependencies
 
+#### Mandatory to Run:
 - None (fully independent)
+
+#### Optional:
+- Redis
 
 ---
 
@@ -82,13 +87,26 @@ Manages top-level content classification, such as topic groupings (e.g., "Interv
 
 Returns all available categories.
 
+---
 #### `GET /categories/:uuid`
 
 Fetches a category by UUID.
 
+---
 #### `POST /categories`
 
 Creates a new category.
+
+Before creating a new category, it checks if the category already exists.
+Redis can be used for optional cache layer checking.
+
+Workflow:
+- First checks cache for existing slug (if enabled)
+- If not found, checks DB for existing slug
+- If not found, Creates the category. Also adds the required informations to cache (if enabled)
+- If existing slug is found at any point, Return a conflict error
+
+Flow Chart: [CREATE CATEGORY]
 
 ```json
 {
@@ -99,10 +117,19 @@ Creates a new category.
 }
 ```
 
+| Responses                   | Status Code |
+|-----------------------------|-------------|
+| Successfull                 | 200         |
+| Bad Request - Invalid Input | 400         |
+| Slug already exists         | 409         |
+| Internal Server Error       | 500         |
+
+---
 #### `PUT /categories/:uuid`
 
 Updates an existing category.
 
+---
 #### `DELETE /categories/:uuid`
 
 Soft-deletes the category (sets `deleted_at`, updates `status`).
@@ -354,3 +381,5 @@ Example:
 
 ---
 ```
+
+[CREATE CATEGORY]: ../flowchart/create-category.drawio.png
