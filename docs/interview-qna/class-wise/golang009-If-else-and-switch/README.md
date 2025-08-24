@@ -49,10 +49,6 @@ package main
 import "fmt"
 
 func main() {
-    package main
-import "fmt"
-
-func main() {
     age := 18 // বয়স ১৮ সেট করা হয়েছে
 
     if age > 18 {
@@ -67,7 +63,6 @@ func main() {
     }
 }
 
-}
 ```
 
 >একাধিক স্টেটমেন্ট চেক করার জন্য `else if` ব্যবহার করা হয় | উপরের কোডে বয়স অনুসারে তিনটি ভিন্ন রেসপন্স দেখানো হয়েছে।
