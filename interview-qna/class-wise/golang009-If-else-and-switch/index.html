@@ -209,17 +209,13 @@ func main() {
 import "fmt"
 
 func main() {
-    package main
-import "fmt"
-
-func main() {
     age := 18 // বয়স ১৮ সেট করা হয়েছে
 
     if age &gt; 18 {
         // যদি বয়স ১৮ এর বেশি হয়, তাহলে নিচের মেসেজ দেখা যাবে
         fmt.Println("You are eligible to be married") // প্রাপ্তবয়স্ক, বিয়ের জন্য উপযুক্ত
     } else if age &lt; 18 {
-        // যদি বয়স ১৮ এর কম হয়, তাহলে এই অংশ এক্সিকিউট হবে 
+        // যদি বয়স ১৮ এর কম হয়, তাহলে এই অংশ এক্সিকিউট হবে
         fmt.Println("You are not eligible to be married, but you can love someone") // নাবালক, প্রেম করা যেতে পারে
     } else if age == 18 {
         // যদি বয়স একদম ১৮ হয়, তাহলে এই অংশ এক্সিকিউট হবে
@@ -227,7 +223,6 @@ func main() {
     }
 }
 
-}
 </code></pre>
 <blockquote>
 <p>একাধিক স্টেটমেন্ট চেক করার জন্য <code>else if</code> ব্যবহার করা হয় | উপরের কোডে বয়স অনুসারে তিনটি ভিন্ন রেসপন্স দেখানো হয়েছে।</p>
@@ -248,7 +243,7 @@ func main() {
     case 3:
         fmt.Println("Tuesday") // যদি day == 3 হয়, তাহলে Tuesday প্রিন্ট হবে
     default:
-        fmt.Println("Another day") // যদি কোন case না মিলে , তাহলে default অংশে চলে যাবে 
+        fmt.Println("Another day") // যদি কোন case না মিলে , তাহলে default অংশে চলে যাবে
     }
 }
 </code></pre>
@@ -261,7 +256,7 @@ func main() {
 <li>Go তে <code>if</code> এবং <code>switch</code> ব্লকে ব্র্যাকেট <code>{}</code> আবশ্যক।</li>
 <li><code>switch</code> ব্লকে প্রতিটি case এর পরে <code>break</code> লিখতে হয় না, কারণ Go নিজেই implicity break করে দেয়, যদি না <code>fallthrough</code> ব্যবহার করা হবে |</li>
 </ul>
-<p>[Author : @shahriar-em0n  Date: 2025-06-11 Category: interview-qa/class-wise ]</p>
+<p>[Author : @shahriar-em0n Date: 2025-06-11 Category: interview-qa/class-wise ]</p>
 
                     </main>
 
