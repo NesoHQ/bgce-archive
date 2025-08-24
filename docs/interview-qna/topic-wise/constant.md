@@ -1,35 +1,89 @@
-[**Author:** @mdimamhosen
+[**Author:** @mdimamhosen, @mahabubulhasibshawon
 **Date:** 2025-04-19
 **Category:** interview-qa/constants
 **Tags:** [go, constants, beginner]
 ]
 
-# The const keyword declares the variable as "constant", which means that it is unchangeable and read-only.
+
+### 📌 **Constant কখন ব্যবহৃত হয়?**
+
+* যখন আপনার এমন একটি মান প্রয়োজন যা প্রোগ্রাম চলাকালীন সময়ে কখনোই পরিবর্তন হবে না, তখন constant ব্যবহার করা উচিত।
+* এটি সাধারণত magic numbers বা fixed messages/states/states নির্ধারণ করার জন্য ব্যবহৃত হয়।
+
+---
+
+### ⚙️ **Go build করার সময় Constant কোথায় যায়?**
+
+Go প্রোগ্রাম build করার সময়, compiler `const` দিয়ে declared মানগুলোকে **code segment** বা **text segment**-এ রাখে।
+
+* `const` variable গুলো **compile-time**-এ evaluate হয়, অর্থাৎ run-time এ গিয়ে তা আর হিসাব করে না।
+* এদের জন্য **memory allocation হয় না heap বা stack-এ**, বরং এরা **program binary-র read-only অংশে** store থাকে।
+* এই কারণে constant গুলো **immutable (অপরিবর্তনীয়)** হয় এবং runtime-এ পরিবর্তন করা যায় না।
+
+### 🧠 উদাহরণস্বরূপ:
 
 ```go
-package main
-import ("fmt")
-
-const user = "admin" // cannot be changed
-
-func main() {
-  fmt.Println("admin")
-}
+const PI = 3.14
 ```
 
-# Constant Rules
+* এই মানটি runtime-এ কোনো memory assign করে রাখবে না।
+* বরং যেখানেই `PI` ব্যবহার করা হবে, সেখানে সরাসরি `3.14` inject করে দেবে Go compiler।
 
-### 1. Constant names follow the same naming rules as variables
+---
 
-### 2. Constant names are usually written in uppercase letters
+### 🚀 **Performance এর দিক থেকে Constant এর উপকারিতা:**
 
-### 3. Constants can be declared both inside and outside of a function
+1. **No Memory Overhead:**
+   Constant মানের জন্য আলাদা memory allocation হয় না (heap/stack এ না), ফলে এটি memory-efficient।
 
-# Frequently Asked Questions
+2. **Fast Execution:**
+   যেহেতু constant-এর মান compile time-এ জানা থাকে, Go compiler এগুলোকে সরাসরি machine instruction এ transform করে — এতে execution দ্রুত হয়।
 
-### 1. **What is a constant in Go?**
+3. **Safe & Predictable:**
+   Constant মান runtime-এ হঠাৎ করে পরিবর্তন হয়ে যাবার ভয় থাকে না, যা bug প্রতিরোধে সাহায্য করে।
 
-**Answer:** A constant is a variable whose value cannot be changed once it is assigned. Constants are declared using the `const` keyword.
+---
+
+### 📍 Stack, Heap, এবং Code Segment – Constant কোথায়?
+
+| Variable Type | Stored In    | Mutable? | Allocated at |
+| ------------- | ------------ | -------- | ------------ |
+| `var`         | Stack / Heap | ✅ হ্যাঁ  | Runtime      |
+| `const`       | Code Segment | ❌ না     | Compile Time |
+
+---
+
+### 🎯 যখন constant ব্যবহার করা উচিত:
+
+* যখন আপনি এমন কিছু ডেটা ব্যবহার করছেন যা **একই থাকে** পুরো প্রোগ্রাম জুড়ে (যেমন `PI`, `MAX_RETRIES`, `VERSION` ইত্যাদি)
+* যখন আপনি এমন মান ব্যবহার করছেন যা **পরিবর্তন করার প্রয়োজন নেই বা করা উচিত নয়**
+* যখন আপনি **better performance ও memory efficiency** চান
+
+---
+
+### 🛑 ভুল ধারণা:
+
+অনেকে মনে করে constant মান মানে শুধু number বা string। কিন্তু Go তে constant হিসেবে `bool`, `rune`, এবং untyped value-ও ব্যবহার করা যায় — যদিও complex type যেমন slice, map, array constant হিসেবে ব্যবহার করা যায় না।
+
+
+---
+
+# Constant Rules (নিয়মাবলী)
+
+### 1. Constant-এর নাম সাধারণ variable এর মতোই rule follow করে
+
+### 2. Constant-এর নাম সাধারণত uppercase অক্ষরে লেখা হয়
+
+### 3. Constants ফাংশনের ভিতর এবং বাহির — দুই জায়গাতেই ঘোষণা করা যায়
+
+---
+
+## Frequently Asked Questions
+
+### 1. **Go-তে constant বলতে কী বোঝায়?**
+
+**উত্তর:**
+একটি constant হলো এমন একটি variable যার মান একবার সেট করার পর পরিবর্তন করা যায় না। Constant ঘোষণা করতে `const` কিওয়ার্ড ব্যবহার করা হয়।
 
 **Code Example:**
 
@@ -46,9 +100,10 @@ func main() {
 
 ---
 
-### 2. **Can constants be declared inside a function?**
+### 2. **Constant কি ফাংশনের ভিতর ঘোষণা করা যায়?**
 
-**Answer:** Yes, constants can be declared both inside and outside of a function.
+**উত্তর:**
+হ্যাঁ, constant ফাংশনের ভিতরেও এবং বাইরেও ঘোষণা করা যায়।
 
 **Code Example:**
 
@@ -64,9 +119,10 @@ func main() {
 
 ---
 
-### 3. **Can constants hold values other than numbers?**
+### 3. **Constant কি শুধু সংখ্যা রাখে, না কি অন্য টাইপও রাখা যায়?**
 
-**Answer:** Yes, constants can hold string, boolean, or even character values.
+**উত্তর:**
+Constant শুধু সংখ্যা না, string, boolean, এমনকি character টাইপের মানও রাখতে পারে।
 
 **Code Example:**
 
@@ -85,9 +141,10 @@ func main() {
 
 ---
 
-### 4. **Can constants be computed at runtime?**
+### 4. **Constant কি runtime-এ হিসাব করে মান রাখতে পারে?**
 
-**Answer:** No, constants must be assigned a value that can be determined at compile time.
+**উত্তর:**
+না, constant-কে এমন মান দিতে হবে যা compile time-এ নির্ধারণ করা যায়।
 
 **Code Example:**
 
@@ -104,9 +161,10 @@ func main() {
 
 ---
 
-### 5. **What happens if you try to change a constant's value?**
+### 5. **যদি constant-এর মান পরিবর্তন করার চেষ্টা করি, তাহলে কী হয়?**
 
-**Answer:** The compiler will throw an error if you try to change the value of a constant.
+**উত্তর:**
+যদি আপনি constant-এর মান পরিবর্তনের চেষ্টা করেন, তাহলে compile time-এ error হবে।
 
 **Code Example:**
 
@@ -124,9 +182,10 @@ func main() {
 
 ---
 
-### 6. **Can constants be used in expressions?**
+### 6. **Constant কি expression-এ ব্যবহার করা যায়?**
 
-**Answer:** Yes, constants can be used in expressions to compute other constants.
+**উত্তর:**
+হ্যাঁ, constant ব্যবহার করে অন্য constant-এর মান হিসাব করা যায়।
 
 **Code Example:**
 
@@ -145,9 +204,10 @@ func main() {
 
 ---
 
-### 7. **What is the difference between `const` and `var` in Go?**
+### 7. **`const` এবং `var` এর মধ্যে পার্থক্য কী?**
 
-**Answer:** `const` is used for values that do not change, while `var` is used for variables whose values can change.
+**উত্তর:**
+`const` ব্যবহার করা হয় এমন মানের জন্য যেটা কখনোই পরিবর্তন হবে না, আর `var` ব্যবহার করা হয় পরিবর্তনশীল মান রাখার জন্য।
 
 **Code Example:**
 
@@ -168,9 +228,10 @@ func main() {
 
 ---
 
-### 8. **Can constants be of type array or slice?**
+### 8. **Constant কি array বা slice টাইপের হতে পারে?**
 
-**Answer:** No, constants cannot be of type array, slice, or map.
+**উত্তর:**
+না, constant কখনো array, slice বা map টাইপের হতে পারে না।
 
 **Code Example:**
 
@@ -186,9 +247,10 @@ func main() {
 
 ---
 
-### 9. **Can constants be exported in Go?**
+### 9. **Go-তে constant কি export করা যায়?**
 
-**Answer:** Yes, constants can be exported if their names start with an uppercase letter.
+**উত্তর:**
+হ্যাঁ, যদি constant-এর নাম uppercase letter দিয়ে শুরু হয়, তাহলে তা exported হয় এবং অন্য প্যাকেজ থেকেও access করা যায়।
 
 **Code Example:**
 
@@ -205,9 +267,10 @@ func main() {
 
 ---
 
-### 10. **What are untyped constants in Go?**
+### 10. **Go-তে untyped constant কী?**
 
-**Answer:** Untyped constants do not have a specific type until they are assigned to a variable.
+**উত্তর:**
+Untyped constant এমন constant যেটার কোনো নির্দিষ্ট টাইপ নেই যতক্ষণ না তা কোনো variable এ assign করা হয়।
 
 **Code Example:**
 
