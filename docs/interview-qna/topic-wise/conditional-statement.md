@@ -1,4 +1,4 @@
-[**Author:** @mdimamhosen
+[**Author:** @mdimamhosen, @mahabubulhasibshawon
 **Date:** 2025-04-19
 **Category:** interview-qa/conditional-statements
 **Tags:** [go, conditional-statements, if-else]
