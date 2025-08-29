@@ -1,6 +1,6 @@
 package database 
 
-var ProductList []Product
+var productList []Product
 
 type Product struct {
 	ID 			int     `json:"id"`
@@ -8,6 +8,46 @@ type Product struct {
 	Description string  `json:"description"`
 	Price       float64 `json:"price"`
 	ImgUrl 		string  `json:"imageUrl"`
+}
+
+func Store(p Product) Product {
+	p.ID = len(productList) + 1
+	productList =  append(productList, p)
+	return p
+}
+
+func List() []Product {
+	return productList
+}
+
+func Get(productID int) *Product{
+	for _, product := range productList{
+		if product.ID == productID {
+			return &product
+		}
+	}
+
+	return nil
+}
+
+func Update(product Product) {
+	for idx, p := range productList{
+		if p.ID == product.ID {
+			productList[idx] = product
+		}	
+	}
+}
+
+func Delete(productID int) {
+	var tempList []Product 
+	
+	for _, p := range productList{
+		if p.ID != productID {
+			tempList = append(tempList, p) 
+		}	
+	}
+
+	productList = tempList
 }
 
 func init() {
@@ -59,12 +99,12 @@ func init() {
 		ImgUrl: "https://snaped.fns.usda.gov/sites/default/files/styles/crop_ratio_7_5/public/seasonal-produce/2018-05/strawberries.jpg.webp?itok=B4LFd4vV",
 	}
 
-	ProductList = append(ProductList, prd1)
-	ProductList = append(ProductList, prd2)
-	ProductList = append(ProductList, prd3)
-	ProductList = append(ProductList, prd4)
-	ProductList = append(ProductList, prd5)
-	ProductList = append(ProductList, prd6)
+	productList = append(productList, prd1)
+	productList = append(productList, prd2)
+	productList = append(productList, prd3)
+	productList = append(productList, prd4)
+	productList = append(productList, prd5)
+	productList = append(productList, prd6)
 
 }
 
