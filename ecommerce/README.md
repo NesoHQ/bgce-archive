@@ -43,24 +43,30 @@ This project demonstrates a clean and modular folder structure for building REST
 
 ```
 ├── cmd
-│   ├── routes.go
 │   └── serve.go
+├── config
+│   └── config.go
 ├── database
 │   └── product.go
 ├── go.mod
-├── handlers
-│   ├── create_product.go
-│   ├── get_product_by_id.go
-│   ├── get_products.go
-│   └── test.go
+├── go.sum
 ├── main.go
-├── middleware
-│   ├── arekta.go
-│   ├── cors.go
-│   ├── logger.go
-│   ├── manager.go
-│   └── preflight.go
 ├── README.md
+├── rest
+│   ├── handlers
+│   │   ├── create_product.go
+│   │   ├── delete_product.go
+│   │   ├── get_product.go
+│   │   ├── get_products.go
+│   │   └── update_product.go
+│   ├── middlewares
+│   │   ├── arekta.go
+│   │   ├── cors.go
+│   │   ├── logger.go
+│   │   ├── manager.go
+│   │   └── preflight.go
+│   ├── routes.go
+│   └── server.go
 └── util
     └── send_data.go
 ```
