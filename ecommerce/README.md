@@ -10,6 +10,8 @@ This project demonstrates a clean and modular folder structure for building REST
 * 📜 **Product Listing** (`GET /products`)
 * ➕ **Create Product** (`POST /products`)
 * 🔍 **Get Product by ID** (`GET /products/{productId}`)
+* 🔍 **Update Product by ID** (`PUT /products/{productId}`)
+* 🔍 **Delete Product by ID** (`DELETE /products/{productId}`)
 * ✅ **CORS Support**
 * 🛠 **Clean Code** using Go's `net/http` package
 
@@ -17,11 +19,13 @@ This project demonstrates a clean and modular folder structure for building REST
 
 ## 📦 API Endpoints
 
-| Method | Route                   | Description          |
-| ------ | ----------------------- | -------------------- |
-| GET    | `/products`             | Fetch all products   |
-| POST   | `/products`             | Create a new product |
-| GET    | `/products/{productId}` | Fetch product by ID  |
+| Method    | Route                   | Description           |
+| ------    | ----------------------- | --------------------  |
+| GET       | `/products`             | Fetch all products    |
+| POST      | `/products`             | Create a new product  |
+| GET       | `/products/{productId}` | Fetch product by ID   |
+| PUT       | `/products/{productId}` | Update product by ID  |
+| DELETE    | `/products/{productId}` | Delete product by ID  |
 
 ---
 
