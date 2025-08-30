@@ -169,28 +169,74 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>[<strong>Author:</strong> @mdimamhosen
+                        <p>[<strong>Author:</strong> @mdimamhosen, @mahabubulhasibshawon
 <strong>Date:</strong> 2025-04-19
 <strong>Category:</strong> interview-qa/constants
 <strong>Tags:</strong> [go, constants, beginner]
 ]</p>
-<h1 id="the-const-keyword-declares-the-variable-as-constant-which-means-that-it-is-unchangeable-and-read-only"><a class="header" href="#the-const-keyword-declares-the-variable-as-constant-which-means-that-it-is-unchangeable-and-read-only">The const keyword declares the variable as "constant", which means that it is unchangeable and read-only.</a></h1>
-<pre><code class="language-go">package main
-import ("fmt")
-
-const user = "admin" // cannot be changed
-
-func main() {
-  fmt.Println("admin")
-}
+<h3 id="-constant-কখন-বযবহৃত-হয়"><a class="header" href="#-constant-কখন-বযবহৃত-হয়">📌 <strong>Constant কখন ব্যবহৃত হয়?</strong></a></h3>
+<ul>
+<li>যখন আপনার এমন একটি মান প্রয়োজন যা প্রোগ্রাম চলাকালীন সময়ে কখনোই পরিবর্তন হবে না, তখন constant ব্যবহার করা উচিত।</li>
+<li>এটি সাধারণত magic numbers বা fixed messages/states/states নির্ধারণ করার জন্য ব্যবহৃত হয়।</li>
+</ul>
+<hr />
+<h3 id="-go-build-করার-সময়-constant-কোথায়-যায়"><a class="header" href="#-go-build-করার-সময়-constant-কোথায়-যায়">⚙️ <strong>Go build করার সময় Constant কোথায় যায়?</strong></a></h3>
+<p>Go প্রোগ্রাম build করার সময়, compiler <code>const</code> দিয়ে declared মানগুলোকে <strong>code segment</strong> বা <strong>text segment</strong>-এ রাখে।</p>
+<ul>
+<li><code>const</code> variable গুলো <strong>compile-time</strong>-এ evaluate হয়, অর্থাৎ run-time এ গিয়ে তা আর হিসাব করে না।</li>
+<li>এদের জন্য <strong>memory allocation হয় না heap বা stack-এ</strong>, বরং এরা <strong>program binary-র read-only অংশে</strong> store থাকে।</li>
+<li>এই কারণে constant গুলো <strong>immutable (অপরিবর্তনীয়)</strong> হয় এবং runtime-এ পরিবর্তন করা যায় না।</li>
+</ul>
+<h3 id="-উদাহরণসবরূপ"><a class="header" href="#-উদাহরণসবরূপ">🧠 উদাহরণস্বরূপ:</a></h3>
+<pre><code class="language-go">const PI = 3.14
 </code></pre>
-<h1 id="constant-rules"><a class="header" href="#constant-rules">Constant Rules</a></h1>
-<h3 id="1-constant-names-follow-the-same-naming-rules-as-variables"><a class="header" href="#1-constant-names-follow-the-same-naming-rules-as-variables">1. Constant names follow the same naming rules as variables</a></h3>
-<h3 id="2-constant-names-are-usually-written-in-uppercase-letters"><a class="header" href="#2-constant-names-are-usually-written-in-uppercase-letters">2. Constant names are usually written in uppercase letters</a></h3>
-<h3 id="3-constants-can-be-declared-both-inside-and-outside-of-a-function"><a class="header" href="#3-constants-can-be-declared-both-inside-and-outside-of-a-function">3. Constants can be declared both inside and outside of a function</a></h3>
-<h1 id="frequently-asked-questions"><a class="header" href="#frequently-asked-questions">Frequently Asked Questions</a></h1>
-<h3 id="1-what-is-a-constant-in-go"><a class="header" href="#1-what-is-a-constant-in-go">1. <strong>What is a constant in Go?</strong></a></h3>
-<p><strong>Answer:</strong> A constant is a variable whose value cannot be changed once it is assigned. Constants are declared using the <code>const</code> keyword.</p>
+<ul>
+<li>এই মানটি runtime-এ কোনো memory assign করে রাখবে না।</li>
+<li>বরং যেখানেই <code>PI</code> ব্যবহার করা হবে, সেখানে সরাসরি <code>3.14</code> inject করে দেবে Go compiler।</li>
+</ul>
+<hr />
+<h3 id="-performance-এর-দিক-থেকে-constant-এর-উপকারিতা"><a class="header" href="#-performance-এর-দিক-থেকে-constant-এর-উপকারিতা">🚀 <strong>Performance এর দিক থেকে Constant এর উপকারিতা:</strong></a></h3>
+<ol>
+<li>
+<p><strong>No Memory Overhead:</strong>
+Constant মানের জন্য আলাদা memory allocation হয় না (heap/stack এ না), ফলে এটি memory-efficient।</p>
+</li>
+<li>
+<p><strong>Fast Execution:</strong>
+যেহেতু constant-এর মান compile time-এ জানা থাকে, Go compiler এগুলোকে সরাসরি machine instruction এ transform করে — এতে execution দ্রুত হয়।</p>
+</li>
+<li>
+<p><strong>Safe &amp; Predictable:</strong>
+Constant মান runtime-এ হঠাৎ করে পরিবর্তন হয়ে যাবার ভয় থাকে না, যা bug প্রতিরোধে সাহায্য করে।</p>
+</li>
+</ol>
+<hr />
+<h3 id="-stack-heap-এবং-code-segment--constant-কোথায়"><a class="header" href="#-stack-heap-এবং-code-segment--constant-কোথায়">📍 Stack, Heap, এবং Code Segment – Constant কোথায়?</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Variable Type</th><th>Stored In</th><th>Mutable?</th><th>Allocated at</th></tr></thead><tbody>
+<tr><td><code>var</code></td><td>Stack / Heap</td><td>✅ হ্যাঁ</td><td>Runtime</td></tr>
+<tr><td><code>const</code></td><td>Code Segment</td><td>❌ না</td><td>Compile Time</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h3 id="-যখন-constant-বযবহার-করা-উচিত"><a class="header" href="#-যখন-constant-বযবহার-করা-উচিত">🎯 যখন constant ব্যবহার করা উচিত:</a></h3>
+<ul>
+<li>যখন আপনি এমন কিছু ডেটা ব্যবহার করছেন যা <strong>একই থাকে</strong> পুরো প্রোগ্রাম জুড়ে (যেমন <code>PI</code>, <code>MAX_RETRIES</code>, <code>VERSION</code> ইত্যাদি)</li>
+<li>যখন আপনি এমন মান ব্যবহার করছেন যা <strong>পরিবর্তন করার প্রয়োজন নেই বা করা উচিত নয়</strong></li>
+<li>যখন আপনি <strong>better performance ও memory efficiency</strong> চান</li>
+</ul>
+<hr />
+<h3 id="-ভুল-ধারণা"><a class="header" href="#-ভুল-ধারণা">🛑 ভুল ধারণা:</a></h3>
+<p>অনেকে মনে করে constant মান মানে শুধু number বা string। কিন্তু Go তে constant হিসেবে <code>bool</code>, <code>rune</code>, এবং untyped value-ও ব্যবহার করা যায় — যদিও complex type যেমন slice, map, array constant হিসেবে ব্যবহার করা যায় না।</p>
+<hr />
+<h1 id="constant-rules-নিয়মাবলী"><a class="header" href="#constant-rules-নিয়মাবলী">Constant Rules (নিয়মাবলী)</a></h1>
+<h3 id="1-constant-এর-নাম-সাধারণ-variable-এর-মতোই-rule-follow-করে"><a class="header" href="#1-constant-এর-নাম-সাধারণ-variable-এর-মতোই-rule-follow-করে">1. Constant-এর নাম সাধারণ variable এর মতোই rule follow করে</a></h3>
+<h3 id="2-constant-এর-নাম-সাধারণত-uppercase-অকষরে-লেখা-হয়"><a class="header" href="#2-constant-এর-নাম-সাধারণত-uppercase-অকষরে-লেখা-হয়">2. Constant-এর নাম সাধারণত uppercase অক্ষরে লেখা হয়</a></h3>
+<h3 id="3-constants-ফাংশনের-ভিতর-এবং-বাহির--দুই-জায়গাতেই-ঘোষণা-করা-যায়"><a class="header" href="#3-constants-ফাংশনের-ভিতর-এবং-বাহির--দুই-জায়গাতেই-ঘোষণা-করা-যায়">3. Constants ফাংশনের ভিতর এবং বাহির — দুই জায়গাতেই ঘোষণা করা যায়</a></h3>
+<hr />
+<h2 id="frequently-asked-questions"><a class="header" href="#frequently-asked-questions">Frequently Asked Questions</a></h2>
+<h3 id="1-go-তে-constant-বলতে-কী-বোঝায়"><a class="header" href="#1-go-তে-constant-বলতে-কী-বোঝায়">1. <strong>Go-তে constant বলতে কী বোঝায়?</strong></a></h3>
+<p><strong>উত্তর:</strong>
+একটি constant হলো এমন একটি variable যার মান একবার সেট করার পর পরিবর্তন করা যায় না। Constant ঘোষণা করতে <code>const</code> কিওয়ার্ড ব্যবহার করা হয়।</p>
 <p><strong>Code Example:</strong></p>
 <pre><code class="language-go">package main
 import "fmt"
@@ -202,8 +248,9 @@ func main() {
 }
 </code></pre>
 <hr />
-<h3 id="2-can-constants-be-declared-inside-a-function"><a class="header" href="#2-can-constants-be-declared-inside-a-function">2. <strong>Can constants be declared inside a function?</strong></a></h3>
-<p><strong>Answer:</strong> Yes, constants can be declared both inside and outside of a function.</p>
+<h3 id="2-constant-কি-ফাংশনের-ভিতর-ঘোষণা-করা-যায়"><a class="header" href="#2-constant-কি-ফাংশনের-ভিতর-ঘোষণা-করা-যায়">2. <strong>Constant কি ফাংশনের ভিতর ঘোষণা করা যায়?</strong></a></h3>
+<p><strong>উত্তর:</strong>
+হ্যাঁ, constant ফাংশনের ভিতরেও এবং বাইরেও ঘোষণা করা যায়।</p>
 <p><strong>Code Example:</strong></p>
 <pre><code class="language-go">package main
 import "fmt"
@@ -214,8 +261,9 @@ func main() {
 }
 </code></pre>
 <hr />
-<h3 id="3-can-constants-hold-values-other-than-numbers"><a class="header" href="#3-can-constants-hold-values-other-than-numbers">3. <strong>Can constants hold values other than numbers?</strong></a></h3>
-<p><strong>Answer:</strong> Yes, constants can hold string, boolean, or even character values.</p>
+<h3 id="3-constant-কি-শুধু-সংখযা-রাখে-না-কি-অনয-টাইপও-রাখা-যায়"><a class="header" href="#3-constant-কি-শুধু-সংখযা-রাখে-না-কি-অনয-টাইপও-রাখা-যায়">3. <strong>Constant কি শুধু সংখ্যা রাখে, না কি অন্য টাইপও রাখা যায়?</strong></a></h3>
+<p><strong>উত্তর:</strong>
+Constant শুধু সংখ্যা না, string, boolean, এমনকি character টাইপের মানও রাখতে পারে।</p>
 <p><strong>Code Example:</strong></p>
 <pre><code class="language-go">package main
 import "fmt"
@@ -229,8 +277,9 @@ func main() {
 }
 </code></pre>
 <hr />
-<h3 id="4-can-constants-be-computed-at-runtime"><a class="header" href="#4-can-constants-be-computed-at-runtime">4. <strong>Can constants be computed at runtime?</strong></a></h3>
-<p><strong>Answer:</strong> No, constants must be assigned a value that can be determined at compile time.</p>
+<h3 id="4-constant-কি-runtime-এ-হিসাব-করে-মান-রাখতে-পারে"><a class="header" href="#4-constant-কি-runtime-এ-হিসাব-করে-মান-রাখতে-পারে">4. <strong>Constant কি runtime-এ হিসাব করে মান রাখতে পারে?</strong></a></h3>
+<p><strong>উত্তর:</strong>
+না, constant-কে এমন মান দিতে হবে যা compile time-এ নির্ধারণ করা যায়।</p>
 <p><strong>Code Example:</strong></p>
 <pre><code class="language-go">package main
 import "fmt"
@@ -242,8 +291,9 @@ func main() {
 }
 </code></pre>
 <hr />
-<h3 id="5-what-happens-if-you-try-to-change-a-constants-value"><a class="header" href="#5-what-happens-if-you-try-to-change-a-constants-value">5. <strong>What happens if you try to change a constant's value?</strong></a></h3>
-<p><strong>Answer:</strong> The compiler will throw an error if you try to change the value of a constant.</p>
+<h3 id="5-যদি-constant-এর-মান-পরিবরতন-করার-চেষটা-করি-তাহলে-কী-হয়"><a class="header" href="#5-যদি-constant-এর-মান-পরিবরতন-করার-চেষটা-করি-তাহলে-কী-হয়">5. <strong>যদি constant-এর মান পরিবর্তন করার চেষ্টা করি, তাহলে কী হয়?</strong></a></h3>
+<p><strong>উত্তর:</strong>
+যদি আপনি constant-এর মান পরিবর্তনের চেষ্টা করেন, তাহলে compile time-এ error হবে।</p>
 <p><strong>Code Example:</strong></p>
 <pre><code class="language-go">package main
 import "fmt"
@@ -256,8 +306,9 @@ func main() {
 }
 </code></pre>
 <hr />
-<h3 id="6-can-constants-be-used-in-expressions"><a class="header" href="#6-can-constants-be-used-in-expressions">6. <strong>Can constants be used in expressions?</strong></a></h3>
-<p><strong>Answer:</strong> Yes, constants can be used in expressions to compute other constants.</p>
+<h3 id="6-constant-কি-expression-এ-বযবহার-করা-যায়"><a class="header" href="#6-constant-কি-expression-এ-বযবহার-করা-যায়">6. <strong>Constant কি expression-এ ব্যবহার করা যায়?</strong></a></h3>
+<p><strong>উত্তর:</strong>
+হ্যাঁ, constant ব্যবহার করে অন্য constant-এর মান হিসাব করা যায়।</p>
 <p><strong>Code Example:</strong></p>
 <pre><code class="language-go">package main
 import "fmt"
@@ -271,8 +322,9 @@ func main() {
 }
 </code></pre>
 <hr />
-<h3 id="7-what-is-the-difference-between-const-and-var-in-go"><a class="header" href="#7-what-is-the-difference-between-const-and-var-in-go">7. <strong>What is the difference between <code>const</code> and <code>var</code> in Go?</strong></a></h3>
-<p><strong>Answer:</strong> <code>const</code> is used for values that do not change, while <code>var</code> is used for variables whose values can change.</p>
+<h3 id="7-const-এবং-var-এর-মধযে-পারথকয-কী"><a class="header" href="#7-const-এবং-var-এর-মধযে-পারথকয-কী">7. <strong><code>const</code> এবং <code>var</code> এর মধ্যে পার্থক্য কী?</strong></a></h3>
+<p><strong>উত্তর:</strong>
+<code>const</code> ব্যবহার করা হয় এমন মানের জন্য যেটা কখনোই পরিবর্তন হবে না, আর <code>var</code> ব্যবহার করা হয় পরিবর্তনশীল মান রাখার জন্য।</p>
 <p><strong>Code Example:</strong></p>
 <pre><code class="language-go">package main
 import "fmt"
@@ -288,8 +340,9 @@ func main() {
 }
 </code></pre>
 <hr />
-<h3 id="8-can-constants-be-of-type-array-or-slice"><a class="header" href="#8-can-constants-be-of-type-array-or-slice">8. <strong>Can constants be of type array or slice?</strong></a></h3>
-<p><strong>Answer:</strong> No, constants cannot be of type array, slice, or map.</p>
+<h3 id="8-constant-কি-array-বা-slice-টাইপের-হতে-পারে"><a class="header" href="#8-constant-কি-array-বা-slice-টাইপের-হতে-পারে">8. <strong>Constant কি array বা slice টাইপের হতে পারে?</strong></a></h3>
+<p><strong>উত্তর:</strong>
+না, constant কখনো array, slice বা map টাইপের হতে পারে না।</p>
 <p><strong>Code Example:</strong></p>
 <pre><code class="language-go">package main
 import "fmt"
@@ -300,8 +353,9 @@ func main() {
 }
 </code></pre>
 <hr />
-<h3 id="9-can-constants-be-exported-in-go"><a class="header" href="#9-can-constants-be-exported-in-go">9. <strong>Can constants be exported in Go?</strong></a></h3>
-<p><strong>Answer:</strong> Yes, constants can be exported if their names start with an uppercase letter.</p>
+<h3 id="9-go-তে-constant-কি-export-করা-যায়"><a class="header" href="#9-go-তে-constant-কি-export-করা-যায়">9. <strong>Go-তে constant কি export করা যায়?</strong></a></h3>
+<p><strong>উত্তর:</strong>
+হ্যাঁ, যদি constant-এর নাম uppercase letter দিয়ে শুরু হয়, তাহলে তা exported হয় এবং অন্য প্যাকেজ থেকেও access করা যায়।</p>
 <p><strong>Code Example:</strong></p>
 <pre><code class="language-go">package main
 import "fmt"
@@ -313,8 +367,9 @@ func main() {
 }
 </code></pre>
 <hr />
-<h3 id="10-what-are-untyped-constants-in-go"><a class="header" href="#10-what-are-untyped-constants-in-go">10. <strong>What are untyped constants in Go?</strong></a></h3>
-<p><strong>Answer:</strong> Untyped constants do not have a specific type until they are assigned to a variable.</p>
+<h3 id="10-go-তে-untyped-constant-কী"><a class="header" href="#10-go-তে-untyped-constant-কী">10. <strong>Go-তে untyped constant কী?</strong></a></h3>
+<p><strong>উত্তর:</strong>
+Untyped constant এমন constant যেটার কোনো নির্দিষ্ট টাইপ নেই যতক্ষণ না তা কোনো variable এ assign করা হয়।</p>
 <p><strong>Code Example:</strong></p>
 <pre><code class="language-go">package main
 import "fmt"
