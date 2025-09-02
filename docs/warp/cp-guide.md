@@ -73,23 +73,92 @@
 
 ---
 
-### 🧑‍💻 Beginner Friendly CP Problems
+### 🔨 Brute Force Problems (Easy → Hard)
 
-| #   | UID   | Title                         | Link                                                                 | Tag       |
-|-----|-------|-------------------------------|----------------------------------------------------------------------|-----------|
-| 22  | 4598  | Weird Algorithm               | [Link](https://cses.fi/problemset/task/1068)                         |           |
-| 23  | 7334  | Concatenation of Array        | [Link](https://leetcode.com/problems/concatenation-of-array/description/) |        |
-| 24  | 1019  | Sakurako's Exam               | [Link](https://codeforces.com/problemset/problem/2008/A)            |           |
-| 25  | 5640  | Fifty-Fifty                   | [Link](https://atcoder.jp/contests/abc132/tasks/abc132_a?lang=en)   | dncpc6    |
-| 26  | 8123  | Good Kid                      | [Link](https://codeforces.com/problemset/problem/1873/B)            | dncpc6    |
-| 27  | 2047  | Make it Big                   | [Link](https://toph.co/p/make-it-big)                               | dncpc6    |
-| 28  | 6831  | Three Doors                   | [Link](https://codeforces.com/problemset/problem/1709/A)            | dncpc6    |
-| 29  | 9276  | Distance Table                | [Link](https://atcoder.jp/contests/abc411/tasks/abc411_b?lang=en)   | dncpc7    |
-| 30  | 3915  | Sushi for Two                 | [Link](https://codeforces.com/problemset/problem/1138/A)            | dncpc7    |
-| 31 |  0313  | Ilya and Bank Account         | [Link](https://codeforces.com/problemset/problem/313/A)             |           |
-| 32 |  1676  | Equal Candies                 | [Link](https://codeforces.com/problemset/problem/1676/B)             |           |
-| 33 |  1295  | Find Numbers with Even Number of digits | [Link](https://leetcode.com/problems/find-numbers-with-even-number-of-digits/) |       |
+| UID   | Title                         | Link                                                                 | Tag       |
+|-------|-------------------------------|----------------------------------------------------------------------|-----------|
+| 4598  | Weird Algorithm               | [Link](https://cses.fi/problemset/task/1068)                         |           |
+| 7334  | Concatenation of Array        | [Link](https://leetcode.com/problems/concatenation-of-array/description/) |        |
+| 1019  | Sakurako's Exam               | [Link](https://codeforces.com/problemset/problem/2008/A)             |           |
+| 0313  | Ilya and Bank Account         | [Link](https://codeforces.com/problemset/problem/313/A)              |           |
+| 1676  | Equal Candies                 | [Link](https://codeforces.com/problemset/problem/1676/B)             |           |
+| 8123  | Good Kid                      | [Link](https://codeforces.com/problemset/problem/1873/B)             | dncpc6    |
+| 6831  | Three Doors                   | [Link](https://codeforces.com/problemset/problem/1709/A)             | dncpc6    |
+| 9301  | Buy a Shovel                  | [Link](https://codeforces.com/problemset/problem/732/A)              | NC        |
+| 9302  | Games                         | [Link](https://codeforces.com/problemset/problem/268/A)              | NC        |
+| 9303  | IQ Test                       | [Link](https://codeforces.com/problemset/problem/25/A)               | NC        |
+| 9304  | New Year and Hurry            | [Link](https://codeforces.com/problemset/problem/750/A)              | NC        |
+| 9401  | Substring Problem             | [Link](https://atcoder.jp/contests/abc177/tasks/abc177_b)            | NC        |
 
+---
+
+### 🪙 Greedy Problems (Easy → Hard)
+
+| UID   | Title                         | Link                                                                 | Tag       |
+|-------|-------------------------------|----------------------------------------------------------------------|-----------|
+| 5640  | Fifty-Fifty                   | [Link](https://atcoder.jp/contests/abc132/tasks/abc132_a?lang=en)    | dncpc6    |
+| 9276  | Distance Table                | [Link](https://atcoder.jp/contests/abc411/tasks/abc411_b?lang=en)    | dncpc7    |
+| 3915  | Sushi for Two                 | [Link](https://codeforces.com/problemset/problem/1138/A)             | dncpc7    |
+| 9305  | Candies                       | [Link](https://codeforces.com/problemset/problem/1343/A)             | NC        |
+| 9306  | Phoenix and Balance           | [Link](https://codeforces.com/problemset/problem/1348/A)             | NC        |
+| 9307  | Turtle Puzzle                 | [Link](https://codeforces.com/problemset/problem/1933/A)             | NC        |
+| 9308  | Park Lighting                 | [Link](https://codeforces.com/problemset/problem/1358/A)             | NC        |
+| 9309  | Desorting                     | [Link](https://codeforces.com/problemset/problem/1853/A)             | NC        |
+
+---
+
+### 🔤 String Problems
+
+| UID   | Title                         | Link                                                                 | Tag       |
+|-------|-------------------------------|----------------------------------------------------------------------|-----------|
+| 1295  | Find Numbers with Even Number of Digits | [Link](https://leetcode.com/problems/find-numbers-with-even-number-of-digits/) |       |
+| 930A  | Two Substrings                | [Link](https://codeforces.com/problemset/problem/550/A)              | NC        |
+| 930B  | Dreamoon and WiFi             | [Link](https://codeforces.com/problemset/problem/476/B)              | NC        |
+| 930C  | Distinct Split                | [Link](https://codeforces.com/problemset/problem/1791/D)             | NC        |
+| 9402  | Greedy Takahashi              | [Link](https://atcoder.jp/contests/abc149/tasks/abc149_b)            | NC        |
+| 9403  | Festival                      | [Link](https://atcoder.jp/contests/abc322/tasks/abc322_c)            | NC        |
+
+---
+
+### 🔍 Binary Search / Two Pointers Problems
+
+| UID   | Title                         | Link                                                                 | Tag       |
+|-------|-------------------------------|----------------------------------------------------------------------|-----------|
+| 930D  | Books                         | [Link](https://codeforces.com/problemset/problem/279/B)              | NC        |
+| 930E  | Flipping Game                 | [Link](https://codeforces.com/problemset/problem/327/A)              | NC        |
+
+---
+
+### ⚡ Implementation / Ad-hoc Problems
+
+| UID   | Title                         | Link                                                                 | Tag       |
+|-------|-------------------------------|----------------------------------------------------------------------|-----------|
+| 2047  | Make it Big                   | [Link](https://toph.co/p/make-it-big)                                | dncpc6    |
+| 930F  | Constructive Problem          | [Link](https://codeforces.com/problemset/problem/2122/A)             | NC        |
+| 930G  | Math Problem                  | [Link](https://codeforces.com/problemset/problem/2122/B)             | NC        |
+
+---
+
+### 📐 Geometry / Constructive Problems
+
+| UID   | Title                         | Link                                                                 | Tag       |
+|-------|-------------------------------|----------------------------------------------------------------------|-----------|
+| 930H  | Cut Ribbon                    | [Link](https://codeforces.com/problemset/problem/189/A)              | NC        |
+| 930I  | Towers                        | [Link](https://codeforces.com/problemset/problem/189/B)              | NC        |
+| 930J  | Turtle Magic                  | [Link](https://codeforces.com/problemset/problem/193/E)              | NC        |
+
+---
+
+### 🔢 Math / Number Theory Problems
+
+| UID   | Title                         | Link                                                                 | Tag       |
+|-------|-------------------------------|----------------------------------------------------------------------|-----------|
+| 930K  | Divisibility by Eight         | [Link](https://codeforces.com/problemset/problem/550/C)              | NC        |
+| 930L  | Common Divisors               | [Link](https://codeforces.com/problemset/problem/182/D)              | NC        |
+| 9404  | Next Prime                    | [Link](https://atcoder.jp/contests/abc149/tasks/abc149_c)            | NC        |
+| 9405  | Factorial Yen Coin            | [Link](https://atcoder.jp/contests/abc208/tasks/abc208_b)            | NC        |
+
+---
 
 
 #### 🧩 Problems made by the community
@@ -105,6 +174,14 @@
 | 2204         | [Challenge to Kraken](https://www.hackerrank.com/contests/nebula-clash-002/challenges/challenge-to-kraken)          | toji        |
 | 2205         | [Divisible Positive Subset](https://www.hackerrank.com/contests/nebula-clash-002/challenges/divisible-positive-subset) | MArhamAA |
 | 2206         | [Yet Another LCS Problem](https://www.hackerrank.com/contests/nebula-clash-002/challenges/yet-another-lcs-problem-1) | MArhamAA |
+| 3001  | [Kraken’s Patience (Easy Version)](https://www.hackerrank.com/contests/nebula-clash-003/challenges/krakens-patience-easy-version) | HasanMubin |
+| 3002  | [Housing Crisis in Rentoria](https://www.hackerrank.com/contests/nebula-clash-003/challenges/housing-crisis-in-rentoria) | toji |
+| 3003  | [Kraken’s Many Titles (Hard Version)](https://www.hackerrank.com/contests/nebula-clash-003/challenges/krakens-many-titles-hard-version) | HasanMubin |
+| 3004  | [Chronicles of the Royal Scribe](https://www.hackerrank.com/contests/nebula-clash-003/challenges/chronicles-of-the-royal-scribe) | toji |
+| 3005  | [Max Equal Sum](https://www.hackerrank.com/contests/nebula-clash-003/challenges/max-equal-sum)            | MArhamAA |
+| 3006  | [Traveler Rigan](https://www.hackerrank.com/contests/nebula-clash-003/challenges/traveler-rigan)           | MArhamAA |
+
+
 
 
 
