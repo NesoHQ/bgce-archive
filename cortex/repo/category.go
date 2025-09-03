@@ -104,7 +104,11 @@ func (r *ctgryRepo) Insert(ctx context.Context, cat category.Category) (*categor
 }
 
 func (r *ctgryRepo) Delete(ctx context.Context, uuid string) error {
-	query := r.psql.Update(r.tableName).Set("deleted_at", time.Now()).Set("status", "deleted").Where(sq.Eq{"uuid": uuid})
+	query := r.psql.Update(r.tableName).
+		Set("deleted_at", time.Now()).
+		Set("status", "deleted").
+		Where(sq.Eq{"uuid": uuid}).
+		Where(sq.Expr("deleted_at IS NULL"))
 
 	sqlStr, args, err := query.ToSql()
 	if err != nil {
@@ -122,7 +126,24 @@ func (r *ctgryRepo) Delete(ctx context.Context, uuid string) error {
 	}
 
 	if rowsAffected == 0 {
-		return customerrors.ErrCategoryNotFound
+		query := r.psql.Select("deleted_at IS NOT NULL").
+			From(r.tableName).
+			Where(sq.Eq{"uuid": uuid})
+
+		sqlStr, args, err := query.ToSql()
+		if err != nil {
+			return fmt.Errorf("failed to build delete SQL: %w", err)
+		}
+
+		var flag bool
+		err = r.writeDb.QueryRowContext(ctx, sqlStr, args...).Scan(&flag)
+		if err == sql.ErrNoRows {
+			return customerrors.ErrCategoryNotFound
+		} else if err != nil {
+			return fmt.Errorf("query Error: %w", err)
+		}
+
+		return customerrors.ErrCategoryAlreadyDeleted
 	}
 
 	return nil
