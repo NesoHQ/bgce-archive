@@ -1,9 +1,0 @@
-[book]
-authors = ["nazma98", "kraken "]
-language = "en"
-multilingual = false
-src = "src"
-title = "BGCE ARCHIVE"
-
-[output.html]
-git-repository-url = "https://github.com/NesoHQ/bgce-archive.git"
