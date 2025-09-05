@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"net"
 	"net/http"
 	"os"
 
@@ -21,6 +22,7 @@ import (
 
 	"github.com/golang-jwt/jwt"
 	"github.com/spf13/cobra"
+	"go.elastic.co/apm/module/apmhttp"
 )
 
 func Execute(ctx context.Context) {
@@ -126,12 +128,23 @@ func APIServerCommand(ctx context.Context) *cobra.Command {
 			ctgryRepo := repo.NewCtgryRepo(readBgceDB, writeBgceDB, psql)
 			ctgrySvc := category.NewService(cnf, rmq, ctgryRepo, redisCache)
 			handlers := handlers.NewHandler(cnf, ctgrySvc)
-			server, err := rest.NewServer(middlewares, cnf, handlers)
+			mux, err := rest.NewServeMux(middlewares, handlers)
 			if err != nil {
 				slog.Error("Failed to create the server:", logger.Extra(map[string]any{
 					"error": err.Error(),
 				}))
 				return err
+			}
+
+			server := &http.Server{
+				Addr:    fmt.Sprintf(":%d", cnf.HttpPort),
+				Handler: apmhttp.Wrap(mux),
+				BaseContext: func(net.Listener) context.Context {
+					return ctx
+				},
+				ConnContext: func(ctx context.Context, c net.Conn) context.Context {
+					return ctx
+				},
 			}
 
 			go func() {

@@ -1,18 +1,14 @@
 package rest
 
 import (
-	"fmt"
 	"net/http"
 
-	"go.elastic.co/apm/module/apmhttp"
-
-	"cortex/config"
 	"cortex/rest/handlers"
 	"cortex/rest/middlewares"
 	"cortex/rest/swagger"
 )
 
-func NewServer(mw *middlewares.Middlewares, cnf *config.Config, handlers *handlers.Handlers) (*http.Server, error) {
+func NewServeMux(mw *middlewares.Middlewares, handlers *handlers.Handlers) (*http.ServeMux, error) {
 	mux := http.NewServeMux()
 	manager := middlewares.NewManager()
 	manager.Use(middlewares.Recover, middlewares.Logger, middlewares.CORS)
@@ -34,8 +30,6 @@ func NewServer(mw *middlewares.Middlewares, cnf *config.Config, handlers *handle
 	mux.Handle("DELETE /api/v1/sub-categories/{id}", http.HandlerFunc(handlers.DeleteSubCategory))
 
 	swagger.SetupSwagger(mux, manager)
-	return &http.Server{
-		Addr:    fmt.Sprintf(":%d", cnf.HttpPort),
-		Handler: apmhttp.Wrap(mux),
-	}, nil
+
+	return mux, nil
 }
