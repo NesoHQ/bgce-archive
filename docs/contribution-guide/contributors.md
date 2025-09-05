@@ -1,2 +1,0 @@
-Mehraz
-Obaydullah
