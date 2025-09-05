@@ -81,7 +81,7 @@ func APIServerCommand(ctx context.Context) *cobra.Command {
 				}))
 				return err
 			}
-			defer repo.CloseDB(readBgceDB)
+			defer readBgceDB.Close()
 
 			writeBgceDB, err := repo.GetDbConnection(cnf.WriteBgceDB)
 			if err != nil {
@@ -90,7 +90,7 @@ func APIServerCommand(ctx context.Context) *cobra.Command {
 				}))
 				return err
 			}
-			defer repo.CloseDB(writeBgceDB)
+			defer writeBgceDB.Close()
 
 			err = repo.MigrateDB(writeBgceDB, cnf.MigrationSource)
 			if err != nil {

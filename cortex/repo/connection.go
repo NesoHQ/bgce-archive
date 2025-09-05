@@ -45,13 +45,3 @@ func GetDbConnection(cnf config.DBConfig) (*sqlx.DB, error) {
 
 	return dbCon, nil
 }
-
-func CloseDB(db *sqlx.DB) error {
-	if err := db.Close(); err != nil {
-		return err
-	}
-
-	slog.Info("Disconnected from database")
-
-	return nil
-}
