@@ -7,6 +7,6 @@ type Cache interface {
 	RedisEnabledKey() string
 }
 
-type CortexSettings interface {
-	UseRedisCache(context.Context) (bool, error)
+type CortexConfig struct {
+	UseRedisCache bool
 }

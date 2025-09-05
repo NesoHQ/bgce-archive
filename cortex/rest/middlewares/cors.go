@@ -6,15 +6,14 @@ import (
 	"github.com/rs/cors"
 )
 
-func EnableCors(mux *http.ServeMux) http.Handler {
+func CORS(next http.Handler) http.Handler {
 	c := cors.New(cors.Options{
-		// AllowedOrigins: []string{"https://*", "http://*"},
-		AllowOriginFunc: func(origin string) bool { return true },
-		AllowedMethods:  []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
-		// AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		AllowOriginFunc:  func(origin string) bool { return true },
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
 		AllowedHeaders:   []string{"*"},
 		AllowCredentials: true,
 	})
-
-	return c.Handler(mux)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		c.HandlerFunc(w, r)
+	})
 }

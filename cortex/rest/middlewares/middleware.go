@@ -7,14 +7,10 @@ import (
 type Middlewares struct {
 	Cnf            *config.Config
 	cache          Cache
-	cortexSettings CortexSettings
+	cortexSettings CortexConfig
 }
 
-func NewMiddleware(
-	cnf *config.Config,
-	cache Cache,
-	cortexSettings CortexSettings,
-) *Middlewares {
+func NewMiddleware(cnf *config.Config, cache Cache, cortexSettings CortexConfig) *Middlewares {
 	return &Middlewares{
 		Cnf:            cnf,
 		cache:          cache,

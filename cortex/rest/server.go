@@ -2,9 +2,7 @@ package rest
 
 import (
 	"fmt"
-	"log/slog"
 	"net/http"
-	"sync"
 
 	"go.elastic.co/apm/module/apmhttp"
 
@@ -14,50 +12,30 @@ import (
 	"cortex/rest/swagger"
 )
 
-type Server struct {
-	middlewares *middlewares.Middlewares
-	handlers    *handlers.Handlers
-	cnf         *config.Config
-	Wg          sync.WaitGroup
-}
-
-func NewServer(middlewares *middlewares.Middlewares, cnf *config.Config, handlers *handlers.Handlers) (*Server, error) {
-	server := &Server{
-		middlewares: middlewares,
-		cnf:         cnf,
-		handlers:    handlers,
-	}
-
-	return server, nil
-}
-
-func (server *Server) Start() {
-	manager := middlewares.NewManager()
-
-	manager.Use(
-		middlewares.Recover,
-		middlewares.Logger,
-	)
-
+func NewServer(mw *middlewares.Middlewares, cnf *config.Config, handlers *handlers.Handlers) (*http.Server, error) {
 	mux := http.NewServeMux()
+	manager := middlewares.NewManager()
+	manager.Use(middlewares.Recover, middlewares.Logger, middlewares.CORS)
 
-	server.initCtgryRoutes(mux, manager)
-	server.initSubCtgryRoutes(mux, manager)
+	mux.Handle("POST /api/v1/categories", manager.With(
+		http.HandlerFunc(handlers.CreateCategory),
+		mw.RedisToggle,
+		mw.AuthenticateJWT,
+	))
+	mux.Handle("GET /api/v1/categories", http.HandlerFunc(handlers.GetCategoryList))
+	mux.Handle("GET /api/v1/categories/{id}", http.HandlerFunc(handlers.GetCategoryByID))
+	mux.Handle("PUT /api/v1/categories/{id}", http.HandlerFunc(handlers.UpdateCategory))
+	mux.Handle("DELETE /api/v1/categories/{id}", http.HandlerFunc(handlers.DeleteCategory))
 
-	handler := middlewares.EnableCors(mux)
+	mux.Handle("POST /api/v1/sub-categories", http.HandlerFunc(handlers.CreateSubCategory))
+	mux.Handle("GET /api/v1/sub-categories", http.HandlerFunc(handlers.GetSubCategoryList))
+	mux.Handle("GET /api/v1/sub-categories/{id}", http.HandlerFunc(handlers.GetSubCategoryByID))
+	mux.Handle("PUT /api/v1/sub-categories/{id}", http.HandlerFunc(handlers.UpdateSubCategory))
+	mux.Handle("DELETE /api/v1/sub-categories/{id}", http.HandlerFunc(handlers.DeleteSubCategory))
 
 	swagger.SetupSwagger(mux, manager)
-
-	server.Wg.Add(1)
-
-	go func() {
-		defer server.Wg.Done()
-
-		addr := fmt.Sprintf(":%d", server.cnf.HttpPort)
-		slog.Info(fmt.Sprintf("Listening at %s", addr))
-
-		if err := http.ListenAndServe(addr, apmhttp.Wrap(handler)); err != nil {
-			slog.Error(err.Error())
-		}
-	}()
+	return &http.Server{
+		Addr:    fmt.Sprintf(":%d", cnf.HttpPort),
+		Handler: apmhttp.Wrap(mux),
+	}, nil
 }

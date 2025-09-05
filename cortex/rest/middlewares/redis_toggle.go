@@ -2,9 +2,7 @@ package middlewares
 
 import (
 	"context"
-	"log/slog"
 	"net/http"
-	"strconv"
 )
 
 const (
@@ -12,21 +10,11 @@ const (
 )
 
 func (m *Middlewares) RedisToggle(next http.Handler) http.Handler {
+	if !m.cortexSettings.UseRedisCache {
+		return next
+	}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var enabled bool
-
-		val, err := m.cache.Get(r.Context(), m.cache.RedisEnabledKey())
-		if err == nil {
-			enabled, _ = strconv.ParseBool(val)
-		} else {
-			enabled, err = m.cortexSettings.UseRedisCache(r.Context())
-			if err != nil {
-				slog.Warn("Failed to get Redis toggle from cortexSettings, defaulting to false", "error", err)
-				enabled = false
-			}
-		}
-
-		ctx := WithRedisEnabled(r.Context(), enabled)
+		ctx := WithRedisEnabled(r.Context(), true)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
