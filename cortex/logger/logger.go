@@ -22,10 +22,12 @@ var levels map[slog.Level]string = map[slog.Level]string{
 	slog.LevelError: string(LevelError),
 }
 
-var Debug = slog.Debug
-var Info = slog.Info
-var Warn = slog.Warn
-var Error = slog.Error
+var (
+	Debug = slog.Debug
+	Info  = slog.Info
+	Warn  = slog.Warn
+	Error = slog.Error
+)
 
 type LogKey string
 
@@ -69,7 +71,7 @@ func Method(method string) slog.Attr {
 }
 
 func Extra(value any) slog.Attr {
-	return slog.String(string(ExtraKey), ConvertToJson(value))
+	return slog.Any(string(ExtraKey), value)
 }
 
 func UserAgent(ua string) slog.Attr {

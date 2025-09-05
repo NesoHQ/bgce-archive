@@ -31,7 +31,7 @@ func (svc *service) CreateCategory(ctx context.Context, params CreateCategoryPar
 
 	if existingCat != nil {
 		if useRedis {
-			go svc.cacheCategoryAsync(existingCat)
+			go svc.cacheCategory(existingCat)
 		}
 		return customerrors.ErrSlugExists
 	}
@@ -55,13 +55,13 @@ func (svc *service) CreateCategory(ctx context.Context, params CreateCategoryPar
 	}
 
 	if useRedis {
-		go svc.cacheCategoryAsync(cat)
+		go svc.cacheCategory(cat)
 	}
 
 	return nil
 }
 
-func (svc *service) cacheCategoryAsync(cat *Category) {
+func (svc *service) cacheCategory(cat *Category) {
 	cacheCtx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 
