@@ -103,8 +103,8 @@ func (r *ctgryRepo) Insert(ctx context.Context, cat category.Category) (*categor
 	return &inserted, nil
 }
 
-func (r *ctgryRepo) Delete(ctx context.Context, uuid string) error {
-	query := r.psql.Update(r.tableName).Set("deleted_at", time.Now()).Set("status", "deleted").Where(sq.Eq{"uuid": uuid})
+func (r *ctgryRepo) Delete(ctx context.Context, filter category.GetCategoryFilter) error {
+	query := r.psql.Update(r.tableName).Set("deleted_at", time.Now()).Set("status", "deleted").Where(sq.Eq{"uuid": filter.UUID})
 
 	sqlStr, args, err := query.ToSql()
 	if err != nil {

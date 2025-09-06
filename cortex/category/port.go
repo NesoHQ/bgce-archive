@@ -11,7 +11,7 @@ type Service interface {
 	CreateCategory(ctx context.Context, params CreateCategoryParams) error
 	GetCategory(ctx context.Context, filter GetCategoryFilter) (*Category, error)
 	// UpdateCategory(ctx context.Context, params UpdateCategoryReqParams) error
-	DeleteCategory(ctx context.Context, uuid string) error
+	DeleteCategory(ctx context.Context, filter GetCategoryFilter) error
 	// GetCategories(ctx context.Context, params GetCategoryReqParams) ([]Category, error)
 }
 
@@ -19,7 +19,7 @@ type CtgryRepo interface {
 	Insert(ctx context.Context, category Category) (*Category, error)
 	Get(ctx context.Context, flters GetCategoryFilter) (*Category, error)
 	// Update(ctx context.Context, category Category) error
-	Delete(ctx context.Context, uuid string) error
+	Delete(ctx context.Context, filter GetCategoryFilter) error
 	// GetAll(ctx context.Context, params GetCategoryReqParams) ([]Category, error)
 }
 

@@ -17,9 +17,8 @@ func (m *CategoryService) CreateCategory(ctx context.Context, model category.Cre
 	return args.Error(0)
 }
 
-func (m *CategoryService) DeleteCategory(ctx context.Context, uuid string) error {
-	args := m.Called(ctx, uuid)
-	return args.Error(0)
+func (m *CategoryService) DeleteCategory(ctx context.Context, filter category.GetCategoryFilter) error {
+	return nil
 }
 
 func (m *CategoryService) GetCategory(ctx context.Context, filter category.GetCategoryFilter) (*category.Category, error) {

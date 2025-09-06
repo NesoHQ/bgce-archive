@@ -20,8 +20,8 @@ func (m *CategoryRepo) Insert(ctx context.Context, cat category.Category) (*cate
 	return nil, args.Error(1)
 }
 
-func (m *CategoryRepo) Delete(ctx context.Context, uuid string) error {
-	args := m.Called(ctx, uuid)
+func (m *CategoryRepo) Delete(ctx context.Context, filter category.GetCategoryFilter) error {
+	args := m.Called(ctx, filter)
 	return args.Error(0)
 }
 

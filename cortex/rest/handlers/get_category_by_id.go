@@ -12,8 +12,8 @@ import (
 	"github.com/google/uuid"
 )
 
-func (handlers *Handlers) GetCategoryByUUID(w http.ResponseWriter, r *http.Request) {
-	categoryUUID, err := uuid.Parse(r.PathValue("uuid"))
+func (handlers *Handlers) GetCategoryByID(w http.ResponseWriter, r *http.Request) {
+	categoryUUID, err := uuid.Parse(r.PathValue("category_id"))
 	if err != nil {
 		utils.SendError(w, http.StatusBadRequest, "invalid UUID", nil)
 		return
