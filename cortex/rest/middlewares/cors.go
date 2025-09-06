@@ -14,6 +14,6 @@ func CORS(next http.Handler) http.Handler {
 		AllowCredentials: true,
 	})
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		c.HandlerFunc(w, r)
+		c.Handler(next).ServeHTTP(w, r)
 	})
 }
