@@ -3,6 +3,7 @@ package middlewares
 import (
 	"context"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -23,8 +24,7 @@ const (
 	UserEmailKey contextKey = "userEmail"
 )
 
-type AuthClaims struct {
-	Id    int    `json:"id"`
+type authClaims struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
 	jwt.RegisteredClaims
@@ -55,14 +55,10 @@ func (m *Middlewares) AuthenticateJWT(next http.Handler) http.Handler {
 			return
 		}
 
-		var claims AuthClaims
-		token, err := jwt.ParseWithClaims(
-			tokenStr,
-			&claims,
-			func(t *jwt.Token) (interface{}, error) {
-				return []byte(m.Cnf.JwtSecret), nil
-			},
-		)
+		var claims authClaims
+		token, err := jwt.ParseWithClaims(tokenStr, &claims, func(t *jwt.Token) (any, error) {
+			return []byte(m.Cnf.JwtSecret), nil
+		})
 		if err != nil {
 			unauthorizedResponse(w, "Invalid token: "+err.Error())
 			return
@@ -73,12 +69,13 @@ func (m *Middlewares) AuthenticateJWT(next http.Handler) http.Handler {
 			return
 		}
 
-		// if claims.ExpiresAt.Time.Before(time.Now()) {
-		// 	unauthorizedResponse(w, "Token has expired")
-		// 	return
-		// }
+		userID, err := strconv.Atoi(claims.Subject)
+		if err != nil {
+			unauthorizedResponse(w, "JWT subject is not a valid user ID. Expected numeric string.")
+			return
+		}
 
-		ctx := context.WithValue(r.Context(), UserIdKey, claims.Id)
+		ctx := context.WithValue(r.Context(), UserIdKey, userID)
 		ctx = context.WithValue(ctx, UserNameKey, claims.Name)
 		ctx = context.WithValue(ctx, UserEmailKey, claims.Email)
 

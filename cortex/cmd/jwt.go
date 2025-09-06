@@ -5,7 +5,7 @@ import (
 
 	"cortex/config"
 
-	"github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/spf13/cobra"
 )
 
@@ -15,8 +15,8 @@ func GenerateJWTCommand() *cobra.Command {
 		Short: "generate a jwt token",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			conf := config.GetConfig()
-			token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-				Id: "1",
+			token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
+				Subject: "1",
 			}).SignedString([]byte(conf.JwtSecret))
 			if err != nil {
 				return err
