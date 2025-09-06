@@ -21,3 +21,7 @@ func (m *CategoryService) DeleteCategory(ctx context.Context, uuid string) error
 	args := m.Called(ctx, uuid)
 	return args.Error(0)
 }
+
+func (m *CategoryService) GetCategory(ctx context.Context, filter category.GetCategoryFilter) (*category.Category, error) {
+	return nil, nil
+}

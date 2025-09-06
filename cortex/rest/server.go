@@ -19,7 +19,7 @@ func NewServeMux(mw *middlewares.Middlewares, handlers *handlers.Handlers) (*htt
 		mw.AuthenticateJWT,
 	))
 	mux.Handle("GET /api/v1/categories", http.HandlerFunc(handlers.GetCategoryList))
-	mux.Handle("GET /api/v1/categories/{id}", http.HandlerFunc(handlers.GetCategoryByID))
+	mux.Handle("GET /api/v1/categories/{uuid}", http.HandlerFunc(handlers.GetCategoryByUUID))
 	mux.Handle("PUT /api/v1/categories/{id}", http.HandlerFunc(handlers.UpdateCategory))
 	mux.Handle("DELETE /api/v1/categories/{id}", http.HandlerFunc(handlers.DeleteCategory))
 

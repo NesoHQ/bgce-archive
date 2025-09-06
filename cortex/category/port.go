@@ -9,7 +9,7 @@ import (
 
 type Service interface {
 	CreateCategory(ctx context.Context, params CreateCategoryParams) error
-	// GetCategory(ctx context.Context, params GetCategoryReqParams) (*Category, error)
+	GetCategory(ctx context.Context, filter GetCategoryFilter) (*Category, error)
 	// UpdateCategory(ctx context.Context, params UpdateCategoryReqParams) error
 	DeleteCategory(ctx context.Context, uuid string) error
 	// GetCategories(ctx context.Context, params GetCategoryReqParams) ([]Category, error)
