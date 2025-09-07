@@ -11,10 +11,10 @@ import (
 )
 
 type CreateCategoryReq struct {
-	Slug        string          `json:"slug" validate:"required"`
-	Label       string          `json:"label" validate:"required"`
-	Description string          `json:"description,omitempty"`
-	Meta        json.RawMessage `json:"meta,omitempty"`
+	Slug        string                 `json:"slug" validate:"required"`
+	Label       string                 `json:"label" validate:"required"`
+	Description string                 `json:"description,omitempty"`
+	Meta        map[string]interface{} `json:"meta,omitempty"`
 }
 
 func (handlers *Handlers) CreateCategory(w http.ResponseWriter, r *http.Request) {
@@ -39,11 +39,11 @@ func (handlers *Handlers) CreateCategory(w http.ResponseWriter, r *http.Request)
 		Slug:        req.Slug,
 		Label:       req.Label,
 		Description: req.Description,
-		CreatedBy:   userID,
+		CreatorID:   userID,
 		Meta:        req.Meta,
 	}
 
-	err := handlers.CtgrySvc.CreateCategory(r.Context(), ctgry)
+	err := handlers.CategoryService.CreateCategory(r.Context(), ctgry)
 	if err != nil {
 		if err == customerrors.ErrSlugExists {
 			utils.SendError(w, http.StatusConflict, "Category with the slug already exists", nil)
@@ -53,9 +53,9 @@ func (handlers *Handlers) CreateCategory(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	utils.SendJson(w, http.StatusOK, map[string]any{
-		"data":    nil,
-		"message": "Category created successfully",
-		"status":  true,
+	utils.SendJson(w, http.StatusOK, SuccessResponse{
+		Data:    nil,
+		Message: "Category created successfully",
+		Status:  http.StatusCreated,
 	})
 }

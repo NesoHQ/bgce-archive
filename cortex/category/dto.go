@@ -11,8 +11,8 @@ type CreateCategoryParams struct {
 	Slug        string
 	Label       string
 	Description string
-	CreatedBy   int
-	Meta        json.RawMessage
+	CreatorID   int
+	Meta        map[string]interface{}
 }
 
 type UpdateCategoryParams struct {

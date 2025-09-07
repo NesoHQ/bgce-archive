@@ -2,6 +2,7 @@ package category
 
 import (
 	"context"
+	"cortex/ent"
 	"time"
 
 	"github.com/google/uuid"
@@ -9,10 +10,15 @@ import (
 
 type Service interface {
 	CreateCategory(ctx context.Context, params CreateCategoryParams) error
-	GetCategory(ctx context.Context, filter GetCategoryFilter) (*Category, error)
-	// UpdateCategory(ctx context.Context, params UpdateCategoryReqParams) error
-	DeleteCategory(ctx context.Context, filter GetCategoryFilter) error
-	// GetCategories(ctx context.Context, params GetCategoryReqParams) ([]Category, error)
+	FindCategoryBySlug(ctx context.Context, slug string) (*ent.Category, error)
+	FindCategoryByUUID(ctx context.Context, uuid uuid.UUID) (*ent.Category, error)
+	FindCategoryByID(ctx context.Context, id int) (*ent.Category, error)
+	DeleteCategoryByUUID(ctx context.Context, uuid uuid.UUID) error
+	// GetCategory(ctx context.Context, filter GetCategoryFilter) (*Category, error)
+	// // UpdateCategory(ctx context.Context, params UpdateCategoryReqParams) error
+	// DeleteCategory(ctx context.Context, filter GetCategoryFilter) error
+	// // GetCategories(ctx context.Context, params GetCategoryReqParams) ([]Category, error)
+
 }
 
 type CtgryRepo interface {

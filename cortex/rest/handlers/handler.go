@@ -9,7 +9,7 @@ import (
 
 type Handlers struct {
 	cnf      *config.Config
-	CtgrySvc category.Service
+	CategoryService category.Service
 }
 
 func NewHandler(
@@ -18,14 +18,20 @@ func NewHandler(
 ) *Handlers {
 	return &Handlers{
 		cnf:      cnf,
-		CtgrySvc: ctgrySvc,
+		CategoryService: ctgrySvc,
 	}
 }
 
-func (h *Handlers) UpdateCategory(w http.ResponseWriter, r *http.Request)  {}
+func (h *Handlers) UpdateCategory(w http.ResponseWriter, r *http.Request) {}
 
 func (h *Handlers) CreateSubCategory(w http.ResponseWriter, r *http.Request)  {}
 func (h *Handlers) GetSubCategoryList(w http.ResponseWriter, r *http.Request) {}
 func (h *Handlers) GetSubCategoryByID(w http.ResponseWriter, r *http.Request) {}
 func (h *Handlers) UpdateSubCategory(w http.ResponseWriter, r *http.Request)  {}
 func (h *Handlers) DeleteSubCategory(w http.ResponseWriter, r *http.Request)  {}
+
+type SuccessResponse struct {
+	Message string      `json:"message"`
+	Status  int         `json:"status"`
+	Data    interface{} `json:"data"`
+}

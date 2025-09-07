@@ -5,6 +5,7 @@ go 1.23.0
 toolchain go1.23.11
 
 require (
+	entgo.io/ent v0.14.5
 	github.com/Masterminds/squirrel v1.5.4
 	github.com/go-playground/form/v4 v4.2.1
 	github.com/go-playground/locales v0.14.1
@@ -33,11 +34,20 @@ require (
 )
 
 require (
+	ariga.io/atlas v0.32.1-0.20250325101103-175b25e1c1b9 // indirect
+	github.com/agext/levenshtein v1.2.3 // indirect
+	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
+	github.com/bmatcuk/doublestar v1.3.4 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
+	github.com/go-openapi/inflect v0.19.0 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
+	github.com/hashicorp/hcl/v2 v2.18.1 // indirect
+	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.38.0 // indirect
+	github.com/zclconf/go-cty v1.14.4 // indirect
+	github.com/zclconf/go-cty-yaml v1.1.0 // indirect
 )
 
 require (

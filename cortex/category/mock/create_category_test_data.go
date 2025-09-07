@@ -1,7 +1,6 @@
 package mock_category
 
 import (
-	"encoding/json"
 	"errors"
 	"testing"
 	"time"
@@ -22,17 +21,12 @@ type CreateCategory struct {
 
 func CreateCategoryTestData(t *testing.T, mockCategoryRepo *CategoryRepo) []CreateCategory {
 	metaMap := map[string]any{"foo": "bar"}
-	metaJSON, err := json.Marshal(metaMap)
-	if err != nil {
-		t.Fatalf("failed to marshal meta json: %v", err)
-	}
-
 	baseModel := category.CreateCategoryParams{
 		Slug:        "slug-test",
 		Label:       "Label",
 		Description: "desc",
-		CreatedBy:   1,
-		Meta:        metaJSON,
+		CreatorID:   1,
+		Meta:        metaMap,
 	}
 
 	demoCategory := &category.Category{
@@ -41,7 +35,7 @@ func CreateCategoryTestData(t *testing.T, mockCategoryRepo *CategoryRepo) []Crea
 		Slug:        baseModel.Slug,
 		Label:       baseModel.Label,
 		Description: baseModel.Description,
-		CreatedBy:   baseModel.CreatedBy,
+		CreatedBy:   baseModel.CreatorID,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 		Status:      category.StatusPending,
@@ -63,16 +57,13 @@ func CreateCategoryTestData(t *testing.T, mockCategoryRepo *CategoryRepo) []Crea
 						if c.Slug != baseModel.Slug ||
 							c.Label != baseModel.Label ||
 							c.Description != baseModel.Description ||
-							c.CreatedBy != baseModel.CreatedBy ||
+							c.CreatedBy != baseModel.CreatorID ||
 							c.Status != category.StatusPending ||
 							c.CreatedAt.IsZero() ||
 							c.UpdatedAt.IsZero() {
 							return false
 						}
 						var meta map[string]interface{}
-						if err := json.Unmarshal(c.Meta, &meta); err != nil {
-							return false
-						}
 						val, ok := meta["foo"]
 						return ok && val == "bar"
 					})).
