@@ -3,6 +3,7 @@ CREATE TABLE "categories" (
   "uuid" UUID NOT NULL DEFAULT gen_random_uuid(),
   "parent_id" INTEGER REFERENCES categories(id) ON DELETE CASCADE,
   "slug" VARCHAR UNIQUE NOT NULL,
+  "type" VARCHAR NOT NULL,
   "label" VARCHAR NOT NULL,
   "description" TEXT,
   "maintainer" VARCHAR,

@@ -375,7 +375,6 @@ Example:
 | Role         | GitHub Handle |
 | ------------ | ------------- |
 | Schema Owner | @jsiqbal      |
-| Reviewer     | @ifrunruhin12 |
 
 ```
 
