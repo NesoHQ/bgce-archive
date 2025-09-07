@@ -21,7 +21,7 @@ func (Category) Mixin() []ent.Mixin {
 // Fields of the Category.
 func (Category) Fields() []ent.Field {
 	return []ent.Field{
-		field.UUID("uuid", uuid.UUID{}).
+		field.UUID("uuid", uuid.UUID{}).Unique().
 			Default(uuid.New),
 		field.String("slug").
 			Unique().
