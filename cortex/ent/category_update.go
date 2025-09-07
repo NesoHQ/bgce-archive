@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/google/uuid"
 )
 
 // CategoryUpdate is the builder for updating Category entities.
@@ -26,6 +25,20 @@ type CategoryUpdate struct {
 // Where appends a list predicates to the CategoryUpdate builder.
 func (_u *CategoryUpdate) Where(ps ...predicate.Category) *CategoryUpdate {
 	_u.mutation.Where(ps...)
+	return _u
+}
+
+// SetUUID sets the "uuid" field.
+func (_u *CategoryUpdate) SetUUID(v string) *CategoryUpdate {
+	_u.mutation.SetUUID(v)
+	return _u
+}
+
+// SetNillableUUID sets the "uuid" field if the given value is not nil.
+func (_u *CategoryUpdate) SetNillableUUID(v *string) *CategoryUpdate {
+	if v != nil {
+		_u.SetUUID(*v)
+	}
 	return _u
 }
 
@@ -46,20 +59,6 @@ func (_u *CategoryUpdate) SetNillableCreatedAt(v *time.Time) *CategoryUpdate {
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *CategoryUpdate) SetUpdatedAt(v time.Time) *CategoryUpdate {
 	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// SetUUID sets the "uuid" field.
-func (_u *CategoryUpdate) SetUUID(v uuid.UUID) *CategoryUpdate {
-	_u.mutation.SetUUID(v)
-	return _u
-}
-
-// SetNillableUUID sets the "uuid" field if the given value is not nil.
-func (_u *CategoryUpdate) SetNillableUUID(v *uuid.UUID) *CategoryUpdate {
-	if v != nil {
-		_u.SetUUID(*v)
-	}
 	return _u
 }
 
@@ -363,14 +362,14 @@ func (_u *CategoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			}
 		}
 	}
+	if value, ok := _u.mutation.UUID(); ok {
+		_spec.SetField(category.FieldUUID, field.TypeString, value)
+	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(category.FieldCreatedAt, field.TypeTime, value)
 	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(category.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if value, ok := _u.mutation.UUID(); ok {
-		_spec.SetField(category.FieldUUID, field.TypeUUID, value)
 	}
 	if value, ok := _u.mutation.Slug(); ok {
 		_spec.SetField(category.FieldSlug, field.TypeString, value)
@@ -461,6 +460,20 @@ type CategoryUpdateOne struct {
 	mutation *CategoryMutation
 }
 
+// SetUUID sets the "uuid" field.
+func (_u *CategoryUpdateOne) SetUUID(v string) *CategoryUpdateOne {
+	_u.mutation.SetUUID(v)
+	return _u
+}
+
+// SetNillableUUID sets the "uuid" field if the given value is not nil.
+func (_u *CategoryUpdateOne) SetNillableUUID(v *string) *CategoryUpdateOne {
+	if v != nil {
+		_u.SetUUID(*v)
+	}
+	return _u
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (_u *CategoryUpdateOne) SetCreatedAt(v time.Time) *CategoryUpdateOne {
 	_u.mutation.SetCreatedAt(v)
@@ -478,20 +491,6 @@ func (_u *CategoryUpdateOne) SetNillableCreatedAt(v *time.Time) *CategoryUpdateO
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *CategoryUpdateOne) SetUpdatedAt(v time.Time) *CategoryUpdateOne {
 	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// SetUUID sets the "uuid" field.
-func (_u *CategoryUpdateOne) SetUUID(v uuid.UUID) *CategoryUpdateOne {
-	_u.mutation.SetUUID(v)
-	return _u
-}
-
-// SetNillableUUID sets the "uuid" field if the given value is not nil.
-func (_u *CategoryUpdateOne) SetNillableUUID(v *uuid.UUID) *CategoryUpdateOne {
-	if v != nil {
-		_u.SetUUID(*v)
-	}
 	return _u
 }
 
@@ -825,14 +824,14 @@ func (_u *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err 
 			}
 		}
 	}
+	if value, ok := _u.mutation.UUID(); ok {
+		_spec.SetField(category.FieldUUID, field.TypeString, value)
+	}
 	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(category.FieldCreatedAt, field.TypeTime, value)
 	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(category.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if value, ok := _u.mutation.UUID(); ok {
-		_spec.SetField(category.FieldUUID, field.TypeUUID, value)
 	}
 	if value, ok := _u.mutation.Slug(); ok {
 		_spec.SetField(category.FieldSlug, field.TypeString, value)

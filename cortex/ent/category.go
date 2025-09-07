@@ -11,7 +11,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/google/uuid"
 )
 
 // Category is the model entity for the Category schema.
@@ -19,12 +18,12 @@ type Category struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// UUID holds the value of the "uuid" field.
+	UUID string `json:"uuid,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// UUID holds the value of the "uuid" field.
-	UUID uuid.UUID `json:"uuid,omitempty"`
 	// Slug holds the value of the "slug" field.
 	Slug string `json:"slug,omitempty"`
 	// Label holds the value of the "label" field.
@@ -59,12 +58,10 @@ func (*Category) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case category.FieldID, category.FieldCreatorID, category.FieldApproverID, category.FieldUpdaterID, category.FieldDeleterID:
 			values[i] = new(sql.NullInt64)
-		case category.FieldSlug, category.FieldLabel, category.FieldDescription, category.FieldStatus:
+		case category.FieldUUID, category.FieldSlug, category.FieldLabel, category.FieldDescription, category.FieldStatus:
 			values[i] = new(sql.NullString)
 		case category.FieldCreatedAt, category.FieldUpdatedAt, category.FieldApprovedAt, category.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case category.FieldUUID:
-			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -86,6 +83,12 @@ func (_m *Category) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			_m.ID = int(value.Int64)
+		case category.FieldUUID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field uuid", values[i])
+			} else if value.Valid {
+				_m.UUID = value.String
+			}
 		case category.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -97,12 +100,6 @@ func (_m *Category) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				_m.UpdatedAt = value.Time
-			}
-		case category.FieldUUID:
-			if value, ok := values[i].(*uuid.UUID); !ok {
-				return fmt.Errorf("unexpected type %T for field uuid", values[i])
-			} else if value != nil {
-				_m.UUID = *value
 			}
 		case category.FieldSlug:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -208,14 +205,14 @@ func (_m *Category) String() string {
 	var builder strings.Builder
 	builder.WriteString("Category(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
+	builder.WriteString("uuid=")
+	builder.WriteString(_m.UUID)
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("uuid=")
-	builder.WriteString(fmt.Sprintf("%v", _m.UUID))
 	builder.WriteString(", ")
 	builder.WriteString("slug=")
 	builder.WriteString(_m.Slug)

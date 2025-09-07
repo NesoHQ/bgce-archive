@@ -8,7 +8,7 @@ import (
 )
 
 type Handlers struct {
-	cnf      *config.Config
+	cnf             *config.Config
 	CategoryService category.Service
 }
 
@@ -17,7 +17,7 @@ func NewHandler(
 	ctgrySvc category.Service,
 ) *Handlers {
 	return &Handlers{
-		cnf:      cnf,
+		cnf:             cnf,
 		CategoryService: ctgrySvc,
 	}
 }

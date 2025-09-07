@@ -6,8 +6,6 @@ import (
 	"cortex/ent/category"
 	"cortex/ent/schema"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -19,30 +17,30 @@ func init() {
 	_ = categoryMixinFields0
 	categoryFields := schema.Category{}.Fields()
 	_ = categoryFields
+	// categoryDescUUID is the schema descriptor for uuid field.
+	categoryDescUUID := categoryMixinFields0[0].Descriptor()
+	// category.DefaultUUID holds the default value on creation for the uuid field.
+	category.DefaultUUID = categoryDescUUID.Default.(func() string)
 	// categoryDescCreatedAt is the schema descriptor for created_at field.
-	categoryDescCreatedAt := categoryMixinFields0[0].Descriptor()
+	categoryDescCreatedAt := categoryMixinFields0[1].Descriptor()
 	// category.DefaultCreatedAt holds the default value on creation for the created_at field.
 	category.DefaultCreatedAt = categoryDescCreatedAt.Default.(func() time.Time)
 	// categoryDescUpdatedAt is the schema descriptor for updated_at field.
-	categoryDescUpdatedAt := categoryMixinFields0[1].Descriptor()
+	categoryDescUpdatedAt := categoryMixinFields0[2].Descriptor()
 	// category.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	category.DefaultUpdatedAt = categoryDescUpdatedAt.Default.(func() time.Time)
 	// category.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	category.UpdateDefaultUpdatedAt = categoryDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// categoryDescUUID is the schema descriptor for uuid field.
-	categoryDescUUID := categoryFields[0].Descriptor()
-	// category.DefaultUUID holds the default value on creation for the uuid field.
-	category.DefaultUUID = categoryDescUUID.Default.(func() uuid.UUID)
 	// categoryDescSlug is the schema descriptor for slug field.
-	categoryDescSlug := categoryFields[1].Descriptor()
+	categoryDescSlug := categoryFields[0].Descriptor()
 	// category.SlugValidator is a validator for the "slug" field. It is called by the builders before save.
 	category.SlugValidator = categoryDescSlug.Validators[0].(func(string) error)
 	// categoryDescLabel is the schema descriptor for label field.
-	categoryDescLabel := categoryFields[2].Descriptor()
+	categoryDescLabel := categoryFields[1].Descriptor()
 	// category.LabelValidator is a validator for the "label" field. It is called by the builders before save.
 	category.LabelValidator = categoryDescLabel.Validators[0].(func(string) error)
 	// categoryDescCreatorID is the schema descriptor for creator_id field.
-	categoryDescCreatorID := categoryFields[4].Descriptor()
+	categoryDescCreatorID := categoryFields[3].Descriptor()
 	// category.CreatorIDValidator is a validator for the "creator_id" field. It is called by the builders before save.
 	category.CreatorIDValidator = categoryDescCreatorID.Validators[0].(func(int) error)
 }

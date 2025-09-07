@@ -22,7 +22,7 @@ func (handlers *Handlers) GetCategoryByID(w http.ResponseWriter, r *http.Request
 		return
 	}
 	utils.SendJson(w, http.StatusOK, SuccessResponse{
-		Data: cateory,
+		Data:   cateory,
 		Status: http.StatusOK,
 	})
 

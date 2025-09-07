@@ -22,6 +22,6 @@ func (handlers *Handlers) DeleteCategoryByID(w http.ResponseWriter, r *http.Requ
 	}
 	utils.SendJson(w, http.StatusOK, SuccessResponse{
 		Message: "Category deleted successfully",
-		Status: http.StatusOK,
+		Status:  http.StatusOK,
 	})
 }

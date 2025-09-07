@@ -11,7 +11,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/google/uuid"
 )
 
 // CategoryCreate is the builder for creating a Category entity.
@@ -19,6 +18,20 @@ type CategoryCreate struct {
 	config
 	mutation *CategoryMutation
 	hooks    []Hook
+}
+
+// SetUUID sets the "uuid" field.
+func (_c *CategoryCreate) SetUUID(v string) *CategoryCreate {
+	_c.mutation.SetUUID(v)
+	return _c
+}
+
+// SetNillableUUID sets the "uuid" field if the given value is not nil.
+func (_c *CategoryCreate) SetNillableUUID(v *string) *CategoryCreate {
+	if v != nil {
+		_c.SetUUID(*v)
+	}
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
@@ -45,20 +58,6 @@ func (_c *CategoryCreate) SetUpdatedAt(v time.Time) *CategoryCreate {
 func (_c *CategoryCreate) SetNillableUpdatedAt(v *time.Time) *CategoryCreate {
 	if v != nil {
 		_c.SetUpdatedAt(*v)
-	}
-	return _c
-}
-
-// SetUUID sets the "uuid" field.
-func (_c *CategoryCreate) SetUUID(v uuid.UUID) *CategoryCreate {
-	_c.mutation.SetUUID(v)
-	return _c
-}
-
-// SetNillableUUID sets the "uuid" field if the given value is not nil.
-func (_c *CategoryCreate) SetNillableUUID(v *uuid.UUID) *CategoryCreate {
-	if v != nil {
-		_c.SetUUID(*v)
 	}
 	return _c
 }
@@ -228,6 +227,10 @@ func (_c *CategoryCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (_c *CategoryCreate) defaults() {
+	if _, ok := _c.mutation.UUID(); !ok {
+		v := category.DefaultUUID()
+		_c.mutation.SetUUID(v)
+	}
 	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := category.DefaultCreatedAt()
 		_c.mutation.SetCreatedAt(v)
@@ -235,10 +238,6 @@ func (_c *CategoryCreate) defaults() {
 	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := category.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
-	}
-	if _, ok := _c.mutation.UUID(); !ok {
-		v := category.DefaultUUID()
-		_c.mutation.SetUUID(v)
 	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := category.DefaultStatus
@@ -248,14 +247,14 @@ func (_c *CategoryCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *CategoryCreate) check() error {
+	if _, ok := _c.mutation.UUID(); !ok {
+		return &ValidationError{Name: "uuid", err: errors.New(`ent: missing required field "Category.uuid"`)}
+	}
 	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Category.created_at"`)}
 	}
 	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Category.updated_at"`)}
-	}
-	if _, ok := _c.mutation.UUID(); !ok {
-		return &ValidationError{Name: "uuid", err: errors.New(`ent: missing required field "Category.uuid"`)}
 	}
 	if _, ok := _c.mutation.Slug(); !ok {
 		return &ValidationError{Name: "slug", err: errors.New(`ent: missing required field "Category.slug"`)}
@@ -312,6 +311,10 @@ func (_c *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 		_node = &Category{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(category.Table, sqlgraph.NewFieldSpec(category.FieldID, field.TypeInt))
 	)
+	if value, ok := _c.mutation.UUID(); ok {
+		_spec.SetField(category.FieldUUID, field.TypeString, value)
+		_node.UUID = value
+	}
 	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(category.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -319,10 +322,6 @@ func (_c *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(category.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
-	}
-	if value, ok := _c.mutation.UUID(); ok {
-		_spec.SetField(category.FieldUUID, field.TypeUUID, value)
-		_node.UUID = value
 	}
 	if value, ok := _c.mutation.Slug(); ok {
 		_spec.SetField(category.FieldSlug, field.TypeString, value)
