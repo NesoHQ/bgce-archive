@@ -33,8 +33,6 @@ type Config struct {
 	RabbitmqURL        string `mapstructure:"RABBITMQ_URL" validate:"required"`
 	RmqReconnectDelay  int    `mapstructure:"RMQ_RECONNECT_DELAY" validate:"required"`
 	RmqRetryInterval   int    `mapstructure:"RMQ_RETRY_INTERVAL" validate:"required"`
-	ReadBgceDB         DBConfig
-	WriteBgceDB        DBConfig
 	BGCE_DB_DSN        string `mapstructure:"BGCE_DB_DSN" validate:"required"`
 	BGCE_DB_DRIVER     string `mapstructure:"BGCE_DB_DRIVER" validate:"required"`
 	Apm                *Apm

@@ -15,13 +15,12 @@ import (
 	"cortex/ent/migrate"
 	"cortex/logger"
 	"cortex/rabbitmq"
-	"cortex/repo"
 	"cortex/rest"
 	"cortex/rest/handlers"
 	"cortex/rest/middlewares"
 	"cortex/rest/utils"
 
-	_ "github.com/lib/pq" // postgres driver
+	_ "github.com/lib/pq" 
 
 	"github.com/spf13/cobra"
 	"go.elastic.co/apm/module/apmhttp"
@@ -54,34 +53,6 @@ func APIServerCommand(ctx context.Context) *cobra.Command {
 				return err
 			}
 
-			psql := repo.GetQueryBuilder()
-
-			readBgceDB, err := repo.GetDbConnection(cnf.ReadBgceDB)
-			if err != nil {
-				slog.Error("Failed to connect to read bgce database:", logger.Extra(map[string]any{
-					"error": err.Error(),
-				}))
-				return err
-			}
-			defer readBgceDB.Close()
-
-			writeBgceDB, err := repo.GetDbConnection(cnf.WriteBgceDB)
-			if err != nil {
-				slog.Error("Failed to connect to write bgce database:", logger.Extra(map[string]any{
-					"error": err.Error(),
-				}))
-				return err
-			}
-			defer writeBgceDB.Close()
-
-			err = repo.MigrateDB(writeBgceDB, cnf.MigrationSource)
-			if err != nil {
-				slog.Error("Failed to migrate database:", logger.Extra(map[string]any{
-					"error": err.Error(),
-				}))
-				return err
-			}
-
 			readRedisClient, err := cache.NewRedisClient(cnf.ReadRedisURL, cnf.EnableRedisTLSMode)
 			if err != nil {
 				slog.Error("Unable to create redis read client", logger.Extra(map[string]any{
@@ -107,8 +78,7 @@ func APIServerCommand(ctx context.Context) *cobra.Command {
 				UseRedisCache: true,
 			})
 
-			ctgryRepo := repo.NewCtgryRepo(readBgceDB, writeBgceDB, psql)
-			ctgrySvc := category.NewService(cnf, rmq, ctgryRepo, redisCache, entClient)
+			ctgrySvc := category.NewService(cnf, rmq, redisCache, entClient)
 			handlers := handlers.NewHandler(cnf, ctgrySvc)
 			mux, err := rest.NewServeMux(middlewares, handlers)
 			if err != nil {

@@ -17,7 +17,7 @@ func loadConfig() error {
 
 	err := godotenv.Load()
 	if err != nil {
-		slog.Warn(".env not found,that's okay!")
+		slog.Warn(".env not found, that's okay!")
 	}
 
 	viper.AutomaticEnv()
@@ -41,28 +41,9 @@ func loadConfig() error {
 		RabbitmqURL:       viper.GetString("RABBITMQ_URL"),
 		RmqReconnectDelay: viper.GetInt("RMQ_RECONNECT_DELAY"),
 		RmqRetryInterval:  viper.GetInt("RMQ_RETRY_INTERVAL"),
-		ReadBgceDB: &ReadBgceDB{
-			DbHost:                 viper.GetString("READ_BGCE_DB_HOST"),
-			DbPort:                 viper.GetInt("READ_BGCE_DB_PORT"),
-			DbName:                 viper.GetString("READ_BGCE_DB_NAME"),
-			DbUser:                 viper.GetString("READ_BGCE_DB_USER"),
-			DbPassword:             viper.GetString("READ_BGCE_DB_PASSWORD"),
-			DbMaxIdleTimeInMinutes: viper.GetInt("READ_BGCE_DB_MAX_IDLE_TIME_IN_MINUTES"),
-			DbMaxOpenConns:         viper.GetInt("READ_BGCE_DB_MAX_OPEN_CONNS"),
-			DbMaxIdleConns:         viper.GetInt("READ_BGCE_DB_MAX_IDLE_CONNS"),
-			DbEnableSSLMode:        viper.GetBool("READ_BGCE_DB_ENABLE_SSL_MODE"),
-		},
-		WriteBgceDB: &WriteBgceDB{
-			DbHost:                 viper.GetString("WRITE_BGCE_DB_HOST"),
-			DbPort:                 viper.GetInt("WRITE_BGCE_DB_PORT"),
-			DbName:                 viper.GetString("WRITE_BGCE_DB_NAME"),
-			DbUser:                 viper.GetString("WRITE_BGCE_DB_USER"),
-			DbPassword:             viper.GetString("WRITE_BGCE_DB_PASSWORD"),
-			DbMaxIdleTimeInMinutes: viper.GetInt("WRITE_BGCE_DB_MAX_IDLE_TIME_IN_MINUTES"),
-			DbMaxOpenConns:         viper.GetInt("WRITE_BGCE_DB_MAX_OPEN_CONNS"),
-			DbMaxIdleConns:         viper.GetInt("WRITE_BGCE_DB_MAX_IDLE_CONNS"),
-			DbEnableSSLMode:        viper.GetBool("WRITE_BGCE_DB_ENABLE_SSL_MODE"),
-		},
+
+		BGCE_DB_DSN:    viper.GetString("BGCE_DB_DSN"),
+		BGCE_DB_DRIVER: viper.GetString("BGCE_DB_DRIVER"),
 	}
 
 	v := validator.New()

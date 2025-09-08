@@ -25,5 +25,4 @@ func (handlers *Handlers) GetCategoryByID(w http.ResponseWriter, r *http.Request
 		Data:   cateory,
 		Status: http.StatusOK,
 	})
-
 }
