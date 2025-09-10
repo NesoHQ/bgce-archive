@@ -11,7 +11,7 @@ RUN go build -o main main.go
 FROM alpine:3.14
 WORKDIR /app
 COPY --from=builder /app/main .
-COPY --from=builder /app/migrations /app/migrations
+COPY --from=builder /app/ent/migrate /app/migrations
 EXPOSE 8080
 
 # Command to run the executable
