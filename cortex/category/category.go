@@ -14,7 +14,7 @@ const (
 )
 
 type Category struct {
-	ID          uint           `json:"id,omitempty" db:"id"`
+	ID          int            `json:"id,omitempty" db:"id"`
 	UUID        uuid.UUID      `json:"uuid" db:"uuid"`
 	Slug        string         `json:"slug" db:"slug"`
 	Label       string         `json:"label" db:"label"`

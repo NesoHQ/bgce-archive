@@ -16,24 +16,24 @@ type CreateCategoryParams struct {
 }
 
 type UpdateCategoryParams struct {
-	ID          uint
+	ID          int
 	Slug        *string
 	Label       *string
 	Description *string
-	ApprovedBy  *uint
-	DeletedBy   *uint
+	ApprovedBy  *int
+	DeletedBy   *int
 	Status      *string
 	Meta        json.RawMessage
 }
 
 type DeleteCategoryParams struct {
-	ID        uint
-	DeletedBy uint
+	ID        int
+	DeletedBy int
 	DeletedAt time.Time
 }
 
 type GetCategoryFilter struct {
-	ID     *uint
+	ID     *int
 	UUID   *uuid.UUID
 	Slug   *string
 	Label  *string
