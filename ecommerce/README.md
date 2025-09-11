@@ -1,5 +1,3 @@
-Here’s an updated **README.md** that matches your current project structure and includes your TODO list:
-
 # 🛒 Simple Go eCommerce Backend
 
 A minimal eCommerce backend built in pure Go (**Golang**) without any external web frameworks.  
