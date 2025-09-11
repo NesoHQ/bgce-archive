@@ -115,7 +115,6 @@ Server will run at: **[http://localhost:8080](http://localhost:8080)**
 ---
 
 ## 📝 TODO
-
 * [ ] Add database integration (currently missing)
 * [ ] Split `routes.go` into multiple route files
 * [ ] Split handlers into feature-wise packages
