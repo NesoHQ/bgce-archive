@@ -7,6 +7,8 @@ import (
 
 	"ecommerce/database"
 	"ecommerce/util"
+	"ecommerce/config"
+	
 )
 
 
@@ -26,11 +28,26 @@ func Login(w http.ResponseWriter, r *http.Request){
 		return 
 	}
 
+
 	user := database.Find(requestlogin.Email, requestlogin.Password)
 	if user == nil {
 		http.Error(w, "Invalid credentials", http.StatusCreated)
 		return
 	}
 
-	util.SendData(w, user, http.StatusCreated)	
+	cnf := config.GetConfig()
+
+	accessToken, err := util.CreateJwt(cnf.JwtSecretKey, util.Payload{
+		Sub:       user.ID, 
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Email:     user.Email,
+	})
+
+	if err != nil {
+		http.Error(w, "Interal Server Error", http.StatusInternalServerError) 
+		return
+	}
+
+	util.SendData(w, accessToken, http.StatusCreated)	
 }
