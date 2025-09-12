@@ -53,7 +53,7 @@ services:
       WRITE_BGCE_DB_MAX_IDLE_CONNS: 25
       WRITE_BGCE_DB_ENABLE_SSL_MODE: false
 
-      # Required DB configuration ..
+      # Required DB configuration
 
       BGCE_DB_DSN: "postgres://postgres:postgres@postgres:5432/bgce?sslmode=disable"
       BGCE_DB_DRIVER: "postgres"
