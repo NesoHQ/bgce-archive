@@ -4,17 +4,12 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
-	"encoding/json"
-	"fmt"
 	"net/http"
 	"strings"
 
-	"ecommerce/config"
-	"ecommerce/database"
-	
 )
 
-func AuthenticateJWT(next http.Handler) http.Handler {
+func (m *Middlewares) AuthenticateJWT(next http.Handler) http.Handler {
 	return http.HandlerFunc(func (w http.ResponseWriter, r *http.Request) {
 		header := r.Header.Get("Authorization")
 
@@ -44,8 +39,8 @@ func AuthenticateJWT(next http.Handler) http.Handler {
 
 		message := jwtHeader + "." + jwtPayload
 
-		cnf := config.GetConfig()
-		byteArrSecret := []byte(cnf.JwtSecretKey)
+		
+		byteArrSecret := []byte(m.cnf.JwtSecretKey)
 		byteArrMessage := []byte(message)
 
 		h := hmac.New(sha256.New, byteArrSecret)
@@ -59,14 +54,6 @@ func AuthenticateJWT(next http.Handler) http.Handler {
 			return
 		}
 
-	var newProduct database.Product 	
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&newProduct)
-	if err != nil {
-		fmt.Println(err)
-		http.Error(w, "Please send a valid JSON body", 400)
-		return 
-	}
 		next.ServeHTTP(w, r)
 	})
 }
