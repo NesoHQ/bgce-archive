@@ -74,20 +74,30 @@ This project demonstrates a clean and modular folder structure for building REST
 ├── README.md
 ├── rest
 │   ├── handlers
-│   │   ├── create_product.go
-│   │   ├── create_user.go
-│   │   ├── delete_product.go
-│   │   ├── get_product.go
-│   │   ├── get_products.go
-│   │   ├── login.go
-│   │   └── update_product.go
+│   │   ├── product
+│   │   │   ├── create_product.go
+│   │   │   ├── delete_product.go
+│   │   │   ├── get_product.go
+│   │   │   ├── get_products.go
+│   │   │   ├── handler.go
+│   │   │   ├── routes.go
+│   │   │   └── update_product.go
+│   │   ├── review
+│   │   │   ├── get_reviews.go
+│   │   │   ├── handler.go
+│   │   │   └── routes.go
+│   │   └── user
+│   │       ├── create_user.go
+│   │       ├── handler.go
+│   │       ├── login.go
+│   │       └── routes.go
 │   ├── middlewares
 │   │   ├── authenticate_jwt.go
 │   │   ├── cors.go
 │   │   ├── logger.go
 │   │   ├── manager.go
+│   │   ├── middleware.go
 │   │   └── preflight.go
-│   ├── routes.go
 │   └── server.go
 └── util
     ├── create_jwt.go
