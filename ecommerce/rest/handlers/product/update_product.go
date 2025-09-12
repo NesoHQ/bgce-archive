@@ -1,4 +1,4 @@
-package handlers
+package product
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 )
 	
 
-func UpdateProduct(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	productID := r.PathValue("id")
 
 	pId, err := strconv.Atoi(productID)
