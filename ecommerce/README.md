@@ -3,7 +3,27 @@
 A minimal eCommerce backend built in pure Go (**Golang**) without any external web frameworks.  
 This project demonstrates a clean and modular folder structure for building REST APIs in Go.
 
----
+## 🌿 Environment Variables
+
+This project uses environment variables for configuration.  
+
+1. Copy `.env.example` to `.env`:
+
+```bash
+cp .env.example .env
+```
+2.-   Fill in the required values in `.env`
+
+  -   `SERVICE_NAME` – The name of your service (e.g., `ecommerce`)
+        
+    -   `HTTP_PORT` – The port your server will run on (e.g., `8080`)
+        
+    -   `JWT_SECRET_KEY` – Secret key used for signing JWT tokens
+        
+    -   `VERSION` – Version of the application (e.g., `1.0.0`)
+        
+-   If the service isn’t deployed yet, you can keep local defaults so anyone can run the service out of the box:
+
 
 ## 🚀 Features
 
