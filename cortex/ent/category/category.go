@@ -20,20 +20,24 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldParentID holds the string denoting the parent_id field in the database.
+	FieldParentID = "parent_id"
 	// FieldSlug holds the string denoting the slug field in the database.
 	FieldSlug = "slug"
 	// FieldLabel holds the string denoting the label field in the database.
 	FieldLabel = "label"
-	// FieldDescription holds the string denoting the description field in the database.
-	FieldDescription = "description"
 	// FieldCreatorID holds the string denoting the creator_id field in the database.
 	FieldCreatorID = "creator_id"
-	// FieldApproverID holds the string denoting the approver_id field in the database.
-	FieldApproverID = "approver_id"
-	// FieldUpdaterID holds the string denoting the updater_id field in the database.
-	FieldUpdaterID = "updater_id"
-	// FieldDeleterID holds the string denoting the deleter_id field in the database.
-	FieldDeleterID = "deleter_id"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
+	// FieldCreatedBy holds the string denoting the created_by field in the database.
+	FieldCreatedBy = "created_by"
+	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
+	FieldUpdatedBy = "updated_by"
+	// FieldApprovedBy holds the string denoting the approved_by field in the database.
+	FieldApprovedBy = "approved_by"
+	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
+	FieldDeletedBy = "deleted_by"
 	// FieldApprovedAt holds the string denoting the approved_at field in the database.
 	FieldApprovedAt = "approved_at"
 	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
@@ -52,13 +56,15 @@ var Columns = []string{
 	FieldUUID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldParentID,
 	FieldSlug,
 	FieldLabel,
-	FieldDescription,
 	FieldCreatorID,
-	FieldApproverID,
-	FieldUpdaterID,
-	FieldDeleterID,
+	FieldDescription,
+	FieldCreatedBy,
+	FieldUpdatedBy,
+	FieldApprovedBy,
+	FieldDeletedBy,
 	FieldApprovedAt,
 	FieldDeletedAt,
 	FieldStatus,
@@ -100,10 +106,10 @@ const DefaultStatus = StatusPending
 
 // Status values.
 const (
+	StatusPending  Status = "pending"
 	StatusApproved Status = "approved"
 	StatusRejected Status = "rejected"
 	StatusDeleted  Status = "deleted"
-	StatusPending  Status = "pending"
 )
 
 func (s Status) String() string {
@@ -113,7 +119,7 @@ func (s Status) String() string {
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s Status) error {
 	switch s {
-	case StatusApproved, StatusRejected, StatusDeleted, StatusPending:
+	case StatusPending, StatusApproved, StatusRejected, StatusDeleted:
 		return nil
 	default:
 		return fmt.Errorf("category: invalid enum value for status field: %q", s)
@@ -143,6 +149,11 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
+// ByParentID orders the results by the parent_id field.
+func ByParentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldParentID, opts...).ToFunc()
+}
+
 // BySlug orders the results by the slug field.
 func BySlug(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSlug, opts...).ToFunc()
@@ -153,29 +164,34 @@ func ByLabel(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLabel, opts...).ToFunc()
 }
 
-// ByDescription orders the results by the description field.
-func ByDescription(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDescription, opts...).ToFunc()
-}
-
 // ByCreatorID orders the results by the creator_id field.
 func ByCreatorID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCreatorID, opts...).ToFunc()
 }
 
-// ByApproverID orders the results by the approver_id field.
-func ByApproverID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldApproverID, opts...).ToFunc()
+// ByDescription orders the results by the description field.
+func ByDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDescription, opts...).ToFunc()
 }
 
-// ByUpdaterID orders the results by the updater_id field.
-func ByUpdaterID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUpdaterID, opts...).ToFunc()
+// ByCreatedBy orders the results by the created_by field.
+func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
 }
 
-// ByDeleterID orders the results by the deleter_id field.
-func ByDeleterID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDeleterID, opts...).ToFunc()
+// ByUpdatedBy orders the results by the updated_by field.
+func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+}
+
+// ByApprovedBy orders the results by the approved_by field.
+func ByApprovedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldApprovedBy, opts...).ToFunc()
+}
+
+// ByDeletedBy orders the results by the deleted_by field.
+func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
 // ByApprovedAt orders the results by the approved_at field.

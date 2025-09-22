@@ -24,20 +24,24 @@ type Category struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// ParentID holds the value of the "parent_id" field.
+	ParentID int `json:"parent_id,omitempty"`
 	// Slug holds the value of the "slug" field.
 	Slug string `json:"slug,omitempty"`
 	// Label holds the value of the "label" field.
 	Label string `json:"label,omitempty"`
-	// Description holds the value of the "description" field.
-	Description string `json:"description,omitempty"`
 	// CreatorID holds the value of the "creator_id" field.
 	CreatorID int `json:"creator_id,omitempty"`
-	// ApproverID holds the value of the "approver_id" field.
-	ApproverID int `json:"approver_id,omitempty"`
-	// UpdaterID holds the value of the "updater_id" field.
-	UpdaterID int `json:"updater_id,omitempty"`
-	// DeleterID holds the value of the "deleter_id" field.
-	DeleterID int `json:"deleter_id,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy int `json:"created_by,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy int `json:"updated_by,omitempty"`
+	// ApprovedBy holds the value of the "approved_by" field.
+	ApprovedBy int `json:"approved_by,omitempty"`
+	// DeletedBy holds the value of the "deleted_by" field.
+	DeletedBy int `json:"deleted_by,omitempty"`
 	// ApprovedAt holds the value of the "approved_at" field.
 	ApprovedAt time.Time `json:"approved_at,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
@@ -56,7 +60,7 @@ func (*Category) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case category.FieldMeta:
 			values[i] = new([]byte)
-		case category.FieldID, category.FieldCreatorID, category.FieldApproverID, category.FieldUpdaterID, category.FieldDeleterID:
+		case category.FieldID, category.FieldParentID, category.FieldCreatorID, category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldApprovedBy, category.FieldDeletedBy:
 			values[i] = new(sql.NullInt64)
 		case category.FieldUUID, category.FieldSlug, category.FieldLabel, category.FieldDescription, category.FieldStatus:
 			values[i] = new(sql.NullString)
@@ -101,6 +105,12 @@ func (_m *Category) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.UpdatedAt = value.Time
 			}
+		case category.FieldParentID:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field parent_id", values[i])
+			} else if value.Valid {
+				_m.ParentID = int(value.Int64)
+			}
 		case category.FieldSlug:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field slug", values[i])
@@ -113,35 +123,41 @@ func (_m *Category) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Label = value.String
 			}
-		case category.FieldDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
-			} else if value.Valid {
-				_m.Description = value.String
-			}
 		case category.FieldCreatorID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field creator_id", values[i])
 			} else if value.Valid {
 				_m.CreatorID = int(value.Int64)
 			}
-		case category.FieldApproverID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field approver_id", values[i])
+		case category.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				_m.ApproverID = int(value.Int64)
+				_m.Description = value.String
 			}
-		case category.FieldUpdaterID:
+		case category.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field updater_id", values[i])
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				_m.UpdaterID = int(value.Int64)
+				_m.CreatedBy = int(value.Int64)
 			}
-		case category.FieldDeleterID:
+		case category.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field deleter_id", values[i])
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				_m.DeleterID = int(value.Int64)
+				_m.UpdatedBy = int(value.Int64)
+			}
+		case category.FieldApprovedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field approved_by", values[i])
+			} else if value.Valid {
+				_m.ApprovedBy = int(value.Int64)
+			}
+		case category.FieldDeletedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+			} else if value.Valid {
+				_m.DeletedBy = int(value.Int64)
 			}
 		case category.FieldApprovedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -214,26 +230,32 @@ func (_m *Category) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("parent_id=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ParentID))
+	builder.WriteString(", ")
 	builder.WriteString("slug=")
 	builder.WriteString(_m.Slug)
 	builder.WriteString(", ")
 	builder.WriteString("label=")
 	builder.WriteString(_m.Label)
 	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(_m.Description)
-	builder.WriteString(", ")
 	builder.WriteString("creator_id=")
 	builder.WriteString(fmt.Sprintf("%v", _m.CreatorID))
 	builder.WriteString(", ")
-	builder.WriteString("approver_id=")
-	builder.WriteString(fmt.Sprintf("%v", _m.ApproverID))
+	builder.WriteString("description=")
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
-	builder.WriteString("updater_id=")
-	builder.WriteString(fmt.Sprintf("%v", _m.UpdaterID))
+	builder.WriteString("created_by=")
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedBy))
 	builder.WriteString(", ")
-	builder.WriteString("deleter_id=")
-	builder.WriteString(fmt.Sprintf("%v", _m.DeleterID))
+	builder.WriteString("updated_by=")
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedBy))
+	builder.WriteString(", ")
+	builder.WriteString("approved_by=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ApprovedBy))
+	builder.WriteString(", ")
+	builder.WriteString("deleted_by=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DeletedBy))
 	builder.WriteString(", ")
 	builder.WriteString("approved_at=")
 	builder.WriteString(_m.ApprovedAt.Format(time.ANSIC))

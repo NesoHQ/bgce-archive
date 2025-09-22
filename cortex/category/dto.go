@@ -16,12 +16,16 @@ type CreateCategoryParams struct {
 }
 
 type UpdateCategoryParams struct {
-	ID          int
+	ID          *int
+	UUID        uuid.UUID
 	Slug        *string
+	NewSlug     *string
 	Label       *string
 	Description *string
-	ApprovedBy  *int
+	ApprovedBy  int
+	UpdatedBy   int
 	DeletedBy   *int
+	ApprovedAt  time.Time
 	Status      *string
 	Meta        json.RawMessage
 }

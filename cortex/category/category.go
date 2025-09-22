@@ -15,6 +15,7 @@ const (
 
 type Category struct {
 	ID          int            `json:"id,omitempty" db:"id"`
+	ParentID    int            `json:"parent_id,omitempty" db:"parent_id"`
 	UUID        uuid.UUID      `json:"uuid" db:"uuid"`
 	Slug        string         `json:"slug" db:"slug"`
 	Label       string         `json:"label" db:"label"`

@@ -36,17 +36,21 @@ type CategoryMutation struct {
 	uuid           *string
 	created_at     *time.Time
 	updated_at     *time.Time
+	parent_id      *int
+	addparent_id   *int
 	slug           *string
 	label          *string
-	description    *string
 	creator_id     *int
 	addcreator_id  *int
-	approver_id    *int
-	addapprover_id *int
-	updater_id     *int
-	addupdater_id  *int
-	deleter_id     *int
-	adddeleter_id  *int
+	description    *string
+	created_by     *int
+	addcreated_by  *int
+	updated_by     *int
+	addupdated_by  *int
+	approved_by    *int
+	addapproved_by *int
+	deleted_by     *int
+	adddeleted_by  *int
 	approved_at    *time.Time
 	deleted_at     *time.Time
 	status         *category.Status
@@ -263,6 +267,76 @@ func (m *CategoryMutation) ResetUpdatedAt() {
 	m.updated_at = nil
 }
 
+// SetParentID sets the "parent_id" field.
+func (m *CategoryMutation) SetParentID(i int) {
+	m.parent_id = &i
+	m.addparent_id = nil
+}
+
+// ParentID returns the value of the "parent_id" field in the mutation.
+func (m *CategoryMutation) ParentID() (r int, exists bool) {
+	v := m.parent_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldParentID returns the old "parent_id" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldParentID(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldParentID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldParentID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldParentID: %w", err)
+	}
+	return oldValue.ParentID, nil
+}
+
+// AddParentID adds i to the "parent_id" field.
+func (m *CategoryMutation) AddParentID(i int) {
+	if m.addparent_id != nil {
+		*m.addparent_id += i
+	} else {
+		m.addparent_id = &i
+	}
+}
+
+// AddedParentID returns the value that was added to the "parent_id" field in this mutation.
+func (m *CategoryMutation) AddedParentID() (r int, exists bool) {
+	v := m.addparent_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearParentID clears the value of the "parent_id" field.
+func (m *CategoryMutation) ClearParentID() {
+	m.parent_id = nil
+	m.addparent_id = nil
+	m.clearedFields[category.FieldParentID] = struct{}{}
+}
+
+// ParentIDCleared returns if the "parent_id" field was cleared in this mutation.
+func (m *CategoryMutation) ParentIDCleared() bool {
+	_, ok := m.clearedFields[category.FieldParentID]
+	return ok
+}
+
+// ResetParentID resets all changes to the "parent_id" field.
+func (m *CategoryMutation) ResetParentID() {
+	m.parent_id = nil
+	m.addparent_id = nil
+	delete(m.clearedFields, category.FieldParentID)
+}
+
 // SetSlug sets the "slug" field.
 func (m *CategoryMutation) SetSlug(s string) {
 	m.slug = &s
@@ -335,55 +409,6 @@ func (m *CategoryMutation) ResetLabel() {
 	m.label = nil
 }
 
-// SetDescription sets the "description" field.
-func (m *CategoryMutation) SetDescription(s string) {
-	m.description = &s
-}
-
-// Description returns the value of the "description" field in the mutation.
-func (m *CategoryMutation) Description() (r string, exists bool) {
-	v := m.description
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDescription returns the old "description" field's value of the Category entity.
-// If the Category object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CategoryMutation) OldDescription(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDescription requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
-	}
-	return oldValue.Description, nil
-}
-
-// ClearDescription clears the value of the "description" field.
-func (m *CategoryMutation) ClearDescription() {
-	m.description = nil
-	m.clearedFields[category.FieldDescription] = struct{}{}
-}
-
-// DescriptionCleared returns if the "description" field was cleared in this mutation.
-func (m *CategoryMutation) DescriptionCleared() bool {
-	_, ok := m.clearedFields[category.FieldDescription]
-	return ok
-}
-
-// ResetDescription resets all changes to the "description" field.
-func (m *CategoryMutation) ResetDescription() {
-	m.description = nil
-	delete(m.clearedFields, category.FieldDescription)
-}
-
 // SetCreatorID sets the "creator_id" field.
 func (m *CategoryMutation) SetCreatorID(i int) {
 	m.creator_id = &i
@@ -454,214 +479,319 @@ func (m *CategoryMutation) ResetCreatorID() {
 	delete(m.clearedFields, category.FieldCreatorID)
 }
 
-// SetApproverID sets the "approver_id" field.
-func (m *CategoryMutation) SetApproverID(i int) {
-	m.approver_id = &i
-	m.addapprover_id = nil
+// SetDescription sets the "description" field.
+func (m *CategoryMutation) SetDescription(s string) {
+	m.description = &s
 }
 
-// ApproverID returns the value of the "approver_id" field in the mutation.
-func (m *CategoryMutation) ApproverID() (r int, exists bool) {
-	v := m.approver_id
+// Description returns the value of the "description" field in the mutation.
+func (m *CategoryMutation) Description() (r string, exists bool) {
+	v := m.description
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldApproverID returns the old "approver_id" field's value of the Category entity.
+// OldDescription returns the old "description" field's value of the Category entity.
 // If the Category object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CategoryMutation) OldApproverID(ctx context.Context) (v int, err error) {
+func (m *CategoryMutation) OldDescription(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldApproverID is only allowed on UpdateOne operations")
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldApproverID requires an ID field in the mutation")
+		return v, errors.New("OldDescription requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldApproverID: %w", err)
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
 	}
-	return oldValue.ApproverID, nil
+	return oldValue.Description, nil
 }
 
-// AddApproverID adds i to the "approver_id" field.
-func (m *CategoryMutation) AddApproverID(i int) {
-	if m.addapprover_id != nil {
-		*m.addapprover_id += i
-	} else {
-		m.addapprover_id = &i
-	}
+// ClearDescription clears the value of the "description" field.
+func (m *CategoryMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[category.FieldDescription] = struct{}{}
 }
 
-// AddedApproverID returns the value that was added to the "approver_id" field in this mutation.
-func (m *CategoryMutation) AddedApproverID() (r int, exists bool) {
-	v := m.addapprover_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearApproverID clears the value of the "approver_id" field.
-func (m *CategoryMutation) ClearApproverID() {
-	m.approver_id = nil
-	m.addapprover_id = nil
-	m.clearedFields[category.FieldApproverID] = struct{}{}
-}
-
-// ApproverIDCleared returns if the "approver_id" field was cleared in this mutation.
-func (m *CategoryMutation) ApproverIDCleared() bool {
-	_, ok := m.clearedFields[category.FieldApproverID]
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *CategoryMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[category.FieldDescription]
 	return ok
 }
 
-// ResetApproverID resets all changes to the "approver_id" field.
-func (m *CategoryMutation) ResetApproverID() {
-	m.approver_id = nil
-	m.addapprover_id = nil
-	delete(m.clearedFields, category.FieldApproverID)
+// ResetDescription resets all changes to the "description" field.
+func (m *CategoryMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, category.FieldDescription)
 }
 
-// SetUpdaterID sets the "updater_id" field.
-func (m *CategoryMutation) SetUpdaterID(i int) {
-	m.updater_id = &i
-	m.addupdater_id = nil
+// SetCreatedBy sets the "created_by" field.
+func (m *CategoryMutation) SetCreatedBy(i int) {
+	m.created_by = &i
+	m.addcreated_by = nil
 }
 
-// UpdaterID returns the value of the "updater_id" field in the mutation.
-func (m *CategoryMutation) UpdaterID() (r int, exists bool) {
-	v := m.updater_id
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *CategoryMutation) CreatedBy() (r int, exists bool) {
+	v := m.created_by
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldUpdaterID returns the old "updater_id" field's value of the Category entity.
+// OldCreatedBy returns the old "created_by" field's value of the Category entity.
 // If the Category object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CategoryMutation) OldUpdaterID(ctx context.Context) (v int, err error) {
+func (m *CategoryMutation) OldCreatedBy(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdaterID is only allowed on UpdateOne operations")
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdaterID requires an ID field in the mutation")
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdaterID: %w", err)
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
 	}
-	return oldValue.UpdaterID, nil
+	return oldValue.CreatedBy, nil
 }
 
-// AddUpdaterID adds i to the "updater_id" field.
-func (m *CategoryMutation) AddUpdaterID(i int) {
-	if m.addupdater_id != nil {
-		*m.addupdater_id += i
+// AddCreatedBy adds i to the "created_by" field.
+func (m *CategoryMutation) AddCreatedBy(i int) {
+	if m.addcreated_by != nil {
+		*m.addcreated_by += i
 	} else {
-		m.addupdater_id = &i
+		m.addcreated_by = &i
 	}
 }
 
-// AddedUpdaterID returns the value that was added to the "updater_id" field in this mutation.
-func (m *CategoryMutation) AddedUpdaterID() (r int, exists bool) {
-	v := m.addupdater_id
+// AddedCreatedBy returns the value that was added to the "created_by" field in this mutation.
+func (m *CategoryMutation) AddedCreatedBy() (r int, exists bool) {
+	v := m.addcreated_by
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// ClearUpdaterID clears the value of the "updater_id" field.
-func (m *CategoryMutation) ClearUpdaterID() {
-	m.updater_id = nil
-	m.addupdater_id = nil
-	m.clearedFields[category.FieldUpdaterID] = struct{}{}
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *CategoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	m.addcreated_by = nil
 }
 
-// UpdaterIDCleared returns if the "updater_id" field was cleared in this mutation.
-func (m *CategoryMutation) UpdaterIDCleared() bool {
-	_, ok := m.clearedFields[category.FieldUpdaterID]
-	return ok
+// SetUpdatedBy sets the "updated_by" field.
+func (m *CategoryMutation) SetUpdatedBy(i int) {
+	m.updated_by = &i
+	m.addupdated_by = nil
 }
 
-// ResetUpdaterID resets all changes to the "updater_id" field.
-func (m *CategoryMutation) ResetUpdaterID() {
-	m.updater_id = nil
-	m.addupdater_id = nil
-	delete(m.clearedFields, category.FieldUpdaterID)
-}
-
-// SetDeleterID sets the "deleter_id" field.
-func (m *CategoryMutation) SetDeleterID(i int) {
-	m.deleter_id = &i
-	m.adddeleter_id = nil
-}
-
-// DeleterID returns the value of the "deleter_id" field in the mutation.
-func (m *CategoryMutation) DeleterID() (r int, exists bool) {
-	v := m.deleter_id
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *CategoryMutation) UpdatedBy() (r int, exists bool) {
+	v := m.updated_by
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldDeleterID returns the old "deleter_id" field's value of the Category entity.
+// OldUpdatedBy returns the old "updated_by" field's value of the Category entity.
 // If the Category object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CategoryMutation) OldDeleterID(ctx context.Context) (v int, err error) {
+func (m *CategoryMutation) OldUpdatedBy(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDeleterID is only allowed on UpdateOne operations")
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDeleterID requires an ID field in the mutation")
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDeleterID: %w", err)
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
 	}
-	return oldValue.DeleterID, nil
+	return oldValue.UpdatedBy, nil
 }
 
-// AddDeleterID adds i to the "deleter_id" field.
-func (m *CategoryMutation) AddDeleterID(i int) {
-	if m.adddeleter_id != nil {
-		*m.adddeleter_id += i
+// AddUpdatedBy adds i to the "updated_by" field.
+func (m *CategoryMutation) AddUpdatedBy(i int) {
+	if m.addupdated_by != nil {
+		*m.addupdated_by += i
 	} else {
-		m.adddeleter_id = &i
+		m.addupdated_by = &i
 	}
 }
 
-// AddedDeleterID returns the value that was added to the "deleter_id" field in this mutation.
-func (m *CategoryMutation) AddedDeleterID() (r int, exists bool) {
-	v := m.adddeleter_id
+// AddedUpdatedBy returns the value that was added to the "updated_by" field in this mutation.
+func (m *CategoryMutation) AddedUpdatedBy() (r int, exists bool) {
+	v := m.addupdated_by
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// ClearDeleterID clears the value of the "deleter_id" field.
-func (m *CategoryMutation) ClearDeleterID() {
-	m.deleter_id = nil
-	m.adddeleter_id = nil
-	m.clearedFields[category.FieldDeleterID] = struct{}{}
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *CategoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	m.clearedFields[category.FieldUpdatedBy] = struct{}{}
 }
 
-// DeleterIDCleared returns if the "deleter_id" field was cleared in this mutation.
-func (m *CategoryMutation) DeleterIDCleared() bool {
-	_, ok := m.clearedFields[category.FieldDeleterID]
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *CategoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[category.FieldUpdatedBy]
 	return ok
 }
 
-// ResetDeleterID resets all changes to the "deleter_id" field.
-func (m *CategoryMutation) ResetDeleterID() {
-	m.deleter_id = nil
-	m.adddeleter_id = nil
-	delete(m.clearedFields, category.FieldDeleterID)
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *CategoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	delete(m.clearedFields, category.FieldUpdatedBy)
+}
+
+// SetApprovedBy sets the "approved_by" field.
+func (m *CategoryMutation) SetApprovedBy(i int) {
+	m.approved_by = &i
+	m.addapproved_by = nil
+}
+
+// ApprovedBy returns the value of the "approved_by" field in the mutation.
+func (m *CategoryMutation) ApprovedBy() (r int, exists bool) {
+	v := m.approved_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldApprovedBy returns the old "approved_by" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldApprovedBy(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldApprovedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldApprovedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldApprovedBy: %w", err)
+	}
+	return oldValue.ApprovedBy, nil
+}
+
+// AddApprovedBy adds i to the "approved_by" field.
+func (m *CategoryMutation) AddApprovedBy(i int) {
+	if m.addapproved_by != nil {
+		*m.addapproved_by += i
+	} else {
+		m.addapproved_by = &i
+	}
+}
+
+// AddedApprovedBy returns the value that was added to the "approved_by" field in this mutation.
+func (m *CategoryMutation) AddedApprovedBy() (r int, exists bool) {
+	v := m.addapproved_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearApprovedBy clears the value of the "approved_by" field.
+func (m *CategoryMutation) ClearApprovedBy() {
+	m.approved_by = nil
+	m.addapproved_by = nil
+	m.clearedFields[category.FieldApprovedBy] = struct{}{}
+}
+
+// ApprovedByCleared returns if the "approved_by" field was cleared in this mutation.
+func (m *CategoryMutation) ApprovedByCleared() bool {
+	_, ok := m.clearedFields[category.FieldApprovedBy]
+	return ok
+}
+
+// ResetApprovedBy resets all changes to the "approved_by" field.
+func (m *CategoryMutation) ResetApprovedBy() {
+	m.approved_by = nil
+	m.addapproved_by = nil
+	delete(m.clearedFields, category.FieldApprovedBy)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *CategoryMutation) SetDeletedBy(i int) {
+	m.deleted_by = &i
+	m.adddeleted_by = nil
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *CategoryMutation) DeletedBy() (r int, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldDeletedBy(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// AddDeletedBy adds i to the "deleted_by" field.
+func (m *CategoryMutation) AddDeletedBy(i int) {
+	if m.adddeleted_by != nil {
+		*m.adddeleted_by += i
+	} else {
+		m.adddeleted_by = &i
+	}
+}
+
+// AddedDeletedBy returns the value that was added to the "deleted_by" field in this mutation.
+func (m *CategoryMutation) AddedDeletedBy() (r int, exists bool) {
+	v := m.adddeleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *CategoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.adddeleted_by = nil
+	m.clearedFields[category.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *CategoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[category.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *CategoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	m.adddeleted_by = nil
+	delete(m.clearedFields, category.FieldDeletedBy)
 }
 
 // SetApprovedAt sets the "approved_at" field.
@@ -881,7 +1011,7 @@ func (m *CategoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CategoryMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 16)
 	if m.uuid != nil {
 		fields = append(fields, category.FieldUUID)
 	}
@@ -891,26 +1021,32 @@ func (m *CategoryMutation) Fields() []string {
 	if m.updated_at != nil {
 		fields = append(fields, category.FieldUpdatedAt)
 	}
+	if m.parent_id != nil {
+		fields = append(fields, category.FieldParentID)
+	}
 	if m.slug != nil {
 		fields = append(fields, category.FieldSlug)
 	}
 	if m.label != nil {
 		fields = append(fields, category.FieldLabel)
 	}
-	if m.description != nil {
-		fields = append(fields, category.FieldDescription)
-	}
 	if m.creator_id != nil {
 		fields = append(fields, category.FieldCreatorID)
 	}
-	if m.approver_id != nil {
-		fields = append(fields, category.FieldApproverID)
+	if m.description != nil {
+		fields = append(fields, category.FieldDescription)
 	}
-	if m.updater_id != nil {
-		fields = append(fields, category.FieldUpdaterID)
+	if m.created_by != nil {
+		fields = append(fields, category.FieldCreatedBy)
 	}
-	if m.deleter_id != nil {
-		fields = append(fields, category.FieldDeleterID)
+	if m.updated_by != nil {
+		fields = append(fields, category.FieldUpdatedBy)
+	}
+	if m.approved_by != nil {
+		fields = append(fields, category.FieldApprovedBy)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, category.FieldDeletedBy)
 	}
 	if m.approved_at != nil {
 		fields = append(fields, category.FieldApprovedAt)
@@ -938,20 +1074,24 @@ func (m *CategoryMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedAt()
 	case category.FieldUpdatedAt:
 		return m.UpdatedAt()
+	case category.FieldParentID:
+		return m.ParentID()
 	case category.FieldSlug:
 		return m.Slug()
 	case category.FieldLabel:
 		return m.Label()
-	case category.FieldDescription:
-		return m.Description()
 	case category.FieldCreatorID:
 		return m.CreatorID()
-	case category.FieldApproverID:
-		return m.ApproverID()
-	case category.FieldUpdaterID:
-		return m.UpdaterID()
-	case category.FieldDeleterID:
-		return m.DeleterID()
+	case category.FieldDescription:
+		return m.Description()
+	case category.FieldCreatedBy:
+		return m.CreatedBy()
+	case category.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case category.FieldApprovedBy:
+		return m.ApprovedBy()
+	case category.FieldDeletedBy:
+		return m.DeletedBy()
 	case category.FieldApprovedAt:
 		return m.ApprovedAt()
 	case category.FieldDeletedAt:
@@ -975,20 +1115,24 @@ func (m *CategoryMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldCreatedAt(ctx)
 	case category.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
+	case category.FieldParentID:
+		return m.OldParentID(ctx)
 	case category.FieldSlug:
 		return m.OldSlug(ctx)
 	case category.FieldLabel:
 		return m.OldLabel(ctx)
-	case category.FieldDescription:
-		return m.OldDescription(ctx)
 	case category.FieldCreatorID:
 		return m.OldCreatorID(ctx)
-	case category.FieldApproverID:
-		return m.OldApproverID(ctx)
-	case category.FieldUpdaterID:
-		return m.OldUpdaterID(ctx)
-	case category.FieldDeleterID:
-		return m.OldDeleterID(ctx)
+	case category.FieldDescription:
+		return m.OldDescription(ctx)
+	case category.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case category.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case category.FieldApprovedBy:
+		return m.OldApprovedBy(ctx)
+	case category.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
 	case category.FieldApprovedAt:
 		return m.OldApprovedAt(ctx)
 	case category.FieldDeletedAt:
@@ -1027,6 +1171,13 @@ func (m *CategoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedAt(v)
 		return nil
+	case category.FieldParentID:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetParentID(v)
+		return nil
 	case category.FieldSlug:
 		v, ok := value.(string)
 		if !ok {
@@ -1041,13 +1192,6 @@ func (m *CategoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetLabel(v)
 		return nil
-	case category.FieldDescription:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDescription(v)
-		return nil
 	case category.FieldCreatorID:
 		v, ok := value.(int)
 		if !ok {
@@ -1055,26 +1199,40 @@ func (m *CategoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetCreatorID(v)
 		return nil
-	case category.FieldApproverID:
-		v, ok := value.(int)
+	case category.FieldDescription:
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetApproverID(v)
+		m.SetDescription(v)
 		return nil
-	case category.FieldUpdaterID:
+	case category.FieldCreatedBy:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetUpdaterID(v)
+		m.SetCreatedBy(v)
 		return nil
-	case category.FieldDeleterID:
+	case category.FieldUpdatedBy:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetDeleterID(v)
+		m.SetUpdatedBy(v)
+		return nil
+	case category.FieldApprovedBy:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetApprovedBy(v)
+		return nil
+	case category.FieldDeletedBy:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
 		return nil
 	case category.FieldApprovedAt:
 		v, ok := value.(time.Time)
@@ -1112,17 +1270,23 @@ func (m *CategoryMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *CategoryMutation) AddedFields() []string {
 	var fields []string
+	if m.addparent_id != nil {
+		fields = append(fields, category.FieldParentID)
+	}
 	if m.addcreator_id != nil {
 		fields = append(fields, category.FieldCreatorID)
 	}
-	if m.addapprover_id != nil {
-		fields = append(fields, category.FieldApproverID)
+	if m.addcreated_by != nil {
+		fields = append(fields, category.FieldCreatedBy)
 	}
-	if m.addupdater_id != nil {
-		fields = append(fields, category.FieldUpdaterID)
+	if m.addupdated_by != nil {
+		fields = append(fields, category.FieldUpdatedBy)
 	}
-	if m.adddeleter_id != nil {
-		fields = append(fields, category.FieldDeleterID)
+	if m.addapproved_by != nil {
+		fields = append(fields, category.FieldApprovedBy)
+	}
+	if m.adddeleted_by != nil {
+		fields = append(fields, category.FieldDeletedBy)
 	}
 	return fields
 }
@@ -1132,14 +1296,18 @@ func (m *CategoryMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *CategoryMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
+	case category.FieldParentID:
+		return m.AddedParentID()
 	case category.FieldCreatorID:
 		return m.AddedCreatorID()
-	case category.FieldApproverID:
-		return m.AddedApproverID()
-	case category.FieldUpdaterID:
-		return m.AddedUpdaterID()
-	case category.FieldDeleterID:
-		return m.AddedDeleterID()
+	case category.FieldCreatedBy:
+		return m.AddedCreatedBy()
+	case category.FieldUpdatedBy:
+		return m.AddedUpdatedBy()
+	case category.FieldApprovedBy:
+		return m.AddedApprovedBy()
+	case category.FieldDeletedBy:
+		return m.AddedDeletedBy()
 	}
 	return nil, false
 }
@@ -1149,6 +1317,13 @@ func (m *CategoryMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *CategoryMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case category.FieldParentID:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddParentID(v)
+		return nil
 	case category.FieldCreatorID:
 		v, ok := value.(int)
 		if !ok {
@@ -1156,26 +1331,33 @@ func (m *CategoryMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddCreatorID(v)
 		return nil
-	case category.FieldApproverID:
+	case category.FieldCreatedBy:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddApproverID(v)
+		m.AddCreatedBy(v)
 		return nil
-	case category.FieldUpdaterID:
+	case category.FieldUpdatedBy:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddUpdaterID(v)
+		m.AddUpdatedBy(v)
 		return nil
-	case category.FieldDeleterID:
+	case category.FieldApprovedBy:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddDeleterID(v)
+		m.AddApprovedBy(v)
+		return nil
+	case category.FieldDeletedBy:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDeletedBy(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Category numeric field %s", name)
@@ -1185,20 +1367,23 @@ func (m *CategoryMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *CategoryMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(category.FieldDescription) {
-		fields = append(fields, category.FieldDescription)
+	if m.FieldCleared(category.FieldParentID) {
+		fields = append(fields, category.FieldParentID)
 	}
 	if m.FieldCleared(category.FieldCreatorID) {
 		fields = append(fields, category.FieldCreatorID)
 	}
-	if m.FieldCleared(category.FieldApproverID) {
-		fields = append(fields, category.FieldApproverID)
+	if m.FieldCleared(category.FieldDescription) {
+		fields = append(fields, category.FieldDescription)
 	}
-	if m.FieldCleared(category.FieldUpdaterID) {
-		fields = append(fields, category.FieldUpdaterID)
+	if m.FieldCleared(category.FieldUpdatedBy) {
+		fields = append(fields, category.FieldUpdatedBy)
 	}
-	if m.FieldCleared(category.FieldDeleterID) {
-		fields = append(fields, category.FieldDeleterID)
+	if m.FieldCleared(category.FieldApprovedBy) {
+		fields = append(fields, category.FieldApprovedBy)
+	}
+	if m.FieldCleared(category.FieldDeletedBy) {
+		fields = append(fields, category.FieldDeletedBy)
 	}
 	if m.FieldCleared(category.FieldApprovedAt) {
 		fields = append(fields, category.FieldApprovedAt)
@@ -1223,20 +1408,23 @@ func (m *CategoryMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *CategoryMutation) ClearField(name string) error {
 	switch name {
-	case category.FieldDescription:
-		m.ClearDescription()
+	case category.FieldParentID:
+		m.ClearParentID()
 		return nil
 	case category.FieldCreatorID:
 		m.ClearCreatorID()
 		return nil
-	case category.FieldApproverID:
-		m.ClearApproverID()
+	case category.FieldDescription:
+		m.ClearDescription()
 		return nil
-	case category.FieldUpdaterID:
-		m.ClearUpdaterID()
+	case category.FieldUpdatedBy:
+		m.ClearUpdatedBy()
 		return nil
-	case category.FieldDeleterID:
-		m.ClearDeleterID()
+	case category.FieldApprovedBy:
+		m.ClearApprovedBy()
+		return nil
+	case category.FieldDeletedBy:
+		m.ClearDeletedBy()
 		return nil
 	case category.FieldApprovedAt:
 		m.ClearApprovedAt()
@@ -1264,26 +1452,32 @@ func (m *CategoryMutation) ResetField(name string) error {
 	case category.FieldUpdatedAt:
 		m.ResetUpdatedAt()
 		return nil
+	case category.FieldParentID:
+		m.ResetParentID()
+		return nil
 	case category.FieldSlug:
 		m.ResetSlug()
 		return nil
 	case category.FieldLabel:
 		m.ResetLabel()
 		return nil
-	case category.FieldDescription:
-		m.ResetDescription()
-		return nil
 	case category.FieldCreatorID:
 		m.ResetCreatorID()
 		return nil
-	case category.FieldApproverID:
-		m.ResetApproverID()
+	case category.FieldDescription:
+		m.ResetDescription()
 		return nil
-	case category.FieldUpdaterID:
-		m.ResetUpdaterID()
+	case category.FieldCreatedBy:
+		m.ResetCreatedBy()
 		return nil
-	case category.FieldDeleterID:
-		m.ResetDeleterID()
+	case category.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case category.FieldApprovedBy:
+		m.ResetApprovedBy()
+		return nil
+	case category.FieldDeletedBy:
+		m.ResetDeletedBy()
 		return nil
 	case category.FieldApprovedAt:
 		m.ResetApprovedAt()

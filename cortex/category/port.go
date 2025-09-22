@@ -16,6 +16,7 @@ type Service interface {
 	FindCategoryByID(ctx context.Context, id int) (*ent.Category, error)
 	DeleteCategoryByUUID(ctx context.Context, uuid uuid.UUID) error
 	GetCategoryList(ctx context.Context, filter GetCategoryFilter) ([]*Category, error)
+	UpdateCategory(ctx context.Context, params UpdateCategoryParams) error
 }
 
 type Cache interface {

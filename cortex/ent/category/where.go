@@ -69,14 +69,14 @@ func UpdatedAt(v time.Time) predicate.Category {
 	return predicate.Category(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
+// ParentID applies equality check predicate on the "parent_id" field. It's identical to ParentIDEQ.
+func ParentID(v int) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldParentID, v))
+}
+
 // Slug applies equality check predicate on the "slug" field. It's identical to SlugEQ.
 func Slug(v string) predicate.Category {
 	return predicate.Category(sql.FieldEQ(FieldSlug, v))
-}
-
-// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
-func Description(v string) predicate.Category {
-	return predicate.Category(sql.FieldEQ(FieldDescription, v))
 }
 
 // CreatorID applies equality check predicate on the "creator_id" field. It's identical to CreatorIDEQ.
@@ -84,19 +84,29 @@ func CreatorID(v int) predicate.Category {
 	return predicate.Category(sql.FieldEQ(FieldCreatorID, v))
 }
 
-// ApproverID applies equality check predicate on the "approver_id" field. It's identical to ApproverIDEQ.
-func ApproverID(v int) predicate.Category {
-	return predicate.Category(sql.FieldEQ(FieldApproverID, v))
+// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
+func Description(v string) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldDescription, v))
 }
 
-// UpdaterID applies equality check predicate on the "updater_id" field. It's identical to UpdaterIDEQ.
-func UpdaterID(v int) predicate.Category {
-	return predicate.Category(sql.FieldEQ(FieldUpdaterID, v))
+// CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
+func CreatedBy(v int) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldCreatedBy, v))
 }
 
-// DeleterID applies equality check predicate on the "deleter_id" field. It's identical to DeleterIDEQ.
-func DeleterID(v int) predicate.Category {
-	return predicate.Category(sql.FieldEQ(FieldDeleterID, v))
+// UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
+func UpdatedBy(v int) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
+// ApprovedBy applies equality check predicate on the "approved_by" field. It's identical to ApprovedByEQ.
+func ApprovedBy(v int) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldApprovedBy, v))
+}
+
+// DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
+func DeletedBy(v int) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldDeletedBy, v))
 }
 
 // ApprovedAt applies equality check predicate on the "approved_at" field. It's identical to ApprovedAtEQ.
@@ -254,6 +264,56 @@ func UpdatedAtLTE(v time.Time) predicate.Category {
 	return predicate.Category(sql.FieldLTE(FieldUpdatedAt, v))
 }
 
+// ParentIDEQ applies the EQ predicate on the "parent_id" field.
+func ParentIDEQ(v int) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldParentID, v))
+}
+
+// ParentIDNEQ applies the NEQ predicate on the "parent_id" field.
+func ParentIDNEQ(v int) predicate.Category {
+	return predicate.Category(sql.FieldNEQ(FieldParentID, v))
+}
+
+// ParentIDIn applies the In predicate on the "parent_id" field.
+func ParentIDIn(vs ...int) predicate.Category {
+	return predicate.Category(sql.FieldIn(FieldParentID, vs...))
+}
+
+// ParentIDNotIn applies the NotIn predicate on the "parent_id" field.
+func ParentIDNotIn(vs ...int) predicate.Category {
+	return predicate.Category(sql.FieldNotIn(FieldParentID, vs...))
+}
+
+// ParentIDGT applies the GT predicate on the "parent_id" field.
+func ParentIDGT(v int) predicate.Category {
+	return predicate.Category(sql.FieldGT(FieldParentID, v))
+}
+
+// ParentIDGTE applies the GTE predicate on the "parent_id" field.
+func ParentIDGTE(v int) predicate.Category {
+	return predicate.Category(sql.FieldGTE(FieldParentID, v))
+}
+
+// ParentIDLT applies the LT predicate on the "parent_id" field.
+func ParentIDLT(v int) predicate.Category {
+	return predicate.Category(sql.FieldLT(FieldParentID, v))
+}
+
+// ParentIDLTE applies the LTE predicate on the "parent_id" field.
+func ParentIDLTE(v int) predicate.Category {
+	return predicate.Category(sql.FieldLTE(FieldParentID, v))
+}
+
+// ParentIDIsNil applies the IsNil predicate on the "parent_id" field.
+func ParentIDIsNil() predicate.Category {
+	return predicate.Category(sql.FieldIsNull(FieldParentID))
+}
+
+// ParentIDNotNil applies the NotNil predicate on the "parent_id" field.
+func ParentIDNotNil() predicate.Category {
+	return predicate.Category(sql.FieldNotNull(FieldParentID))
+}
+
 // SlugEQ applies the EQ predicate on the "slug" field.
 func SlugEQ(v string) predicate.Category {
 	return predicate.Category(sql.FieldEQ(FieldSlug, v))
@@ -384,6 +444,56 @@ func LabelContainsFold(v string) predicate.Category {
 	return predicate.Category(sql.FieldContainsFold(FieldLabel, v))
 }
 
+// CreatorIDEQ applies the EQ predicate on the "creator_id" field.
+func CreatorIDEQ(v int) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldCreatorID, v))
+}
+
+// CreatorIDNEQ applies the NEQ predicate on the "creator_id" field.
+func CreatorIDNEQ(v int) predicate.Category {
+	return predicate.Category(sql.FieldNEQ(FieldCreatorID, v))
+}
+
+// CreatorIDIn applies the In predicate on the "creator_id" field.
+func CreatorIDIn(vs ...int) predicate.Category {
+	return predicate.Category(sql.FieldIn(FieldCreatorID, vs...))
+}
+
+// CreatorIDNotIn applies the NotIn predicate on the "creator_id" field.
+func CreatorIDNotIn(vs ...int) predicate.Category {
+	return predicate.Category(sql.FieldNotIn(FieldCreatorID, vs...))
+}
+
+// CreatorIDGT applies the GT predicate on the "creator_id" field.
+func CreatorIDGT(v int) predicate.Category {
+	return predicate.Category(sql.FieldGT(FieldCreatorID, v))
+}
+
+// CreatorIDGTE applies the GTE predicate on the "creator_id" field.
+func CreatorIDGTE(v int) predicate.Category {
+	return predicate.Category(sql.FieldGTE(FieldCreatorID, v))
+}
+
+// CreatorIDLT applies the LT predicate on the "creator_id" field.
+func CreatorIDLT(v int) predicate.Category {
+	return predicate.Category(sql.FieldLT(FieldCreatorID, v))
+}
+
+// CreatorIDLTE applies the LTE predicate on the "creator_id" field.
+func CreatorIDLTE(v int) predicate.Category {
+	return predicate.Category(sql.FieldLTE(FieldCreatorID, v))
+}
+
+// CreatorIDIsNil applies the IsNil predicate on the "creator_id" field.
+func CreatorIDIsNil() predicate.Category {
+	return predicate.Category(sql.FieldIsNull(FieldCreatorID))
+}
+
+// CreatorIDNotNil applies the NotNil predicate on the "creator_id" field.
+func CreatorIDNotNil() predicate.Category {
+	return predicate.Category(sql.FieldNotNull(FieldCreatorID))
+}
+
 // DescriptionEQ applies the EQ predicate on the "description" field.
 func DescriptionEQ(v string) predicate.Category {
 	return predicate.Category(sql.FieldEQ(FieldDescription, v))
@@ -459,204 +569,194 @@ func DescriptionContainsFold(v string) predicate.Category {
 	return predicate.Category(sql.FieldContainsFold(FieldDescription, v))
 }
 
-// CreatorIDEQ applies the EQ predicate on the "creator_id" field.
-func CreatorIDEQ(v int) predicate.Category {
-	return predicate.Category(sql.FieldEQ(FieldCreatorID, v))
+// CreatedByEQ applies the EQ predicate on the "created_by" field.
+func CreatedByEQ(v int) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldCreatedBy, v))
 }
 
-// CreatorIDNEQ applies the NEQ predicate on the "creator_id" field.
-func CreatorIDNEQ(v int) predicate.Category {
-	return predicate.Category(sql.FieldNEQ(FieldCreatorID, v))
+// CreatedByNEQ applies the NEQ predicate on the "created_by" field.
+func CreatedByNEQ(v int) predicate.Category {
+	return predicate.Category(sql.FieldNEQ(FieldCreatedBy, v))
 }
 
-// CreatorIDIn applies the In predicate on the "creator_id" field.
-func CreatorIDIn(vs ...int) predicate.Category {
-	return predicate.Category(sql.FieldIn(FieldCreatorID, vs...))
+// CreatedByIn applies the In predicate on the "created_by" field.
+func CreatedByIn(vs ...int) predicate.Category {
+	return predicate.Category(sql.FieldIn(FieldCreatedBy, vs...))
 }
 
-// CreatorIDNotIn applies the NotIn predicate on the "creator_id" field.
-func CreatorIDNotIn(vs ...int) predicate.Category {
-	return predicate.Category(sql.FieldNotIn(FieldCreatorID, vs...))
+// CreatedByNotIn applies the NotIn predicate on the "created_by" field.
+func CreatedByNotIn(vs ...int) predicate.Category {
+	return predicate.Category(sql.FieldNotIn(FieldCreatedBy, vs...))
 }
 
-// CreatorIDGT applies the GT predicate on the "creator_id" field.
-func CreatorIDGT(v int) predicate.Category {
-	return predicate.Category(sql.FieldGT(FieldCreatorID, v))
+// CreatedByGT applies the GT predicate on the "created_by" field.
+func CreatedByGT(v int) predicate.Category {
+	return predicate.Category(sql.FieldGT(FieldCreatedBy, v))
 }
 
-// CreatorIDGTE applies the GTE predicate on the "creator_id" field.
-func CreatorIDGTE(v int) predicate.Category {
-	return predicate.Category(sql.FieldGTE(FieldCreatorID, v))
+// CreatedByGTE applies the GTE predicate on the "created_by" field.
+func CreatedByGTE(v int) predicate.Category {
+	return predicate.Category(sql.FieldGTE(FieldCreatedBy, v))
 }
 
-// CreatorIDLT applies the LT predicate on the "creator_id" field.
-func CreatorIDLT(v int) predicate.Category {
-	return predicate.Category(sql.FieldLT(FieldCreatorID, v))
+// CreatedByLT applies the LT predicate on the "created_by" field.
+func CreatedByLT(v int) predicate.Category {
+	return predicate.Category(sql.FieldLT(FieldCreatedBy, v))
 }
 
-// CreatorIDLTE applies the LTE predicate on the "creator_id" field.
-func CreatorIDLTE(v int) predicate.Category {
-	return predicate.Category(sql.FieldLTE(FieldCreatorID, v))
+// CreatedByLTE applies the LTE predicate on the "created_by" field.
+func CreatedByLTE(v int) predicate.Category {
+	return predicate.Category(sql.FieldLTE(FieldCreatedBy, v))
 }
 
-// CreatorIDIsNil applies the IsNil predicate on the "creator_id" field.
-func CreatorIDIsNil() predicate.Category {
-	return predicate.Category(sql.FieldIsNull(FieldCreatorID))
+// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
+func UpdatedByEQ(v int) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
-// CreatorIDNotNil applies the NotNil predicate on the "creator_id" field.
-func CreatorIDNotNil() predicate.Category {
-	return predicate.Category(sql.FieldNotNull(FieldCreatorID))
+// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
+func UpdatedByNEQ(v int) predicate.Category {
+	return predicate.Category(sql.FieldNEQ(FieldUpdatedBy, v))
 }
 
-// ApproverIDEQ applies the EQ predicate on the "approver_id" field.
-func ApproverIDEQ(v int) predicate.Category {
-	return predicate.Category(sql.FieldEQ(FieldApproverID, v))
+// UpdatedByIn applies the In predicate on the "updated_by" field.
+func UpdatedByIn(vs ...int) predicate.Category {
+	return predicate.Category(sql.FieldIn(FieldUpdatedBy, vs...))
 }
 
-// ApproverIDNEQ applies the NEQ predicate on the "approver_id" field.
-func ApproverIDNEQ(v int) predicate.Category {
-	return predicate.Category(sql.FieldNEQ(FieldApproverID, v))
+// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
+func UpdatedByNotIn(vs ...int) predicate.Category {
+	return predicate.Category(sql.FieldNotIn(FieldUpdatedBy, vs...))
 }
 
-// ApproverIDIn applies the In predicate on the "approver_id" field.
-func ApproverIDIn(vs ...int) predicate.Category {
-	return predicate.Category(sql.FieldIn(FieldApproverID, vs...))
+// UpdatedByGT applies the GT predicate on the "updated_by" field.
+func UpdatedByGT(v int) predicate.Category {
+	return predicate.Category(sql.FieldGT(FieldUpdatedBy, v))
 }
 
-// ApproverIDNotIn applies the NotIn predicate on the "approver_id" field.
-func ApproverIDNotIn(vs ...int) predicate.Category {
-	return predicate.Category(sql.FieldNotIn(FieldApproverID, vs...))
+// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
+func UpdatedByGTE(v int) predicate.Category {
+	return predicate.Category(sql.FieldGTE(FieldUpdatedBy, v))
 }
 
-// ApproverIDGT applies the GT predicate on the "approver_id" field.
-func ApproverIDGT(v int) predicate.Category {
-	return predicate.Category(sql.FieldGT(FieldApproverID, v))
+// UpdatedByLT applies the LT predicate on the "updated_by" field.
+func UpdatedByLT(v int) predicate.Category {
+	return predicate.Category(sql.FieldLT(FieldUpdatedBy, v))
 }
 
-// ApproverIDGTE applies the GTE predicate on the "approver_id" field.
-func ApproverIDGTE(v int) predicate.Category {
-	return predicate.Category(sql.FieldGTE(FieldApproverID, v))
+// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
+func UpdatedByLTE(v int) predicate.Category {
+	return predicate.Category(sql.FieldLTE(FieldUpdatedBy, v))
 }
 
-// ApproverIDLT applies the LT predicate on the "approver_id" field.
-func ApproverIDLT(v int) predicate.Category {
-	return predicate.Category(sql.FieldLT(FieldApproverID, v))
+// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
+func UpdatedByIsNil() predicate.Category {
+	return predicate.Category(sql.FieldIsNull(FieldUpdatedBy))
 }
 
-// ApproverIDLTE applies the LTE predicate on the "approver_id" field.
-func ApproverIDLTE(v int) predicate.Category {
-	return predicate.Category(sql.FieldLTE(FieldApproverID, v))
+// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
+func UpdatedByNotNil() predicate.Category {
+	return predicate.Category(sql.FieldNotNull(FieldUpdatedBy))
 }
 
-// ApproverIDIsNil applies the IsNil predicate on the "approver_id" field.
-func ApproverIDIsNil() predicate.Category {
-	return predicate.Category(sql.FieldIsNull(FieldApproverID))
+// ApprovedByEQ applies the EQ predicate on the "approved_by" field.
+func ApprovedByEQ(v int) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldApprovedBy, v))
 }
 
-// ApproverIDNotNil applies the NotNil predicate on the "approver_id" field.
-func ApproverIDNotNil() predicate.Category {
-	return predicate.Category(sql.FieldNotNull(FieldApproverID))
+// ApprovedByNEQ applies the NEQ predicate on the "approved_by" field.
+func ApprovedByNEQ(v int) predicate.Category {
+	return predicate.Category(sql.FieldNEQ(FieldApprovedBy, v))
 }
 
-// UpdaterIDEQ applies the EQ predicate on the "updater_id" field.
-func UpdaterIDEQ(v int) predicate.Category {
-	return predicate.Category(sql.FieldEQ(FieldUpdaterID, v))
+// ApprovedByIn applies the In predicate on the "approved_by" field.
+func ApprovedByIn(vs ...int) predicate.Category {
+	return predicate.Category(sql.FieldIn(FieldApprovedBy, vs...))
 }
 
-// UpdaterIDNEQ applies the NEQ predicate on the "updater_id" field.
-func UpdaterIDNEQ(v int) predicate.Category {
-	return predicate.Category(sql.FieldNEQ(FieldUpdaterID, v))
+// ApprovedByNotIn applies the NotIn predicate on the "approved_by" field.
+func ApprovedByNotIn(vs ...int) predicate.Category {
+	return predicate.Category(sql.FieldNotIn(FieldApprovedBy, vs...))
 }
 
-// UpdaterIDIn applies the In predicate on the "updater_id" field.
-func UpdaterIDIn(vs ...int) predicate.Category {
-	return predicate.Category(sql.FieldIn(FieldUpdaterID, vs...))
+// ApprovedByGT applies the GT predicate on the "approved_by" field.
+func ApprovedByGT(v int) predicate.Category {
+	return predicate.Category(sql.FieldGT(FieldApprovedBy, v))
 }
 
-// UpdaterIDNotIn applies the NotIn predicate on the "updater_id" field.
-func UpdaterIDNotIn(vs ...int) predicate.Category {
-	return predicate.Category(sql.FieldNotIn(FieldUpdaterID, vs...))
+// ApprovedByGTE applies the GTE predicate on the "approved_by" field.
+func ApprovedByGTE(v int) predicate.Category {
+	return predicate.Category(sql.FieldGTE(FieldApprovedBy, v))
 }
 
-// UpdaterIDGT applies the GT predicate on the "updater_id" field.
-func UpdaterIDGT(v int) predicate.Category {
-	return predicate.Category(sql.FieldGT(FieldUpdaterID, v))
+// ApprovedByLT applies the LT predicate on the "approved_by" field.
+func ApprovedByLT(v int) predicate.Category {
+	return predicate.Category(sql.FieldLT(FieldApprovedBy, v))
 }
 
-// UpdaterIDGTE applies the GTE predicate on the "updater_id" field.
-func UpdaterIDGTE(v int) predicate.Category {
-	return predicate.Category(sql.FieldGTE(FieldUpdaterID, v))
+// ApprovedByLTE applies the LTE predicate on the "approved_by" field.
+func ApprovedByLTE(v int) predicate.Category {
+	return predicate.Category(sql.FieldLTE(FieldApprovedBy, v))
 }
 
-// UpdaterIDLT applies the LT predicate on the "updater_id" field.
-func UpdaterIDLT(v int) predicate.Category {
-	return predicate.Category(sql.FieldLT(FieldUpdaterID, v))
+// ApprovedByIsNil applies the IsNil predicate on the "approved_by" field.
+func ApprovedByIsNil() predicate.Category {
+	return predicate.Category(sql.FieldIsNull(FieldApprovedBy))
 }
 
-// UpdaterIDLTE applies the LTE predicate on the "updater_id" field.
-func UpdaterIDLTE(v int) predicate.Category {
-	return predicate.Category(sql.FieldLTE(FieldUpdaterID, v))
+// ApprovedByNotNil applies the NotNil predicate on the "approved_by" field.
+func ApprovedByNotNil() predicate.Category {
+	return predicate.Category(sql.FieldNotNull(FieldApprovedBy))
 }
 
-// UpdaterIDIsNil applies the IsNil predicate on the "updater_id" field.
-func UpdaterIDIsNil() predicate.Category {
-	return predicate.Category(sql.FieldIsNull(FieldUpdaterID))
+// DeletedByEQ applies the EQ predicate on the "deleted_by" field.
+func DeletedByEQ(v int) predicate.Category {
+	return predicate.Category(sql.FieldEQ(FieldDeletedBy, v))
 }
 
-// UpdaterIDNotNil applies the NotNil predicate on the "updater_id" field.
-func UpdaterIDNotNil() predicate.Category {
-	return predicate.Category(sql.FieldNotNull(FieldUpdaterID))
+// DeletedByNEQ applies the NEQ predicate on the "deleted_by" field.
+func DeletedByNEQ(v int) predicate.Category {
+	return predicate.Category(sql.FieldNEQ(FieldDeletedBy, v))
 }
 
-// DeleterIDEQ applies the EQ predicate on the "deleter_id" field.
-func DeleterIDEQ(v int) predicate.Category {
-	return predicate.Category(sql.FieldEQ(FieldDeleterID, v))
+// DeletedByIn applies the In predicate on the "deleted_by" field.
+func DeletedByIn(vs ...int) predicate.Category {
+	return predicate.Category(sql.FieldIn(FieldDeletedBy, vs...))
 }
 
-// DeleterIDNEQ applies the NEQ predicate on the "deleter_id" field.
-func DeleterIDNEQ(v int) predicate.Category {
-	return predicate.Category(sql.FieldNEQ(FieldDeleterID, v))
+// DeletedByNotIn applies the NotIn predicate on the "deleted_by" field.
+func DeletedByNotIn(vs ...int) predicate.Category {
+	return predicate.Category(sql.FieldNotIn(FieldDeletedBy, vs...))
 }
 
-// DeleterIDIn applies the In predicate on the "deleter_id" field.
-func DeleterIDIn(vs ...int) predicate.Category {
-	return predicate.Category(sql.FieldIn(FieldDeleterID, vs...))
+// DeletedByGT applies the GT predicate on the "deleted_by" field.
+func DeletedByGT(v int) predicate.Category {
+	return predicate.Category(sql.FieldGT(FieldDeletedBy, v))
 }
 
-// DeleterIDNotIn applies the NotIn predicate on the "deleter_id" field.
-func DeleterIDNotIn(vs ...int) predicate.Category {
-	return predicate.Category(sql.FieldNotIn(FieldDeleterID, vs...))
+// DeletedByGTE applies the GTE predicate on the "deleted_by" field.
+func DeletedByGTE(v int) predicate.Category {
+	return predicate.Category(sql.FieldGTE(FieldDeletedBy, v))
 }
 
-// DeleterIDGT applies the GT predicate on the "deleter_id" field.
-func DeleterIDGT(v int) predicate.Category {
-	return predicate.Category(sql.FieldGT(FieldDeleterID, v))
+// DeletedByLT applies the LT predicate on the "deleted_by" field.
+func DeletedByLT(v int) predicate.Category {
+	return predicate.Category(sql.FieldLT(FieldDeletedBy, v))
 }
 
-// DeleterIDGTE applies the GTE predicate on the "deleter_id" field.
-func DeleterIDGTE(v int) predicate.Category {
-	return predicate.Category(sql.FieldGTE(FieldDeleterID, v))
+// DeletedByLTE applies the LTE predicate on the "deleted_by" field.
+func DeletedByLTE(v int) predicate.Category {
+	return predicate.Category(sql.FieldLTE(FieldDeletedBy, v))
 }
 
-// DeleterIDLT applies the LT predicate on the "deleter_id" field.
-func DeleterIDLT(v int) predicate.Category {
-	return predicate.Category(sql.FieldLT(FieldDeleterID, v))
+// DeletedByIsNil applies the IsNil predicate on the "deleted_by" field.
+func DeletedByIsNil() predicate.Category {
+	return predicate.Category(sql.FieldIsNull(FieldDeletedBy))
 }
 
-// DeleterIDLTE applies the LTE predicate on the "deleter_id" field.
-func DeleterIDLTE(v int) predicate.Category {
-	return predicate.Category(sql.FieldLTE(FieldDeleterID, v))
-}
-
-// DeleterIDIsNil applies the IsNil predicate on the "deleter_id" field.
-func DeleterIDIsNil() predicate.Category {
-	return predicate.Category(sql.FieldIsNull(FieldDeleterID))
-}
-
-// DeleterIDNotNil applies the NotNil predicate on the "deleter_id" field.
-func DeleterIDNotNil() predicate.Category {
-	return predicate.Category(sql.FieldNotNull(FieldDeleterID))
+// DeletedByNotNil applies the NotNil predicate on the "deleted_by" field.
+func DeletedByNotNil() predicate.Category {
+	return predicate.Category(sql.FieldNotNull(FieldDeletedBy))
 }
 
 // ApprovedAtEQ applies the EQ predicate on the "approved_at" field.

@@ -32,11 +32,11 @@ func init() {
 	// category.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	category.UpdateDefaultUpdatedAt = categoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// categoryDescSlug is the schema descriptor for slug field.
-	categoryDescSlug := categoryFields[0].Descriptor()
+	categoryDescSlug := categoryFields[1].Descriptor()
 	// category.SlugValidator is a validator for the "slug" field. It is called by the builders before save.
 	category.SlugValidator = categoryDescSlug.Validators[0].(func(string) error)
 	// categoryDescLabel is the schema descriptor for label field.
-	categoryDescLabel := categoryFields[1].Descriptor()
+	categoryDescLabel := categoryFields[2].Descriptor()
 	// category.LabelValidator is a validator for the "label" field. It is called by the builders before save.
 	category.LabelValidator = categoryDescLabel.Validators[0].(func(string) error)
 	// categoryDescCreatorID is the schema descriptor for creator_id field.

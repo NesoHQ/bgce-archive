@@ -62,6 +62,20 @@ func (_c *CategoryCreate) SetNillableUpdatedAt(v *time.Time) *CategoryCreate {
 	return _c
 }
 
+// SetParentID sets the "parent_id" field.
+func (_c *CategoryCreate) SetParentID(v int) *CategoryCreate {
+	_c.mutation.SetParentID(v)
+	return _c
+}
+
+// SetNillableParentID sets the "parent_id" field if the given value is not nil.
+func (_c *CategoryCreate) SetNillableParentID(v *int) *CategoryCreate {
+	if v != nil {
+		_c.SetParentID(*v)
+	}
+	return _c
+}
+
 // SetSlug sets the "slug" field.
 func (_c *CategoryCreate) SetSlug(v string) *CategoryCreate {
 	_c.mutation.SetSlug(v)
@@ -71,20 +85,6 @@ func (_c *CategoryCreate) SetSlug(v string) *CategoryCreate {
 // SetLabel sets the "label" field.
 func (_c *CategoryCreate) SetLabel(v string) *CategoryCreate {
 	_c.mutation.SetLabel(v)
-	return _c
-}
-
-// SetDescription sets the "description" field.
-func (_c *CategoryCreate) SetDescription(v string) *CategoryCreate {
-	_c.mutation.SetDescription(v)
-	return _c
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (_c *CategoryCreate) SetNillableDescription(v *string) *CategoryCreate {
-	if v != nil {
-		_c.SetDescription(*v)
-	}
 	return _c
 }
 
@@ -102,44 +102,64 @@ func (_c *CategoryCreate) SetNillableCreatorID(v *int) *CategoryCreate {
 	return _c
 }
 
-// SetApproverID sets the "approver_id" field.
-func (_c *CategoryCreate) SetApproverID(v int) *CategoryCreate {
-	_c.mutation.SetApproverID(v)
+// SetDescription sets the "description" field.
+func (_c *CategoryCreate) SetDescription(v string) *CategoryCreate {
+	_c.mutation.SetDescription(v)
 	return _c
 }
 
-// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
-func (_c *CategoryCreate) SetNillableApproverID(v *int) *CategoryCreate {
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_c *CategoryCreate) SetNillableDescription(v *string) *CategoryCreate {
 	if v != nil {
-		_c.SetApproverID(*v)
+		_c.SetDescription(*v)
 	}
 	return _c
 }
 
-// SetUpdaterID sets the "updater_id" field.
-func (_c *CategoryCreate) SetUpdaterID(v int) *CategoryCreate {
-	_c.mutation.SetUpdaterID(v)
+// SetCreatedBy sets the "created_by" field.
+func (_c *CategoryCreate) SetCreatedBy(v int) *CategoryCreate {
+	_c.mutation.SetCreatedBy(v)
 	return _c
 }
 
-// SetNillableUpdaterID sets the "updater_id" field if the given value is not nil.
-func (_c *CategoryCreate) SetNillableUpdaterID(v *int) *CategoryCreate {
+// SetUpdatedBy sets the "updated_by" field.
+func (_c *CategoryCreate) SetUpdatedBy(v int) *CategoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (_c *CategoryCreate) SetNillableUpdatedBy(v *int) *CategoryCreate {
 	if v != nil {
-		_c.SetUpdaterID(*v)
+		_c.SetUpdatedBy(*v)
 	}
 	return _c
 }
 
-// SetDeleterID sets the "deleter_id" field.
-func (_c *CategoryCreate) SetDeleterID(v int) *CategoryCreate {
-	_c.mutation.SetDeleterID(v)
+// SetApprovedBy sets the "approved_by" field.
+func (_c *CategoryCreate) SetApprovedBy(v int) *CategoryCreate {
+	_c.mutation.SetApprovedBy(v)
 	return _c
 }
 
-// SetNillableDeleterID sets the "deleter_id" field if the given value is not nil.
-func (_c *CategoryCreate) SetNillableDeleterID(v *int) *CategoryCreate {
+// SetNillableApprovedBy sets the "approved_by" field if the given value is not nil.
+func (_c *CategoryCreate) SetNillableApprovedBy(v *int) *CategoryCreate {
 	if v != nil {
-		_c.SetDeleterID(*v)
+		_c.SetApprovedBy(*v)
+	}
+	return _c
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (_c *CategoryCreate) SetDeletedBy(v int) *CategoryCreate {
+	_c.mutation.SetDeletedBy(v)
+	return _c
+}
+
+// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
+func (_c *CategoryCreate) SetNillableDeletedBy(v *int) *CategoryCreate {
+	if v != nil {
+		_c.SetDeletedBy(*v)
 	}
 	return _c
 }
@@ -277,6 +297,9 @@ func (_c *CategoryCreate) check() error {
 			return &ValidationError{Name: "creator_id", err: fmt.Errorf(`ent: validator failed for field "Category.creator_id": %w`, err)}
 		}
 	}
+	if _, ok := _c.mutation.CreatedBy(); !ok {
+		return &ValidationError{Name: "created_by", err: errors.New(`ent: missing required field "Category.created_by"`)}
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`ent: missing required field "Category.status"`)}
 	}
@@ -323,6 +346,10 @@ func (_c *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 		_spec.SetField(category.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := _c.mutation.ParentID(); ok {
+		_spec.SetField(category.FieldParentID, field.TypeInt, value)
+		_node.ParentID = value
+	}
 	if value, ok := _c.mutation.Slug(); ok {
 		_spec.SetField(category.FieldSlug, field.TypeString, value)
 		_node.Slug = value
@@ -331,25 +358,29 @@ func (_c *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 		_spec.SetField(category.FieldLabel, field.TypeString, value)
 		_node.Label = value
 	}
-	if value, ok := _c.mutation.Description(); ok {
-		_spec.SetField(category.FieldDescription, field.TypeString, value)
-		_node.Description = value
-	}
 	if value, ok := _c.mutation.CreatorID(); ok {
 		_spec.SetField(category.FieldCreatorID, field.TypeInt, value)
 		_node.CreatorID = value
 	}
-	if value, ok := _c.mutation.ApproverID(); ok {
-		_spec.SetField(category.FieldApproverID, field.TypeInt, value)
-		_node.ApproverID = value
+	if value, ok := _c.mutation.Description(); ok {
+		_spec.SetField(category.FieldDescription, field.TypeString, value)
+		_node.Description = value
 	}
-	if value, ok := _c.mutation.UpdaterID(); ok {
-		_spec.SetField(category.FieldUpdaterID, field.TypeInt, value)
-		_node.UpdaterID = value
+	if value, ok := _c.mutation.CreatedBy(); ok {
+		_spec.SetField(category.FieldCreatedBy, field.TypeInt, value)
+		_node.CreatedBy = value
 	}
-	if value, ok := _c.mutation.DeleterID(); ok {
-		_spec.SetField(category.FieldDeleterID, field.TypeInt, value)
-		_node.DeleterID = value
+	if value, ok := _c.mutation.UpdatedBy(); ok {
+		_spec.SetField(category.FieldUpdatedBy, field.TypeInt, value)
+		_node.UpdatedBy = value
+	}
+	if value, ok := _c.mutation.ApprovedBy(); ok {
+		_spec.SetField(category.FieldApprovedBy, field.TypeInt, value)
+		_node.ApprovedBy = value
+	}
+	if value, ok := _c.mutation.DeletedBy(); ok {
+		_spec.SetField(category.FieldDeletedBy, field.TypeInt, value)
+		_node.DeletedBy = value
 	}
 	if value, ok := _c.mutation.ApprovedAt(); ok {
 		_spec.SetField(category.FieldApprovedAt, field.TypeTime, value)

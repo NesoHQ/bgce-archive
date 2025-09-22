@@ -12,7 +12,6 @@ type Category struct {
 
 func (Category) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		// This BaseMixin Automatically adds id, uuid, created_at, and updated_at fields. // this comment should be removed
 		BaseMixin{},
 	}
 }
@@ -20,26 +19,41 @@ func (Category) Mixin() []ent.Mixin {
 // Fields of the Category.
 func (Category) Fields() []ent.Field {
 	return []ent.Field{
+		field.Int("parent_id").
+			Optional(),
+
 		field.String("slug").
 			Unique().
 			NotEmpty(),
+
 		field.String("label").
 			NotEmpty(),
-		field.Text("description").
-			Optional(),
 		field.Int("creator_id").
 			NonNegative().Optional(), // This can't be optional. its okay for now cause we have no other entity for now
-		field.Int("approver_id").
+		field.Text("description").
 			Optional(),
-		field.Int("updater_id").
+
+		field.Int("created_by"),
+
+		field.Int("updated_by").
 			Optional(),
-		field.Int("deleter_id").
+
+		field.Int("approved_by").
 			Optional(),
+
+		field.Int("deleted_by").
+			Optional(),
+
 		field.Time("approved_at").
 			Optional(),
+
 		field.Time("deleted_at").
 			Optional(),
-		field.Enum("status").Values("approved", "rejected", "deleted", "pending").Default("pending"),
+
+		field.Enum("status").
+			Values("pending", "approved", "rejected", "deleted").
+			Default("pending"),
+
 		field.JSON("meta", map[string]any{}).
 			Optional(),
 	}
@@ -48,5 +62,5 @@ func (Category) Fields() []ent.Field {
 // Edges of the Category.
 func (Category) Edges() []ent.Edge {
 	return nil
-	// All Relations should be defined here like approver_id, updater_id, deleter_id, creator_id
+	// Relations can be added later if needed
 }
