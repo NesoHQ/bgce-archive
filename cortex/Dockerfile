@@ -10,8 +10,10 @@ RUN go build -o main main.go
 # Run final stage
 FROM alpine:3.14
 WORKDIR /app
+
+# Copy the compiled binary
 COPY --from=builder /app/main .
-COPY --from=builder /app/migrate /app/migrations
+
 EXPOSE 8080
 
 # Command to run the executable

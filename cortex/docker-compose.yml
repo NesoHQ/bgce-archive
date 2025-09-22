@@ -1,4 +1,5 @@
-name: cortex
+version: "3.8"
+
 services:
   bgce_cortex:
     image: cortex:local
@@ -12,14 +13,6 @@ services:
       MODE: debug
       SERVICE_NAME: cortex
       HTTP_PORT: 80
-      MIGRATION_SOURCE: migrations
-      JWT_SECRET: anything-secret
-
-      # APM Configuration
-      APM_SERVICE_NAME:
-      APM_SERVER_URL:
-      APM_SECRET_TOKEN:
-      APM_ENVIRONMENT:
 
       # RabbitMQ
       RABBITMQ_URL: "amqp://admin:admin@rabbitmq:5672"
@@ -31,32 +24,10 @@ services:
       READ_REDIS_URL: "redis://redis:6379"
       WRITE_REDIS_URL: "redis://redis:6379"
 
-      # Read cortex DB
-      READ_BGCE_DB_HOST: postgres
-      READ_BGCE_DB_PORT: 5432
-      READ_BGCE_DB_NAME: bgce
-      READ_BGCE_DB_USER: postgres
-      READ_BGCE_DB_PASSWORD: postgres
-      READ_BGCE_DB_MAX_IDLE_TIME_IN_MINUTES: 60
-      READ_BGCE_DB_MAX_OPEN_CONNS: 25
-      READ_BGCE_DB_MAX_IDLE_CONNS: 25
-      READ_BGCE_DB_ENABLE_SSL_MODE: false
-
-      # Write cortex DB
-      WRITE_BGCE_DB_HOST: postgres
-      WRITE_BGCE_DB_PORT: 5432
-      WRITE_BGCE_DB_NAME: bgce
-      WRITE_BGCE_DB_USER: postgres
-      WRITE_BGCE_DB_PASSWORD: postgres
-      WRITE_BGCE_DB_MAX_IDLE_TIME_IN_MINUTES: 60
-      WRITE_BGCE_DB_MAX_OPEN_CONNS: 25
-      WRITE_BGCE_DB_MAX_IDLE_CONNS: 25
-      WRITE_BGCE_DB_ENABLE_SSL_MODE: false
-
-      # Required DB configuration
-
+      # Postgres DB
       BGCE_DB_DSN: "postgres://postgres:postgres@postgres:5432/bgce?sslmode=disable"
       BGCE_DB_DRIVER: "postgres"
+
     depends_on:
       postgres:
         condition: service_healthy
@@ -116,4 +87,3 @@ volumes:
   postgres_data:
   rabbitmq_data:
   redis_data:
-
