@@ -13,7 +13,7 @@ import (
 )
 
 type UpdateCategoryReq struct {
-	NewSlug     string          `json:"new_slug" validate:"required"`
+	NewSlug     string          `json:"new_slug,omitempty"`
 	Label       string          `json:"label,omitempty"`
 	Description string          `json:"description,omitempty"`
 	ApprovedAt  *time.Time      `json:"approved_at,omitempty"`

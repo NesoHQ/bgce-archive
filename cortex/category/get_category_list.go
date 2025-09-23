@@ -69,6 +69,12 @@ func (s *service) GetCategoryList(ctx context.Context, filter GetCategoryFilter)
 			Label:       c.Label,
 			Description: c.Description,
 			CreatedBy:   c.CreatorID,
+			UpdatedBy:   &c.UpdatedBy,
+			ApprovedBy:  &c.ApprovedBy,
+			ApprovedAt:  &c.ApprovedAt,
+			Status:      string(c.Status),
+			CreatedAt:   c.CreatedAt,
+			UpdatedAt:   c.UpdatedAt,
 			Meta:        c.Meta,
 		})
 	}
