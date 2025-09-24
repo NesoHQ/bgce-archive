@@ -32,6 +32,11 @@ jobs:
   build-and-deploy:
     needs: detect-changes
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write  # Needed to push to GHCR
+      
     strategy:
       matrix:
         service: [ archive-admin, archive-client, cortex ]
