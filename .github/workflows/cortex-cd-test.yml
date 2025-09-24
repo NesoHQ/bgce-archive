@@ -1,12 +1,11 @@
-# .github/workflows/deploy-cortex.yml
-name: Build and Deploy Cortex
+# .github/workflows/build-and-push-cortex.yml
+name: Build and Push Cortex
 
 on:
   push:
     branches:
-      - master
-    paths:
-      - 'cortex/**'  # Only trigger if cortex folder changes
+      - master  # Trigger on pushes to master
+  workflow_dispatch:   # Optional: allows manual trigger
 
 jobs:
   build-and-push:
