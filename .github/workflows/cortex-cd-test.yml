@@ -1,11 +1,9 @@
-# .github/workflows/build-and-push-cortex.yml
-name: Build and Push Cortex
+name: Build and Deploy Cortex
 
 on:
   push:
     branches:
-      - master  # Trigger on pushes to master
-  workflow_dispatch:   # Optional: allows manual trigger
+      - master
 
 jobs:
   build-and-push:
@@ -13,7 +11,7 @@ jobs:
 
     permissions:
       contents: read
-      packages: write  # Needed to push to GHCR
+      packages: write
 
     steps:
       # 1. Checkout code
@@ -35,9 +33,9 @@ jobs:
       # 4. Build Docker image
       - name: Build Cortex image
         run: |
-          docker build -t ghcr.io/${{ github.repository }}/cortex:latest ./cortex
+          docker build -t ghcr.io/nesohq/bgce-archive/cortex:latest ./cortex
 
       # 5. Push Docker image
       - name: Push Cortex image
         run: |
-          docker push ghcr.io/${{ github.repository }}/cortex:latest
+          docker push ghcr.io/nesohq/bgce-archive/cortex:latest
