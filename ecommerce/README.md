@@ -79,19 +79,18 @@ cp .env.example .env
 ---
 
 ## 📂 Project Structure
-
 ```
 ├── cmd
 │   └── serve.go
 ├── config
 │   └── config.go
-├── database
-│   ├── product.go
-│   └── user.go
 ├── go.mod
 ├── go.sum
 ├── main.go
 ├── README.md
+├── repo
+│   ├── product.go
+│   └── user.go
 ├── rest
 │   ├── handlers
 │   │   ├── product
@@ -102,10 +101,6 @@ cp .env.example .env
 │   │   │   ├── handler.go
 │   │   │   ├── routes.go
 │   │   │   └── update_product.go
-│   │   ├── review
-│   │   │   ├── get_reviews.go
-│   │   │   ├── handler.go
-│   │   │   └── routes.go
 │   │   └── user
 │   │       ├── create_user.go
 │   │       ├── handler.go
@@ -132,7 +127,7 @@ cp .env.example .env
 go run main.go
 ```
 
-Server will run at: **[http://localhost:8080](http://localhost:8080)**
+Server will run at: **[http://localhost:3000](http://localhost:3000)**
 
 ---
 
@@ -150,4 +145,4 @@ Server will run at: **[http://localhost:8080](http://localhost:8080)**
 * [X] Split handlers into feature-wise packages
 * [X] Avoid reloading configuration repeatedly
 * [X] Remove tight coupling from `config`
-* [ ] Decouple handlers from direct database calls
+* [X] Decouple handlers from direct database calls
