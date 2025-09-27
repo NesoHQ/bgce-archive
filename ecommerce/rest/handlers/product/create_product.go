@@ -5,23 +5,39 @@ import (
 	"fmt"
 	"net/http"
 
-	"ecommerce/database"
 	"ecommerce/util"
+	"ecommerce/repo"
 	
 )
 
+type ReqCreateProduct struct {
+	Title       string  `json:"title"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+	ImgUrl 		string  `json:"imageUrl"`
+}
+
 func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request){	
-	var newProduct database.Product 	
+	var req ReqCreateProduct 	
 	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&newProduct)
+	err := decoder.Decode(&req)
 	if err != nil {
 		fmt.Println(err)
-		http.Error(w, "Please send a valid JSON body", 400)
+		util.SendError(w, http.StatusBadRequest, "Invalid request body")
 		return 
 	}
 
-	createdProduct := database.Store(newProduct)
+	createdProduct, err := h.productRepo.Create(repo.Product{
+		Title:       req.Title,
+		Description: req.Description,
+		Price:       req.Price,
+		ImgUrl:      req.ImgUrl,
+	})
+	if err != nil {
+		util.SendError(w, http.StatusInternalServerError, "Internal Server Error") 
+		return 
+	}
 
-	util.SendData(w, createdProduct, 201)	
+	util.SendData(w, http.StatusCreated, createdProduct)	
 }
 
