@@ -27,6 +27,9 @@ func (h *Handlers) GetSubCategoryList(w http.ResponseWriter, r *http.Request) {}
 func (h *Handlers) GetSubCategoryByID(w http.ResponseWriter, r *http.Request) {}
 func (h *Handlers) UpdateSubCategory(w http.ResponseWriter, r *http.Request)  {}
 func (h *Handlers) DeleteSubCategory(w http.ResponseWriter, r *http.Request)  {}
+func (h *Handlers) Hello(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Hello, World!"))
+}
 
 type SuccessResponse struct {
 	Message string      `json:"message"`
