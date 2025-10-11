@@ -24,7 +24,9 @@
             "post": {
                 "summary": "Create a new category",
                 "description": "Creates a new category with slug, label, description, creator info, and optional metadata.",
-                "tags": ["Categories"],
+                "tags": [
+                    "Categories"
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -77,14 +79,16 @@
             "delete": {
                 "summary": "Delete a category",
                 "description": "Soft deletes a category through uuid",
-                "tags": ["Categories"],
+                "tags": [
+                    "Categories"
+                ],
                 "parameters": [
                     {
                         "name": "uuid",
                         "in": "path",
                         "required": true,
                         "schema": {
-                        "type": "string"
+                            "type": "string"
                         }
                     }
                 ],
@@ -119,94 +123,209 @@
                     }
                 }
             }
-        }
-    },
-    "components": {
-        "securitySchemes": {
-            "BearerAuth": {
-                "type": "http",
-                "scheme": "bearer",
-                "bearerFormat": "JWT"
-            }
         },
-        "schemas": {
-            "CreateCategoryReq": {
-                "type": "object",
-                "properties": {
-                    "slug": {
-                        "type": "string",
-                        "example": "interview-qna",
-                        "description": "Unique slug identifier for the category"
-                    },
-                    "label": {
-                        "type": "string",
-                        "example": "Interview",
-                        "description": "Human readable label"
-                    },
-                    "description": {
-                        "type": "string",
-                        "example": "Interview category to manage all interview related sub categories",
-                        "description": "Optional description of the category"
-                    },
-                    "created_by": {
-                        "type": "integer",
-                        "example": 1,
-                        "description": "User ID who creates the category"
-                    },
-                    "meta": {
-                        "type": "object",
-                        "description": "Optional JSON metadata",
-                        "nullable": true,
-                        "additionalProperties": true,
-                        "example": {
-                            "tags": ["qna", "interview", "exam"],
-                            "icon": "📱",
-                            "regex": "/?*"
+        "/api/v1/sub-categories": {
+            "post": {
+                "summary": "Create a new subcategory",
+                "description": "Creates a new subcategory with slug, name, description, creator info, parent category UUID, and optional metadata.",
+                "tags": [
+                    "Categories"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateSubcategoryRequest"
+                            }
                         }
                     }
                 },
-                "required": ["slug", "label", "created_by"]
-            },
-            "ErrorResponse": {
-                "type": "object",
-                "properties": {
-                    "message": {
-                        "type": "string",
-                        "example": "Invalid Request"
+                "responses": {
+                    "201": {
+                        "description": "Subcategory created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
                     },
-                    "status": {
-                        "type": "boolean",
-                        "example": false
+                    "400": {
+                        "description": "Bad Request - Invalid input",
+                        "content": {
+                            "application/json": {
+                                "$ref": "#/components/schemas/ErrorResponse"
+                            }
+                        }
                     },
-                    "errors": {
-                        "type": ["object", "null"],
-                        "example": null
-                    }
-                }
-            },
-            "SuccessResponse": {
-                "type": "object",
-                "properties": {
-                    "data": {
-                        "type": ["object", "null"],
-                        "nullable": true,
-                        "example": null
+                    "401": {
+                        "description": "Unauthorized - Invalid or missing authentication",
+                        "content": {
+                            "application/json": {
+                                "$ref": "#/components/schemas/ErrorResponse"
+                            }
+                        }
                     },
-                    "message": {
-                        "type": "string",
-                        "example": "Category created successfully"
+                    "409": {
+                        "description": "Conflict - Subcategory slug already exists",
+                        "content": {
+                            "application/json": {
+                                "$ref": "#/components/schemas/ErrorResponse"
+                            }
+                        }
                     },
-                    "status": {
-                        "type": "boolean",
-                        "example": true
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "$ref": "#/components/schemas/ErrorResponse"
+                            }
+                        }
                     }
                 }
             }
         }
     },
-    "security": [
-        {
-            "BearerAuth": []
+    "components": {
+            "securitySchemes": {
+                "BearerAuth": {
+                    "type": "http",
+                    "scheme": "bearer",
+                    "bearerFormat": "JWT"
+                }
+            },
+            "schemas": {
+                "CreateCategoryReq": {
+                    "type": "object",
+                    "properties": {
+                        "slug": {
+                            "type": "string",
+                            "example": "interview-qna",
+                            "description": "Unique slug identifier for the category"
+                        },
+                        "label": {
+                            "type": "string",
+                            "example": "Interview",
+                            "description": "Human readable label"
+                        },
+                        "description": {
+                            "type": "string",
+                            "example": "Interview category to manage all interview related sub categories",
+                            "description": "Optional description of the category"
+                        },
+                        "created_by": {
+                            "type": "integer",
+                            "example": 1,
+                            "description": "User ID who creates the category"
+                        },
+                        "meta": {
+                            "type": "object",
+                            "description": "Optional JSON metadata",
+                            "nullable": true,
+                            "additionalProperties": true,
+                            "example": {
+                                "tags": [
+                                    "qna",
+                                    "interview",
+                                    "exam"
+                                ],
+                                "icon": "📱",
+                                "regex": "/?*"
+                            }
+                        }
+                    },
+                    "required": [
+                        "slug",
+                        "label",
+                        "created_by"
+                    ]
+                },
+                "CreateSubcategoryRequest": {
+                    "type": "object",
+                    "properties": {
+                        "slug": {
+                            "type": "string",
+                            "example": "laptops",
+                            "description": "Unique slug identifier for the subcategory"
+                        },
+                        "name": {
+                            "type": "string",
+                            "example": "Laptops",
+                            "description": "Human readable name for the subcategory"
+                        },
+                        "description": {
+                            "type": "string",
+                            "example": "Laptop related questions and answers",
+                            "description": "Optional description of the subcategory"
+                        },
+                        "parent_uuid": {
+                            "type": "string",
+                            "example": "0199d379-d2d4-76a1-9d2d-f99640a16929",
+                            "description": "UUID of the parent category"
+                        },
+                        "meta": {
+                            "type": "object",
+                            "description": "Optional JSON metadata",
+                            "nullable": true,
+                            "additionalProperties": true,
+                            "example": {
+                                "tags": [
+                                    "electronics",
+                                    "computers"
+                                ],
+                                "icon": "💻"
+                            }
+                        }
+                    },
+                    "required": [
+                        "slug",
+                        "name",
+                        "parent_uuid"
+                    ]
+                },
+                "ErrorResponse": {
+                    "type": "object",
+                    "properties": {
+                        "message": {
+                            "type": "string",
+                            "example": "Invalid Request"
+                        },
+                        "status": {
+                            "type": "boolean",
+                            "example": false
+                        },
+                        "errors": {
+                            "type": [
+                                "object",
+                                "null"
+                            ],
+                            "example": null
+                        }
+                    }
+                },
+                "SuccessResponse": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "type": [
+                                "object",
+                                "null"
+                            ],
+                            "nullable": true,
+                            "example": null
+                        },
+                        "message": {
+                            "type": "string",
+                            "example": "Category created successfully"
+                        },
+                        "status": {
+                            "type": "boolean",
+                            "example": true
+                        }
+                    }
+                }
+            }
         }
-    ]
-}
+    }

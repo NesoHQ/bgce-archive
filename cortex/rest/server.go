@@ -28,11 +28,21 @@ func NewServeMux(mw *middlewares.Middlewares, handlers *handlers.Handlers) (*htt
 	mux.Handle("DELETE /api/v1/categories/{category_id}", http.HandlerFunc(handlers.DeleteCategoryByID))
 	mux.Handle("GET /api/v1/hello", http.HandlerFunc(handlers.Hello))
 
-	mux.Handle("POST /api/v1/sub-categories", http.HandlerFunc(handlers.CreateSubCategory))
+
+	mux.Handle("POST /api/v1/sub-categories", manager.With(
+		http.HandlerFunc(handlers.CreateSubCategory),
+		mw.AuthenticateJWT,
+	))
 	mux.Handle("GET /api/v1/sub-categories", http.HandlerFunc(handlers.GetSubCategoryList))
 	mux.Handle("GET /api/v1/sub-categories/{id}", http.HandlerFunc(handlers.GetSubCategoryByID))
-	mux.Handle("PUT /api/v1/sub-categories/{id}", http.HandlerFunc(handlers.UpdateSubCategory))
-	mux.Handle("DELETE /api/v1/sub-categories/{id}", http.HandlerFunc(handlers.DeleteSubCategory))
+	mux.Handle("PUT /api/v1/sub-categories/{id}", manager.With(
+		http.HandlerFunc(handlers.UpdateSubCategory),
+		mw.AuthenticateJWT,
+	))
+	mux.Handle("DELETE /api/v1/sub-categories/{id}", manager.With(
+		http.HandlerFunc(handlers.DeleteSubCategory),
+		mw.AuthenticateJWT,
+	))
 
 	swagger.SetupSwagger(mux, manager)
 

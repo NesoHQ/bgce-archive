@@ -2,9 +2,10 @@ package category
 
 import (
 	"context"
+	"errors"
+
 	"cortex/ent"
 	"cortex/ent/category"
-	"errors"
 
 	"github.com/google/uuid"
 )
@@ -14,7 +15,7 @@ func (s *service) FindCategoryByUUID(ctx context.Context, uid uuid.UUID) (*ent.C
 		category.UUIDEQ(uid.String()),
 	).First(ctx)
 	if err != nil {
-		return nil, errors.New("ent: category not found")
+		return nil, errors.New("category not found")
 	}
 	return category, nil
 }
