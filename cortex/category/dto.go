@@ -15,14 +15,6 @@ type CreateCategoryParams struct {
 	Meta        map[string]interface{}
 }
 
-type CreateSubcategoryParams struct {
-	Slug        string
-	Label       string
-	Description string
-	CreatorID   int
-	ParentUUID  string
-	Meta        map[string]interface{}
-}
 
 type UpdateCategoryParams struct {
 	ID          *int
@@ -61,3 +53,4 @@ type GetCategoryFilter struct {
 	SortBy    *string
 	SortOrder *string
 }
+

@@ -19,6 +19,7 @@ import (
 	"cortex/rest/handlers"
 	"cortex/rest/middlewares"
 	"cortex/rest/utils"
+	"cortex/subcategory"
 
 	_ "github.com/lib/pq" 
 
@@ -79,7 +80,8 @@ func APIServerCommand(ctx context.Context) *cobra.Command {
 			})
 
 			ctgrySvc := category.NewService(cnf, rmq, redisCache, entClient)
-			handlers := handlers.NewHandler(cnf, ctgrySvc)
+			subcategorySvc := subcategory.NewService(cnf, rmq, redisCache, entClient)
+			handlers := handlers.NewHandler(cnf, ctgrySvc, subcategorySvc)
 			mux, err := rest.NewServeMux(middlewares, handlers)
 			if err != nil {
 				slog.Error("Failed to create the server:", logger.Extra(map[string]any{

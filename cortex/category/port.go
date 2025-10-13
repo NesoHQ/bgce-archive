@@ -18,10 +18,6 @@ type Service interface {
 	GetCategoryList(ctx context.Context, filter GetCategoryFilter) ([]*Category, error)
 	UpdateCategory(ctx context.Context, params UpdateCategoryParams) error
 
-	CreateSubcategory(ctx context.Context, params CreateSubcategoryParams) error
-	// GetSubcategoriesByParentID(ctx context.Context, parentID int, filter GetSubcategoryFilter) ([]*Category, error)
-	// UpdateSubcategory(ctx context.Context, params UpdateSubcategoryParams) error
-	// DeleteSubcategory(ctx context.Context, id int, deletedBy int) error
 }
 
 type Cache interface {

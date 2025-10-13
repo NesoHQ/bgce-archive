@@ -1,14 +1,14 @@
 {
     "openapi": "3.0.1",
     "info": {
-        "title": "[Cortex]: Category service APIs",
-        "description": "API for managing categories and sub categories.",
+        "title": "[Cortex]: Category and Subcategory service APIs",
+        "description": "API for managing categories and subcategories with full CRUD operations.",
         "version": "1.0.0"
     },
     "servers": [
         {
             "url": "http://localhost:3345",
-            "description": "Local"
+            "description": "Local Development"
         },
         {
             "url": "http://",
@@ -26,6 +26,11 @@
                 "description": "Creates a new category with slug, label, description, creator info, and optional metadata.",
                 "tags": [
                     "Categories"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
                 ],
                 "requestBody": {
                     "required": true,
@@ -52,7 +57,19 @@
                         "description": "Bad Request - Invalid input",
                         "content": {
                             "application/json": {
-                                "$ref": "#/components/schemas/ErrorResponse"
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Invalid or missing authentication",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
                             }
                         }
                     },
@@ -60,7 +77,9 @@
                         "description": "Conflict - Category slug already exists",
                         "content": {
                             "application/json": {
-                                "$ref": "#/components/schemas/ErrorResponse"
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
                             }
                         }
                     },
@@ -68,27 +87,296 @@
                         "description": "Internal Server Error",
                         "content": {
                             "application/json": {
-                                "$ref": "#/components/schemas/ErrorResponse"
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "Get categories list",
+                "description": "Retrieves a list of categories with optional filtering and pagination.",
+                "tags": [
+                    "Categories"
+                ],
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Maximum number of results to return",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 100,
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Number of results to skip",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Field to sort by",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "created_at",
+                                "label",
+                                "slug"
+                            ],
+                            "default": "created_at"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort order",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ],
+                            "default": "desc"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filter by status",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "pending",
+                                "approved",
+                                "rejected",
+                                "deleted"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "slug",
+                        "in": "query",
+                        "description": "Filter by slug",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "label",
+                        "in": "query",
+                        "description": "Filter by label",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categories retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CategoryListResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
                             }
                         }
                     }
                 }
             }
         },
-        "/api/v1/categories/{uuid}": {
-            "delete": {
-                "summary": "Delete a category",
-                "description": "Soft deletes a category through uuid",
+        "/api/v1/categories/{category_uuid}": {
+            "get": {
+                "summary": "Get category by UUID",
+                "description": "Retrieves a specific category by its UUID.",
                 "tags": [
                     "Categories"
                 ],
                 "parameters": [
                     {
-                        "name": "uuid",
+                        "name": "category_uuid",
                         "in": "path",
                         "required": true,
+                        "description": "Category UUID",
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CategoryResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/categories/{slug}": {
+            "put": {
+                "summary": "Update category",
+                "description": "Updates an existing category by slug.",
+                "tags": [
+                    "Categories"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "required": true,
+                        "description": "Category slug",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateCategoryReq"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Category updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Invalid or missing authentication",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict - New slug already exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/categories/{category_id}": {
+            "delete": {
+                "summary": "Delete category",
+                "description": "Soft deletes a category by ID.",
+                "tags": [
+                    "Categories"
+                ],
+                "parameters": [
+                    {
+                        "name": "category_id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Category ID",
+                        "schema": {
+                            "type": "integer"
                         }
                     }
                 ],
@@ -117,7 +405,9 @@
                         "description": "Internal Server Error",
                         "content": {
                             "application/json": {
-                                "$ref": "#/components/schemas/ErrorResponse"
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
                             }
                         }
                     }
@@ -129,7 +419,12 @@
                 "summary": "Create a new subcategory",
                 "description": "Creates a new subcategory with slug, name, description, creator info, parent category UUID, and optional metadata.",
                 "tags": [
-                    "Categories"
+                    "Subcategories"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
                 ],
                 "requestBody": {
                     "required": true,
@@ -156,7 +451,9 @@
                         "description": "Bad Request - Invalid input",
                         "content": {
                             "application/json": {
-                                "$ref": "#/components/schemas/ErrorResponse"
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
                             }
                         }
                     },
@@ -164,7 +461,9 @@
                         "description": "Unauthorized - Invalid or missing authentication",
                         "content": {
                             "application/json": {
-                                "$ref": "#/components/schemas/ErrorResponse"
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
                             }
                         }
                     },
@@ -172,7 +471,9 @@
                         "description": "Conflict - Subcategory slug already exists",
                         "content": {
                             "application/json": {
-                                "$ref": "#/components/schemas/ErrorResponse"
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
                             }
                         }
                     },
@@ -180,7 +481,409 @@
                         "description": "Internal Server Error",
                         "content": {
                             "application/json": {
-                                "$ref": "#/components/schemas/ErrorResponse"
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "Get subcategories list",
+                "description": "Retrieves a list of subcategories for a specific parent category with optional filtering and pagination.",
+                "tags": [
+                    "Subcategories"
+                ],
+                "parameters": [
+                    {
+                        "name": "parent_uuid",
+                        "in": "query",
+                        "description": "UUID of the parent category",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Maximum number of results to return",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 100,
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Number of results to skip",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Field to sort by",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "created_at",
+                                "label",
+                                "slug"
+                            ],
+                            "default": "created_at"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort order",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ],
+                            "default": "desc"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filter by status",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "pending",
+                                "approved",
+                                "rejected",
+                                "deleted"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "slug",
+                        "in": "query",
+                        "description": "Filter by slug",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "label",
+                        "in": "query",
+                        "description": "Filter by label",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Subcategories retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SubcategoryListResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Invalid parent_uuid or missing parameter",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sub-categories/{id}": {
+            "get": {
+                "summary": "Get subcategory by ID or UUID",
+                "description": "Retrieves a specific subcategory by its ID (integer) or UUID (string).",
+                "tags": [
+                    "Subcategories"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Subcategory ID (integer) or UUID (string)",
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "string",
+                                    "format": "uuid"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Subcategory retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SubcategoryResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Invalid ID format or category is not a subcategory",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Subcategory not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update subcategory",
+                "description": "Updates an existing subcategory by UUID.",
+                "tags": [
+                    "Subcategories"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Subcategory UUID",
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateSubcategoryRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Subcategory updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Invalid input or ID format",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Invalid or missing authentication",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Subcategory not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict - Subcategory slug already exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete subcategory",
+                "description": "Soft deletes a subcategory by UUID.",
+                "tags": [
+                    "Subcategories"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Subcategory UUID",
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Subcategory deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Invalid ID format",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Invalid or missing authentication",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Subcategory not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/hello": {
+            "get": {
+                "summary": "Hello endpoint",
+                "description": "Simple hello world endpoint for health checks.",
+                "tags": [
+                    "Health"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Hello response",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Hello, World!"
+                                }
                             }
                         }
                     }
@@ -189,143 +892,480 @@
         }
     },
     "components": {
-            "securitySchemes": {
-                "BearerAuth": {
-                    "type": "http",
-                    "scheme": "bearer",
-                    "bearerFormat": "JWT"
-                }
-            },
-            "schemas": {
-                "CreateCategoryReq": {
-                    "type": "object",
-                    "properties": {
-                        "slug": {
-                            "type": "string",
-                            "example": "interview-qna",
-                            "description": "Unique slug identifier for the category"
-                        },
-                        "label": {
-                            "type": "string",
-                            "example": "Interview",
-                            "description": "Human readable label"
-                        },
-                        "description": {
-                            "type": "string",
-                            "example": "Interview category to manage all interview related sub categories",
-                            "description": "Optional description of the category"
-                        },
-                        "created_by": {
-                            "type": "integer",
-                            "example": 1,
-                            "description": "User ID who creates the category"
-                        },
-                        "meta": {
-                            "type": "object",
-                            "description": "Optional JSON metadata",
-                            "nullable": true,
-                            "additionalProperties": true,
-                            "example": {
-                                "tags": [
-                                    "qna",
-                                    "interview",
-                                    "exam"
-                                ],
-                                "icon": "📱",
-                                "regex": "/?*"
-                            }
-                        }
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "JWT token for authentication"
+            }
+        },
+        "schemas": {
+            "CreateCategoryReq": {
+                "type": "object",
+                "properties": {
+                    "slug": {
+                        "type": "string",
+                        "example": "interview-qna",
+                        "description": "Unique slug identifier for the category"
                     },
-                    "required": [
-                        "slug",
-                        "label",
-                        "created_by"
-                    ]
-                },
-                "CreateSubcategoryRequest": {
-                    "type": "object",
-                    "properties": {
-                        "slug": {
-                            "type": "string",
-                            "example": "laptops",
-                            "description": "Unique slug identifier for the subcategory"
-                        },
-                        "name": {
-                            "type": "string",
-                            "example": "Laptops",
-                            "description": "Human readable name for the subcategory"
-                        },
-                        "description": {
-                            "type": "string",
-                            "example": "Laptop related questions and answers",
-                            "description": "Optional description of the subcategory"
-                        },
-                        "parent_uuid": {
-                            "type": "string",
-                            "example": "0199d379-d2d4-76a1-9d2d-f99640a16929",
-                            "description": "UUID of the parent category"
-                        },
-                        "meta": {
-                            "type": "object",
-                            "description": "Optional JSON metadata",
-                            "nullable": true,
-                            "additionalProperties": true,
-                            "example": {
-                                "tags": [
-                                    "electronics",
-                                    "computers"
-                                ],
-                                "icon": "💻"
-                            }
-                        }
+                    "label": {
+                        "type": "string",
+                        "example": "Interview Q&A",
+                        "description": "Human readable label"
                     },
-                    "required": [
-                        "slug",
-                        "name",
-                        "parent_uuid"
-                    ]
-                },
-                "ErrorResponse": {
-                    "type": "object",
-                    "properties": {
-                        "message": {
-                            "type": "string",
-                            "example": "Invalid Request"
-                        },
-                        "status": {
-                            "type": "boolean",
-                            "example": false
-                        },
-                        "errors": {
-                            "type": [
-                                "object",
-                                "null"
+                    "description": {
+                        "type": "string",
+                        "example": "Interview category to manage all interview related sub categories",
+                        "description": "Optional description of the category"
+                    },
+                    "meta": {
+                        "type": "object",
+                        "description": "Optional JSON metadata",
+                        "nullable": true,
+                        "additionalProperties": true,
+                        "example": {
+                            "tags": [
+                                "qna",
+                                "interview",
+                                "exam"
                             ],
-                            "example": null
+                            "icon": "📱",
+                            "regex": "/?*"
                         }
                     }
                 },
-                "SuccessResponse": {
-                    "type": "object",
-                    "properties": {
-                        "data": {
-                            "type": [
-                                "object",
-                                "null"
-                            ],
-                            "nullable": true,
-                            "example": null
-                        },
-                        "message": {
-                            "type": "string",
-                            "example": "Category created successfully"
-                        },
-                        "status": {
-                            "type": "boolean",
-                            "example": true
+                "required": [
+                    "slug",
+                    "label"
+                ]
+            },
+            "UpdateCategoryReq": {
+                "type": "object",
+                "properties": {
+                    "new_slug": {
+                        "type": "string",
+                        "example": "updated-interview-qna",
+                        "description": "New slug for the category"
+                    },
+                    "label": {
+                        "type": "string",
+                        "example": "Updated Interview Q&A",
+                        "description": "Updated label"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Updated description",
+                        "description": "Updated description"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "approved",
+                            "rejected",
+                            "deleted"
+                        ],
+                        "example": "approved",
+                        "description": "Category status"
+                    },
+                    "meta": {
+                        "type": "object",
+                        "description": "Updated JSON metadata",
+                        "nullable": true,
+                        "additionalProperties": true
+                    }
+                }
+            },
+            "CreateSubcategoryRequest": {
+                "type": "object",
+                "properties": {
+                    "slug": {
+                        "type": "string",
+                        "example": "web-development",
+                        "description": "Unique slug identifier for the subcategory"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Web Development",
+                        "description": "Human readable name for the subcategory"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "All about web development technologies",
+                        "description": "Optional description of the subcategory"
+                    },
+                    "parent_uuid": {
+                        "type": "string",
+                        "example": "0199d379-d2d4-76a1-9d2d-f99640a16929",
+                        "description": "UUID of the parent category"
+                    }
+                },
+                "required": [
+                    "slug",
+                    "name",
+                    "parent_uuid"
+                ]
+            },
+            "UpdateSubcategoryRequest": {
+                "type": "object",
+                "properties": {
+                    "slug": {
+                        "type": "string",
+                        "example": "updated-web-development",
+                        "description": "Updated slug for the subcategory"
+                    },
+                    "label": {
+                        "type": "string",
+                        "example": "Updated Web Development",
+                        "description": "Updated label"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Updated description",
+                        "description": "Updated description"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "approved",
+                            "rejected",
+                            "deleted"
+                        ],
+                        "example": "approved",
+                        "description": "Subcategory status"
+                    },
+                    "meta": {
+                        "type": "object",
+                        "description": "Updated JSON metadata",
+                        "nullable": true,
+                        "additionalProperties": true
+                    }
+                }
+            },
+            "Category": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "Category ID"
+                    },
+                    "uuid": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "0199d379-d2d4-76a1-9d2d-f99640a16929",
+                        "description": "Category UUID"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "interview-qna",
+                        "description": "Category slug"
+                    },
+                    "label": {
+                        "type": "string",
+                        "example": "Interview Q&A",
+                        "description": "Category label"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Interview category to manage all interview related sub categories",
+                        "description": "Category description"
+                    },
+                    "created_by": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "User ID who created the category"
+                    },
+                    "updated_by": {
+                        "type": "integer",
+                        "nullable": true,
+                        "example": 1,
+                        "description": "User ID who last updated the category"
+                    },
+                    "approved_by": {
+                        "type": "integer",
+                        "nullable": true,
+                        "example": 1,
+                        "description": "User ID who approved the category"
+                    },
+                    "deleted_by": {
+                        "type": "integer",
+                        "nullable": true,
+                        "example": 1,
+                        "description": "User ID who deleted the category"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T00:00:00Z",
+                        "description": "Creation timestamp"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T00:00:00Z",
+                        "description": "Last update timestamp"
+                    },
+                    "approved_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true,
+                        "example": "2024-01-01T00:00:00Z",
+                        "description": "Approval timestamp"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true,
+                        "example": "2024-01-01T00:00:00Z",
+                        "description": "Deletion timestamp"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "approved",
+                            "rejected",
+                            "deleted"
+                        ],
+                        "example": "approved",
+                        "description": "Category status"
+                    },
+                    "meta": {
+                        "type": "object",
+                        "nullable": true,
+                        "additionalProperties": true,
+                        "description": "Category metadata"
+                    }
+                }
+            },
+            "Subcategory": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "Subcategory ID"
+                    },
+                    "parent_id": {
+                        "type": "integer",
+                        "example": 5,
+                        "description": "Parent category ID"
+                    },
+                    "uuid": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "0199d379-d2d4-76a1-9d2d-f99640a16930",
+                        "description": "Subcategory UUID"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "web-development",
+                        "description": "Subcategory slug"
+                    },
+                    "label": {
+                        "type": "string",
+                        "example": "Web Development",
+                        "description": "Subcategory label"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "All about web development technologies",
+                        "description": "Subcategory description"
+                    },
+                    "created_by": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "User ID who created the subcategory"
+                    },
+                    "updated_by": {
+                        "type": "integer",
+                        "nullable": true,
+                        "example": 1,
+                        "description": "User ID who last updated the subcategory"
+                    },
+                    "approved_by": {
+                        "type": "integer",
+                        "nullable": true,
+                        "example": 1,
+                        "description": "User ID who approved the subcategory"
+                    },
+                    "deleted_by": {
+                        "type": "integer",
+                        "nullable": true,
+                        "example": 1,
+                        "description": "User ID who deleted the subcategory"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T00:00:00Z",
+                        "description": "Creation timestamp"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T00:00:00Z",
+                        "description": "Last update timestamp"
+                    },
+                    "approved_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true,
+                        "example": "2024-01-01T00:00:00Z",
+                        "description": "Approval timestamp"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true,
+                        "example": "2024-01-01T00:00:00Z",
+                        "description": "Deletion timestamp"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "approved",
+                            "rejected",
+                            "deleted"
+                        ],
+                        "example": "approved",
+                        "description": "Subcategory status"
+                    },
+                    "meta": {
+                        "type": "object",
+                        "nullable": true,
+                        "additionalProperties": true,
+                        "description": "Subcategory metadata"
+                    }
+                }
+            },
+            "CategoryResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Category retrieved successfully"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "example": 200
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/Category"
+                    }
+                }
+            },
+            "CategoryListResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Categories retrieved successfully"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "example": 200
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Category"
                         }
+                    }
+                }
+            },
+            "SubcategoryResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Subcategory retrieved successfully"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "example": 200
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/Subcategory"
+                    }
+                }
+            },
+            "SubcategoryListResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Subcategories retrieved successfully"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "example": 200
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Subcategory"
+                        }
+                    }
+                }
+            },
+            "SuccessResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Operation completed successfully"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "example": 200
+                    },
+                    "data": {
+                        "type": "object",
+                        "nullable": true,
+                        "description": "Response data (null for most operations)"
+                    }
+                }
+            },
+            "ErrorResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Invalid Request"
+                    },
+                    "status": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "errors": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true,
+                        "description": "Detailed error messages"
                     }
                 }
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Categories",
+            "description": "Operations related to categories"
+        },
+        {
+            "name": "Subcategories",
+            "description": "Operations related to subcategories"
+        },
+        {
+            "name": "Health",
+            "description": "Health check endpoints"
+        }
+    ]
+}

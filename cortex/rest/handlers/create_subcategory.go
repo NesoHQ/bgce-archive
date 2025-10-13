@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"cortex/category"
+	"cortex/subcategory"
 	customerrors "cortex/pkg/custom_errors"
 	"cortex/rest/middlewares"
 	"cortex/rest/utils"
@@ -32,7 +32,7 @@ func (h *Handlers) CreateSubcategory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	subcategory := category.CreateSubcategoryParams{
+	subcategoryParams := subcategory.CreateSubcategoryParams{
 		Slug:        req.Slug,
 		Label:       req.Name,
 		Description: req.Description,
@@ -41,7 +41,7 @@ func (h *Handlers) CreateSubcategory(w http.ResponseWriter, r *http.Request) {
 		Meta:        make(map[string]interface{}),
 	}
 
-	err := h.CategoryService.CreateSubcategory(ctx, subcategory)
+	err := h.SubcategoryService.CreateSubcategory(ctx, subcategoryParams)
 	if err != nil {
 		if err == customerrors.ErrSlugExists {
 			utils.SendError(w, http.StatusConflict, "Subcategory with this slug already exists", nil)

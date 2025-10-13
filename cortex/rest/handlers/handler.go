@@ -5,30 +5,30 @@ import (
 
 	"cortex/category"
 	"cortex/config"
+	"cortex/subcategory"
 )
 
 type Handlers struct {
-	cnf             *config.Config
-	CategoryService category.Service
+	cnf                 *config.Config
+	CategoryService     category.Service
+	SubcategoryService  subcategory.Service
 }
 
 func NewHandler(
 	cnf *config.Config,
 	ctgrySvc category.Service,
+	subcategorySvc subcategory.Service,
 ) *Handlers {
 	return &Handlers{
-		cnf:             cnf,
-		CategoryService: ctgrySvc,
+		cnf:                cnf,
+		CategoryService:    ctgrySvc,
+		SubcategoryService: subcategorySvc,
 	}
 }
 
-func (h *Handlers) CreateSubCategory(w http.ResponseWriter, r *http.Request)  {
+func (h *Handlers) CreateSubCategory(w http.ResponseWriter, r *http.Request) {
 	h.CreateSubcategory(w, r)
 }
-func (h *Handlers) GetSubCategoryList(w http.ResponseWriter, r *http.Request) {}
-func (h *Handlers) GetSubCategoryByID(w http.ResponseWriter, r *http.Request) {}
-func (h *Handlers) UpdateSubCategory(w http.ResponseWriter, r *http.Request)  {}
-func (h *Handlers) DeleteSubCategory(w http.ResponseWriter, r *http.Request)  {}
 func (h *Handlers) Hello(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Hello, World!"))
 }
