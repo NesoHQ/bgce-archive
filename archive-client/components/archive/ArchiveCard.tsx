@@ -41,7 +41,7 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
           className="w-full bg-gray-800 text-white hover:bg-gray-950 hover:text-white   transition duration-400 ease-in-out"
           asChild
         >
-          <Link href="/">Read Now</Link>
+          <Link href={`/archive/${String(article.id)}`}>Read Now</Link>
         </Button>
       </CardFooter>
     </Card>

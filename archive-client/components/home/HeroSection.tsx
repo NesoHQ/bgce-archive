@@ -13,14 +13,18 @@ export function HeroSection() {
     },
     {
       icon: Users,
-      label: "FB Group",
-      href: "#",
+
+      label: "Facebook",
+      href: "https://www.facebook.com/share/g/17eLEEiUPN/",
+
       variant: "outline" as const,
     },
     {
       icon: Youtube,
-      label: "YT Channel",
-      href: "#",
+
+      label: "Youtube",
+      href: "https://www.youtube.com/@gowithhabib",
+
       variant: "outline" as const,
     },
   ];
