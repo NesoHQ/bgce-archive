@@ -33,7 +33,7 @@
     } from "@/components/ui/sidebar"
 
 
-const { state } = useSidebar()
+const { state: sidebarState } = useSidebar()
 const route = useRoute()
 
 
@@ -45,7 +45,7 @@ interface NavItem {
 
 const mainItems: NavItem[] = [
     { title: "Dashboard", url: "/", icon: BarChart3 },
-    { title: "All Archives", url: "/archives", icon: Archive },
+    { title: "Archive Categories", url: "/archive/categories", icon: Archive },
     { title: "Documents", url: "/documents", icon: FileText },
     { title: "Images", url: "/images", icon: Image },
     { title: "Videos", url: "/videos", icon: Video },
@@ -66,7 +66,7 @@ const systemItems: NavItem[] = [
 ]
 
 const currentPath = computed(() => route.path)
-const isCollapsed = computed(() => state === "collapsed")
+const isCollapsed = computed(() => sidebarState.value === "collapsed")
 
 // A function to determine if a route is active.
 const isActive = (path: string) => {
@@ -92,7 +92,7 @@ const getNavCls = (path: string) =>
                         <div class=" rounded-lg bg-archive-primary p-2 flex items-center justify-center">
                             <Archive class="h-4 w-4 text-white" />
                         </div>
-                        <div :class="isCollpsed ? 'opacity-0' : 'opacity-100'">
+                        <div :class="isCollapsed ? 'opacity-0' : 'opacity-100'">
                             <h2 class="font-semibold text-foreground">Archive Admin</h2>
                             <p class="text-xs text-muted-foreground">Admin Portal</p>
                         </div>

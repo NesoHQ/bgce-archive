@@ -7,7 +7,6 @@
     import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table"
     import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
 
-// Define the data for the table as a reactive ref.
 const recentFiles = ref([
     {
         id: 1,
