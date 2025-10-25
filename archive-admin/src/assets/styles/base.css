@@ -1,0 +1,114 @@
+/* This file contains the raw CSS variables for the design system. */
+
+@layer base {
+  :root {
+    --background: hsl(220 20% 97%);
+    --foreground: hsl(215 28% 17%);
+
+    --card: hsl(0 0% 100%);
+    --card-foreground: hsl(215 28% 17%);
+
+    --popover: hsl(0 0% 100%);
+    --popover-foreground: hsl(215 28% 17%);
+
+    --primary: hsl(214 84% 56%);
+    --primary-foreground: hsl(0 0% 98%);
+    --primary-glow: hsl(214 84% 70%);
+
+    --secondary: hsl(210 40% 96%);
+    --secondary-foreground: hsl(215 28% 17%);
+
+    --muted: hsl(213 27% 94%);
+    --muted-foreground: hsl(215 16% 46%);
+
+    --accent: hsl(214 32% 91%);
+    --accent-foreground: hsl(215 28% 17%);
+
+    --destructive: hsl(0 84% 60%);
+    --destructive-foreground: hsl(210 40% 98%);
+
+    --border: hsl(214 32% 91%);
+    --input: hsl(214 32% 91%);
+    --ring: hsl(214 84% 56%);
+
+    --success: hsl(142 71% 45%);
+    --success-foreground: hsl(0 0% 98%);
+
+    --warning: hsl(38 92% 50%);
+    --warning-foreground: hsl(0 0% 98%);
+
+    --info: hsl(199 89% 48%);
+    --info-foreground: hsl(0 0% 98%);
+
+    --radius: 0.75rem;
+
+    /* Archive Dashboard Colors */
+    --archive-primary: hsl(214 84% 56%);
+    --archive-secondary: hsl(213 27% 94%);
+    --archive-accent: hsl(199 89% 48%);
+    --archive-muted: hsl(215 16% 46%);
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(214 84% 56%), hsl(199 89% 48%));
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(213 27% 97%));
+    --gradient-sidebar: linear-gradient(180deg, hsl(220 20% 97%), hsl(213 27% 94%));
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(215 28% 17% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(215 28% 17% / 0.1), 0 2px 4px -2px hsl(215 28% 17% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(215 28% 17% / 0.1), 0 4px 6px -4px hsl(215 28% 17% / 0.1);
+    --shadow-glow: 0 0 20px hsl(214 84% 56% / 0.3);
+
+    /* Sidebar */
+    --sidebar-background: hsl(220 20% 97%);
+    --sidebar-foreground: hsl(215 28% 17%);
+    --sidebar-primary: hsl(214 84% 56%);
+    --sidebar-primary-foreground: hsl(0 0% 98%);
+    --sidebar-accent: hsl(213 27% 94%);
+    --sidebar-accent-foreground: hsl(215 28% 17%);
+    --sidebar-border: hsl(214 32% 91%);
+    --sidebar-ring: hsl(214 84% 56%);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .dark {
+    --background: hsl(222.2 84% 4.9%);
+    --foreground: hsl(210 40% 98%);
+
+    --card: hsl(222.2 84% 4.9%);
+    --card-foreground: hsl(210 40% 98%);
+
+    --popover: hsl(222.2 84% 4.9%);
+    --popover-foreground: hsl(210 40% 98%);
+
+    --primary: hsl(210 40% 98%);
+    --primary-foreground: hsl(222.2 47.4% 11.2%);
+
+    --secondary: hsl(217.2 32.6% 17.5%);
+    --secondary-foreground: hsl(210 40% 98%);
+
+    --muted: hsl(217.2 32.6% 17.5%);
+    --muted-foreground: hsl(215 20.2% 65.1%);
+
+    --accent: hsl(217.2 32.6% 17.5%);
+    --accent-foreground: hsl(210 40% 98%);
+
+    --destructive: hsl(0 62.8% 30.6%);
+    --destructive-foreground: hsl(210 40% 98%);
+
+    --border: hsl(217.2 32.6% 17.5%);
+    --input: hsl(217.2 32.6% 17.5%);
+    --ring: hsl(212.7 26.8% 83.9%);
+    --sidebar-background: hsl(240 5.9% 10%);
+    --sidebar-foreground: hsl(240 4.8% 95.9%);
+    --sidebar-primary: hsl(224.3 76.3% 48%);
+    --sidebar-primary-foreground: hsl(0 0% 100%);
+    --sidebar-accent: hsl(240 3.7% 15.9%);
+    --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+    --sidebar-border: hsl(240 3.7% 15.9%);
+    --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  }
+}
