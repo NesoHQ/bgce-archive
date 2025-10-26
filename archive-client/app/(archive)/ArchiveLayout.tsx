@@ -42,7 +42,7 @@ const ArchiveLayout = ({ children }: ArchiveLayoutProps) => {
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Mobile Filter Button */}
-          <div className="lg:hidden">
+          {/* <div className="lg:hidden">
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="outline" className="w-full">
@@ -56,12 +56,12 @@ const ArchiveLayout = ({ children }: ArchiveLayoutProps) => {
             </Sheet>
           </div>
 
-          {/* Sidebar - Desktop */}
+          {/* Sidebar - Desktop *
           <aside className="hidden lg:block w-64 flex-shrink-0">
             <div className="sticky top-20 max-h-[calc(100vh-4rem)] overflow-y-auto">
               <CategoriesSidebar categories={categories} />
             </div>
-          </aside>
+          </aside> */}
 
           {/* Main Content */}
           <main className="flex-1 min-w-0 ">{children}</main>

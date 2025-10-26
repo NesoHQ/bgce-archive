@@ -1,8 +1,4 @@
-import React from "react";
-import ArchiveLayout from "../ArchiveLayout";
-import ArticleCard from "@/components/archive/ArchiveCard";
-import { PaginationDemo } from "@/components/archive/Pagination";
-import { BlogBreadcrumb } from "@/components/archive/ArchiveBreadcrumb";
+import ArchiveWrapper from "@/components/archive/ArchiveWrapper";
 import { Article } from "@/types/blog.type";
 
 const ArticlesPage = () => {
@@ -10,81 +6,74 @@ const ArticlesPage = () => {
     {
       id: 1,
       title: "Understanding Next.js 15 New Features",
+      author: "Tech Journal",
+      publishedAt: "Jan 15, 2024",
+      views: 120,
+      votes: 10,
       description:
         "Explore the latest features and improvements in Next.js 15 and how they can benefit your projects.",
-      publication: "Tech Journal - Jan 15, 2024",
-      image: "/api/placeholder/300/200",
+      tags: ["Next.js", "Web Development", "JavaScript"],
     },
     {
       id: 2,
       title: "The Future of Software Development",
+      author: "Dev Weekly",
+      publishedAt: "Jan 12, 2024",
+      views: 95,
+      votes: 8,
       description:
         "A comprehensive look at emerging trends and technologies shaping the future of Software development.",
-      publication: "Dev Weekly - Jan 12, 2024",
-      image: "/api/placeholder/300/200",
+      tags: ["Software Development", "Trends", "Tech"],
     },
     {
       id: 3,
       title: "TypeScript Best Practices 2024",
+      author: "Code Review",
+      publishedAt: "Jan 10, 2024",
+      views: 80,
+      votes: 5,
       description:
         "Learn the most effective TypeScript patterns and practices for modern Software development.",
-      publication: "Code Review - Jan 10, 2024",
-      image: "/api/placeholder/300/200",
+      tags: ["TypeScript", "Best Practices", "Programming"],
     },
     {
       id: 4,
       title: "Responsive Design Mastery",
+      author: "Design Monthly",
+      publishedAt: "Jan 8, 2024",
+      views: 70,
+      votes: 4,
       description:
         "Master the art of creating fully responsive layouts that work across all devices and screen sizes.",
-      publication: "Design Monthly - Jan 8, 2024",
-      image: "/api/placeholder/300/200",
+      tags: ["Responsive Design", "CSS", "UX/UI"],
     },
     {
       id: 5,
       title: "State Management in React",
+      author: "React Digest",
+      publishedAt: "Jan 5, 2024",
+      views: 110,
+      votes: 7,
       description:
         "Comparing different state management solutions and when to use each in your React applications.",
-      publication: "React Digest - Jan 5, 2024",
-      image: "/api/placeholder/300/200",
+      tags: ["React", "State Management", "JavaScript"],
     },
     {
       id: 6,
       title: "CSS Grid vs Flexbox",
+      author: "Web Design Pro",
+      publishedAt: "Jan 3, 2024",
+      views: 65,
+      votes: 3,
       description:
         "A detailed comparison of CSS Grid and Flexbox with practical examples and use cases.",
-      publication: "Web Design Pro - Jan 3, 2024",
-      image: "/api/placeholder/300/200",
+      tags: ["CSS", "Grid", "Flexbox", "Web Design"],
     },
   ];
 
   return (
     <>
-      <div className="mb-4">
-        <BlogBreadcrumb />
-      </div>
-
-      {/* Page Title */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">
-          Software Development
-        </h1>
-        <p className="text-muted-foreground mt-2">
-          Browse through our collection of Software development articles and
-          tutorials
-        </p>
-      </div>
-
-      {/* Articles Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {articles.map((article) => (
-          <ArticleCard key={article.id} article={article} />
-        ))}
-      </div>
-
-      {/* Pagination */}
-      <div className="mt-12 flex justify-center">
-        <PaginationDemo />
-      </div>
+      <ArchiveWrapper articles={articles} />
     </>
   );
 };

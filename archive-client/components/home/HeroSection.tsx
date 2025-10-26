@@ -26,7 +26,7 @@ export function HeroSection() {
   ];
 
   return (
-    <section className="my-2 flex items-center justify-center bg-white dark:bg-gray-900">
+    <section className="my-2 flex items-center justify-center ">
       <div className="container mx-auto px-4 py-20">
         <div className="max-w-3xl mx-auto text-center">
           {/* Badge */}

@@ -1,49 +1,74 @@
-import Link from "next/link";
-import { Calendar } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Article } from "@/types/blog.type";
-import Image from "next/image";
+"use client";
+
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 interface ArticleCardProps {
-  article: Article;
+  article: {
+    id: number; // Add this for keys
+    title: string;
+    author: string;
+    publishedAt: string;
+    views: number;
+    votes: number;
+    description: string;
+    tags: string[];
+  };
 }
 
 const ArticleCard = ({ article }: ArticleCardProps) => {
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 py-0">
-      <div className="aspect-video bg-muted relative">
-        <div className="w-full h-full bg-gradient-to-br from-primary/20 to-muted-foreground/10 flex items-center justify-center">
-          <Image
-            src="https://images.pexels.com/photos/574071/pexels-photo-574071.jpeg"
-            alt={article.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
-        </div>
-      </div>
-      <CardContent className="p-4">
-        <h3 className="font-semibold text-lg mb-2 line-clamp-2">
+    <Card className="border border-gray-200 shadow-none rounded-md  transition-all duration-300 bg-white p-0 pb-10 hover:shadow-md cursor-pointer">
+      <div className="bg-[#EEEEFA] py-5 px-4">
+        {/* Title */}
+        <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-1">
           {article.title}
         </h3>
-        <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
+
+        {/* Author and meta info */}
+        <div className="flex items-center gap-2 text-sm text-gray-600 mb-2 ">
+          {/* Avatar */}
+          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 border border-blue-200 text-blue-600 font-semibold text-sm">
+            {article.author.charAt(0)}
+          </div>
+
+          {/* Name and badge */}
+          <div className="flex flex-col leading-tight">
+            <div className="flex items-center gap-2">
+              <span className="text-teal-900 font-medium hover:underline cursor-pointer">
+                {article.author}
+              </span>
+              <Badge className="bg-[#504BAB] text-white text-[10px] font-semibold">
+                EXPERT
+              </Badge>
+            </div>
+            <span className="text-xs text-gray-600">
+              published {article.publishedAt} | {article.votes} votes |{" "}
+              {article.views} views
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-4">
+        {/* Description */}
+        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
           {article.description}
         </p>
-        <div className="flex items-center text-xs text-muted-foreground">
-          <Calendar className="h-3 w-3 mr-1" />
-          {article.publication}
+
+        {/* Tags */}
+        <div className="flex flex-wrap gap-2 mt-2">
+          {article.tags.map((tag, i) => (
+            <Badge
+              key={i}
+              variant="outline"
+              className="text-[11px] px-2 py-1 rounded-full font-medium border-gray-300 text-gray-700 bg-gray-50"
+            >
+              {tag}
+            </Badge>
+          ))}
         </div>
-      </CardContent>
-      <CardFooter className="p-4 pt-0">
-        <Button
-          variant="outline"
-          className="w-full bg-gray-800 text-white hover:bg-gray-950 hover:text-white   transition duration-400 ease-in-out"
-          asChild
-        >
-          <Link href={`/archive/${String(article.id)}`}>Read Now</Link>
-        </Button>
-      </CardFooter>
+      </div>
     </Card>
   );
 };

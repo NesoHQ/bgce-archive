@@ -10,9 +10,12 @@ export interface Category {
 }
 
 export interface Article {
-  id: number;
+  id: number; // Needed for key in lists
   title: string;
+  author: string; // New field
+  publishedAt: string; // New field
+  views: number; // New field
+  votes: number; // New field
   description: string;
-  publication: string;
-  image: string;
+  tags: string[]; // New field
 }

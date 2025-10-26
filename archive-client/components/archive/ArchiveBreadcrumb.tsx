@@ -8,7 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, House } from "lucide-react";
 
 export function BlogBreadcrumb() {
   return (
@@ -17,6 +17,7 @@ export function BlogBreadcrumb() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
+              <House size={20} />
               <BreadcrumbLink href="/">Home</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator>
