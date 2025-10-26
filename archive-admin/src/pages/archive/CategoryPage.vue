@@ -157,7 +157,7 @@ const fetchCategories = async () => {
             sort_order: 'desc',
         }
         
-        const response = await axiosInstance.get('/api/v1/categories', { params })
+        const response = await axios.get('http://localhost:5000/api/v1/categories', { params })
         
         if (response.data && response.data.data) {
             categories.value = response.data.data as Category[]
@@ -188,7 +188,16 @@ const handleCreateCategory = async () => {
 
     try {
         // API Call: POST /api/v1/categories
-        await axiosInstance.post('/api/v1/categories', newCategoryForm.value)
+            await axios.post(
+        'http://localhost:5000/api/v1/categories',
+        newCategoryForm.value,
+        {
+            headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`, // 👈 Replace with your token variable
+            },
+        }
+        )
+
         
         // Success: Clear form, close modal, refresh list, and notify
         const createdLabel = newCategoryForm.value.label
@@ -278,10 +287,10 @@ const handleDelete = async (category: Category) => {
     
     try {
         // CORRECTED: Use category.id (integer) for the DELETE endpoint
-        await axiosInstance.delete(`/api/v1/categories/${category.id}`)
+        await axiosInstance.delete(`http://localhost:5000/api/v1/categories/${category.uuid}`)
         
         // Remove the category from the local list on success, filtering by ID
-        categories.value = categories.value.filter(c => c.id !== category.id)
+        categories.value = categories.value.filter(c => c.uuid !== category.uuid)
         toast.info(`Category '${category.label}' deleted.`)
 
     } catch (error) {

@@ -13,11 +13,11 @@ import (
 )
 
 type UpdateCategoryReq struct {
-	NewSlug     string          `json:"new_slug,omitempty"`
-	Label       string          `json:"label,omitempty"`
-	Description string          `json:"description,omitempty"`
+	NewSlug     *string          `json:"new_slug,omitempty"`
+	Label       *string          `json:"label,omitempty"`
+	Description *string          `json:"description,omitempty"`
 	ApprovedAt  *time.Time      `json:"approved_at,omitempty"`
-	Status      string          `json:"status,omitempty"`
+	Status      *string          `json:"status,omitempty"`
 	Meta        json.RawMessage `json:"meta,omitempty"`
 }
 
@@ -49,13 +49,13 @@ func (h *Handlers) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	// Prepare update params
 	updateParams := category.UpdateCategoryParams{
 		Slug:        &slug,
-		NewSlug:     &req.NewSlug,
-		Label:       &req.Label,
-		Description: &req.Description,
+		NewSlug:     req.NewSlug,
+		Label:       req.Label,
+		Description: req.Description,
 		UpdatedBy:   userID,
 		ApprovedBy:  userID,
 		ApprovedAt:  time.Now(),
-		Status:      &req.Status,
+		Status:      req.Status,
 		Meta:        req.Meta,
 	}
 

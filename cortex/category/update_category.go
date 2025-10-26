@@ -6,6 +6,7 @@ import (
 	customerrors "cortex/pkg/custom_errors"
 	"encoding/json"
 	"errors"
+	"strings"
 )
 
 func (s *service) UpdateCategory(ctx context.Context, params UpdateCategoryParams) error {
@@ -18,12 +19,15 @@ func (s *service) UpdateCategory(ctx context.Context, params UpdateCategoryParam
 	update := s.ent.Category.UpdateOne(cat)
 
 	// 2. Check if the new slug is provided and different from current
-	if params.NewSlug != nil && *params.NewSlug != cat.Slug {
-		existing, _ := s.FindCategoryBySlug(ctx, *params.NewSlug)
-		if existing != nil {
-			return customerrors.ErrSlugExists
+	if params.NewSlug != nil {
+		newSlug := strings.TrimSpace(*params.NewSlug)
+		if newSlug != "" && newSlug != cat.Slug {
+			existing, err := s.FindCategoryBySlug(ctx, newSlug)
+			if err == nil && existing != nil {
+				return customerrors.ErrSlugExists
+			}
+			update.SetSlug(newSlug)
 		}
-		update.SetSlug(*params.NewSlug)
 	}
 
 	// 3. Optional fields
