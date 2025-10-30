@@ -84,16 +84,16 @@ const ArticleList: React.FC = () => {
       {articles.map((article) => (
         <Card
           key={article.id}
-          className="w-full hover:shadow-lg transition-shadow duration-200 p-0 rounded-sm"
+          className="w-full hover:shadow-lg dark:hover:shadow-gray-900 dark:bg-gray-800 dark:border-0  transition-shadow duration-200 p-0 rounded-sm"
         >
           <CardContent className="p-0">
             <div className="flex flex-col lg:flex-row">
               {/* Main Content */}
               <div className="flex-1 p-4 md:p-6">
-                <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-2 hover:text-blue-900 cursor-pointer">
+                <h2 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white mb-2 hover:text-blue-900 dark:hover:text-blue-300 cursor-pointer">
                   {article.title}
                 </h2>
-                <p className="text-sm md:text-base text-gray-600 mb-4">
+                <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-4">
                   {article.description}
                 </p>
                 <div className="flex flex-wrap items-center gap-2">
@@ -104,7 +104,7 @@ const ArticleList: React.FC = () => {
                     <Badge
                       key={index}
                       variant="outline"
-                      className="text-xs bg-white hover:bg-gray-50"
+                      className="text-xs bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
                     >
                       {tag}
                     </Badge>
@@ -113,28 +113,32 @@ const ArticleList: React.FC = () => {
               </div>
 
               {/* Stats and Author Section */}
-              <div className="bg-[#EEEEFA] p-4 md:px-4 md:py-4  lg:w-72 border-t lg:border-t-0 lg:border-l">
+              <div className="bg-[#EEEEFA] dark:bg-gray-700 p-4 md:px-4 md:py-4 lg:w-72 border-t lg:border-t-0 lg:border-l dark:border-gray-600">
                 <div className="flex lg:flex-col gap-1">
                   {/* Stats */}
                   <div className="flex lg:flex-row gap-4 lg:gap-6 lg:mb-4 items-center mr-2">
                     <div className="text-center">
-                      <div className="text-2xl md:text-3xl font-semibold text-gray-900">
+                      <div className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white">
                         {article.votes}
                       </div>
-                      <div className="text-xs text-gray-600">votes</div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400">
+                        votes
+                      </div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl md:text-3xl font-semibold text-gray-900">
+                      <div className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white">
                         {article.views}
                       </div>
-                      <div className="text-xs text-gray-600">views</div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400">
+                        views
+                      </div>
                     </div>
                   </div>
 
                   {/* Author Info */}
                   <div className="flex items-center gap-3 flex-1 lg:flex-initial">
                     <div className="relative">
-                      <Avatar className="h-10 w-10 md:h-12 md:w-12 border-2 border-gray-800">
+                      <Avatar className="h-10 w-10 md:h-12 md:w-12 border-2 border-gray-800 dark:border-gray-600">
                         <AvatarImage
                           src={article.author.avatar}
                           alt={article.author.name}
@@ -150,10 +154,10 @@ const ArticleList: React.FC = () => {
                       >
                         {article.author.badge}
                       </div>
-                      <div className="text-teal-900 text-sm font-medium hover:underline cursor-pointer">
+                      <div className="text-teal-900 dark:text-teal-300 text-sm font-medium hover:underline cursor-pointer">
                         {article.author.name}
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
                         {article.publishedDate}
                       </div>
                     </div>

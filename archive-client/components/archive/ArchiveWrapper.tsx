@@ -16,7 +16,7 @@ const ArchiveWrapper = ({ articles }: ArchiveWrapperProps) => {
   const [viewMode, setViewMode] = useState<"list" | "grid">("grid");
 
   return (
-    <>
+    <div className="container mx-auto px-4 py-8">
       <div className="mb-4">
         <BlogBreadcrumb />
       </div>
@@ -44,7 +44,7 @@ const ArchiveWrapper = ({ articles }: ArchiveWrapperProps) => {
       <div className="mt-12 flex justify-center">
         <PaginationDemo />
       </div>
-    </>
+    </div>
   );
 };
 
