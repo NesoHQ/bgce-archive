@@ -5,10 +5,9 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"cortex/rest/utils"
 
 	"github.com/golang-jwt/jwt/v5"
-
-	"cortex/rest/utils"
 )
 
 const (
@@ -22,11 +21,15 @@ const (
 	UserIdKey    contextKey = "userId"
 	UserNameKey  contextKey = "userName"
 	UserEmailKey contextKey = "userEmail"
+	UserRoleKey  contextKey = "userRole"
+	IsAdminKey   contextKey = "isAdmin"
 )
 
 type authClaims struct {
-	Name  string `json:"name"`
-	Email string `json:"email"`
+	Name    string `json:"name"`
+	Email   string `json:"email"`
+	Role    string `json:"role"`
+	IsAdmin bool   `json:"is_admin"`
 	jwt.RegisteredClaims
 }
 
@@ -78,6 +81,8 @@ func (m *Middlewares) AuthenticateJWT(next http.Handler) http.Handler {
 		ctx := context.WithValue(r.Context(), UserIdKey, userID)
 		ctx = context.WithValue(ctx, UserNameKey, claims.Name)
 		ctx = context.WithValue(ctx, UserEmailKey, claims.Email)
+		ctx = context.WithValue(ctx, UserRoleKey, claims.Role)
+		ctx = context.WithValue(ctx, IsAdminKey, claims.IsAdmin)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
@@ -96,4 +101,14 @@ func GetUserName(r *http.Request) string {
 func GetUserEmail(r *http.Request) string {
 	userEmail, _ := r.Context().Value(UserEmailKey).(string)
 	return userEmail
+}
+
+func GetUserRole(r *http.Request) string {
+	role, _ := r.Context().Value(UserRoleKey).(string)
+	return role
+}
+
+func IsAdmin(r *http.Request) bool {
+	isAdmin, _ := r.Context().Value(IsAdminKey).(bool)
+	return isAdmin
 }

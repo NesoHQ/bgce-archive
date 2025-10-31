@@ -18,16 +18,20 @@ func NewServeMux(mw *middlewares.Middlewares, handlers *handlers.Handlers) (*htt
 		// mw.RedisToggle,
 		mw.AuthenticateJWT,
 	))
-	mux.Handle("GET /api/v1/categories",manager.With(http.HandlerFunc(handlers.GetCategoryList)))
+	mux.Handle("GET /api/v1/categories", manager.With(http.HandlerFunc(handlers.GetCategoryList)))
 	mux.Handle("GET /api/v1/categories/{category_uuid}", http.HandlerFunc(handlers.GetCategoryByUUID))
 	mux.Handle("PUT /api/v1/categories/{slug}", manager.With(
 		http.HandlerFunc(handlers.UpdateCategory),
 		// mw.RedisToggle,
 		mw.AuthenticateJWT,
 	))
-	mux.Handle("DELETE /api/v1/categories/{category_id}", http.HandlerFunc(handlers.DeleteCategoryByID))
-	mux.Handle("GET /api/v1/hello", http.HandlerFunc(handlers.Hello))
 
+	mux.Handle("DELETE /api/v1/categories/{category_id}", manager.With(
+		http.HandlerFunc(handlers.DeleteCategoryByID),
+		mw.AuthenticateJWT,
+	))
+
+	mux.Handle("GET /api/v1/hello", http.HandlerFunc(handlers.Hello))
 
 	mux.Handle("POST /api/v1/sub-categories", manager.With(
 		http.HandlerFunc(handlers.CreateSubCategory),
