@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"cortex/ent/category"
+	"cortex/ent/user"
 	"errors"
 	"fmt"
 	"reflect"
@@ -74,6 +75,7 @@ func checkColumn(t, c string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
 			category.Table: category.ValidColumn,
+			user.Table:     user.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

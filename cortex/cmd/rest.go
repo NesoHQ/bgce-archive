@@ -20,8 +20,9 @@ import (
 	"cortex/rest/middlewares"
 	"cortex/rest/utils"
 	"cortex/subcategory"
+	"cortex/user"
 
-	_ "github.com/lib/pq" 
+	_ "github.com/lib/pq"
 
 	"github.com/spf13/cobra"
 	"go.elastic.co/apm/module/apmhttp"
@@ -81,7 +82,8 @@ func APIServerCommand(ctx context.Context) *cobra.Command {
 
 			ctgrySvc := category.NewService(cnf, rmq, redisCache, entClient)
 			subcategorySvc := subcategory.NewService(cnf, rmq, redisCache, entClient)
-			handlers := handlers.NewHandler(cnf, ctgrySvc, subcategorySvc)
+			userSvc := user.NewService(cnf, entClient)
+			handlers := handlers.NewHandler(cnf, ctgrySvc, subcategorySvc, userSvc)
 			mux, err := rest.NewServeMux(middlewares, handlers)
 			if err != nil {
 				slog.Error("Failed to create the server:", logger.Extra(map[string]any{
@@ -90,9 +92,13 @@ func APIServerCommand(ctx context.Context) *cobra.Command {
 				return err
 			}
 
+			// Wrap with CORS middleware FIRST, then APM
+			handler := rest.WrapWithCORS(mux)
+			handler = apmhttp.Wrap(handler)
+
 			server := &http.Server{
 				Addr:    fmt.Sprintf(":%d", cnf.HttpPort),
-				Handler: apmhttp.Wrap(mux),
+				Handler: handler,
 				BaseContext: func(net.Listener) context.Context {
 					return ctx
 				},

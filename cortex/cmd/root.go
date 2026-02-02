@@ -15,6 +15,7 @@ func Execute(ctx context.Context) {
 	}
 	root.AddCommand(APIServerCommand(ctx))
 	root.AddCommand(GenerateJWTCommand())
+	root.AddCommand(SeedCommand())
 	if err := root.ExecuteContext(ctx); err != nil {
 		slog.Error("Failed to execute command", slog.Any("error", err))
 		os.Exit(1)

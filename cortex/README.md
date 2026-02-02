@@ -1,106 +1,150 @@
-# Categories Service — Quick Start Guide
+# Cortex Service — Quick Start Guide
 
-This project uses a Makefile to automate common development tasks. Below is how you can build, run, test, and work with the project.
+A category management service built with Go, featuring REST APIs, PostgreSQL, Redis caching, and RabbitMQ messaging.
 
 ## Prerequisites
 
-- Go installed (preferably latest stable version)
-- Protocol Buffers compiler (`protoc`) installed
-- `make` utility available
+- Go 1.23+ installed
+- Docker and Docker Compose (for containerized setup)
+- Make utility available
 
-## Setup and Development
+## Quick Start with Docker
 
-### 1. Prepare the environment
+The easiest way to get started is using Docker Compose:
 
-Run the `prepare` command to install necessary dependencies, tools, and tidy the modules:
+```bash
+# Start all services (PostgreSQL, Redis, RabbitMQ, and Cortex)
+make docker-up
+
+# View logs
+make docker-logs
+
+# Stop all services
+make docker-down
+```
+
+The service will be available at `http://localhost:5000`
+
+### Docker Commands
+
+- `make docker-build` — Build the Docker image
+- `make docker-up` — Start all services
+- `make docker-down` — Stop all services
+- `make docker-logs` — View logs from all services
+- `make docker-restart` — Restart all services
+- `make docker-clean` — Remove all containers, volumes, and images
+
+## Local Development Setup
+
+### 1. Environment Configuration
+
+Copy the example environment file and configure it:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with your local configuration (database, Redis, RabbitMQ URLs).
+
+### 2. Start Dependencies
+
+You can run just the dependencies with Docker:
+
+```bash
+docker-compose up -d postgres redis rabbitmq
+```
+
+### 3. Prepare the Environment
+
+Install necessary dependencies and tools:
 
 ```bash
 make prepare
 ```
 
-This will install:
+This installs:
+- Protobuf code generators
+- Development tools like `air` for live reload
+- Go module dependencies
 
-- Protobuf code generators (`protoc-gen-go` and `protoc-gen-go-grpc`)
-- Development tools like `air` for live reload during development
-- Download Go module dependencies
-- Tidy your `go.mod`
+### 4. Generate Ent Code
 
-### 2. Build Protobuf files
-
-Generate Go code from protobuf definitions:
+Generate database schema code:
 
 ```bash
-make build-proto
+make ent-gen
 ```
 
-This compiles the `.proto` files located at `./grpc/cortex/cortex.proto` into Go source code.
+### 5. Run the Server
 
-### 3. Run the server in development mode
-
-Start the project with live reload enabled by running:
+Start in development mode with live reload:
 
 ```bash
 make dev
 ```
 
-This runs the server command (`./main serve-rest`) managed by `air` for hot-reloading when code changes.
-
-### 4. Seed the database
-
-If you need to seed the database with initial data, run:
-
-```bash
-make seed
-```
-
-### 5. Build the executable
-
-To build the project binary:
-
-```bash
-make build
-```
-
-This compiles the source code into an executable named `main`.
-
-### 6. Start the server (production)
-
-Run the compiled binary:
+Or build and run:
 
 ```bash
 make start
 ```
 
-This runs `./main serve-rest`.
+The service will be available at `http://localhost:8080`
 
-### 7. Run tests
+## API Documentation
 
-To run all tests with verbose output:
+Swagger documentation is available at:
+- `http://localhost:5000/swagger/` (Docker)
+- `http://localhost:8080/swagger/` (Local)
+
+## Testing
+
+Run all tests:
 
 ```bash
 make test
 ```
 
----
+## Database Management
 
-## Additional commands
+The service automatically runs migrations on startup. The database schema is managed using Ent.
 
-- `make tidy` — cleans and verifies module dependencies
-- `make install-mockgen` — installs the mockgen tool for generating mocks
-- `make install-proto-deps` — installs protobuf compiler plugins
-- `make install-dev-deps` — installs development dependencies/tools
-- `make install-deps` — downloads Go module dependencies
-
----
-
-## Summary
-
-Just run:
+### Create New Entity Schema
 
 ```bash
-make dev
+make ent-schema NAME=YourEntity
 ```
 
-and the project should be up and running with live reload for easy development!
+Then edit the schema in `ent/schema/` and regenerate:
+
+```bash
+make ent-gen
+```
+
+## Additional Commands
+
+- `make build` — Build the executable
+- `make clean` — Clean build artifacts
+- `make tidy` — Clean up go.mod
+- `make install-mockgen` — Install mockgen for generating mocks
+- `make help` — Show all available commands
+
+## Service Endpoints
+
+- **API**: `http://localhost:5000` (Docker) or `http://localhost:8080` (Local)
+- **PostgreSQL**: `localhost:5432`
+- **Redis**: `localhost:6379`
+- **RabbitMQ**: `localhost:5672`
+- **RabbitMQ Management**: `http://localhost:15672` (admin/admin)
+
+## Architecture
+
+- **Framework**: Go with standard library HTTP
+- **Database**: PostgreSQL with Ent ORM
+- **Cache**: Redis
+- **Message Queue**: RabbitMQ
+- **API Documentation**: Swagger/OpenAPI
 
 ---
+
+For more details, see the documentation in the `docs/` directory.

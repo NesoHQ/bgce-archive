@@ -23,12 +23,14 @@ func (m *Manager) With(handler http.Handler, middlewares ...Middleware) http.Han
 	var h http.Handler
 	h = handler
 
-	for _, m := range middlewares {
-		h = m(h)
+	// Apply route-specific middlewares first (innermost)
+	for i := len(middlewares) - 1; i >= 0; i-- {
+		h = middlewares[i](h)
 	}
 
-	for _, m := range m.globalMiddlewares {
-		h = m(h)
+	// Apply global middlewares last (outermost) - CORS should be outermost
+	for i := len(m.globalMiddlewares) - 1; i >= 0; i-- {
+		h = m.globalMiddlewares[i](h)
 	}
 
 	return h
