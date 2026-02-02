@@ -23,6 +23,6 @@ func (handlers *Handlers) GetCategoryByUUID(w http.ResponseWriter, r *http.Reque
 	}
 	utils.SendJson(w, http.StatusOK, SuccessResponse{
 		Data:   cateory,
-		Status: http.StatusOK,
+		Status: true,
 	})
 }

@@ -2,10 +2,11 @@ package category
 
 import (
 	"context"
-	"cortex/ent/category"
-	customerrors "cortex/pkg/custom_errors"
 	"encoding/json"
 	"errors"
+
+	"cortex/ent/category"
+	customerrors "cortex/pkg/custom_errors"
 )
 
 func (s *service) UpdateCategory(ctx context.Context, params UpdateCategoryParams) error {
@@ -44,11 +45,15 @@ func (s *service) UpdateCategory(ctx context.Context, params UpdateCategoryParam
 		update.SetMeta(meta)
 	}
 
-	// 4. Always set updater + approval fields
-	update.
-		SetUpdatedBy(params.UpdatedBy).
-		SetApprovedBy(params.ApprovedBy).
-		SetApprovedAt(params.ApprovedAt)
+	// 4. Set updater and optional approval fields
+	update.SetUpdatedBy(params.UpdatedBy)
+
+	if params.ApprovedBy != 0 {
+		update.SetApprovedBy(params.ApprovedBy)
+	}
+	if !params.ApprovedAt.IsZero() {
+		update.SetApprovedAt(params.ApprovedAt)
+	}
 
 	// 5. Save changes
 	_, err = update.Save(ctx)

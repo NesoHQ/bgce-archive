@@ -38,6 +38,6 @@ func (h *Handlers) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	utils.SendJson(w, http.StatusOK, SuccessResponse{
 		Data:    userResp,
 		Message: "Profile updated successfully",
-		Status:  http.StatusOK,
+		Status:  true,
 	})
 }

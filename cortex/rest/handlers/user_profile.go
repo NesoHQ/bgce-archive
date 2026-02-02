@@ -25,6 +25,6 @@ func (h *Handlers) GetProfile(w http.ResponseWriter, r *http.Request) {
 	utils.SendJson(w, http.StatusOK, SuccessResponse{
 		Data:    userResp,
 		Message: "Profile retrieved successfully",
-		Status:  http.StatusOK,
+		Status:  true,
 	})
 }

@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"time"
@@ -40,21 +41,21 @@ func Logger(handler http.Handler) http.Handler {
 		path := r.URL.Path
 		rec := &recorder{
 			ResponseWriter: w,
+			statusCode:     200, // Default status code
 		}
 		start := time.Now()
 
 		r = NewRequestWithTraceCtx(r)
 
+		// Simple console log to verify middleware is working
+		fmt.Printf("[%s] %s %s\n", time.Now().Format("15:04:05"), r.Method, path)
+
 		handler.ServeHTTP(rec, r)
 
-		// ignore healthcheck route
-		if path == "/api/v1/hello" {
-			return
-		}
-
+		// Structured log
 		slog.InfoContext(
 			r.Context(),
-			"",
+			"HTTP Request",
 			logger.Path(path),
 			logger.Query(r.URL.Query()),
 			logger.Method(r.Method),

@@ -49,7 +49,7 @@ func (h *Handlers) DeleteSubCategory(w http.ResponseWriter, r *http.Request) {
 
 	utils.SendJson(w, http.StatusOK, SuccessResponse{
 		Message: "Subcategory deleted successfully",
-		Status:  http.StatusOK,
+		Status:  true,
 		Data:    nil,
 	})
 }

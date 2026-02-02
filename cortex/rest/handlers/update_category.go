@@ -48,15 +48,30 @@ func (h *Handlers) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 
 	// Prepare update params
 	updateParams := category.UpdateCategoryParams{
-		Slug:        &slug,
-		NewSlug:     &req.NewSlug,
-		Label:       &req.Label,
-		Description: &req.Description,
-		UpdatedBy:   userID,
-		ApprovedBy:  userID,
-		ApprovedAt:  time.Now(),
-		Status:      &req.Status,
-		Meta:        req.Meta,
+		Slug:      &slug,
+		UpdatedBy: userID,
+	}
+
+	// Only set fields that are provided
+	if req.NewSlug != "" {
+		updateParams.NewSlug = &req.NewSlug
+	}
+	if req.Label != "" {
+		updateParams.Label = &req.Label
+	}
+	if req.Description != "" {
+		updateParams.Description = &req.Description
+	}
+	if req.Status != "" {
+		updateParams.Status = &req.Status
+		// Only set approval fields if status is being changed to approved
+		if req.Status == "approved" {
+			updateParams.ApprovedBy = userID
+			updateParams.ApprovedAt = time.Now()
+		}
+	}
+	if req.Meta != nil {
+		updateParams.Meta = req.Meta
 	}
 
 	err := h.CategoryService.UpdateCategory(r.Context(), updateParams)
@@ -75,6 +90,6 @@ func (h *Handlers) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	utils.SendJson(w, http.StatusOK, SuccessResponse{
 		Data:    nil,
 		Message: "Category updated successfully",
-		Status:  http.StatusOK,
+		Status:  true,
 	})
 }

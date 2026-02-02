@@ -84,7 +84,9 @@ func APIServerCommand(ctx context.Context) *cobra.Command {
 			subcategorySvc := subcategory.NewService(cnf, rmq, redisCache, entClient)
 			userSvc := user.NewService(cnf, entClient)
 			handlers := handlers.NewHandler(cnf, ctgrySvc, subcategorySvc, userSvc)
-			mux, err := rest.NewServeMux(middlewares, handlers)
+
+			// NewServeMux now returns http.Handler with all middlewares applied
+			handler, err := rest.NewServeMux(middlewares, handlers)
 			if err != nil {
 				slog.Error("Failed to create the server:", logger.Extra(map[string]any{
 					"error": err.Error(),
@@ -92,8 +94,7 @@ func APIServerCommand(ctx context.Context) *cobra.Command {
 				return err
 			}
 
-			// Wrap with CORS middleware FIRST, then APM
-			handler := rest.WrapWithCORS(mux)
+			// Wrap with APM for monitoring
 			handler = apmhttp.Wrap(handler)
 
 			server := &http.Server{

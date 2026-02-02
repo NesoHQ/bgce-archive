@@ -47,7 +47,7 @@ func (h *Handlers) GetSubCategoryByID(w http.ResponseWriter, r *http.Request) {
 		response := SuccessResponse{
 			Message: "Subcategory retrieved successfully",
 			Data:    subcategory,
-			Status:  http.StatusOK,
+			Status:  true,
 		}
 
 		utils.SendJson(w, http.StatusOK, response)
@@ -74,7 +74,7 @@ func (h *Handlers) GetSubCategoryByID(w http.ResponseWriter, r *http.Request) {
 	response := SuccessResponse{
 		Message: "Subcategory retrieved successfully",
 		Data:    subcategory,
-		Status:  http.StatusOK,
+		Status:  true,
 	}
 
 	utils.SendJson(w, http.StatusOK, response)

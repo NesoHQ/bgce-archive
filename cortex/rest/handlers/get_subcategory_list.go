@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	"cortex/subcategory"
 	"cortex/rest/utils"
+	"cortex/subcategory"
 
 	"github.com/google/uuid"
 )
@@ -62,7 +62,7 @@ func (h *Handlers) GetSubCategoryList(w http.ResponseWriter, r *http.Request) {
 	response := SuccessResponse{
 		Message: "Subcategories retrieved successfully",
 		Data:    subcategories,
-		Status:  http.StatusOK,
+		Status:  true,
 	}
 
 	utils.SendJson(w, http.StatusOK, response)

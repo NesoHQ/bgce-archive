@@ -36,6 +36,6 @@ func (h *Handlers) Register(w http.ResponseWriter, r *http.Request) {
 	utils.SendJson(w, http.StatusCreated, SuccessResponse{
 		Data:    userResp,
 		Message: "User registered successfully",
-		Status:  http.StatusCreated,
+		Status:  true,
 	})
 }

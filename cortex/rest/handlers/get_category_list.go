@@ -48,8 +48,8 @@ func (h *Handlers) GetCategoryList(w http.ResponseWriter, r *http.Request) {
 
 	response := SuccessResponse{
 		Message: "Categories retrieved successfully",
-		Data:   categories,
-		Status: http.StatusOK,
+		Data:    categories,
+		Status:  true,
 	}
 
 	utils.SendJson(w, http.StatusOK, response)

@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"cortex/subcategory"
 	customerrors "cortex/pkg/custom_errors"
 	"cortex/rest/middlewares"
 	"cortex/rest/utils"
+	"cortex/subcategory"
 
 	"github.com/google/uuid"
 )
@@ -97,7 +97,7 @@ func (h *Handlers) UpdateSubCategory(w http.ResponseWriter, r *http.Request) {
 
 	utils.SendJson(w, http.StatusOK, SuccessResponse{
 		Message: "Subcategory updated successfully",
-		Status:  http.StatusOK,
+		Status:  true,
 		Data:    nil,
 	})
 }

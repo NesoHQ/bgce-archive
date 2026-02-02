@@ -1,92 +1,54 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { onMounted, ref } from "vue"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Archive, Edit, Trash2, CheckCircle, Clock, XCircle, MoreHorizontal } from "lucide-vue-next"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
-import axiosInstance from "@/utils/AxiosInstance"
-import axios from "axios"
+import { Archive, Edit, Trash2, CheckCircle, Clock, XCircle, MoreHorizontal, Plus } from "lucide-vue-next"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useCategoryStore } from "@/stores/category"
+import CategoryModal from "@/components/platform/CategoryModal.vue"
+import type { Category, CreateCategoryRequest, UpdateCategoryRequest } from "@/types/api"
 
+const categoryStore = useCategoryStore()
 
-interface Category {
-    id: number
-    uuid: string
-    slug: string
-    label: string
-    description: string
-    created_at: string
-    status: 'pending' | 'approved' | 'rejected' | 'deleted'
+const isModalOpen = ref(false)
+const modalMode = ref<'create' | 'edit'>('create')
+const selectedCategory = ref<Category | null>(null)
+
+const handleCreate = () => {
+    modalMode.value = 'create'
+    selectedCategory.value = null
+    isModalOpen.value = true
 }
 
-const categories = ref<Category[]>([])
-const isLoading = ref(true)
-const fetchError = ref<string | null>(null)
+const handleEdit = (category: Category) => {
+    modalMode.value = 'edit'
+    selectedCategory.value = category
+    isModalOpen.value = true
+}
 
-const fetchCategories = async () => {
-    isLoading.value = true
-    fetchError.value = null
-    try {
-        const params = {
-            limit: 10,
-            offset: 0,
-            sort_by: 'created_at',
-            sort_order: 'desc',
-        }
-        
-        const response = await axios.get('http://localhost:5000/api/v1/categories', { params })
-        
-        if (response.data && response.data.data) {
-            categories.value = response.data.data as Category[]
-        } else {
-            categories.value = []
-        }
-        
-    } catch (error) {
-        console.error("Failed to fetch categories:", error)
-        fetchError.value = "Failed to load categories. Please check the network connection."
-    } finally {
-        isLoading.value = false
+const handleModalSubmit = async (data: CreateCategoryRequest | UpdateCategoryRequest) => {
+    if (modalMode.value === 'create') {
+        await categoryStore.createCategory(data as CreateCategoryRequest)
+    } else if (selectedCategory.value) {
+        await categoryStore.updateCategory(selectedCategory.value.slug, data as UpdateCategoryRequest)
     }
 }
 
-
-const handleEdit = (category: Category) => {
-    console.log("Edit category clicked:", category.label, category.uuid)
-}
-
 const handleDelete = async (category: Category) => {
-    
-    try {
-        await axiosInstance.delete(`/api/v1/categories/${category.uuid}`)
-        categories.value = categories.value.filter(c => c.uuid !== category.uuid)
- 
-
-    } catch (error) {
-        console.error("Failed to delete category:", error)
-        fetchError.value = `Failed to delete ${category.label}.`
+    if (confirm(`Are you sure you want to delete "${category.label}"?`)) {
+        await categoryStore.deleteCategory(category.uuid)
     }
 }
 
 const handleUpdateStatus = async (category: Category, newStatus: Category['status']) => {
     try {
-        await axiosInstance.put(`/api/v1/categories/${category.uuid}`, {
-            status: newStatus,
-        })
-        
-        const index = categories.value.findIndex(c => c.uuid === category.uuid)
-        if (index !== -1) {
-            categories.value[index].status = newStatus
-        }
-        console.log(`Successfully updated status of ${category.label} to ${newStatus}`)
-        
+        await categoryStore.updateCategory(category.slug, { status: newStatus } as any)
     } catch (error) {
         console.error(`Failed to update status for ${category.label}:`, error)
-        fetchError.value = `Failed to update status for ${category.label}.`
     }
 }
-
 
 const getStatusBadge = (status: Category['status']) => {
     switch (status) {
@@ -103,7 +65,9 @@ const getStatusBadge = (status: Category['status']) => {
     }
 }
 
-onMounted(fetchCategories)
+onMounted(() => {
+    categoryStore.fetchCategories()
+})
 </script>
 
 <template>
@@ -114,23 +78,24 @@ onMounted(fetchCategories)
                     <Archive class="h-5 w-5 text-primary" />
                     Category Management
                 </span>
-                <Button variant="default" size="sm" @click="console.log('Open Create Category Modal')">
+                <Button variant="default" size="sm" @click="handleCreate">
+                    <Plus class="h-4 w-4 mr-2" />
                     Create New Category
                 </Button>
             </CardTitle>
         </CardHeader>
         <CardContent>
-            <div v-if="isLoading" class="p-8 text-center text-muted-foreground flex justify-center items-center gap-2">
+            <div v-if="categoryStore.loading" class="p-8 text-center text-muted-foreground flex justify-center items-center gap-2">
                 <Clock class="animate-spin h-5 w-5" />
                 <span>Loading categories...</span>
             </div>
             
-            <div v-else-if="fetchError" class="p-8 text-center text-red-500 bg-red-50 border border-red-200 rounded-lg">
-                Error: {{ fetchError }}
-                <Button variant="link" class="mt-2" @click="fetchCategories">Retry</Button>
+            <div v-else-if="categoryStore.error" class="p-8 text-center text-red-500 bg-red-50 border border-red-200 rounded-lg">
+                Error: {{ categoryStore.error }}
+                <Button variant="link" class="mt-2" @click="categoryStore.fetchCategories()">Retry</Button>
             </div>
 
-            <div v-else-if="categories.length === 0" class="p-8 text-center text-muted-foreground">
+            <div v-else-if="categoryStore.categories.length === 0" class="p-8 text-center text-muted-foreground">
                 No categories found. Click "Create New Category" to add one.
             </div>
             
@@ -145,7 +110,7 @@ onMounted(fetchCategories)
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow v-for="category in categories" :key="category.uuid" class="hover:bg-muted/50">
+                    <TableRow v-for="category in categoryStore.categories" :key="category.uuid" class="hover:bg-muted/50">
                         <TableCell class="font-medium">
                             <p class="text-foreground">{{ category.label }}</p>
                             <p class="text-sm text-muted-foreground">/{{ category.slug }}</p>
@@ -157,7 +122,7 @@ onMounted(fetchCategories)
                         <TableCell>
                             <Badge 
                                 :class="getStatusBadge(category.status).class"
-                                class="capitalize flex items-center gap-1">
+                                class="capitalize flex items-center gap-1 w-fit">
                                 <component :is="getStatusBadge(category.status).icon" class="h-3 w-3" />
                                 {{ getStatusBadge(category.status).text }}
                             </Badge>
@@ -200,4 +165,12 @@ onMounted(fetchCategories)
             </Table>
         </CardContent>
     </Card>
+
+    <!-- Category Modal -->
+    <CategoryModal
+        v-model:open="isModalOpen"
+        :mode="modalMode"
+        :category="selectedCategory"
+        @submit="handleModalSubmit"
+    />
 </template>

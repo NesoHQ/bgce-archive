@@ -56,6 +56,6 @@ func (handlers *Handlers) CreateCategory(w http.ResponseWriter, r *http.Request)
 	utils.SendJson(w, http.StatusOK, SuccessResponse{
 		Data:    nil,
 		Message: "Category created successfully",
-		Status:  http.StatusCreated,
+		Status:  true,
 	})
 }

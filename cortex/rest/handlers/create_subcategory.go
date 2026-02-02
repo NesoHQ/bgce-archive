@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"cortex/subcategory"
 	customerrors "cortex/pkg/custom_errors"
 	"cortex/rest/middlewares"
 	"cortex/rest/utils"
+	"cortex/subcategory"
 )
 
 type CreateSubcategoryRequest struct {
@@ -53,7 +53,7 @@ func (h *Handlers) CreateSubcategory(w http.ResponseWriter, r *http.Request) {
 
 	utils.SendJson(w, http.StatusCreated, SuccessResponse{
 		Message: "Subcategory created successfully",
-		Status:  http.StatusCreated,
+		Status:  true,
 		Data:    nil,
 	})
 }

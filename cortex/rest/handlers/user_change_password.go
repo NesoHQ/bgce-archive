@@ -42,6 +42,6 @@ func (h *Handlers) ChangePassword(w http.ResponseWriter, r *http.Request) {
 	utils.SendJson(w, http.StatusOK, SuccessResponse{
 		Data:    nil,
 		Message: "Password changed successfully",
-		Status:  http.StatusOK,
+		Status:  true,
 	})
 }

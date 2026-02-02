@@ -40,6 +40,6 @@ func (h *Handlers) Hello(w http.ResponseWriter, r *http.Request) {
 
 type SuccessResponse struct {
 	Message string      `json:"message"`
-	Status  int         `json:"status"`
+	Status  bool        `json:"status"`
 	Data    interface{} `json:"data"`
 }

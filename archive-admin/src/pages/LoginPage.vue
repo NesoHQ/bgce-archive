@@ -6,11 +6,10 @@ import { useAuthStore } from "@/stores/auth";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeOff, Archive, Shield } from "lucide-vue-next";
+import { Eye, EyeOff, Shield } from "lucide-vue-next";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-
-const { handleLogin } = useAuthStore();
+const authStore = useAuthStore();
 
 const schema = yup.object({
     email: yup.string().email("Invalid email address").required("Email is required"),
@@ -25,15 +24,21 @@ const [email, emailAttrs] = defineField("email");
 const [password, passwordAttrs] = defineField("password");
 
 const showPassword = ref(false);
+const isSubmitting = ref(false);
 
 const onSubmit = handleSubmit(async values => {
-    console.log("Form submitted successfully!", values);
-    // In a real application, you would make an API call here.
-    // For this example, we'll simulate a successful login.
-    
-    // Call the login action from your Pinia store.
-    handleLogin({ id: "123", email: values.email }, "dummy-auth-token");
-})
+    try {
+        isSubmitting.value = true;
+        await authStore.login({
+            email: values.email,
+            password: values.password,
+        });
+    } catch (error) {
+        console.error("Login failed:", error);
+    } finally {
+        isSubmitting.value = false;
+    }
+});
 </script>
 
 <template>
@@ -61,9 +66,9 @@ const onSubmit = handleSubmit(async values => {
                             <Label for="email" class="text-sm font-medium">
                                 Email Address
                             </Label>
-                            <Input id="email" type="email" placeholder="admin@archive.com"
+                            <Input id="email" type="email" placeholder="admin@bgce.com"
                                 class="h-11 bg-background/50 border-archive-muted/30 focus:border-archive-primary"
-                                v-model="email" v-bind="emailAttrs" />
+                                v-model="email" v-bind="emailAttrs" :disabled="isSubmitting" />
                             <!-- Display error message if present -->
                             <p v-if="errors.email" class="text-destructive text-sm">{{ errors.email }}</p>
                         </div>
@@ -77,10 +82,10 @@ const onSubmit = handleSubmit(async values => {
                                 <Input id="password" :type="showPassword ? 'text' : 'password'"
                                     placeholder="Enter your password"
                                     class="h-11 bg-background/50 border-archive-muted/30 focus:border-archive-primary pr-10"
-                                    v-model="password" v-bind="passwordAttrs" />
+                                    v-model="password" v-bind="passwordAttrs" :disabled="isSubmitting" />
                                 <Button type="button" variant="ghost" size="sm"
                                     class="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                                    @click="showPassword = !showPassword">
+                                    @click="showPassword = !showPassword" :disabled="isSubmitting">
                                     <EyeOff v-if="showPassword" class="w-4 h-4 text-muted-foreground" />
                                     <Eye v-else class="w-4 h-4 text-muted-foreground" />
                                 </Button>
@@ -92,22 +97,25 @@ const onSubmit = handleSubmit(async values => {
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2">
                                 <input type="checkbox" id="remember"
-                                    class="w-4 h-4 text-archive-primary bg-background border-archive-muted/30 rounded focus:ring-archive-primary focus:ring-2" />
+                                    class="w-4 h-4 text-archive-primary bg-background border-archive-muted/30 rounded focus:ring-archive-primary focus:ring-2" 
+                                    :disabled="isSubmitting" />
                                 <Label for="remember" class="text-sm text-muted-foreground">
                                     Remember me
                                 </Label>
                             </div>
                             <Button variant="link"
-                                class="text-sm text-archive-primary hover:text-archive-primary/80 p-0 cursor-pointer">
+                                class="text-sm text-archive-primary hover:text-archive-primary/80 p-0 cursor-pointer"
+                                :disabled="isSubmitting">
                                 Forgot password?
                             </Button>
                         </div>
 
                         <!-- Login Button -->
                         <Button type="submit"
-                            class="w-full h-11 bg-archive-primary hover:bg-archive-primary/90 text-white font-medium cursor-pointer">
+                            class="w-full h-11 bg-archive-primary hover:bg-archive-primary/90 text-white font-medium cursor-pointer"
+                            :disabled="isSubmitting || authStore.loading">
                             <Shield class="w-4 h-4 mr-2" />
-                            Login to Archive
+                            {{ isSubmitting || authStore.loading ? 'Logging in...' : 'Login to Archive' }}
                         </Button>
                     </form>
 

@@ -8,7 +8,7 @@ import (
 	"cortex/rest/swagger"
 )
 
-func NewServeMux(mw *middlewares.Middlewares, handlers *handlers.Handlers) (*http.ServeMux, error) {
+func NewServeMux(mw *middlewares.Middlewares, handlers *handlers.Handlers) (http.Handler, error) {
 	mux := http.NewServeMux()
 
 	// Auth routes (public)
@@ -53,37 +53,15 @@ func NewServeMux(mw *middlewares.Middlewares, handlers *handlers.Handlers) (*htt
 	// Health check
 	mux.HandleFunc("GET /api/v1/hello", handlers.Hello)
 
-	// Setup swagger
+	// Setup swagger with its own middleware manager
+	swaggerManager := middlewares.NewManager()
+	swaggerManager.Use(middlewares.Recover, middlewares.Logger, middlewares.CORS)
+	swagger.SetupSwagger(mux, swaggerManager)
+
+	// Apply global middlewares to all routes (including swagger)
+	// Order: CORS (outermost) -> Logger -> Recover -> Routes (innermost)
 	manager := middlewares.NewManager()
-	manager.Use(middlewares.Recover, middlewares.Logger, middlewares.CORS)
-	swagger.SetupSwagger(mux, manager)
+	handler := manager.With(mux, middlewares.CORS, middlewares.Logger, middlewares.Recover)
 
-	return mux, nil
-}
-
-// WrapWithCORS wraps the entire mux with CORS middleware
-func WrapWithCORS(handler http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Set CORS headers for all requests
-		origin := r.Header.Get("Origin")
-		if origin == "" {
-			origin = "*"
-		}
-
-		w.Header().Set("Access-Control-Allow-Origin", origin)
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH, HEAD")
-		w.Header().Set("Access-Control-Allow-Headers", "Accept, Authorization, Content-Type, X-CSRF-Token, X-Requested-With, Origin")
-		w.Header().Set("Access-Control-Expose-Headers", "Content-Length, Content-Type")
-		w.Header().Set("Access-Control-Allow-Credentials", "true")
-		w.Header().Set("Access-Control-Max-Age", "300")
-
-		// Handle preflight requests
-		if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusNoContent)
-			return
-		}
-
-		// Call the next handler
-		handler.ServeHTTP(w, r)
-	})
+	return handler, nil
 }

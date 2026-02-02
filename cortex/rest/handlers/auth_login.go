@@ -36,6 +36,6 @@ func (h *Handlers) Login(w http.ResponseWriter, r *http.Request) {
 	utils.SendJson(w, http.StatusOK, SuccessResponse{
 		Data:    loginResp,
 		Message: "Login successful",
-		Status:  http.StatusOK,
+		Status:  true,
 	})
 }
