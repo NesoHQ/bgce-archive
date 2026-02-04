@@ -47,6 +47,9 @@ jobs:
   build-and-push:
     needs: detect-changes
     if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      packages: write
     strategy:
       fail-fast: false
       matrix:
