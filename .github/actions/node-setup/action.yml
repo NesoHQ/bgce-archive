@@ -1,0 +1,31 @@
+name: "Node.js Setup with Yarn"
+description: "Setup Node.js with Yarn caching for faster installs"
+
+inputs:
+  node-version:
+    description: "Node.js version to use"
+    required: false
+    default: "20"
+  working-directory:
+    description: "Working directory containing package.json"
+    required: true
+  install-dependencies:
+    description: "Whether to install dependencies"
+    required: false
+    default: "true"
+
+runs:
+  using: "composite"
+  steps:
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: 'yarn'
+        cache-dependency-path: ${{ inputs.working-directory }}/yarn.lock
+
+    - name: 📥 Install dependencies
+      if: inputs.install-dependencies == 'true'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: yarn install --frozen-lockfile

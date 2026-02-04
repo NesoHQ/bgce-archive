@@ -1,0 +1,41 @@
+name: "Docker Metadata Extractor"
+description: "Extract Docker image metadata and tags"
+
+inputs:
+  service:
+    description: "Service name"
+    required: true
+  registry:
+    description: "Container registry"
+    required: false
+    default: "ghcr.io"
+  image-prefix:
+    description: "Image name prefix"
+    required: false
+    default: "nesohq/bgce-archive"
+
+outputs:
+  tags:
+    description: "Generated Docker tags"
+    value: ${{ steps.meta.outputs.tags }}
+  labels:
+    description: "Generated Docker labels"
+    value: ${{ steps.meta.outputs.labels }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: 🏷️ Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: |
+          ${{ inputs.registry }}/${{ inputs.image-prefix }}/${{ inputs.service }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest,enable={{is_default_branch}}

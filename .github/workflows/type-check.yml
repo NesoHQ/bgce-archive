@@ -15,18 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: 📦 Setup Node.js with Yarn
+        uses: ./.github/actions/node-setup
         with:
-          node-version: '20'
-          cache: 'yarn'
-          cache-dependency-path: ${{ inputs.service }}/yarn.lock
+          working-directory: ${{ inputs.service }}
       
-      - name: Install dependencies
-        working-directory: ${{ inputs.service }}
-        run: yarn install --frozen-lockfile
-      
-      - name: Type check
+      - name: 🔍 Type check
         working-directory: ${{ inputs.service }}
         run: yarn type-check
         continue-on-error: true
