@@ -1,0 +1,78 @@
+name: Update Kubernetes Deployment
+
+on:
+  workflow_call:
+    inputs:
+      service:
+        required: true
+        type: string
+        description: 'Service name to update'
+      should-update:
+        required: true
+        type: boolean
+        description: 'Whether to update this service'
+    secrets:
+      INFRA_REPO_TOKEN:
+        required: true
+
+env:
+  REGISTRY_GHCR: ghcr.io
+  IMAGE_PREFIX: nesohq/bgce-archive
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    if: inputs.should-update
+    
+    steps:
+      - name: Checkout infra repo
+        uses: actions/checkout@v4
+        with:
+          repository: managed-ops-preps/infra
+          token: ${{ secrets.INFRA_REPO_TOKEN }}
+          path: infra
+
+      - name: Update deployment manifest
+        run: |
+          cd infra
+          IMAGE="${{ env.REGISTRY_GHCR }}/${{ env.IMAGE_PREFIX }}/${{ inputs.service }}:${{ github.sha }}"
+          
+          # Update or create deployment file
+          mkdir -p k8s
+          FILE="k8s/${{ inputs.service }}.yaml"
+          
+          if [ -f "$FILE" ]; then
+            # Update existing file
+            sed -i "s|image:.*${{ inputs.service }}.*|image: $IMAGE|g" "$FILE"
+          else
+            # Create new deployment file
+            cat > "$FILE" <<EOF
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: ${{ inputs.service }}
+            labels:
+              app: ${{ inputs.service }}
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                app: ${{ inputs.service }}
+            template:
+              metadata:
+                labels:
+                  app: ${{ inputs.service }}
+              spec:
+                containers:
+                - name: ${{ inputs.service }}
+                  image: $IMAGE
+                  imagePullPolicy: Always
+          EOF
+          fi
+          
+          # Commit and push changes
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "$FILE"
+          git commit -m "Update ${{ inputs.service }} image to ${{ github.sha }}" || echo "No changes to commit"
+          git push

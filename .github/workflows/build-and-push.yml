@@ -10,7 +10,6 @@ on:
 
 env:
   REGISTRY_GHCR: ghcr.io
-  REGISTRY_DOCKERHUB: docker.io
   IMAGE_PREFIX: nesohq/bgce-archive
 
 jobs:
@@ -40,168 +39,32 @@ jobs:
 
   type-check:
     needs: detect-changes
-    runs-on: ubuntu-latest
     if: needs.detect-changes.outputs.archive-admin == 'true'
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'yarn'
-          cache-dependency-path: archive-admin/yarn.lock
-      
-      - name: Install dependencies
-        working-directory: archive-admin
-        run: yarn install --frozen-lockfile
-      
-      - name: Type check
-        working-directory: archive-admin
-        run: yarn type-check
-        continue-on-error: true  # Don't fail the build, just warn
+    uses: ./.github/workflows/type-check.yml
+    with:
+      service: archive-admin
 
   build-and-push:
     needs: detect-changes
-    runs-on: ubuntu-latest
     if: github.event_name != 'pull_request'
-    
-    permissions:
-      contents: read
-      packages: write
-      
     strategy:
       fail-fast: false
       matrix:
         service: [archive-admin, archive-client, cortex, postal]
-        
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY_GHCR }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      # Optional: Uncomment to push to Docker Hub as well
-      # - name: Log in to Docker Hub
-      #   uses: docker/login-action@v3
-      #   with:
-      #     registry: ${{ env.REGISTRY_DOCKERHUB }}
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: |
-            ${{ env.REGISTRY_GHCR }}/${{ env.IMAGE_PREFIX }}/${{ matrix.service }}
-          tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=sha,prefix={{branch}}-
-            type=raw,value=latest,enable={{is_default_branch}}
-
-      - name: Build and push Docker image
-        if: needs.detect-changes.outputs[matrix.service] == 'true' || github.ref_type == 'tag'
-        uses: docker/build-push-action@v5
-        with:
-          context: ./${{ matrix.service }}
-          file: ./${{ matrix.service }}/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          platforms: linux/amd64,linux/arm64
-
-      - name: Generate image summary
-        if: needs.detect-changes.outputs[matrix.service] == 'true' || github.ref_type == 'tag'
-        run: |
-          echo "## 🐳 Docker Image Built" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Service:** ${{ matrix.service }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Tags:**" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Pull command:**" >> $GITHUB_STEP_SUMMARY
-          echo '```bash' >> $GITHUB_STEP_SUMMARY
-          echo "docker pull ${{ env.REGISTRY_GHCR }}/${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:latest" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+    uses: ./.github/workflows/docker-build.yml
+    with:
+      service: ${{ matrix.service }}
+      should-build: ${{ needs.detect-changes.outputs[matrix.service] == 'true' || github.ref_type == 'tag' }}
+    secrets: inherit
 
   update-deployment:
     needs: [detect-changes, build-and-push]
-    runs-on: ubuntu-latest
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
-    
     strategy:
       matrix:
         service: [archive-admin, archive-client, cortex, postal]
-        
-    steps:
-      - name: Checkout infra repo
-        if: needs.detect-changes.outputs[matrix.service] == 'true'
-        uses: actions/checkout@v4
-        with:
-          repository: managed-ops-preps/infra
-          token: ${{ secrets.INFRA_REPO_TOKEN }}
-          path: infra
-
-      - name: Update deployment manifest
-        if: needs.detect-changes.outputs[matrix.service] == 'true'
-        run: |
-          cd infra
-          IMAGE="${{ env.REGISTRY_GHCR }}/${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:${{ github.sha }}"
-          
-          # Update or create deployment file
-          mkdir -p k8s
-          FILE="k8s/${{ matrix.service }}.yaml"
-          
-          if [ -f "$FILE" ]; then
-            # Update existing file
-            sed -i "s|image:.*${{ matrix.service }}.*|image: $IMAGE|g" "$FILE"
-          else
-            # Create new deployment file
-            cat > "$FILE" <<EOF
-          apiVersion: apps/v1
-          kind: Deployment
-          metadata:
-            name: ${{ matrix.service }}
-            labels:
-              app: ${{ matrix.service }}
-          spec:
-            replicas: 1
-            selector:
-              matchLabels:
-                app: ${{ matrix.service }}
-            template:
-              metadata:
-                labels:
-                  app: ${{ matrix.service }}
-              spec:
-                containers:
-                - name: ${{ matrix.service }}
-                  image: $IMAGE
-                  imagePullPolicy: Always
-          EOF
-          fi
-          
-          # Commit and push changes
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add "$FILE"
-          git commit -m "Update ${{ matrix.service }} image to ${{ github.sha }}" || echo "No changes to commit"
-          git push
+    uses: ./.github/workflows/update-k8s.yml
+    with:
+      service: ${{ matrix.service }}
+      should-update: ${{ needs.detect-changes.outputs[matrix.service] == 'true' }}
+    secrets: inherit
