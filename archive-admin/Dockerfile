@@ -3,26 +3,25 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
+# Install dependencies first (better caching)
 COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile --production=false
 
-# Install dependencies
-RUN yarn install --frozen-lockfile
-
-# Copy source code
+# Copy source and build
 COPY . .
-
-# Build the application (skip type checking - already done in CI)
 RUN yarn build-only
 
 # Production stage
 FROM nginx:alpine
 
-# Copy custom nginx config for SPA
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy nginx config template
+COPY nginx.conf /etc/nginx/templates/default.conf.template
 
-# Copy built assets from builder
+# Copy only built assets (not node_modules)
 COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Set default backend URL (can be overridden at runtime)
+ENV CORTEX_API_URL=http://cortex:8080
 
 EXPOSE 80
 
