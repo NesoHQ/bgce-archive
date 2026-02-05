@@ -6,9 +6,10 @@
  */
 
 export const API_CONFIG = {
-    // Base URLs - use relative paths, nginx will proxy to backend
-    CORTEX_BASE_URL: '/api/v1',
-    POSTAL_BASE_URL: '/api/v1',
+    // Base URLs from environment variables
+    // For production: use /api/cortex and /api/postal (nginx proxies to different backends)
+    CORTEX_BASE_URL: import.meta.env.VITE_API_BASE_URL || '/api/cortex/v1',
+    POSTAL_BASE_URL: import.meta.env.VITE_POSTAL_API_BASE_URL || '/api/postal/v1',
 
     // Mock data flags - set to false when backend is ready
     USE_MOCK_POSTS: false, // Now using real postal API

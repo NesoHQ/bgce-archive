@@ -1,8 +1,9 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
 import { toast } from 'vue-sonner'
+import { API_CONFIG } from '@/config/api.config'
 
 // API Configuration
-const API_BASE_URL = '/api/v1'
+const API_BASE_URL = API_CONFIG.CORTEX_BASE_URL
 
 // Create axios instance
 const apiClient: AxiosInstance = axios.create({

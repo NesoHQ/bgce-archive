@@ -1,6 +1,7 @@
 import axios, { type AxiosInstance } from 'axios'
+import { API_CONFIG } from '@/config/api.config'
 
-const baseURL = '/api/v1'
+const baseURL = API_CONFIG.CORTEX_BASE_URL
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL,
