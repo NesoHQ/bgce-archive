@@ -23,8 +23,9 @@ import (
 	"cortex/user"
 
 	_ "github.com/lib/pq"
-
 	"github.com/spf13/cobra"
+	"github.com/ulule/limiter/v3"
+	redisStore "github.com/ulule/limiter/v3/drivers/store/redis"
 	"go.elastic.co/apm/module/apmhttp"
 )
 
@@ -82,9 +83,34 @@ func APIServerCommand(ctx context.Context) *cobra.Command {
 			redisCache := cache.NewCache(readRedisClient, writeRedisClient)
 			slog.Info("Redis client is connected.")
 
+			// Initialize Rate Limiter Stores
+			ipStore, err := redisStore.NewStoreWithOptions(writeRedisClient, limiter.StoreOptions{
+				Prefix: "cortex:limiter:ip",
+			})
+			if err != nil {
+				slog.Error("Failed to create IP limiter store", slog.Any("error", err))
+				return err
+			}
+
+			userStore, err := redisStore.NewStoreWithOptions(writeRedisClient, limiter.StoreOptions{
+				Prefix: "cortex:limiter:user",
+			})
+			if err != nil {
+				slog.Error("Failed to create User limiter store", slog.Any("error", err))
+				return err
+			}
+
+			authStore, err := redisStore.NewStoreWithOptions(writeRedisClient, limiter.StoreOptions{
+				Prefix: "cortex:limiter:auth",
+			})
+			if err != nil {
+				slog.Error("Failed to create Auth limiter store", slog.Any("error", err))
+				return err
+			}
+
 			middlewares := middlewares.NewMiddleware(cnf, redisCache, middlewares.CortexConfig{
 				UseRedisCache: true,
-			})
+			}, ipStore, userStore, authStore)
 
 			ctgrySvc := category.NewService(cnf, rmq, redisCache, entClient)
 			subcategorySvc := subcategory.NewService(cnf, rmq, redisCache, entClient)

@@ -59,9 +59,9 @@ func NewServeMux(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handle
 	swagger.SetupSwagger(mux, swaggerManager)
 
 	// Apply global middlewares to all routes (including swagger)
-	// Order: CORS (outermost) -> Logger -> Recover -> Routes (innermost)
+	// Order: RateLimiter (outermost) -> CORS -> Logger -> Recover -> Routes (innermost)
 	manager := middlewares.NewManager()
-	handler := manager.With(mux, middlewares.CORS, middlewares.Logger, middlewares.Recover)
+	handler := manager.With(mux, mw.RateLimiter, middlewares.CORS, middlewares.Logger, middlewares.Recover)
 
 	return handler, nil
 }

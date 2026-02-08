@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"postal/config"
 	"postal/post"
@@ -14,6 +15,8 @@ import (
 	"postal/rest/middlewares"
 
 	"github.com/spf13/cobra"
+	"github.com/ulule/limiter/v3"
+	"github.com/ulule/limiter/v3/drivers/store/memory"
 )
 
 var restCmd = &cobra.Command{
@@ -61,7 +64,12 @@ func runRESTServer(cmd *cobra.Command, args []string) error {
 
 	// Initialize middlewares
 	log.Println("🔄 Initializing middlewares...")
-	mw := middlewares.NewMiddlewares(cfg.JWTSecret)
+	// Explicitly set a cleanup interval for the in-memory store
+	ipStore := memory.NewStoreWithOptions(limiter.StoreOptions{
+		Prefix:          "postal:limiter",
+		CleanUpInterval: time.Minute,
+	})
+	mw := middlewares.NewMiddlewares(cfg.JWTSecret, ipStore)
 
 	// Create server
 	log.Println("🔄 Creating HTTP server...")
