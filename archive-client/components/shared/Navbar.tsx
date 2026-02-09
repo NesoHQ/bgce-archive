@@ -50,7 +50,7 @@ export function Navbar() {
         "sticky top-0 z-50 w-full transition-all duration-500 border-b",
         scrolled
           ? "bg-background/90 backdrop-blur-xl border-border shadow-lg shadow-primary/5"
-          : "bg-background/50 backdrop-blur-md border-transparent"
+          : "bg-background/50 backdrop-blur-md border-transparent",
       )}
       suppressHydrationWarning
     >
@@ -76,8 +76,8 @@ export function Navbar() {
                   className={cn(
                     "relative flex items-center gap-2 px-4 py-2.5 text-xs font-mono tracking-wider transition-all duration-300 uppercase rounded-xl group",
                     isActive
-                      ? "text-primary font-bold bg-primary/10"
-                      : "text-muted-foreground hover:text-primary hover:bg-primary/5"
+                      ? "text-primary font-bold "
+                      : "text-muted-foreground hover:text-primary",
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -128,17 +128,9 @@ export function Navbar() {
                 <div className="flex flex-col h-full">
                   <div className="flex items-center justify-between pb-6 border-b">
                     <span className="font-semibold text-lg">Menu</span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={closeSheet}
-                      className="rounded-md"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
                   </div>
 
-                  <div className="flex-1 py-6 space-y-1">
+                  <div className="flex-1 py-6 px-4 space-y-1">
                     {navItems.map((item) => {
                       const Icon = item.icon;
                       const isActive = pathname === item.href;
@@ -151,7 +143,7 @@ export function Navbar() {
                             "flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
                             isActive
                               ? "bg-muted text-foreground"
-                              : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                              : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
                           )}
                         >
                           <Icon className="h-4 w-4" />
@@ -161,7 +153,7 @@ export function Navbar() {
                     })}
                   </div>
 
-                  <div className="pt-6 border-t space-y-2">
+                  <div className="pt-6 px-6 border-t space-y-2">
                     <Button
                       variant="outline"
                       asChild

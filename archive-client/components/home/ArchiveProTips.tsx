@@ -25,7 +25,9 @@ const ArchiveProTips = () => {
     <section className="container mx-auto py-16">
       {/* Header */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold tracking-tight">BGCE Archive pro tips</h2>
+        <h2 className="text-2xl font-bold tracking-tight">
+          BGCE Archive pro tips
+        </h2>
         <p className="text-sm text-muted-foreground font-mono mt-2">
           Essential resources for community members
         </p>
@@ -35,7 +37,7 @@ const ArchiveProTips = () => {
         {tips.map((tip) => (
           <div
             key={tip.title}
-            className="p-6 rounded-[2rem] bg-card/50 border border-white/10 backdrop-blur-md hover:border-primary/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer group shadow-lg"
+            className="p-4  rounded-md bg-card/50 border border-gray-200 dark:border-white/10 backdrop-blur-md hover:border-primary/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer group shadow-lg"
           >
             <div className="flex items-start gap-4">
               <div className="p-3 rounded-2xl bg-primary/10 border border-primary/20 group-hover:bg-primary/20 transition-colors flex-shrink-0">
@@ -48,10 +50,6 @@ const ArchiveProTips = () => {
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {tip.desc}
                 </p>
-                <div className="flex items-center gap-2 text-xs font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span className="uppercase tracking-widest">Learn More</span>
-                  <ArrowRight className="h-3 w-3" />
-                </div>
               </div>
             </div>
           </div>

@@ -28,7 +28,7 @@ export default function RecentQuestions() {
         {questions.map((q, idx) => (
           <div
             key={idx}
-            className="rounded-[2rem] bg-card/30 border border-white/5 backdrop-blur-md hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 cursor-pointer group overflow-hidden"
+            className="rounded-md bg-card/30 border border-gray-300 dark:border-white/10 backdrop-blur-md hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 cursor-pointer group overflow-hidden"
           >
             {/* Content */}
             <div className="p-6 space-y-4">
@@ -75,107 +75,6 @@ export default function RecentQuestions() {
                 </div>
 
                 {/* Author */}
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 border border-primary/20">
-                    <User className="h-3 w-3 text-primary" />
-                  </div>
-                  <span className="font-medium">{q.author}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-
-        {/* Duplicate for demo */}
-        {questions.map((q, idx) => (
-          <div
-            key={`dup1-${idx}`}
-            className="rounded-[2rem] bg-card/30 border border-white/5 backdrop-blur-md hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 cursor-pointer group overflow-hidden"
-          >
-            <div className="p-6 space-y-4">
-              <h3 className="font-bold text-lg leading-snug line-clamp-2 group-hover:text-primary transition-colors">
-                {q.title}
-              </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
-                {q.desc}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {q.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-mono uppercase tracking-wider text-primary"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="px-6 py-4 bg-gray-300 dark:bg-black/40 border-t border-white/5">
-              <div className="flex items-center justify-between text-xs font-mono">
-                <div className="flex items-center gap-4 text-muted-foreground">
-                  <span className="flex items-center gap-1">
-                    <MessageSquare className="h-3.5 w-3.5 text-primary" />
-                    <strong>{q.stats.answers}</strong>
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <ThumbsUp className="h-3.5 w-3.5 text-primary" />
-                    <strong>{q.stats.votes}</strong>
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Eye className="h-3.5 w-3.5 text-primary" />
-                    <strong>{q.stats.views}</strong>
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 border border-primary/20">
-                    <User className="h-3 w-3 text-primary" />
-                  </div>
-                  <span className="font-medium">{q.author}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-
-        {questions.map((q, idx) => (
-          <div
-            key={`dup2-${idx}`}
-            className="rounded-[2rem] bg-card/30 border border-white/5 backdrop-blur-md hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 cursor-pointer group overflow-hidden"
-          >
-            <div className="p-6 space-y-4">
-              <h3 className="font-bold text-lg leading-snug line-clamp-2 group-hover:text-primary transition-colors">
-                {q.title}
-              </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
-                {q.desc}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {q.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-mono uppercase tracking-wider text-primary"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="px-6 py-4 bg-gray-300 dark:bg-black/40 border-t border-white/5">
-              <div className="flex items-center justify-between text-xs font-mono">
-                <div className="flex items-center gap-4 text-muted-foreground">
-                  <span className="flex items-center gap-1">
-                    <MessageSquare className="h-3.5 w-3.5 text-primary" />
-                    <strong>{q.stats.answers}</strong>
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <ThumbsUp className="h-3.5 w-3.5 text-primary" />
-                    <strong>{q.stats.votes}</strong>
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Eye className="h-3.5 w-3.5 text-primary" />
-                    <strong>{q.stats.views}</strong>
-                  </span>
-                </div>
                 <div className="flex items-center gap-2">
                   <div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 border border-primary/20">
                     <User className="h-3 w-3 text-primary" />

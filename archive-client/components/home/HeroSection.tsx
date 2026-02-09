@@ -1,30 +1,7 @@
 "use client";
 
 import React from "react";
-import { BookOpen, Users, ShieldCheck, Layers, Code2 } from "lucide-react";
-
-const features = [
-  {
-    icon: <ShieldCheck className="w-6 h-6 text-primary" />,
-    title: "Find answers",
-    description: "Get unblocked with peer, BGCE, and expert advice",
-  },
-  {
-    icon: <BookOpen className="w-6 h-6 text-primary" />,
-    title: "Access Knowledge Center",
-    description: "Troubleshoot technical and account issues",
-  },
-  {
-    icon: <Layers className="w-6 h-6 text-primary" />,
-    title: "Reuse best practices",
-    description: "Remove roadblocks with articles",
-  },
-  {
-    icon: <Users className="w-6 h-6 text-primary" />,
-    title: "Join a group",
-    description: "Connect with BGCE partners and employees",
-  },
-];
+import { Code2 } from "lucide-react";
 
 export default function HeroSection() {
   return (
@@ -43,8 +20,7 @@ export default function HeroSection() {
         </div>
 
         <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-[1.1]">
-          Welcome to{" "}
-          <span className="text-primary italic">BGCE Archive</span>
+          Welcome to <span className="text-primary italic">BGCE Archive</span>
         </h1>
 
         <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed border-l-2 border-primary/20 pl-6 inline-block text-left">
@@ -54,41 +30,25 @@ export default function HeroSection() {
           this is where we grow together.
         </p>
 
-        {/* Feature Grid */}
-        <div className="mt-24 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {features.map((f, idx) => (
-            <div
-              key={idx}
-              className="p-6 rounded-[2rem] bg-card/30 border border-white/5 backdrop-blur-md hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 group"
-            >
-              <div className="flex flex-col items-center text-center gap-4">
-                <div className="p-4 rounded-2xl bg-primary/10 border border-primary/20 group-hover:bg-primary/20 transition-colors">
-                  {f.icon}
-                </div>
-                <h3 className="text-lg font-bold tracking-tight">
-                  {f.title}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {f.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
         {/* Stats Grid */}
         <div className="mt-16 grid grid-cols-3 gap-4 max-w-2xl mx-auto">
           <div className="p-4 rounded-xl bg-muted/80 border border-white/10 text-center shadow-lg">
             <div className="text-2xl font-bold font-mono">12k+</div>
-            <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Members</div>
+            <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">
+              Members
+            </div>
           </div>
           <div className="p-4 rounded-xl bg-muted/80 border border-white/10 text-center shadow-lg">
             <div className="text-2xl font-bold font-mono">840+</div>
-            <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Articles</div>
+            <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">
+              Articles
+            </div>
           </div>
           <div className="p-4 rounded-xl bg-muted/80 border border-white/10 text-center shadow-lg">
             <div className="text-2xl font-bold font-mono">2026</div>
-            <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">Est. Year</div>
+            <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">
+              Est. Year
+            </div>
           </div>
         </div>
       </div>
