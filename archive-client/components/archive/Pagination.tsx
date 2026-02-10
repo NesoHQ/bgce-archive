@@ -31,7 +31,7 @@ export function PaginationDemo() {
             <PaginationLink
               href="#"
               isActive
-              className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-mono w-10 h-10"
+              className="rounded-full bg-primary text-primary-foreground dark:bg-blue-300 hover:bg-primary/90 font-mono w-10 h-10"
             >
               2
             </PaginationLink>

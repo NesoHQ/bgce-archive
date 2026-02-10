@@ -10,12 +10,14 @@ interface ArticleListProps {
 }
 
 const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
+  console.log(articles);
+
   return (
     <div className="space-y-6">
       {articles.map((article) => (
         <div
           key={article.id}
-          className="rounded-[2rem] bg-card/50 border border-white/10 backdrop-blur-md hover:border-primary/30 hover:-translate-y-1 transition-all duration-300 overflow-hidden shadow-lg"
+          className="rounded-md bg-card/50 border border-gray-200 dark:border-white/10 backdrop-blur-md hover:border-primary/30 hover:-translate-y-1 transition-all duration-300 overflow-hidden shadow-lg"
         >
           <div className="flex flex-col lg:flex-row">
             {/* Main Content */}
@@ -85,7 +87,9 @@ const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
-                    <div className={`inline-block px-3 py-1 ${article.author.badgeColor || "bg-primary"} text-primary-foreground text-[10px] font-mono font-bold rounded-full mb-2 uppercase tracking-wider`}>
+                    <div
+                      className={`inline-block px-3 py-1 ${article.author.badgeColor || "bg-primary"} text-primary-foreground text-[10px] font-mono font-bold rounded-full mb-2 uppercase tracking-wider`}
+                    >
                       {article.author.badge || "Member"}
                     </div>
                     <div className="font-bold hover:text-primary transition-colors cursor-pointer">

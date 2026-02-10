@@ -12,37 +12,42 @@ interface ArticleCardProps {
 const ArticleCard = ({ article }: ArticleCardProps) => {
   // Type guard to check if it's an ApiPost
   const isApiPost = (art: ApiPost | Article): art is ApiPost => {
-    return 'content' in art && 'status' in art;
+    return "content" in art && "status" in art;
   };
 
   const postUrl = `/archive/post/${article.slug}`;
 
   // Handle both Article and ApiPost types
-  const publishedDate = isApiPost(article) && article.published_at
-    ? new Date(article.published_at).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    })
-    : isApiPost(article) && article.created_at
-      ? new Date(article.created_at).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      })
-      : 'date' in article
-        ? new Date(article.date).toLocaleDateString("en-US", {
+  const publishedDate =
+    isApiPost(article) && article.published_at
+      ? new Date(article.published_at).toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
           year: "numeric",
         })
-        : 'N/A';
+      : isApiPost(article) && article.created_at
+        ? new Date(article.created_at).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })
+        : "date" in article
+          ? new Date(article.date).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })
+          : "N/A";
 
-  const tags = isApiPost(article) && article.keywords
-    ? article.keywords.split(',').map(k => k.trim()).filter(Boolean)
-    : 'tags' in article
-      ? article.tags
-      : [];
+  const tags =
+    isApiPost(article) && article.keywords
+      ? article.keywords
+          .split(",")
+          .map((k) => k.trim())
+          .filter(Boolean)
+      : "tags" in article
+        ? article.tags
+        : [];
 
   const content = isApiPost(article) ? article.content : article.description;
   const wordCount = content?.split(/\s+/).length || 0;
@@ -51,11 +56,15 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
   const isFeatured = isApiPost(article) ? article.is_featured : false;
   const isPinned = isApiPost(article) ? article.is_pinned : false;
   const summary = isApiPost(article) ? article.summary : article.description;
-  const viewCount = isApiPost(article) ? article.view_count : 'views' in article ? article.views : 0;
+  const viewCount = isApiPost(article)
+    ? article.view_count
+    : "views" in article
+      ? article.views
+      : 0;
 
   return (
     <Link href={postUrl}>
-      <div className="h-full rounded-[2.5rem] bg-gradient-to-br from-card/60 to-card/40 border-2 border-white/10 backdrop-blur-md hover:border-primary/40 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 cursor-pointer group overflow-hidden relative">
+      <div className="h-full rounded-md bg-gradient-to-br from-card/60 to-card/40  border border-gray-200  dark:border-white/10 backdrop-blur-md hover:border-primary/40 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 cursor-pointer group overflow-hidden relative">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
         <div className="relative">
@@ -115,21 +124,27 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
                 <div className="p-2 rounded-xl bg-primary/10 inline-block mb-2 group-hover/stat:bg-primary/20 transition-colors">
                   <Calendar className="h-3.5 w-3.5 text-primary mx-auto" />
                 </div>
-                <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Published</div>
+                <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                  Published
+                </div>
                 <div className="font-bold mt-1">{publishedDate}</div>
               </div>
               <div className="text-center group/stat">
                 <div className="p-2 rounded-xl bg-primary/10 inline-block mb-2 group-hover/stat:bg-primary/20 transition-colors">
                   <Clock className="h-3.5 w-3.5 text-primary mx-auto" />
                 </div>
-                <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Read</div>
+                <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                  Read
+                </div>
                 <div className="font-bold mt-1">{readingTime} min</div>
               </div>
               <div className="text-center group/stat">
                 <div className="p-2 rounded-xl bg-primary/10 inline-block mb-2 group-hover/stat:bg-primary/20 transition-colors">
                   <Eye className="h-3.5 w-3.5 text-primary mx-auto" />
                 </div>
-                <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Views</div>
+                <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                  Views
+                </div>
                 <div className="font-bold mt-1">{viewCount}</div>
               </div>
             </div>
