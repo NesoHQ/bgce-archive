@@ -35,6 +35,9 @@ func NewServeMux(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handle
 	mux.HandleFunc("POST /api/v1/posts", func(w http.ResponseWriter, r *http.Request) {
 		mw.AuthenticateJWT(http.HandlerFunc(h.CreatePost)).ServeHTTP(w, r)
 	})
+	mux.HandleFunc("POST /api/v1/posts/batch", func(w http.ResponseWriter, r *http.Request) {
+		mw.AuthenticateJWT(http.HandlerFunc(h.BatchUploadPosts)).ServeHTTP(w, r)
+	})
 	mux.HandleFunc("PUT /api/v1/posts/{id}", func(w http.ResponseWriter, r *http.Request) {
 		mw.AuthenticateJWT(http.HandlerFunc(h.UpdatePost)).ServeHTTP(w, r)
 	})

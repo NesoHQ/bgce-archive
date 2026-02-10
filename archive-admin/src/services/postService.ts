@@ -77,5 +77,38 @@ export const postService = {
     // Legacy method for compatibility
     async rejectPost(id: number, reason?: string): Promise<ApiResponse<Post>> {
         return this.unpublishPost(id)
+    },
+
+    async bulkUploadPosts(file: File): Promise<ApiResponse<{ total_created: number }>> {
+        if (API_CONFIG.USE_MOCK_POSTS) {
+            // Mock response for testing
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({
+                        success: true,
+                        status: true,
+                        message: "Posts uploaded successfully",
+                        data: {
+                            total_created: 10
+                        }
+                    })
+                }, 2000)
+            })
+        }
+
+        const formData = new FormData()
+        formData.append('file', file)
+
+        const response = await postalApi.post<ApiResponse<{ total_created: number }>>(
+            '/posts/batch',
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+        )
+
+        return response.data
     }
 }

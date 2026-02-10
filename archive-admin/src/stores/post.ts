@@ -194,6 +194,30 @@ export const usePostStore = defineStore('post', () => {
         }
     }
 
+    const bulkUploadPosts = async (file: File) => {
+        loading.value = true
+        error.value = null
+        try {
+            const response = await postService.bulkUploadPosts(file);
+
+            console.log(response);
+            
+
+            if (response.success) {
+                toast.success('Success', `Successfully uploaded ${response.data.total_created} posts`)
+                
+                await fetchPosts()
+                return response.data
+            }
+        } catch (err: any) {
+            error.value = err.message || 'Failed to upload posts'
+            // toast.error('Error', error.value)
+            throw err
+        } finally {
+            loading.value = false
+        }
+    }
+
     return {
         posts,
         currentPost,
@@ -209,6 +233,7 @@ export const usePostStore = defineStore('post', () => {
         publishPost,
         unpublishPost,
         archivePost,
-        rejectPost
+        rejectPost,
+        bulkUploadPosts
     }
 })

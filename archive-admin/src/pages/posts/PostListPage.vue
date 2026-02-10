@@ -1,21 +1,23 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Plus, Search } from 'lucide-vue-next'
+import { Plus, Search, Upload } from 'lucide-vue-next'
 import { usePostStore } from '@/stores/post'
 import { useConfirm } from '@/composables/useConfirm'
 import { usePostFilters } from '@/composables/usePostFilters'
 import PostFilters from '@/components/posts/PostFilters.vue'
 import PostTableRow from '@/components/posts/PostTableRow.vue'
+import BatchUploadModal from '@/components/posts/BatchUploadModal.vue'
 
 const router = useRouter()
 const postStore = usePostStore()
 const { confirm } = useConfirm()
 
 const { statusFilter, searchQuery, filteredPosts, statusCounts } = usePostFilters(() => postStore.posts)
+const batchUploadModalOpen = ref(false)
 
 const handleEdit = (id: number) => {
   router.push(`/posts/${id}/edit`)
@@ -81,6 +83,15 @@ const handleArchive = async (id: number) => {
   }
 }
 
+const handleBatchUpload = async (file: File) => {
+  try {
+    await postStore.bulkUploadPosts(file)
+    batchUploadModalOpen.value = false
+  } catch (error) {
+    console.error('Failed to upload posts:', error)
+  }
+}
+
 onMounted(() => {
   postStore.fetchPosts()
 })
@@ -94,10 +105,16 @@ onMounted(() => {
         <h1 class="text-3xl font-bold tracking-tight">Posts</h1>
         <p class="text-muted-foreground mt-1">Manage and organize your content</p>
       </div>
-      <Button @click="router.push('/posts/new')" size="lg" class="gap-2">
-        <Plus class="h-4 w-4" />
-        Create Post
-      </Button>
+      <div class="flex gap-3">
+        <Button @click="batchUploadModalOpen = true" variant="outline" size="lg" class="gap-2">
+          <Upload class="h-4 w-4" />
+          Batch Upload
+        </Button>
+        <Button @click="router.push('/posts/new')" size="lg" class="gap-2">
+          <Plus class="h-4 w-4" />
+          Create Post
+        </Button>
+      </div>
     </div>
 
     <!-- Filters -->
@@ -151,6 +168,7 @@ onMounted(() => {
           <p class="text-sm text-muted-foreground mb-4">
             {{ searchQuery ? 'Try adjusting your search' : 'Get started by creating your first post' }}
           </p>
+          
           <Button v-if="!searchQuery" @click="router.push('/posts/new')">
             <Plus class="h-4 w-4 mr-2" />
             Create Post
@@ -158,5 +176,11 @@ onMounted(() => {
         </div>
       </CardContent>
     </Card>
+
+    <!-- Batch Upload Modal -->
+    <BatchUploadModal
+      v-model:open="batchUploadModalOpen"
+      @submit="handleBatchUpload"
+    />
   </div>
 </template>

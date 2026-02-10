@@ -11,7 +11,7 @@
             "description": "Production"
         },
         {
-            "url": "http://localhost:8080",
+            "url": "http://localhost:8081",
             "description": "Local Development"
         }
     ],
@@ -526,6 +526,55 @@
                         }
                     }
                 }
+            }
+        },
+        "/api/v1/posts/batch": {
+            "post": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Batch upload posts",
+                "description": "Upload a CSV file to create posts in bulk",
+                "operationId": "batchUploadPosts",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "CSV file"
+                                    }
+                                },
+                                "required": [
+                                    "file"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Posts created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid CSV or validation error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
             }
         }
     },

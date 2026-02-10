@@ -1,5 +1,6 @@
 // Common API Response structure
 export interface ApiResponse<T = any> {
+    success: any
     status: boolean
     message: string
     data: T

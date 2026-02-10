@@ -18,6 +18,8 @@ type Repository interface {
 	Delete(ctx context.Context, id uint) error
 	HardDelete(ctx context.Context, id uint) error
 	SlugExists(ctx context.Context, slug string, excludeID uint) (bool, error)
+	BatchCreate(ctx context.Context, posts[]Post) error
+	FindExistingSlugs(ctx context.Context, slugs []string) (map[string]bool, error)
 }
 
 type repository struct {
@@ -146,4 +148,48 @@ func (r *repository) SlugExists(ctx context.Context, slug string, excludeID uint
 	}
 	err := query.Count(&count).Error
 	return count > 0, err
+}
+
+
+func (r *repository) BatchCreate(ctx context.Context, posts[]Post) error {
+	tx := r.db.WithContext(ctx).Begin()
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	const batchSize = 1000
+
+	for i := 0; i < len(posts); i += batchSize{
+		end := i + batchSize
+		if end > len(posts) {
+			end = len(posts)
+		}
+
+		if err := tx.Create(posts[i:end]).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	return tx.Commit().Error
+}
+
+func (r *repository) FindExistingSlugs(ctx context.Context, slugs []string) (map[string]bool, error){
+	var existing []string
+
+	err := r.db.WithContext(ctx).
+		Model(&Post{}).
+		Where("slug IN ?", slugs).
+		Pluck("slug", &existing).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	result := make(map[string]bool)
+	for _, slug := range existing {
+		result[slug] = true
+	}
+
+	return result, nil
 }
