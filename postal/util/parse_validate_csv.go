@@ -3,98 +3,63 @@ package util
 import (
 	"bufio"
 	"encoding/csv"
-	"errors"
 	"fmt"
 	"io"
 	"mime/multipart"
 	"strconv"
 	"strings"
-	"time"
-
-	"gorm.io/gorm"
+	"postal/domain"
 )
 
-type PostStatus string
-
-const (
-	StatusDraft     PostStatus = "draft"
-	StatusPublished PostStatus = "published"
-	StatusArchived  PostStatus = "archived"
-	StatusDeleted   PostStatus = "deleted"
-)
-
-type Post struct {
-	ID        uint           `gorm:"primarykey" json:"id"`
-	UUID      string         `gorm:"type:uuid;uniqueIndex;not null" json:"uuid"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
-	DeletedAt gorm.DeletedAt `gorm:"index" json:"deleted_at,omitempty"`
-
-	// Content
-	Title     string `gorm:"type:varchar(500);not null" json:"title"`
-	Slug      string `gorm:"type:varchar(500);uniqueIndex;not null" json:"slug"`
-	Summary   string `gorm:"type:text" json:"summary"`
-	Content   string `gorm:"type:text;not null" json:"content"`
-	Thumbnail string `gorm:"type:varchar(500)" json:"thumbnail_url,omitempty"`
-
-	// Categorization
-	CategoryID    uint  `gorm:"not null;index" json:"category_id"`
-	SubCategoryID *uint `gorm:"index" json:"sub_category_id,omitempty"`
-
-	// SEO
-	MetaTitle       string `gorm:"type:varchar(500)" json:"meta_title,omitempty"`
-	MetaDescription string `gorm:"type:text" json:"meta_description,omitempty"`
-	Keywords        string `gorm:"type:text" json:"keywords,omitempty"`
-	OGImage         string `gorm:"type:varchar(500)" json:"og_image,omitempty"`
-
-	// Status & Visibility
-	Status     PostStatus `gorm:"type:varchar(20);not null;default:'draft';index" json:"status"`
-	IsPublic   bool       `gorm:"default:true" json:"is_public"`
-	IsFeatured bool       `gorm:"default:false;index" json:"is_featured"`
-	IsPinned   bool       `gorm:"default:false" json:"is_pinned"`
-
-	// Timestamps
-	PublishedAt *time.Time `json:"published_at,omitempty"`
-	ArchivedAt  *time.Time `json:"archived_at,omitempty"`
-
-	// Audit
-	CreatedBy uint `gorm:"not null" json:"created_by"`
-	UpdatedBy uint `json:"updated_by,omitempty"`
-
-	// Stats (can be updated via separate service)
-	ViewCount int `gorm:"default:0" json:"view_count"`
-
-	// Version tracking
-	Version int `gorm:"default:1" json:"version"`
+type SlugRow struct {
+	Slug string
+	Row  int
 }
 
 func ParseAndValidateCSV(
-	file multipart.File,
+	file *multipart.File,
 	userID uint,
-) ([]Post, error) {
-	reader := csv.NewReader(bufio.NewReader(file))
+) (*[]domain.Post, *[]SlugRow, error) {
+	reader := csv.NewReader(bufio.NewReader(*file))
 	reader.TrimLeadingSpace = true
 
 	// Read header
 	if _, err := reader.Read(); err != nil {
-		return nil, errors.New("invalid CSV header")
+		return nil, nil, fmt.Errorf("invalid CSV header: %w", err)
 	}
 
-	slugSet := make(map[string]bool)
-	var posts []Post
+	var (
+		posts    []domain.Post
+		slugRows []SlugRow
+		slugSet  = make(map[string]bool)
+		rowNo    = 1
+	)
 
 	for {
+		rowNo++
 		row, err := reader.Read()
 
 		if err == io.EOF {
 			break
 		}
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 
 		if len(row) < 14 {
-			return nil, fmt.Errorf("invalid CSV format: expected at least 14 columns, got %d", len(row))
+			return nil, nil, fmt.Errorf("invalid CSV format: expected at least 14 columns, got %d , in row %d", len(row), rowNo)
+		}
+
+		// Validate all required fields
+		fields := []string{
+			"title", "slug", "content", "summary", "thumbnail",
+			"category_id", "sub_category_id", "meta_title", "meta_description",
+			"keywords", "og_image", "is_public", "is_featured", "is_pinned",
+		}
+		for i, name := range fields {
+			if strings.TrimSpace(row[i]) == "" {
+				return nil, nil, fmt.Errorf("row %d: %s is required", rowNo, name)
+			}
 		}
 
 		title := strings.TrimSpace(row[0])
@@ -108,28 +73,29 @@ func ParseAndValidateCSV(
 		metaDescription := strings.TrimSpace(row[8])
 		keywords := strings.TrimSpace(row[9])
 		ogImage := strings.TrimSpace(row[10])
-		isPublicStr := strings.TrimSpace(row[11])
-		isFeaturedStr := strings.TrimSpace(row[12])
-		isPinnedStr := strings.TrimSpace(row[13])
-
-		// Set defaults
-		isPublic := true
-		if isPublicStr != "" {
-			isPublic = strings.ToLower(isPublicStr) == "true"
+		isPublic, err := parseBoolStrict(row[11], "is_public", rowNo)
+		if err != nil {
+			return nil, nil, err
 		}
 
-		isFeatured := false
-		if isFeaturedStr != "" {
-			isFeatured = strings.ToLower(isFeaturedStr) == "true"
+		isFeatured, err := parseBoolStrict(row[12], "is_featured", rowNo)
+		if err != nil {
+			return nil, nil, err
 		}
 
-		isPinned := false
-		if isPinnedStr != "" {
-			isPinned = strings.ToLower(isPinnedStr) == "true"
+		isPinned, err := parseBoolStrict(row[13], "is_pinned", rowNo)
+		if err != nil {
+			return nil, nil, err
 		}
 
-		if title == "" {
-			return nil, errors.New("title is required")
+		// category and sub-category IDs
+		categoryID, err := strconv.ParseUint(categoryIDStr, 10, 64)
+		if err != nil {
+			return nil, nil, fmt.Errorf("row %d: invalid category_id '%s'", rowNo, categoryIDStr)
+		}
+		subCategoryID, err := strconv.ParseUint(subCategoryIDStr, 10, 64)
+		if err != nil {
+			return nil, nil, fmt.Errorf("row %d: invalid sub_category_id '%s'", rowNo, subCategoryIDStr)
 		}
 
 		if slug == "" {
@@ -139,40 +105,52 @@ func ParseAndValidateCSV(
 		}
 
 		if slugSet[slug] {
-			return nil, errors.New("duplicate slug in CSV: " + slug)
+			return nil, nil, fmt.Errorf("row %d: duplicate slug '%s'", rowNo, slug)
 		}
 		slugSet[slug] = true
 
-		categoryID, err := strconv.ParseUint(categoryIDStr, 10, 64)
-		if err != nil {
-			return nil, fmt.Errorf("invalid category ID: %s", categoryIDStr)
-		}
-		subCategoryID, err := strconv.ParseUint(subCategoryIDStr, 10, 64)
-		if err != nil {
-			return nil, fmt.Errorf("invalid sub-category ID: %s", subCategoryIDStr)
-		}
+		slugRows = append(slugRows, SlugRow{
+			Slug: slug,
+			Row:  rowNo,
+		})
 
 		subCategoryIDUint := uint(subCategoryID)
-		posts = append(posts, Post{
-			Title:         title,
-			Slug:          slug,
-			Summary:       summary,
-			Content:       content,
-			Thumbnail:     thumbnail,
-			CategoryID:    uint(categoryID),
-			SubCategoryID: &subCategoryIDUint,
-			MetaTitle: metaTitle,
+		posts = append(posts, domain.Post{
+			Title:           title,
+			Slug:            slug,
+			Summary:         summary,
+			Content:         content,
+			Thumbnail:       thumbnail,
+			CategoryID:      uint(categoryID),
+			SubCategoryID:   &subCategoryIDUint,
+			MetaTitle:       metaTitle,
 			MetaDescription: metaDescription,
-			Keywords: keywords,
-			OGImage: ogImage,
-			Status: StatusDraft,
-			IsPublic: isPublic,
-			IsFeatured: isFeatured,
-			IsPinned: isPinned,
-			CreatedBy: userID,
-			Version: 1,
+			Keywords:        keywords,
+			OGImage:         ogImage,
+			Status:          domain.StatusDraft,
+			IsPublic:        isPublic,
+			IsFeatured:      isFeatured,
+			IsPinned:        isPinned,
+			CreatedBy:       userID,
+			Version:         1,
 		})
 	}
 
-	return posts, nil
+	return &posts, &slugRows, nil
+}
+
+func parseBoolStrict(value string, field string, row int) (bool, error) {
+	v := strings.ToLower(strings.TrimSpace(value))
+
+	switch v {
+	case "true":
+		return true, nil
+	case "false":
+		return false, nil
+	default:
+		return false, fmt.Errorf(
+			"row %d: %s must be 'true' or 'false', got '%s'",
+			row, field, value,
+		)
+	}
 }

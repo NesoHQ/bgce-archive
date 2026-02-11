@@ -20,7 +20,7 @@ type Repository interface {
 	Delete(ctx context.Context, id uint) error
 	HardDelete(ctx context.Context, id uint) error
 	SlugExists(ctx context.Context, slug string, excludeID uint) (bool, error)
-	BatchCreate(ctx context.Context, posts[]Post) error
+	BatchCreate(ctx context.Context, posts *[]domain.Post) error
 	FindExistingSlugs(ctx context.Context, slugs []string) (map[string]bool, error)
 }
 
@@ -153,7 +153,7 @@ func (r *repository) SlugExists(ctx context.Context, slug string, excludeID uint
 }
 
 
-func (r *repository) BatchCreate(ctx context.Context, posts[]Post) error {
+func (r *repository) BatchCreate(ctx context.Context, posts *[]domain.Post) error {
 	tx := r.db.WithContext(ctx).Begin()
 	if tx.Error != nil {
 		return tx.Error
@@ -161,13 +161,13 @@ func (r *repository) BatchCreate(ctx context.Context, posts[]Post) error {
 
 	const batchSize = 1000
 
-	for i := 0; i < len(posts); i += batchSize{
+	for i := 0; i < len(*posts); i += batchSize{
 		end := i + batchSize
-		if end > len(posts) {
-			end = len(posts)
+		if end > len(*posts) {
+			end = len(*posts)
 		}
 
-		if err := tx.Create(posts[i:end]).Error; err != nil {
+		if err := tx.Create((*posts)[i:end]).Error; err != nil {
 			tx.Rollback()
 			return err
 		}
@@ -180,7 +180,7 @@ func (r *repository) FindExistingSlugs(ctx context.Context, slugs []string) (map
 	var existing []string
 
 	err := r.db.WithContext(ctx).
-		Model(&Post{}).
+		Model(&domain.Post{}).
 		Where("slug IN ?", slugs).
 		Pluck("slug", &existing).Error
 

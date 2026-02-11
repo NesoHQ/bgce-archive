@@ -40,7 +40,7 @@ func (h *Handlers) BatchUploadPosts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result, err := h.PostService.BatchUploadPosts(ctx, userID, file)
+	err = h.PostService.BatchUploadPosts(ctx, userID, &file)
 	if err != nil {
 		utils.SendError(w, http.StatusBadRequest, err.Error(), nil)
 		return
@@ -49,10 +49,6 @@ func (h *Handlers) BatchUploadPosts(w http.ResponseWriter, r *http.Request) {
 	response := map[string]any{
 		"success": true,
 		"message": "Posts uploaded successfully",
-		"data": map[string]any{
-			"total_created": len(result),
-			// "posts":         result,
-		},
 	}
 
 	utils.SendJson(w, http.StatusOK, response)
