@@ -10,7 +10,7 @@ import {
 
 export function PaginationDemo() {
   return (
-    <div className="p-4 rounded-[2rem] bg-card/50 border border-white/10 backdrop-blur-md inline-block shadow-lg">
+    <div className="p-2 rounded-[2rem] bg-card/50 border border-white/10 backdrop-blur-md inline-block shadow-lg">
       <Pagination>
         <PaginationContent className="gap-2">
           <PaginationItem>

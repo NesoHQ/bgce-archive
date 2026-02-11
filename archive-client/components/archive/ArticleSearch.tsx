@@ -12,7 +12,7 @@ import {
   SelectGroup,
 } from "@/components/ui/select";
 
-import { Search, List, Grid, Filter } from "lucide-react";
+import { Search, List, Grid } from "lucide-react";
 import { getCategories, getSubcategories } from "@/lib/api";
 import type { ApiCategory, ApiSubcategory } from "@/types/blog.type";
 
@@ -122,7 +122,7 @@ export function ArticleSearch({
             placeholder="Search articles..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-14 h-14 min-h-[56px] max-h-[56px] py-3 rounded-md border-white/20 bg-card/50 backdrop-blur-md focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary/50 font-mono shadow-lg hover:shadow-xl transition-all"
+            className="pl-14 h-8 min-h-[56px] max-h-[56px] py-2 rounded-md border-gray-700 dark:border-white/20 bg-card/50 backdrop-blur-md focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary/50 font-mono shadow-lg hover:shadow-xl transition-all"
           />
           <div className="absolute left-4 top-1/2 transform -translate-y-1/2 p-1.5 rounded-md bg-primary/10 group-hover:bg-primary/20 pointer-events-none z-10">
             <Search className="h-4 w-4 text-primary" />
@@ -131,7 +131,7 @@ export function ArticleSearch({
 
         {/* Category with Subcategories - Fixed display */}
         <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-          <SelectTrigger className="w-full lg:w-[280px] h-14 min-h-[56px] max-h-[56px] py-3 rounded-md border-white/20 bg-card/50 backdrop-blur-md focus:ring-2 focus:ring-primary focus:border-primary/50 font-mono shadow-lg hover:shadow-xl transition-all">
+          <SelectTrigger className="w-full lg:w-[280px] h-14 min-h-[56px] max-h-[56px] py-3 rounded-md border-gray-700 dark:border-white/20 bg-card/50 backdrop-blur-md focus:ring-2 focus:ring-primary focus:border-primary/50 font-mono shadow-lg hover:shadow-xl transition-all">
             <SelectValue>
               {loading ? "Loading..." : getSelectedLabel()}
             </SelectValue>
@@ -173,10 +173,10 @@ export function ArticleSearch({
 
         {/* Sort - Fixed display */}
         <Select value={sortBy} onValueChange={setSortBy}>
-          <SelectTrigger className="w-full lg:w-[280px] h-14 min-h-[56px] max-h-[56px] py-3 rounded-md border-white/20 bg-card/50 backdrop-blur-md focus:ring-2 focus:ring-primary focus:border-primary/50 font-mono shadow-lg hover:shadow-xl transition-all">
+          <SelectTrigger className="w-full lg:w-[280px] h-14 min-h-[56px] max-h-[56px] py-3 rounded-md border-gray-700 dark:border-white/20 bg-card/50 backdrop-blur-md focus:ring-2 focus:ring-primary focus:border-primary/50 font-mono shadow-lg hover:shadow-xl transition-all">
             <SelectValue>{getSortLabel()}</SelectValue>
           </SelectTrigger>
-          <SelectContent className="font-mono rounded-md border-white/20 bg-card/95 backdrop-blur-md shadow-2xl">
+          <SelectContent className="font-mono rounded-md border-gray-700 dark:border-white/20 bg-card/95 backdrop-blur-md shadow-2xl">
             <SelectItem value="name-asc">🔤 Name (A-Z)</SelectItem>
             <SelectItem value="name-desc">🔤 Name (Z-A)</SelectItem>
             <SelectItem value="recent">🕐 Most Recent</SelectItem>

@@ -12,6 +12,30 @@ export default function RecentQuestions() {
       author: "Col",
       time: "asked 5 hours ago",
     },
+    {
+      title: "How to optimize Lambda cold start times for Node.js functions?",
+      desc: "I'm experiencing significant cold start latency with my Node.js Lambda functions (around 3-4 seconds). I've tried reducing package size and using Lambda layers, but the improvement is minimal. What are the best practices for...",
+      tags: ["AWS Lambda", "Node.js", "Performance"],
+      stats: { answers: 3, votes: 12, views: 247 },
+      author: "Sarah",
+      time: "asked 2 days ago",
+    },
+    {
+      title: "S3 bucket policy vs IAM policy - which one should I use?",
+      desc: "I'm confused about when to use S3 bucket policies versus IAM policies for access control. I need to grant cross-account access to specific objects in my bucket. What's the recommended approach and what are the security implications...",
+      tags: ["AWS S3", "IAM", "Security"],
+      stats: { answers: 5, votes: 28, views: 892 },
+      author: "DevOps_Mike",
+      time: "asked 1 week ago",
+    },
+    {
+      title: "RDS MySQL to Aurora migration - downtime considerations",
+      desc: "Planning to migrate our production RDS MySQL database (500GB) to Aurora. We can only afford 2 hours of downtime. Has anyone done this successfully? Looking for advice on using DMS vs snapshot restore, and any gotchas to watch out for...",
+      tags: ["AWS RDS", "Aurora", "Database Migration"],
+      stats: { answers: 2, votes: 7, views: 156 },
+      author: "Alex_Chen",
+      time: "asked 3 days ago",
+    },
   ];
 
   return (

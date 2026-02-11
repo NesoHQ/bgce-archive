@@ -79,7 +79,7 @@ const ArchiveWrapper = ({
 
       <div className="container mx-auto px-4 py-4">
         {/* Breadcrumb */}
-        <div className="mb-8">
+        <div className="mb-3">
           <BlogBreadcrumb />
         </div>
 
