@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { X, Upload, AlertCircle, FileText, CheckCircle2 } from 'lucide-vue-next'
@@ -16,6 +16,13 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+// Reset form when modal is closed (including after successful upload)
+watch(() => props.open, (newValue) => {
+  if (!newValue) {
+    resetForm()
+  }
+})
 
 const toast = useToast()
 const fileInput = ref<HTMLInputElement | null>(null)
@@ -331,6 +338,8 @@ const handleFileInputChange = async (event: Event) => {
   if (file) {
     await handleFileSelect(file)
   }
+
+  target.value = ''
 }
 
 const handleDrop = async (event: DragEvent) => {

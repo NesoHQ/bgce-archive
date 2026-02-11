@@ -204,7 +204,7 @@ export const usePostStore = defineStore('post', () => {
             
 
             if (response.success) {
-                toast.success('Success', `Successfully uploaded ${response.data.total_created} posts`)
+                toast.success('Success', `Successfully uploaded posts`)
                 
                 await fetchPosts()
                 return response.data
