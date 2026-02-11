@@ -52,6 +52,7 @@ pnpm start
 ## Environment Variables
 
 - `NEXT_PUBLIC_API_URL`: Backend API base URL (default: `http://localhost:8080/api/v1`)
+- `NEXT_PUBLIC_KRAKENS_PROJECT_ID`: Krakens analytics project ID — identifies which project in the Krakens dashboard receives this app’s analytics (optional; leave unset to disable)
 
 ## Project Structure
 
