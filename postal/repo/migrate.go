@@ -3,7 +3,7 @@ package repo
 import (
 	"log"
 
-	"postal/post"
+	"postal/domain"
 	"postal/post_version"
 
 	"gorm.io/gorm"
@@ -13,7 +13,7 @@ func AutoMigrate(db *gorm.DB) error {
 	log.Println("🔄 Running database migrations...")
 
 	err := db.AutoMigrate(
-		&post.Post{},
+		&domain.Post{},
 		&post_version.PostVersion{},
 	)
 	if err != nil {

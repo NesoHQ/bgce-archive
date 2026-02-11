@@ -10,7 +10,7 @@ export async function getCategories(): Promise<ApiCategory[]> {
             headers: {
                 'Content-Type': 'application/json',
             },
-            cache: 'no-store', // Disable caching for fresh data
+            next: { revalidate: 300 }, // Cache for 5 minutes
         });
 
         if (!response.ok) {
@@ -42,7 +42,7 @@ export async function getSubcategories(parentUuid?: string): Promise<ApiSubcateg
             headers: {
                 'Content-Type': 'application/json',
             },
-            cache: 'no-store',
+            next: { revalidate: 300 }, // Cache for 5 minutes
         });
 
         if (!response.ok) {
@@ -70,7 +70,7 @@ export async function getCategoryBySlug(slug: string): Promise<ApiCategory | nul
             headers: {
                 'Content-Type': 'application/json',
             },
-            cache: 'no-store',
+            next: { revalidate: 600 }, // Cache for 10 minutes
         });
 
         if (!response.ok) {
@@ -122,7 +122,7 @@ export async function getPosts(params?: {
             headers: {
                 'Content-Type': 'application/json',
             },
-            cache: 'no-store',
+            next: { revalidate: 180 }, // Cache for 3 minutes
         });
 
         if (!response.ok) {
@@ -149,7 +149,7 @@ export async function getPostBySlug(slug: string): Promise<ApiPost | null> {
             headers: {
                 'Content-Type': 'application/json',
             },
-            cache: 'no-store',
+            next: { revalidate: 600 }, // Cache for 10 minutes
         });
 
         if (!response.ok) {
@@ -176,7 +176,7 @@ export async function getPostById(id: number): Promise<ApiPost | null> {
             headers: {
                 'Content-Type': 'application/json',
             },
-            cache: 'no-store',
+            next: { revalidate: 600 }, // Cache for 10 minutes
         });
 
         if (!response.ok) {

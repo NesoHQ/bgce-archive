@@ -1,6 +1,12 @@
 import ArchiveWrapper from "@/components/archive/ArchiveWrapper";
 import { getPosts } from "@/lib/api";
 import { transformPostsToArticles } from "@/lib/transformers";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Archive - BGCE",
+  description: "Browse all posts from the Best Golang Community Ever",
+};
 
 const ArticlesPage = async () => {
   // Fetch all posts

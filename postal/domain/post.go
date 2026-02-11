@@ -1,4 +1,4 @@
-package post
+package domain
 
 import (
 	"time"

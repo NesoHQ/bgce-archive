@@ -114,26 +114,6 @@ export function ArticleSearch({
 
   return (
     <div className="w-full space-y-6 py-6">
-      {/* Filter Badge with animated gradient */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30">
-          <Filter className="h-4 w-4 text-primary" />
-        </div>
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="text-xl font-mono uppercase text-primary font-bold">
-              Search & Filter
-            </span>
-            <span className="text-md font-mono text-muted-foreground">
-              ( {filteredCount} Filtered / {totalCount} Total )
-            </span>
-          </div>
-          <p className="text-md text-muted-foreground mt-0.5">
-            Refine your results
-          </p>
-        </div>
-      </div>
-
       {/* Search and Filters Row */}
       <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
         {/* Search with enhanced styling */}

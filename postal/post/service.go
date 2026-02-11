@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"postal/domain"
 	"postal/post_version"
 	"postal/util"
 )
@@ -80,7 +81,7 @@ func (s *service) CreatePost(ctx context.Context, req CreatePostRequest, userID 
 		isPinned = *req.IsPinned
 	}
 
-	post := &Post{
+	post := &domain.Post{
 		Title:           req.Title,
 		Slug:            slug,
 		Summary:         req.Summary,
@@ -92,7 +93,7 @@ func (s *service) CreatePost(ctx context.Context, req CreatePostRequest, userID 
 		MetaDescription: req.MetaDescription,
 		Keywords:        req.Keywords,
 		OGImage:         req.OGImage,
-		Status:          StatusDraft,
+		Status:          domain.StatusDraft,
 		IsPublic:        isPublic,
 		IsFeatured:      isFeatured,
 		IsPinned:        isPinned,
@@ -242,12 +243,12 @@ func (s *service) PublishPost(ctx context.Context, id uint, userID uint) error {
 		return err
 	}
 
-	if post.Status == StatusPublished {
+	if post.Status == domain.StatusPublished {
 		return fmt.Errorf("post is already published")
 	}
 
 	now := time.Now()
-	post.Status = StatusPublished
+	post.Status = domain.StatusPublished
 	post.PublishedAt = &now
 	post.UpdatedBy = userID
 
@@ -260,7 +261,7 @@ func (s *service) UnpublishPost(ctx context.Context, id uint, userID uint) error
 		return err
 	}
 
-	post.Status = StatusDraft
+	post.Status = domain.StatusDraft
 	post.UpdatedBy = userID
 
 	return s.repo.Update(ctx, post)
@@ -273,7 +274,7 @@ func (s *service) ArchivePost(ctx context.Context, id uint, userID uint) error {
 	}
 
 	now := time.Now()
-	post.Status = StatusArchived
+	post.Status = domain.StatusArchived
 	post.ArchivedAt = &now
 	post.UpdatedBy = userID
 
@@ -286,7 +287,7 @@ func (s *service) RestorePost(ctx context.Context, id uint, userID uint) error {
 		return err
 	}
 
-	post.Status = StatusDraft
+	post.Status = domain.StatusDraft
 	post.ArchivedAt = nil
 	post.UpdatedBy = userID
 
@@ -301,7 +302,7 @@ func (s *service) HardDeletePost(ctx context.Context, id uint) error {
 	return s.repo.HardDelete(ctx, id)
 }
 
-func (s *service) createVersion(ctx context.Context, post *Post, userID uint, changeNote string) error {
+func (s *service) createVersion(ctx context.Context, post *domain.Post, userID uint, changeNote string) error {
 	version := &post_version.PostVersion{
 		PostID:     post.ID,
 		VersionNo:  post.Version,

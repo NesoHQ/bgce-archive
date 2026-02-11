@@ -5,16 +5,18 @@ import (
 	"errors"
 	"fmt"
 
+	"postal/domain"
+
 	"gorm.io/gorm"
 )
 
 type Repository interface {
-	Create(ctx context.Context, post *Post) error
-	GetByID(ctx context.Context, id uint) (*Post, error)
-	GetByUUID(ctx context.Context, uuid string) (*Post, error)
-	GetBySlug(ctx context.Context, slug string) (*Post, error)
-	List(ctx context.Context, filter PostFilter) ([]*Post, int64, error)
-	Update(ctx context.Context, post *Post) error
+	Create(ctx context.Context, post *domain.Post) error
+	GetByID(ctx context.Context, id uint) (*domain.Post, error)
+	GetByUUID(ctx context.Context, uuid string) (*domain.Post, error)
+	GetBySlug(ctx context.Context, slug string) (*domain.Post, error)
+	List(ctx context.Context, filter PostFilter) ([]*domain.Post, int64, error)
+	Update(ctx context.Context, post *domain.Post) error
 	Delete(ctx context.Context, id uint) error
 	HardDelete(ctx context.Context, id uint) error
 	SlugExists(ctx context.Context, slug string, excludeID uint) (bool, error)
@@ -30,12 +32,12 @@ func NewRepository(db *gorm.DB) Repository {
 	return &repository{db: db}
 }
 
-func (r *repository) Create(ctx context.Context, post *Post) error {
+func (r *repository) Create(ctx context.Context, post *domain.Post) error {
 	return r.db.WithContext(ctx).Create(post).Error
 }
 
-func (r *repository) GetByID(ctx context.Context, id uint) (*Post, error) {
-	var post Post
+func (r *repository) GetByID(ctx context.Context, id uint) (*domain.Post, error) {
+	var post domain.Post
 	err := r.db.WithContext(ctx).First(&post, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -46,8 +48,8 @@ func (r *repository) GetByID(ctx context.Context, id uint) (*Post, error) {
 	return &post, nil
 }
 
-func (r *repository) GetByUUID(ctx context.Context, uuid string) (*Post, error) {
-	var post Post
+func (r *repository) GetByUUID(ctx context.Context, uuid string) (*domain.Post, error) {
+	var post domain.Post
 	err := r.db.WithContext(ctx).Where("uuid = ?", uuid).First(&post).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -58,9 +60,9 @@ func (r *repository) GetByUUID(ctx context.Context, uuid string) (*Post, error) 
 	return &post, nil
 }
 
-func (r *repository) GetBySlug(ctx context.Context, slug string) (*Post, error) {
-	var post Post
-	err := r.db.WithContext(ctx).Where("slug = ? AND status = ?", slug, StatusPublished).First(&post).Error
+func (r *repository) GetBySlug(ctx context.Context, slug string) (*domain.Post, error) {
+	var post domain.Post
+	err := r.db.WithContext(ctx).Where("slug = ? AND status = ?", slug, domain.StatusPublished).First(&post).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, fmt.Errorf("post not found")
@@ -70,11 +72,11 @@ func (r *repository) GetBySlug(ctx context.Context, slug string) (*Post, error) 
 	return &post, nil
 }
 
-func (r *repository) List(ctx context.Context, filter PostFilter) ([]*Post, int64, error) {
-	var posts []*Post
+func (r *repository) List(ctx context.Context, filter PostFilter) ([]*domain.Post, int64, error) {
+	var posts []*domain.Post
 	var total int64
 
-	query := r.db.WithContext(ctx).Model(&Post{})
+	query := r.db.WithContext(ctx).Model(&domain.Post{})
 
 	// Apply filters
 	if filter.Status != nil {
@@ -128,21 +130,21 @@ func (r *repository) List(ctx context.Context, filter PostFilter) ([]*Post, int6
 	return posts, total, err
 }
 
-func (r *repository) Update(ctx context.Context, post *Post) error {
+func (r *repository) Update(ctx context.Context, post *domain.Post) error {
 	return r.db.WithContext(ctx).Save(post).Error
 }
 
 func (r *repository) Delete(ctx context.Context, id uint) error {
-	return r.db.WithContext(ctx).Delete(&Post{}, id).Error
+	return r.db.WithContext(ctx).Delete(&domain.Post{}, id).Error
 }
 
 func (r *repository) HardDelete(ctx context.Context, id uint) error {
-	return r.db.WithContext(ctx).Unscoped().Delete(&Post{}, id).Error
+	return r.db.WithContext(ctx).Unscoped().Delete(&domain.Post{}, id).Error
 }
 
 func (r *repository) SlugExists(ctx context.Context, slug string, excludeID uint) (bool, error) {
 	var count int64
-	query := r.db.WithContext(ctx).Model(&Post{}).Where("slug = ?", slug)
+	query := r.db.WithContext(ctx).Model(&domain.Post{}).Where("slug = ?", slug)
 	if excludeID > 0 {
 		query = query.Where("id != ?", excludeID)
 	}

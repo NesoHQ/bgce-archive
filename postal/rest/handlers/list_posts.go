@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"postal/domain"
 	"postal/post"
 )
 
@@ -33,7 +34,7 @@ func (h *Handlers) ListPosts(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if status := query.Get("status"); status != "" {
-		s := post.PostStatus(status)
+		s := domain.PostStatus(status)
 		filter.Status = &s
 	}
 

@@ -1,6 +1,10 @@
 package post
 
-import "time"
+import (
+	"time"
+
+	"postal/domain"
+)
 
 type CreatePostRequest struct {
 	Title           string `json:"title" validate:"required,min=3,max=500"`
@@ -37,7 +41,7 @@ type UpdatePostRequest struct {
 }
 
 type PostFilter struct {
-	Status        *PostStatus
+	Status        *domain.PostStatus
 	CategoryID    *uint
 	SubCategoryID *uint
 	IsFeatured    *bool
@@ -51,34 +55,34 @@ type PostFilter struct {
 }
 
 type PostResponse struct {
-	ID              uint       `json:"id"`
-	UUID            string     `json:"uuid"`
-	Title           string     `json:"title"`
-	Slug            string     `json:"slug"`
-	Summary         string     `json:"summary"`
-	Content         string     `json:"content"`
-	Thumbnail       string     `json:"thumbnail,omitempty"`
-	CategoryID      uint       `json:"category_id"`
-	SubCategoryID   *uint      `json:"sub_category_id,omitempty"`
-	MetaTitle       string     `json:"meta_title,omitempty"`
-	MetaDescription string     `json:"meta_description,omitempty"`
-	Keywords        string     `json:"keywords,omitempty"`
-	OGImage         string     `json:"og_image,omitempty"`
-	Status          PostStatus `json:"status"`
-	IsPublic        bool       `json:"is_public"`
-	IsFeatured      bool       `json:"is_featured"`
-	IsPinned        bool       `json:"is_pinned"`
-	PublishedAt     *time.Time `json:"published_at,omitempty"`
-	ArchivedAt      *time.Time `json:"archived_at,omitempty"`
-	CreatedBy       uint       `json:"created_by"`
-	UpdatedBy       uint       `json:"updated_by,omitempty"`
-	ViewCount       int        `json:"view_count"`
-	Version         int        `json:"version"`
-	CreatedAt       time.Time  `json:"created_at"`
-	UpdatedAt       time.Time  `json:"updated_at"`
+	ID              uint              `json:"id"`
+	UUID            string            `json:"uuid"`
+	Title           string            `json:"title"`
+	Slug            string            `json:"slug"`
+	Summary         string            `json:"summary"`
+	Content         string            `json:"content"`
+	Thumbnail       string            `json:"thumbnail,omitempty"`
+	CategoryID      uint              `json:"category_id"`
+	SubCategoryID   *uint             `json:"sub_category_id,omitempty"`
+	MetaTitle       string            `json:"meta_title,omitempty"`
+	MetaDescription string            `json:"meta_description,omitempty"`
+	Keywords        string            `json:"keywords,omitempty"`
+	OGImage         string            `json:"og_image,omitempty"`
+	Status          domain.PostStatus `json:"status"`
+	IsPublic        bool              `json:"is_public"`
+	IsFeatured      bool              `json:"is_featured"`
+	IsPinned        bool              `json:"is_pinned"`
+	PublishedAt     *time.Time        `json:"published_at,omitempty"`
+	ArchivedAt      *time.Time        `json:"archived_at,omitempty"`
+	CreatedBy       uint              `json:"created_by"`
+	UpdatedBy       uint              `json:"updated_by,omitempty"`
+	ViewCount       int               `json:"view_count"`
+	Version         int               `json:"version"`
+	CreatedAt       time.Time         `json:"created_at"`
+	UpdatedAt       time.Time         `json:"updated_at"`
 }
 
-func ToPostResponse(post *Post) *PostResponse {
+func ToPostResponse(post *domain.Post) *PostResponse {
 	return &PostResponse{
 		ID:              post.ID,
 		UUID:            post.UUID,
