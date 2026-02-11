@@ -77,27 +77,10 @@ const ArchiveWrapper = ({
       {/* Technical Grid Background */}
       <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-4">
         {/* Breadcrumb */}
         <div className="mb-8">
           <BlogBreadcrumb />
-        </div>
-
-        {/* Hero Section */}
-        <div className="mb-16 space-y-8">
-          <div className="space-y-4">
-            <h1 className="text-6xl md:text-5xl font-bold tracking-tight leading-[1.1]">
-              Knowledge{" "}
-              <span className="text-primary italic bg-gradient-to-r from-primary to-primary/60 bg-clip-text ">
-                Vault
-              </span>
-            </h1>
-
-            <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
-              Explore our comprehensive collection of articles, tutorials, and
-              resources from the Go community.
-            </p>
-          </div>
         </div>
 
         {/* Search and Filters */}
