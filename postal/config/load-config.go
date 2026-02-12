@@ -17,6 +17,7 @@ func LoadConfig() *Config {
 
 	rmqReconnectDelay, _ := strconv.Atoi(getEnv("RMQ_RECONNECT_DELAY", "5"))
 	rmqRetryInterval, _ := strconv.Atoi(getEnv("RMQ_RETRY_INTERVAL", "600"))
+	maxCSVUploadSizeMB, _ := strconv.ParseInt(getEnv("MAX_CSV_UPLOAD_SIZE_MB", "20"), 10, 64)
 
 	config := &Config{
 		Version:     getEnv("VERSION", "1.0.0"),
@@ -25,6 +26,8 @@ func LoadConfig() *Config {
 		HTTPPort:    getEnv("HTTP_PORT", "8081"),
 
 		JWTSecret: getEnv("JWT_SECRET", "your-secret-key"),
+
+		MaxCSVUploadSizeMB: maxCSVUploadSizeMB,
 
 		APMServiceName: getEnv("APM_SERVICE_NAME", ""),
 		APMServerURL:   getEnv("APM_SERVER_URL", ""),
