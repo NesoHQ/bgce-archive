@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	"postal/config"
 	"postal/rest/middlewares"
 	"postal/rest/utils"
 )
@@ -19,9 +20,10 @@ func (h *Handlers) BatchUploadPosts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	r.Body = http.MaxBytesReader(w, r.Body, 20<<20) // 20MB
+	maxCSVUploadSize := config.GetConfig().MaxCSVUploadSizeMB << 20
+	r.Body = http.MaxBytesReader(w, r.Body, maxCSVUploadSize)
 
-	err := r.ParseMultipartForm(20 << 20)
+	err := r.ParseMultipartForm(maxCSVUploadSize)
 	if err != nil {
 		utils.SendError(w, http.StatusBadRequest, "Invalid multipart form", nil)
 		return

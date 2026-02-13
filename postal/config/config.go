@@ -17,6 +17,8 @@ type Config struct {
 
 	JWTSecret string
 
+	MaxCSVUploadSizeMB int64
+
 	APMServiceName string
 	APMServerURL   string
 	APMSecretToken string
