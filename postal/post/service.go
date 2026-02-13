@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 	"mime/multipart"
-	"time"
 	"postal/domain"
 	"postal/post_version"
 	"postal/util"
+	"time"
 )
 
 type Service interface {
@@ -310,27 +310,35 @@ func (s *service) BatchUploadPosts(ctx context.Context, userID uint, file *multi
 		return fmt.Errorf("failed to parse CSV: %w", err)
 	}
 
-	// collect slugs for uniqueness check
-	slugs := make([]string, 0, len(*slugRows))
-	for _, sr := range *slugRows {
-		slugs = append(slugs, sr.Slug)
-	}
-
-	// check in DB
-	existing, err := s.repo.FindExistingSlugs(ctx, slugs)
-	if err != nil {
-		return err
-	}
-
-	for _, sr := range *slugRows {
-		if existing[sr.Slug] {
-			return fmt.Errorf("row %d: slug '%s' already exists in database", sr.Row, sr.Slug)
+	return s.repo.WithTransaction(ctx, func(txRepo Repository) error {
+		// collect slugs for uniqueness check
+		slugs := make([]string, 0, len(*slugRows))
+		for _, sr := range *slugRows {
+			slugs = append(slugs, sr.Slug)
 		}
-	}
 
-	if err := s.repo.BatchCreate(ctx, posts); err != nil {
-		return err
-	}
+		// check in DB within the same transaction 
+		existing, err := txRepo.FindExistingSlugs(ctx, slugs)
+		if err != nil {
+			return err
+		}
 
-	return nil
+		for _, sr := range *slugRows {
+			if existing[sr.Slug] {
+				return fmt.Errorf("row %d: slug '%s' already exists in database", sr.Row, sr.Slug)
+			}
+		}
+
+		maxOrderNo, err := txRepo.GetMaxOrderNo(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to get max order no: %w", err)
+		}
+
+		for i := range *posts {
+			maxOrderNo++
+			(*posts)[i].OrderNo = maxOrderNo
+		}
+
+		return txRepo.BatchCreate(ctx, posts)
+	})
 }
