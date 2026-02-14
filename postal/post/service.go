@@ -24,6 +24,7 @@ type Service interface {
 	DeletePost(ctx context.Context, id uint) error
 	HardDeletePost(ctx context.Context, id uint) error
 	BatchUploadPosts(ctx context.Context, userID uint, file *multipart.File) error
+	BatchDeletePosts(ctx context.Context, uuids *[]string) error
 }
 
 type service struct {
@@ -341,4 +342,29 @@ func (s *service) BatchUploadPosts(ctx context.Context, userID uint, file *multi
 
 		return txRepo.BatchCreate(ctx, posts)
 	})
+}
+
+func (s *service) BatchDeletePosts(ctx context.Context, uuids *[]string) error {
+	if len(*uuids) == 0 {
+		return fmt.Errorf("no post UUIDs provided")
+	}
+
+	unique := make(map[string]struct{}, len(*uuids))
+	for _, u := range *uuids {
+		if u == "" {
+			continue
+		}
+		unique[u] = struct{}{}
+	}
+
+	if len(unique) == 0 {
+		return fmt.Errorf("no valid post UUIDs provided")
+	}
+
+	ids := make([]string, 0, len(unique))
+	for u := range unique {
+		ids = append(ids, u)
+	}
+
+	return s.repo.BatchDeleteByUUIDs(ctx, ids)
 }

@@ -82,6 +82,10 @@ type PostResponse struct {
 	UpdatedAt       time.Time         `json:"updated_at"`
 }
 
+type BatchDeleteRequest struct {
+	UUIDs []string `json:"uuids" validate:"required,min=1,dive,required,uuid"`
+}
+
 func ToPostResponse(post *domain.Post) *PostResponse {
 	return &PostResponse{
 		ID:              post.ID,

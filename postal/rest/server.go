@@ -45,6 +45,10 @@ func NewServeMux(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handle
 		mw.AuthenticateJWT(http.HandlerFunc(h.DeletePost)).ServeHTTP(w, r)
 	})
 
+	mux.HandleFunc("DELETE /api/v1/posts/batch", func(w http.ResponseWriter, r *http.Request){
+		mw.AuthenticateJWT(http.HandlerFunc(h.BatchDeletePosts)).ServeHTTP(w, r)
+	})
+
 	// Post action routes (protected)
 	mux.HandleFunc("POST /api/v1/posts/{id}/publish", func(w http.ResponseWriter, r *http.Request) {
 		mw.AuthenticateJWT(http.HandlerFunc(h.PublishPost)).ServeHTTP(w, r)
