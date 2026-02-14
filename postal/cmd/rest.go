@@ -13,6 +13,7 @@ import (
 	"postal/rest"
 	"postal/rest/handlers"
 	"postal/rest/middlewares"
+	"postal/rest/utils"
 
 	"github.com/spf13/cobra"
 	"github.com/ulule/limiter/v3"
@@ -49,6 +50,9 @@ func runRESTServer(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to run migrations: %w", err)
 	}
 
+	//Initialize Validator
+	validator := utils.NewValidator()
+
 	// Initialize repositories
 	log.Println("🔄 Initializing repositories...")
 	postRepo := post.NewRepository(db)
@@ -60,7 +64,7 @@ func runRESTServer(cmd *cobra.Command, args []string) error {
 
 	// Initialize handlers
 	log.Println("🔄 Initializing handlers...")
-	h := handlers.NewHandlers(postService, versionRepo)
+	h := handlers.NewHandlers(postService, versionRepo, validator)
 
 	// Initialize middlewares
 	log.Println("🔄 Initializing middlewares...")

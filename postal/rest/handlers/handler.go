@@ -3,17 +3,20 @@ package handlers
 import (
 	"postal/post"
 	"postal/post_version"
+	"postal/rest/utils"
 )
 
 type Handlers struct {
 	PostService        post.Service
 	PostVersionService post_version.Repository
+	Validator		   *utils.Validator
 }
 
-func NewHandlers(postService post.Service, versionRepo post_version.Repository) *Handlers {
+func NewHandlers(postService post.Service, versionRepo post_version.Repository, validator *utils.Validator) *Handlers {
 	return &Handlers{
 		PostService:        postService,
 		PostVersionService: versionRepo,
+		Validator:		   validator,
 	}
 }
 

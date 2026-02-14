@@ -4,9 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-
 	"postal/domain"
-
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -20,6 +18,7 @@ type Repository interface {
 	Update(ctx context.Context, post *domain.Post) error
 	Delete(ctx context.Context, id uint) error
 	HardDelete(ctx context.Context, id uint) error
+	BatchDeleteByUUIDs(ctx context.Context, uuids []string) error
 	SlugExists(ctx context.Context, slug string, excludeID uint) (bool, error)
 	BatchCreate(ctx context.Context, posts *[]domain.Post) error
 	FindExistingSlugs(ctx context.Context, slugs []string) (map[string]bool, error)
@@ -150,6 +149,45 @@ func (r *repository) Delete(ctx context.Context, id uint) error {
 
 func (r *repository) HardDelete(ctx context.Context, id uint) error {
 	return r.db.WithContext(ctx).Unscoped().Delete(&domain.Post{}, id).Error
+}
+
+func (r *repository) BatchDeleteByUUIDs(ctx context.Context, uuids []string) error {
+	if len(uuids) == 0 {
+		return nil
+	}
+
+	return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		var  count int64
+		if err := tx.Model(&domain.Post{}).
+			Where("uuid IN ?", uuids).
+			Count(&count).Error; err != nil {
+			return err
+		}
+
+		if count == 0 {
+			return errors.New("no posts found for provided uuids")
+		}
+
+		if int(count) != len(uuids) {
+			return errors.New("some posts not found for provided uuids")
+		}
+
+		if err := tx.Model(&domain.Post{}).
+			Where("uuid IN ?", uuids).
+			Updates(map[string]interface{}{
+				"slug":   gorm.Expr("CONCAT('deleted-', uuid)"),
+				"status": domain.StatusDeleted,
+			}).Error; err != nil {
+				return err
+			}
+
+		if err := tx.Where("uuid IN ?", uuids).
+			Delete(&domain.Post{}).Error; err != nil {
+				return err
+			}
+
+		return nil
+	})
 }
 
 func (r *repository) SlugExists(ctx context.Context, slug string, excludeID uint) (bool, error) {
