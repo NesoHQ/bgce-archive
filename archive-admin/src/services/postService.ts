@@ -79,18 +79,14 @@ export const postService = {
         return this.unpublishPost(id)
     },
 
-    async bulkUploadPosts(file: File): Promise<ApiResponse<{ total_created: number }>> {
+    async bulkUploadPosts(file: File): Promise<{ success: boolean; message: string }> {
         if (API_CONFIG.USE_MOCK_POSTS) {
             // Mock response for testing
             return new Promise((resolve) => {
                 setTimeout(() => {
                     resolve({
                         success: true,
-                        status: true,
-                        message: "Posts uploaded successfully",
-                        data: {
-                            total_created: 10
-                        }
+                        message: "Posts uploaded successfully"
                     })
                 }, 2000)
             })
@@ -99,7 +95,7 @@ export const postService = {
         const formData = new FormData()
         formData.append('file', file)
 
-        const response = await postalApi.post<ApiResponse<{ total_created: number }>>(
+        const response = await postalApi.post<{ success: boolean; message: string }>(
             '/posts/batch',
             formData,
             {

@@ -23,6 +23,8 @@ type Post struct {
 	UpdatedAt time.Time      `json:"updated_at"`
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"deleted_at,omitempty"`
 
+	OrderNo uint `gorm:"not null;default:0" json:"order_no"`
+
 	// Content
 	Title     string `gorm:"type:varchar(500);not null" json:"title"`
 	Slug      string `gorm:"type:varchar(500);uniqueIndex;not null" json:"slug"`

@@ -24,7 +24,6 @@ func ParseAndValidateCSV(
 	reader := csv.NewReader(bufio.NewReader(*file))
 	reader.TrimLeadingSpace = true
 
-	// Read header
 	if _, err := reader.Read(); err != nil {
 		return nil, nil, fmt.Errorf("invalid CSV header: %w", err)
 	}
@@ -38,8 +37,8 @@ func ParseAndValidateCSV(
 
 	for {
 		rowNo++
-		row, err := reader.Read()
 
+		row, err := reader.Read()
 		if err == io.EOF {
 			break
 		}
@@ -51,7 +50,6 @@ func ParseAndValidateCSV(
 			return nil, nil, fmt.Errorf("invalid CSV format: expected at least 14 columns, got %d , in row %d", len(row), rowNo)
 		}
 
-		// Validate all required fields
 		fields := []string{
 			"title", "slug", "content", "summary", "thumbnail",
 			"category_id", "sub_category_id", "meta_title", "meta_description",
@@ -89,7 +87,6 @@ func ParseAndValidateCSV(
 			return nil, nil, err
 		}
 
-		// category and sub-category IDs
 		categoryID, err := strconv.ParseUint(categoryIDStr, 10, 64)
 		if err != nil {
 			return nil, nil, fmt.Errorf("row %d: invalid category_id '%s'", rowNo, categoryIDStr)

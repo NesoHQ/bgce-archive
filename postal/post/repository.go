@@ -8,6 +8,7 @@ import (
 	"postal/domain"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type Repository interface {
@@ -22,6 +23,8 @@ type Repository interface {
 	SlugExists(ctx context.Context, slug string, excludeID uint) (bool, error)
 	BatchCreate(ctx context.Context, posts *[]domain.Post) error
 	FindExistingSlugs(ctx context.Context, slugs []string) (map[string]bool, error)
+	GetMaxOrderNo(ctx context.Context) (uint, error)
+	WithTransaction(ctx context.Context, fn func(txRepo Repository) error) error
 }
 
 type repository struct {
@@ -34,6 +37,13 @@ func NewRepository(db *gorm.DB) Repository {
 
 func (r *repository) Create(ctx context.Context, post *domain.Post) error {
 	return r.db.WithContext(ctx).Create(post).Error
+}
+
+func (r *repository) WithTransaction(ctx context.Context, fn func(txRepo Repository) error) error {
+	return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		txRepo := &repository{db: tx}
+		return fn(txRepo)
+	})
 }
 
 func (r *repository) GetByID(ctx context.Context, id uint) (*domain.Post, error) {
@@ -153,27 +163,8 @@ func (r *repository) SlugExists(ctx context.Context, slug string, excludeID uint
 }
 
 func (r *repository) BatchCreate(ctx context.Context, posts *[]domain.Post) error {
-	tx := r.db.WithContext(ctx).Begin()
-	if tx.Error != nil {
-		return tx.Error
-	}
-
 	const batchSize = 1000
-
-	for i := 0; i < len(*posts); i += batchSize {
-		end := i + batchSize
-		if end > len(*posts) {
-			end = len(*posts)
-		}
-
-		// Use Select to explicitly include boolean fields even if they are false (zero value)
-		if err := tx.Select("*").Create((*posts)[i:end]).Error; err != nil {
-			tx.Rollback()
-			return err
-		}
-	}
-
-	return tx.Commit().Error
+	return r.db.WithContext(ctx).Select("*").CreateInBatches(*posts, batchSize).Error
 }
 
 func (r *repository) FindExistingSlugs(ctx context.Context, slugs []string) (map[string]bool, error) {
@@ -193,4 +184,26 @@ func (r *repository) FindExistingSlugs(ctx context.Context, slugs []string) (map
 	}
 
 	return result, nil
+}
+
+func (r *repository) GetMaxOrderNo(ctx context.Context) (uint, error) {
+	var post domain.Post
+
+	err := r.db.WithContext(ctx).
+		Model(&domain.Post{}).
+		Order("order_no DESC").
+		Clauses(clause.Locking{Strength: "UPDATE"}).
+		Limit(1).
+		Select("order_no").
+		First(&post).Error
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return 0, nil
+	}
+
+	if err != nil {
+		return 0, err
+	}
+
+	return post.OrderNo, nil
 }

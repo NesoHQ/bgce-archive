@@ -200,14 +200,14 @@ export const usePostStore = defineStore('post', () => {
         try {
             const response = await postService.bulkUploadPosts(file);
 
-            console.log(response);
+            console.log(response.success);
 
 
-            if (response.status) {
+            if (response.success) {
                 toast.success('Success', `Successfully uploaded posts`)
 
                 await fetchPosts()
-                return response.data
+                return response
             }
         } catch (err: any) {
             error.value = err.message || 'Failed to upload posts'
