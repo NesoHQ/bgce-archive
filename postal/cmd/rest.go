@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"postal/cache"
 	"postal/config"
 	"postal/post"
 	"postal/post_version"
@@ -50,7 +51,7 @@ func runRESTServer(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to run migrations: %w", err)
 	}
 
-	//Initialize Validator
+	// Initialize Validator
 	validator := utils.NewValidator()
 
 	// Initialize repositories
@@ -58,9 +59,25 @@ func runRESTServer(cmd *cobra.Command, args []string) error {
 	postRepo := post.NewRepository(db)
 	versionRepo := post_version.NewRepository(db)
 
+	// Initialize cache
+	log.Println("🔄 Initializing cache...")
+	var postCache post.PostCache
+	writeRedisClient, err := cache.NewRedisClient(cfg.WriteRedisURL, cfg.EnableRedisTLSMode)
+	if err != nil {
+		log.Printf("⚠️ Failed to initialize Redis client, cache disabled: %v", err)
+	} else if writeRedisClient != nil {
+		postCache = cache.NewPostCache(writeRedisClient)
+		defer func() {
+			if closeErr := writeRedisClient.Close(); closeErr != nil {
+				log.Printf("⚠️ Failed to close Redis client: %v", closeErr)
+			}
+		}()
+		log.Println("✅ Redis cache initialized")
+	}
+
 	// Initialize services
 	log.Println("🔄 Initializing services...")
-	postService := post.NewService(postRepo, versionRepo)
+	postService := post.NewService(postRepo, versionRepo, postCache)
 
 	// Initialize handlers
 	log.Println("🔄 Initializing handlers...")

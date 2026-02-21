@@ -3,11 +3,13 @@ package post
 import (
 	"context"
 	"fmt"
+	"log"
 	"mime/multipart"
+	"time"
+
 	"postal/domain"
 	"postal/post_version"
 	"postal/util"
-	"time"
 )
 
 type Service interface {
@@ -27,15 +29,23 @@ type Service interface {
 	BatchDeletePosts(ctx context.Context, uuids *[]string) error
 }
 
+type PostCache interface {
+	SetPost(ctx context.Context, post *domain.Post) error
+	GetByID(ctx context.Context, id uint) (*domain.Post, error)
+	GetBySlug(ctx context.Context, slug string) (*domain.Post, error)
+}
+
 type service struct {
 	repo        Repository
 	versionRepo post_version.Repository
+	cache       PostCache
 }
 
-func NewService(repo Repository, versionRepo post_version.Repository) Service {
+func NewService(repo Repository, versionRepo post_version.Repository, cache PostCache) Service {
 	return &service{
 		repo:        repo,
 		versionRepo: versionRepo,
+		cache:       cache,
 	}
 }
 
@@ -95,6 +105,8 @@ func (s *service) CreatePost(ctx context.Context, req CreatePostRequest, userID 
 		return nil, fmt.Errorf("failed to create post: %w", err)
 	}
 
+	s.cachePost(ctx, post)
+
 	// Create initial version
 	if err := s.createVersion(ctx, post, userID, "Initial version"); err != nil {
 		// Log error but don't fail the request
@@ -105,10 +117,24 @@ func (s *service) CreatePost(ctx context.Context, req CreatePostRequest, userID 
 }
 
 func (s *service) GetPostByID(ctx context.Context, id uint) (*PostResponse, error) {
+	if s.cache != nil {
+		post, err := s.cache.GetByID(ctx, id)
+		if err != nil {
+			return nil, err
+		}
+		if post != nil {
+			// Cache HIT - returning from Redis
+			log.Printf("Cache HIT - returning from Redis (id=%d)", id)
+			return ToPostResponse(post), nil
+		}
+	}
+	// Cache MISS - loading from DB and backfilling cache
+	log.Printf("Cache MISS - loading from DB and backfilling cache (id=%d)", id)
 	post, err := s.repo.GetByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
+	s.cachePost(ctx, post)
 	return ToPostResponse(post), nil
 }
 
@@ -121,10 +147,24 @@ func (s *service) GetPostByUUID(ctx context.Context, uuid string) (*PostResponse
 }
 
 func (s *service) GetPostBySlug(ctx context.Context, slug string) (*PostResponse, error) {
+	if s.cache != nil {
+		post, err := s.cache.GetBySlug(ctx, slug)
+		if err != nil {
+			return nil, err
+		}
+		if post != nil {
+			// Cache HIT - returning from Redis
+			log.Printf("Cache HIT - returning from Redis (slug=%s)", slug)
+			return ToPostResponse(post), nil
+		}
+	}
+	// Cache MISS - loading from DB and backfilling cache
+	log.Printf("Cache MISS - loading from DB and backfilling cache (slug=%s)", slug)
 	post, err := s.repo.GetBySlug(ctx, slug)
 	if err != nil {
 		return nil, err
 	}
+	s.cachePost(ctx, post)
 	return ToPostResponse(post), nil
 }
 
@@ -311,14 +351,14 @@ func (s *service) BatchUploadPosts(ctx context.Context, userID uint, file *multi
 		return fmt.Errorf("failed to parse CSV: %w", err)
 	}
 
-	return s.repo.WithTransaction(ctx, func(txRepo Repository) error {
+	if err := s.repo.WithTransaction(ctx, func(txRepo Repository) error {
 		// collect slugs for uniqueness check
 		slugs := make([]string, 0, len(*slugRows))
 		for _, sr := range *slugRows {
 			slugs = append(slugs, sr.Slug)
 		}
 
-		// check in DB within the same transaction 
+		// check in DB within the same transaction
 		existing, err := txRepo.FindExistingSlugs(ctx, slugs)
 		if err != nil {
 			return err
@@ -341,7 +381,15 @@ func (s *service) BatchUploadPosts(ctx context.Context, userID uint, file *multi
 		}
 
 		return txRepo.BatchCreate(ctx, posts)
-	})
+	}); err != nil {
+		return err
+	}
+
+	for i := range *posts {
+		s.cachePost(ctx, &(*posts)[i])
+	}
+
+	return nil
 }
 
 func (s *service) BatchDeletePosts(ctx context.Context, uuids *[]string) error {
@@ -367,4 +415,14 @@ func (s *service) BatchDeletePosts(ctx context.Context, uuids *[]string) error {
 	}
 
 	return s.repo.BatchDeleteByUUIDs(ctx, ids)
+}
+
+func (s *service) cachePost(ctx context.Context, post *domain.Post) {
+	if s.cache == nil || post == nil {
+		return
+	}
+
+	if err := s.cache.SetPost(ctx, post); err != nil {
+		fmt.Printf("Failed to cache post: %v\n", err)
+	}
 }
