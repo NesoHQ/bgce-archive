@@ -55,6 +55,7 @@ func NewServeMux(mw *middlewares.Middlewares, handlers *handlers.Handlers) (http
 	mux.HandleFunc("GET /api/v1/tenants", func(w http.ResponseWriter, r *http.Request) {
 		mw.AuthenticateJWT(http.HandlerFunc(handlers.GetTenants)).ServeHTTP(w, r)
 	})
+	mux.HandleFunc("GET /api/v1/tenants/{id}", handlers.GetTenantByUUID)
 	mux.HandleFunc("POST /api/v1/tenants", func(w http.ResponseWriter, r *http.Request) {
 		mw.AuthenticateJWT(http.HandlerFunc(handlers.CreateTenant)).ServeHTTP(w, r)
 	})

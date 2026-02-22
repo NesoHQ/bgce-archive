@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { LayoutDashboard, FolderTree, FileText, MessageSquare, HeadphonesIcon, User, LogOut, Building2 } from 'lucide-vue-next'
 import {

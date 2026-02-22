@@ -133,9 +133,9 @@ onMounted(() => {
     <div v-else class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       <Card 
         v-for="tenant in filteredTenants" 
-        :key="tenant.id"
+        :key="tenant.uuid"
         class="hover:shadow-lg transition-shadow relative group"
-        :class="tenantStore.currentTenant?.id === tenant.id ? 'ring-2 ring-primary' : ''"
+        :class="tenantStore.currentTenant?.uuid === tenant.uuid ? 'ring-2 ring-primary' : ''"
       >
         <CardHeader>
           <div class="flex items-start justify-between">
@@ -156,16 +156,16 @@ onMounted(() => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem @click="handleSwitch(tenant.uuid)">
+                <DropdownMenuItem @click.stop="handleSwitch(tenant.uuid)">
                   <ExternalLink class="h-4 w-4 mr-2" />
                   Switch to this tenant
                 </DropdownMenuItem>
-                <DropdownMenuItem @click="handleEdit(tenant.uuid)">
+                <DropdownMenuItem @click.stop="handleEdit(tenant.uuid)">
                   <Edit class="h-4 w-4 mr-2" />
                   Edit
                 </DropdownMenuItem>
                 <DropdownMenuItem 
-                  @click="handleDelete(tenant.uuid, tenant.name)"
+                  @click.stop="handleDelete(tenant.uuid, tenant.name)"
                   class="text-red-600"
                 >
                   <Trash2 class="h-4 w-4 mr-2" />
@@ -185,7 +185,7 @@ onMounted(() => {
               {{ tenant.plan }}
             </Badge>
             <Badge 
-              v-if="tenantStore.currentTenant?.id === tenant.id"
+              v-if="tenantStore.currentTenant?.uuid === tenant.uuid"
               class="bg-primary text-primary-foreground"
             >
               Current
@@ -216,7 +216,7 @@ onMounted(() => {
               variant="outline" 
               size="sm" 
               class="flex-1"
-              @click="handleEdit(tenant.uuid)"
+              @click.stop="handleEdit(tenant.uuid)"
             >
               <Settings class="h-3 w-3 mr-1" />
               Settings
@@ -225,7 +225,7 @@ onMounted(() => {
               v-if="tenantStore.currentTenant?.uuid !== tenant.uuid"
               size="sm" 
               class="flex-1"
-              @click="handleSwitch(tenant.uuid)"
+              @click.stop="handleSwitch(tenant.uuid)"
             >
               Switch
             </Button>

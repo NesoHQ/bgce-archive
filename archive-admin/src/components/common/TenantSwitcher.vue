@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { onMounted } from 'vue'
 import { Check, ChevronsUpDown, Plus, Building2 } from 'lucide-vue-next'
 import { useTenantStore } from '@/stores/tenant'
 import {
@@ -39,6 +39,13 @@ const handleSwitchTenant = (tenantId: string) => {
     tenantStore.switchTenant(tenantId)
   }
 }
+
+// Fetch tenants on mount if not already loaded
+onMounted(() => {
+  if (tenantStore.tenants.length === 0) {
+    tenantStore.fetchTenants()
+  }
+})
 </script>
 
 <template>

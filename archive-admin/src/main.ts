@@ -17,7 +17,14 @@ const tenantStore = useTenantStore()
 
 authStore.initializeAuth()
 
-// Fetch current tenant based on domain (always, regardless of auth)
-tenantStore.fetchCurrentTenant()
+// Initialize tenant data
+const initializeTenants = async () => {
+    // Fetch current tenant first
+    await tenantStore.fetchCurrentTenant()
+    // Then fetch all tenants for the switcher
+    await tenantStore.fetchTenants()
+}
+
+initializeTenants()
 
 app.mount('#app')
