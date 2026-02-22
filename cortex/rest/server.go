@@ -50,6 +50,21 @@ func NewServeMux(mw *middlewares.Middlewares, handlers *handlers.Handlers) (http
 		mw.AuthenticateJWT(http.HandlerFunc(handlers.DeleteSubCategory)).ServeHTTP(w, r)
 	})
 
+	// Tenant routes
+	mux.HandleFunc("GET /api/v1/tenants/by-domain/{identifier}", handlers.GetTenantByDomain)
+	mux.HandleFunc("GET /api/v1/tenants", func(w http.ResponseWriter, r *http.Request) {
+		mw.AuthenticateJWT(http.HandlerFunc(handlers.GetTenants)).ServeHTTP(w, r)
+	})
+	mux.HandleFunc("POST /api/v1/tenants", func(w http.ResponseWriter, r *http.Request) {
+		mw.AuthenticateJWT(http.HandlerFunc(handlers.CreateTenant)).ServeHTTP(w, r)
+	})
+	mux.HandleFunc("PUT /api/v1/tenants/{id}", func(w http.ResponseWriter, r *http.Request) {
+		mw.AuthenticateJWT(http.HandlerFunc(handlers.UpdateTenant)).ServeHTTP(w, r)
+	})
+	mux.HandleFunc("DELETE /api/v1/tenants/{id}", func(w http.ResponseWriter, r *http.Request) {
+		mw.AuthenticateJWT(http.HandlerFunc(handlers.DeleteTenant)).ServeHTTP(w, r)
+	})
+
 	// Health check
 	mux.HandleFunc("GET /api/v1/hello", handlers.Hello)
 

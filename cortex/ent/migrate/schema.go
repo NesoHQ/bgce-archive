@@ -34,6 +34,26 @@ var (
 		Columns:    CategoriesColumns,
 		PrimaryKey: []*schema.Column{CategoriesColumns[0]},
 	}
+	// TenantsColumns holds the columns for the "tenants" table.
+	TenantsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "uuid", Type: field.TypeUUID, Unique: true},
+		{Name: "name", Type: field.TypeString, Size: 255},
+		{Name: "slug", Type: field.TypeString, Unique: true, Size: 255},
+		{Name: "domain", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"active", "inactive", "suspended"}, Default: "active"},
+		{Name: "plan", Type: field.TypeEnum, Enums: []string{"free", "starter", "professional", "enterprise"}, Default: "free"},
+		{Name: "settings", Type: field.TypeJSON, Nullable: true},
+		{Name: "meta", Type: field.TypeJSON, Nullable: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+	}
+	// TenantsTable holds the schema information for the "tenants" table.
+	TenantsTable = &schema.Table{
+		Name:       "tenants",
+		Columns:    TenantsColumns,
+		PrimaryKey: []*schema.Column{TenantsColumns[0]},
+	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -75,6 +95,7 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		CategoriesTable,
+		TenantsTable,
 		UsersTable,
 	}
 )

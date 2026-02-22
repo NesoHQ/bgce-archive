@@ -5,8 +5,11 @@ package ent
 import (
 	"cortex/ent/category"
 	"cortex/ent/schema"
+	"cortex/ent/tenant"
 	"cortex/ent/user"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -44,6 +47,66 @@ func init() {
 	categoryDescCreatorID := categoryFields[3].Descriptor()
 	// category.CreatorIDValidator is a validator for the "creator_id" field. It is called by the builders before save.
 	category.CreatorIDValidator = categoryDescCreatorID.Validators[0].(func(int) error)
+	tenantFields := schema.Tenant{}.Fields()
+	_ = tenantFields
+	// tenantDescUUID is the schema descriptor for uuid field.
+	tenantDescUUID := tenantFields[1].Descriptor()
+	// tenant.DefaultUUID holds the default value on creation for the uuid field.
+	tenant.DefaultUUID = tenantDescUUID.Default.(func() uuid.UUID)
+	// tenantDescName is the schema descriptor for name field.
+	tenantDescName := tenantFields[2].Descriptor()
+	// tenant.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	tenant.NameValidator = func() func(string) error {
+		validators := tenantDescName.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(name string) error {
+			for _, fn := range fns {
+				if err := fn(name); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// tenantDescSlug is the schema descriptor for slug field.
+	tenantDescSlug := tenantFields[3].Descriptor()
+	// tenant.SlugValidator is a validator for the "slug" field. It is called by the builders before save.
+	tenant.SlugValidator = func() func(string) error {
+		validators := tenantDescSlug.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(slug string) error {
+			for _, fn := range fns {
+				if err := fn(slug); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// tenantDescDomain is the schema descriptor for domain field.
+	tenantDescDomain := tenantFields[4].Descriptor()
+	// tenant.DomainValidator is a validator for the "domain" field. It is called by the builders before save.
+	tenant.DomainValidator = tenantDescDomain.Validators[0].(func(string) error)
+	// tenantDescCreatedAt is the schema descriptor for created_at field.
+	tenantDescCreatedAt := tenantFields[9].Descriptor()
+	// tenant.DefaultCreatedAt holds the default value on creation for the created_at field.
+	tenant.DefaultCreatedAt = tenantDescCreatedAt.Default.(func() time.Time)
+	// tenantDescUpdatedAt is the schema descriptor for updated_at field.
+	tenantDescUpdatedAt := tenantFields[10].Descriptor()
+	// tenant.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	tenant.DefaultUpdatedAt = tenantDescUpdatedAt.Default.(func() time.Time)
+	// tenant.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	tenant.UpdateDefaultUpdatedAt = tenantDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// tenantDescID is the schema descriptor for id field.
+	tenantDescID := tenantFields[0].Descriptor()
+	// tenant.IDValidator is a validator for the "id" field. It is called by the builders before save.
+	tenant.IDValidator = tenantDescID.Validators[0].(func(int) error)
 	userMixin := schema.User{}.Mixin()
 	userMixinFields0 := userMixin[0].Fields()
 	_ = userMixinFields0

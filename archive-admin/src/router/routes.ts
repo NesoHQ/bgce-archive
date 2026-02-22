@@ -1,6 +1,8 @@
 import MainLayout from '@/components/layouts/MainLayout.vue'
 import LoginPage from '@/pages/LoginPage.vue'
 import DashboardPage from '@/pages/DashboardPage.vue'
+import TenantsPage from '@/pages/tenants/TenantsPage.vue'
+import TenantFormPage from '@/pages/tenants/TenantFormPage.vue'
 import CategoryHierarchyPage from '@/pages/archive/CategoryHierarchyPage.vue'
 import PostListPage from '@/pages/posts/PostListPage.vue'
 import PostEditorPage from '@/pages/posts/PostEditorPage.vue'
@@ -19,6 +21,24 @@ export const routes = [
         name: 'dashboard',
         component: DashboardPage,
         meta: { requiresAuth: true, title: 'Dashboard' },
+      },
+      {
+        path: 'tenants',
+        name: 'tenants',
+        component: TenantsPage,
+        meta: { requiresAuth: true, title: 'Tenants' },
+      },
+      {
+        path: 'tenants/new',
+        name: 'tenant-create',
+        component: TenantFormPage,
+        meta: { requiresAuth: true, title: 'Create Tenant' },
+      },
+      {
+        path: 'tenants/:id/edit',
+        name: 'tenant-edit',
+        component: TenantFormPage,
+        meta: { requiresAuth: true, title: 'Edit Tenant' },
       },
       {
         path: 'categories',

@@ -6,6 +6,7 @@ import (
 	"cortex/category"
 	"cortex/config"
 	"cortex/subcategory"
+	"cortex/tenant"
 	"cortex/user"
 )
 
@@ -13,6 +14,7 @@ type Handlers struct {
 	cnf                *config.Config
 	CategoryService    category.Service
 	SubcategoryService subcategory.Service
+	TenantService      tenant.Service
 	userService        *user.Service
 }
 
@@ -20,12 +22,14 @@ func NewHandler(
 	cnf *config.Config,
 	ctgrySvc category.Service,
 	subcategorySvc subcategory.Service,
+	tenantSvc tenant.Service,
 	userSvc *user.Service,
 ) *Handlers {
 	return &Handlers{
 		cnf:                cnf,
 		CategoryService:    ctgrySvc,
 		SubcategoryService: subcategorySvc,
+		TenantService:      tenantSvc,
 		userService:        userSvc,
 	}
 }

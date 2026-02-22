@@ -20,6 +20,7 @@ import (
 	"cortex/rest/middlewares"
 	"cortex/rest/utils"
 	"cortex/subcategory"
+	"cortex/tenant"
 	"cortex/user"
 
 	_ "github.com/lib/pq"
@@ -114,8 +115,13 @@ func APIServerCommand(ctx context.Context) *cobra.Command {
 
 			ctgrySvc := category.NewService(cnf, rmq, redisCache, entClient)
 			subcategorySvc := subcategory.NewService(cnf, rmq, redisCache, entClient)
+
+			// Initialize tenant service
+			tenantRepo := tenant.NewRepository(entClient)
+			tenantSvc := tenant.NewService(cnf, tenantRepo, entClient)
+
 			userSvc := user.NewService(cnf, entClient)
-			handlers := handlers.NewHandler(cnf, ctgrySvc, subcategorySvc, userSvc)
+			handlers := handlers.NewHandler(cnf, ctgrySvc, subcategorySvc, tenantSvc, userSvc)
 
 			// NewServeMux now returns http.Handler with all middlewares applied
 			handler, err := rest.NewServeMux(middlewares, handlers)

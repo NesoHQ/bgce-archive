@@ -11,6 +11,7 @@ require (
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/golang-jwt/jwt/v5 v5.2.3
 	github.com/google/uuid v1.6.0
+	github.com/gorilla/mux v1.8.1
 	github.com/iancoleman/strcase v0.3.0
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
@@ -20,6 +21,7 @@ require (
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1
 	github.com/stretchr/testify v1.10.0
+	github.com/ulule/limiter/v3 v3.11.2
 	github.com/wagslane/go-rabbitmq v0.15.0
 	go.elastic.co/apm v1.15.0
 	go.elastic.co/apm/module/apmhttp v1.15.0
@@ -72,7 +74,6 @@ require (
 	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
-	github.com/ulule/limiter/v3 v3.11.2 // indirect
 	go.elastic.co/fastjson v1.1.0 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect

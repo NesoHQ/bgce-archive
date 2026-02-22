@@ -9,5 +9,8 @@ import (
 // Category is the predicate function for category builders.
 type Category func(*sql.Selector)
 
+// Tenant is the predicate function for tenant builders.
+type Tenant func(*sql.Selector)
+
 // User is the predicate function for user builders.
 type User func(*sql.Selector)

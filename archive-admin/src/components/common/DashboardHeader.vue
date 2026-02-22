@@ -68,7 +68,7 @@ const unreadCount = ref(notifications.value.filter(n => n.unread).length)
               v-for="notification in notifications" 
               :key="notification.id"
               class="flex items-start gap-3 px-4 py-3 hover:bg-muted/50 cursor-pointer transition-colors"
-              :class="notification.unread ? 'bg-blue-50/50' : ''"
+              :class="notification.unread ? 'bg-blue-50/50 dark:bg-blue-950/20' : ''"
             >
               <div 
                 class="h-2 w-2 rounded-full mt-2 flex-shrink-0"

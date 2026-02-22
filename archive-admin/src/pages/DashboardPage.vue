@@ -1,17 +1,20 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { FolderTree, FileText, MessageSquare, HeadphonesIcon, TrendingUp, Clock, Loader2 } from 'lucide-vue-next'
+import { FolderTree, FileText, MessageSquare, HeadphonesIcon, TrendingUp, Clock, Loader2, Building2, Users } from 'lucide-vue-next'
 import { useCategoryStore } from '@/stores/category'
 import { usePostStore } from '@/stores/post'
 import { useCommentStore } from '@/stores/comment'
 import { useSupportStore } from '@/stores/support'
+import { useTenantStore } from '@/stores/tenant'
 import { statsService } from '@/services/statsService'
+import { Badge } from '@/components/ui/badge'
 
 const categoryStore = useCategoryStore()
 const postStore = usePostStore()
 const commentStore = useCommentStore()
 const supportStore = useSupportStore()
+const tenantStore = useTenantStore()
 
 const loading = ref(true)
 const stats = ref({
@@ -24,6 +27,9 @@ const stats = ref({
   pendingComments: 0,
   openTickets: 0,
 })
+
+const currentTenantName = computed(() => tenantStore.currentTenant?.name || 'No Tenant Selected')
+const currentTenantPlan = computed(() => tenantStore.currentTenant?.plan || 'free')
 
 const recentActivity = computed(() => {
   const activities: any[] = []
@@ -120,21 +126,61 @@ const getActivityColor = (action: string) => {
     default: return 'text-gray-600'
   }
 }
+
+const getPlanColor = (plan: string) => {
+  switch (plan) {
+    case 'enterprise': return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
+    case 'professional': return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+    case 'starter': return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+    default: return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400'
+  }
+}
 </script>
 
 <template>
   <div class="space-y-8">
-    <!-- Header -->
+    <!-- Header with Tenant Context -->
     <div class="flex items-center justify-between">
       <div>
-        <h1 class="text-4xl font-bold tracking-tight">Dashboard</h1>
-        <p class="text-muted-foreground mt-2">Welcome back! Here's what's happening today.</p>
+        <div class="flex items-center gap-3 mb-2">
+          <h1 class="text-4xl font-bold tracking-tight">Dashboard</h1>
+          <Badge :class="getPlanColor(currentTenantPlan)" class="capitalize">
+            {{ currentTenantPlan }}
+          </Badge>
+        </div>
+        <p class="text-muted-foreground">
+          Managing <span class="font-semibold">{{ currentTenantName }}</span> · Welcome back!
+        </p>
       </div>
       <div class="flex items-center gap-2 text-sm text-muted-foreground">
         <Clock class="h-4 w-4" />
         <span>{{ new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}</span>
       </div>
     </div>
+
+    <!-- Tenant Quick Info -->
+    <Card v-if="tenantStore.currentTenant" class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 border-blue-200 dark:border-blue-800">
+      <CardContent class="pt-6">
+        <div class="flex items-center gap-6">
+          <div class="h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0">
+            <Building2 class="h-8 w-8 text-white" />
+          </div>
+          <div class="flex-1">
+            <h3 class="text-lg font-semibold">{{ tenantStore.currentTenant.name }}</h3>
+            <p class="text-sm text-muted-foreground">{{ tenantStore.currentTenant.slug }}</p>
+            <div v-if="tenantStore.currentTenant.domain" class="text-sm text-muted-foreground mt-1">
+              Domain: {{ tenantStore.currentTenant.domain }}
+            </div>
+          </div>
+          <div class="text-right">
+            <Badge :class="getPlanColor(currentTenantPlan)" class="text-sm capitalize mb-2">
+              {{ currentTenantPlan }} Plan
+            </Badge>
+            <p class="text-xs text-muted-foreground">Domain-based tenant</p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
 
     <!-- Stats Grid -->
     <div v-if="loading" class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
