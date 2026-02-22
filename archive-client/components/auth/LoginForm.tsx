@@ -2,24 +2,45 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Eye, EyeOff, LogIn, Mail, Lock, Github } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Eye, EyeOff, LogIn, Mail, Lock, Loader2 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
+import { AuthAPI } from "@/lib/auth-api";
 
 export function LoginForm() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement login logic
-    console.log(formData);
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await AuthAPI.login(formData);
+
+      if (response.status && response.data) {
+        // Save token and user data
+        AuthAPI.saveToken(response.data.token);
+        AuthAPI.saveUser(response.data.user);
+
+        // Redirect to home or dashboard
+        router.push("/");
+      }
+    } catch (error: any) {
+      setError(error.message || "Login failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +72,11 @@ export function LoginForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        {error && (
+          <div className="p-3 rounded-md bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+            <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+          </div>
+        )}
         <div className="space-y-2">
           <label
             htmlFor="email"
@@ -116,10 +142,20 @@ export function LoginForm() {
         </div>
         <Button
           type="submit"
+          disabled={isLoading}
           className="w-full h-11 text-base font-medium shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-[0.98]"
         >
-          <LogIn className="mr-2 h-5 w-5" />
-          Sign in
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              Signing in...
+            </>
+          ) : (
+            <>
+              <LogIn className="mr-2 h-5 w-5" />
+              Sign in
+            </>
+          )}
         </Button>
       </form>
     </div>

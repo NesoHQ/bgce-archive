@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Eye,
   EyeOff,
@@ -9,32 +10,61 @@ import {
   Lock,
   User,
   CheckCircle2,
+  Loader2,
 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AuthAPI } from "@/lib/auth-api";
 
 export function RegisterForm() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
+    username: "",
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      setError("Passwords do not match!");
       return;
     }
 
-    // TODO: Implement registration logic
-    console.log(formData);
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters long");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await AuthAPI.register({
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        full_name: formData.name,
+      });
+
+      if (response.status && response.data) {
+        // Redirect to login page
+        router.push("/login?registered=true");
+      }
+    } catch (error: any) {
+      setError(error.message || "Registration failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,6 +96,30 @@ export function RegisterForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        {error && (
+          <div className="p-3 rounded-md bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+            <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+          </div>
+        )}
+        <div className="space-y-2">
+          <label
+            htmlFor="username"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
+          >
+            <User className="h-4 w-4 text-muted-foreground" />
+            Username
+          </label>
+          <Input
+            id="username"
+            name="username"
+            type="text"
+            placeholder="johndoe"
+            required
+            value={formData.username}
+            onChange={handleChange}
+            className="bg-background/50 h-11 focus-visible:ring-primary/30 transition-all border-border/60 hover:border-primary/50"
+          />
+        </div>
         <div className="space-y-2">
           <label
             htmlFor="name"
@@ -79,7 +133,6 @@ export function RegisterForm() {
             name="name"
             type="text"
             placeholder="John Doe"
-            required
             value={formData.name}
             onChange={handleChange}
             className="bg-background/50 h-11 focus-visible:ring-primary/30 transition-all border-border/60 hover:border-primary/50"
@@ -178,10 +231,20 @@ export function RegisterForm() {
         </div>
         <Button
           type="submit"
+          disabled={isLoading}
           className="w-full h-11 text-base font-medium shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-[0.98]"
         >
-          <UserPlus className="mr-2 h-5 w-5" />
-          Create account
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              Creating account...
+            </>
+          ) : (
+            <>
+              <UserPlus className="mr-2 h-5 w-5" />
+              Create account
+            </>
+          )}
         </Button>
       </form>
     </div>
