@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"postal/domain"
+
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 type Repository interface {
@@ -157,7 +158,7 @@ func (r *repository) BatchDeleteByUUIDs(ctx context.Context, uuids []string) err
 	}
 
 	return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		var  count int64
+		var count int64
 		if err := tx.Model(&domain.Post{}).
 			Where("uuid IN ?", uuids).
 			Count(&count).Error; err != nil {
@@ -178,13 +179,13 @@ func (r *repository) BatchDeleteByUUIDs(ctx context.Context, uuids []string) err
 				"slug":   gorm.Expr("CONCAT('deleted-', uuid)"),
 				"status": domain.StatusDeleted,
 			}).Error; err != nil {
-				return err
-			}
+			return err
+		}
 
 		if err := tx.Where("uuid IN ?", uuids).
 			Delete(&domain.Post{}).Error; err != nil {
-				return err
-			}
+			return err
+		}
 
 		return nil
 	})
@@ -225,23 +226,16 @@ func (r *repository) FindExistingSlugs(ctx context.Context, slugs []string) (map
 }
 
 func (r *repository) GetMaxOrderNo(ctx context.Context) (uint, error) {
-	var post domain.Post
+	var maxOrderNo uint
 
 	err := r.db.WithContext(ctx).
 		Model(&domain.Post{}).
-		Order("order_no DESC").
-		Clauses(clause.Locking{Strength: "UPDATE"}).
-		Limit(1).
-		Select("order_no").
-		First(&post).Error
-
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return 0, nil
-	}
-
+		Select("COALESCE(MAX(order_no), 0)").
+		Row().
+		Scan(&maxOrderNo)
 	if err != nil {
 		return 0, err
 	}
 
-	return post.OrderNo, nil
+	return maxOrderNo, nil
 }

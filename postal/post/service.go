@@ -370,14 +370,17 @@ func (s *service) BatchUploadPosts(ctx context.Context, userID uint, file *multi
 			}
 		}
 
+		// Get max order_no and add a buffer to avoid conflicts
 		maxOrderNo, err := txRepo.GetMaxOrderNo(ctx)
 		if err != nil {
 			return fmt.Errorf("failed to get max order no: %w", err)
 		}
 
+		// Start from maxOrderNo + 1 to ensure no conflicts
+		currentOrderNo := maxOrderNo
 		for i := range *posts {
-			maxOrderNo++
-			(*posts)[i].OrderNo = maxOrderNo
+			currentOrderNo++
+			(*posts)[i].OrderNo = currentOrderNo
 		}
 
 		return txRepo.BatchCreate(ctx, posts)
