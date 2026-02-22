@@ -14,12 +14,157 @@ import {
   LifeBuoy,
   Folder,
   X,
+  User,
+  LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ModeToggle } from "./ModeToggle";
 import { TopNav } from "./TopNav";
+import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
+
+function DesktopAuthSection() {
+  const { user, isAuthenticated, logout } = useAuth();
+
+  if (isAuthenticated && user) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-xs font-mono uppercase tracking-wider rounded-xl hover:bg-primary/10 gap-2"
+          >
+            <Avatar className="h-6 w-6">
+              <AvatarFallback className="bg-primary/20 text-primary text-xs font-semibold">
+                {user.username.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            {user.username}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuLabel>
+            <div className="flex flex-col space-y-1">
+              <p className="text-sm font-medium">{user.username}</p>
+              <p className="text-xs text-muted-foreground">{user.email}</p>
+            </div>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <Link href="/profile" className="cursor-pointer">
+              <User className="h-4 w-4 mr-2" />
+              Profile
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={logout} className="cursor-pointer text-destructive">
+            <LogOut className="h-4 w-4 mr-2" />
+            Logout
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+
+  return (
+    <>
+      <Button
+        variant="ghost"
+        size="sm"
+        asChild
+        className="text-xs font-mono uppercase tracking-wider rounded-xl hover:bg-primary/10"
+      >
+        <Link href="/login">
+          <LogIn className="h-4 w-4 mr-2" />
+          Login
+        </Link>
+      </Button>
+      <Button
+        size="sm"
+        asChild
+        className="text-xs font-mono uppercase tracking-wider rounded-xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20"
+      >
+        <Link href="/register">
+          <UserPlus className="h-4 w-4 mr-2" />
+          Sign up
+        </Link>
+      </Button>
+    </>
+  );
+}
+
+function MobileAuthSection({ closeSheet }: { closeSheet: () => void }) {
+  const { user, isAuthenticated, logout } = useAuth();
+
+  if (isAuthenticated && user) {
+    return (
+      <div className="pt-6 px-6 border-t space-y-4">
+        <div className="flex items-center gap-3 px-3 py-2 rounded-md bg-muted">
+          <Avatar className="h-10 w-10">
+            <AvatarFallback className="bg-primary/20 text-primary text-sm font-semibold">
+              {user.username.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col">
+            <p className="text-sm font-medium">{user.username}</p>
+            <p className="text-xs text-muted-foreground">{user.email}</p>
+          </div>
+        </div>
+        <Button
+          variant="outline"
+          asChild
+          className="w-full justify-start"
+        >
+          <Link href="/profile" onClick={closeSheet}>
+            <User className="h-4 w-4 mr-2" />
+            Profile
+          </Link>
+        </Button>
+        <Button
+          variant="destructive"
+          onClick={() => {
+            closeSheet();
+            logout();
+          }}
+          className="w-full justify-start"
+        >
+          <LogOut className="h-4 w-4 mr-2" />
+          Logout
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="pt-6 px-6 border-t space-y-2">
+      <Button
+        variant="outline"
+        asChild
+        className="w-full justify-center"
+      >
+        <Link href="/login" onClick={closeSheet}>
+          Login
+        </Link>
+      </Button>
+      <Button asChild className="w-full justify-center">
+        <Link href="/register" onClick={closeSheet}>
+          Sign up
+        </Link>
+      </Button>
+    </div>
+  );
+}
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -96,27 +241,7 @@ export function Navbar() {
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center gap-3">
               <ModeToggle />
-              <Button
-                variant="ghost"
-                size="sm"
-                asChild
-                className="text-xs font-mono uppercase tracking-wider rounded-xl hover:bg-primary/10"
-              >
-                <Link href="/login">
-                  <LogIn className="h-4 w-4 mr-2" />
-                  Login
-                </Link>
-              </Button>
-              <Button
-                size="sm"
-                asChild
-                className="text-xs font-mono uppercase tracking-wider rounded-xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20"
-              >
-                <Link href="/register">
-                  <UserPlus className="h-4 w-4 mr-2" />
-                  Sign up
-                </Link>
-              </Button>
+              <DesktopAuthSection />
             </div>
 
             <div className="flex lg:hidden items-center gap-4">
@@ -156,22 +281,7 @@ export function Navbar() {
                       })}
                     </div>
 
-                    <div className="pt-6 px-6 border-t space-y-2">
-                      <Button
-                        variant="outline"
-                        asChild
-                        className="w-full justify-center"
-                      >
-                        <Link href="/login" onClick={closeSheet}>
-                          Login
-                        </Link>
-                      </Button>
-                      <Button asChild className="w-full justify-center">
-                        <Link href="/register" onClick={closeSheet}>
-                          Sign up
-                        </Link>
-                      </Button>
-                    </div>
+                    <MobileAuthSection closeSheet={closeSheet} />
                   </div>
                 </SheetContent>
               </Sheet>

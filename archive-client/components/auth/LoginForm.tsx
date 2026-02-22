@@ -9,9 +9,11 @@ import { FaGithub } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AuthAPI } from "@/lib/auth-api";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function LoginForm() {
   const router = useRouter();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -29,9 +31,8 @@ export function LoginForm() {
       const response = await AuthAPI.login(formData);
 
       if (response.status && response.data) {
-        // Save token and user data
-        AuthAPI.saveToken(response.data.token);
-        AuthAPI.saveUser(response.data.user);
+        // Use auth context to update state
+        login(response.data.token, response.data.user);
 
         // Redirect to home or dashboard
         router.push("/");
@@ -49,7 +50,7 @@ export function LoginForm() {
 
   return (
     <div className="space-y-6 ">
-      <div className="grid grid-cols-2 gap-4">
+      {/* <div className="grid grid-cols-2 gap-4">
         <Button variant="outline" className="w-full" type="button">
           <FcGoogle className="mr-2 h-5 w-5" />
           Google
@@ -58,9 +59,9 @@ export function LoginForm() {
           <FaGithub className="mr-2 h-5 w-5" />
           Github
         </Button>
-      </div>
+      </div> */}
 
-      <div className="relative">
+      {/* <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t border-border" />
         </div>
@@ -69,7 +70,7 @@ export function LoginForm() {
             Or continue with
           </span>
         </div>
-      </div>
+      </div> */}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (

@@ -73,7 +73,7 @@ export function RegisterForm() {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-4">
+      {/* <div className="grid grid-cols-2 gap-4">
         <Button variant="outline" className="w-full" type="button">
           <FcGoogle className="mr-2 h-5 w-5" />
           Google
@@ -93,7 +93,7 @@ export function RegisterForm() {
             Or register with
           </span>
         </div>
-      </div>
+      </div> */}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
