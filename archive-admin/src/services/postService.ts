@@ -106,5 +106,32 @@ export const postService = {
         )
 
         return response.data
+    },
+
+    async batchDeletePosts(uuids: string[]): Promise<{ status: boolean; message: string; data: { deleted_count: number; uuids: string[] } }> {
+        if (API_CONFIG.USE_MOCK_POSTS) {
+            // Mock response for testing
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({
+                        status: true,
+                        message: "Posts deleted successfully",
+                        data: {
+                            deleted_count: uuids.length,
+                            uuids: uuids
+                        }
+                    })
+                }, 1000)
+            })
+        }
+
+        const response = await postalApi.delete<{ status: boolean; message: string; data: { deleted_count: number; uuids: string[] } }>(
+            '/posts/batch',
+            {
+                data: { uuids }
+            }
+        )
+
+        return response.data
     }
 }

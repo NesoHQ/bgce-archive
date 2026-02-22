@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu'
 import { MoreHorizontal, Edit, Trash2, CheckCircle, XCircle, Eye, Archive, FileText } from 'lucide-vue-next'
@@ -8,6 +9,7 @@ import type { Post } from '@/types/api'
 
 interface Props {
   post: Post
+  selected?: boolean
 }
 
 defineProps<Props>()
@@ -19,6 +21,7 @@ const emit = defineEmits<{
   unpublish: [id: number]
   archive: [id: number]
   preview: [id: number]
+  toggleSelect: []
 }>()
 
 const getStatusBadge = (status: string) => {
@@ -35,6 +38,12 @@ const getStatusBadge = (status: string) => {
 
 <template>
   <TableRow class="hover:bg-muted/30 transition-colors">
+    <TableCell class="w-12">
+      <Checkbox 
+        :checked="selected"
+        @update:checked="emit('toggleSelect')"
+      />
+    </TableCell>
     <TableCell>
       <div class="flex items-start gap-2">
         <div class="flex-1">

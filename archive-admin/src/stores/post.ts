@@ -218,6 +218,25 @@ export const usePostStore = defineStore('post', () => {
         }
     }
 
+    const batchDeletePosts = async (uuids: string[]) => {
+        loading.value = true
+        error.value = null
+        try {
+            const response = await postService.batchDeletePosts(uuids)
+            if (response.status) {
+                toast.success('Success', `Successfully deleted ${response.data.deleted_count} post(s)`)
+                await fetchPosts()
+                return response
+            }
+        } catch (err: any) {
+            error.value = err.message || 'Failed to delete posts'
+            toast.error('Error', error.value)
+            throw err
+        } finally {
+            loading.value = false
+        }
+    }
+
     return {
         posts,
         currentPost,
@@ -234,6 +253,7 @@ export const usePostStore = defineStore('post', () => {
         unpublishPost,
         archivePost,
         rejectPost,
-        bulkUploadPosts
+        bulkUploadPosts,
+        batchDeletePosts
     }
 })
