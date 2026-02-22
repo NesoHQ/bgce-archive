@@ -67,6 +67,10 @@ const handleDelete = async (tenantUuid: string, tenantName: string) => {
   }
 }
 
+const handleSwitch = (tenantUuid: string) => {
+  tenantStore.switchTenant(tenantUuid)
+}
+
 onMounted(() => {
   tenantStore.fetchTenants()
 })
@@ -152,6 +156,10 @@ onMounted(() => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                <DropdownMenuItem @click="handleSwitch(tenant.uuid)">
+                  <ExternalLink class="h-4 w-4 mr-2" />
+                  Switch to this tenant
+                </DropdownMenuItem>
                 <DropdownMenuItem @click="handleEdit(tenant.uuid)">
                   <Edit class="h-4 w-4 mr-2" />
                   Edit
@@ -212,6 +220,14 @@ onMounted(() => {
             >
               <Settings class="h-3 w-3 mr-1" />
               Settings
+            </Button>
+            <Button 
+              v-if="tenantStore.currentTenant?.uuid !== tenant.uuid"
+              size="sm" 
+              class="flex-1"
+              @click="handleSwitch(tenant.uuid)"
+            >
+              Switch
             </Button>
           </div>
         </CardContent>

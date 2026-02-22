@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/sidebar'
 import { useAuthStore } from '@/stores/auth'
 import { useTenantStore } from '@/stores/tenant'
+import TenantSwitcher from './TenantSwitcher.vue'
 
 const authStore = useAuthStore()
 const tenantStore = useTenantStore()
@@ -72,19 +73,19 @@ const isActive = (url: string) => {
 
 <template>
   <Sidebar class="border-r">
-    <SidebarHeader class="border-b px-6 py-5">
+    <SidebarHeader class="border-b px-4 py-4 space-y-4">
       <div class="flex items-center gap-3">
         <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center shadow-lg">
           <span class="text-white font-bold text-lg">A</span>
         </div>
         <div class="flex-1 min-w-0">
           <h2 class="font-bold text-base">Archive Admin</h2>
-          <p v-if="tenantStore.currentTenant" class="text-xs text-muted-foreground truncate">
-            {{ tenantStore.currentTenant.name }}
-          </p>
-          <p v-else class="text-xs text-muted-foreground">Loading...</p>
+          <p class="text-xs text-muted-foreground">Multi-Tenant CMS</p>
         </div>
       </div>
+      
+      <!-- Tenant Switcher -->
+      <TenantSwitcher />
     </SidebarHeader>
 
     <SidebarContent class="px-3 py-4">

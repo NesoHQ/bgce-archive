@@ -33,6 +33,12 @@ const handleCreateTenant = () => {
 const handleManageTenants = () => {
   router.push('/tenants')
 }
+
+const handleSwitchTenant = (tenantId: string) => {
+  if (tenantStore.currentTenant?.uuid !== tenantId) {
+    tenantStore.switchTenant(tenantId)
+  }
+}
 </script>
 
 <template>
@@ -67,8 +73,8 @@ const handleManageTenants = () => {
       <div class="max-h-[300px] overflow-y-auto">
         <DropdownMenuItem
           v-for="tenant in tenantStore.activeTenants"
-          :key="tenant.id"
-          @click="tenantStore.switchTenant(tenant.id)"
+          :key="tenant.uuid"
+          @click="handleSwitchTenant(tenant.uuid)"
           class="flex items-center gap-3 py-3 cursor-pointer"
         >
           <div class="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
@@ -87,7 +93,7 @@ const handleManageTenants = () => {
             <p class="text-xs text-muted-foreground truncate">{{ tenant.slug }}</p>
           </div>
           <Check 
-            v-if="tenantStore.currentTenant?.id === tenant.id"
+            v-if="tenantStore.currentTenant?.uuid === tenant.uuid"
             class="h-4 w-4 text-primary flex-shrink-0" 
           />
         </DropdownMenuItem>

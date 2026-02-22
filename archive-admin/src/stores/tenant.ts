@@ -17,44 +17,58 @@ export const useTenantStore = defineStore('tenant', () => {
     const isAdmin = computed(() => true) // TODO: Check if user has admin role from auth store
 
     /**
-     * Detect tenant from current domain
-     */
-    const detectTenantFromDomain = () => {
-        const hostname = window.location.hostname
-
-        // For localhost, use a default tenant identifier
-        if (hostname === 'localhost' || hostname === '127.0.0.1') {
-            return 'localhost' // Default tenant for local development
-        }
-
-        // Extract subdomain or domain
-        const parts = hostname.split('.')
-        if (parts.length > 2) {
-            // Subdomain-based: tenant.example.com -> tenant
-            return parts[0]
-        }
-
-        // Custom domain: example.com -> example.com
-        return hostname
-    }
-
-    /**
-     * Fetch current tenant based on domain
+     * Fetch current tenant from localStorage or default to localhost
      */
     const fetchCurrentTenant = async () => {
         try {
             loading.value = true
-            const tenantIdentifier = detectTenantFromDomain()
 
-            // Fetch tenant by domain/slug
-            const data = await tenantService.getTenantByDomain(tenantIdentifier)
-            currentTenant.value = data
+            // Check if user has a saved tenant selection
+            const savedTenantId = localStorage.getItem('selected-tenant-id')
 
-            console.log('Current tenant loaded:', currentTenant.value?.name)
+            if (savedTenantId) {
+                // Load the saved tenant
+                const tenant = await tenantService.getTenantById(savedTenantId)
+                currentTenant.value = tenant
+                console.log('Loaded saved tenant:', tenant.name)
+            } else {
+                // Default to localhost tenant
+                const tenant = await tenantService.getTenantByDomain('localhost')
+                currentTenant.value = tenant
+                localStorage.setItem('selected-tenant-id', tenant.uuid)
+                console.log('Loaded default localhost tenant:', tenant.name)
+            }
         } catch (error: any) {
             console.error('Failed to fetch current tenant:', error)
             toast.error('Failed to load tenant', {
-                description: error.response?.data?.message || 'Please check your domain configuration',
+                description: 'Please select a tenant to continue',
+            })
+        } finally {
+            loading.value = false
+        }
+    }
+
+    /**
+     * Switch to a different tenant
+     */
+    const switchTenant = async (tenantId: string) => {
+        try {
+            loading.value = true
+            const tenant = await tenantService.getTenantById(tenantId)
+
+            currentTenant.value = tenant
+            localStorage.setItem('selected-tenant-id', tenantId)
+
+            toast.success('Tenant switched', {
+                description: `Now managing ${tenant.name}`,
+            })
+
+            // Reload page to refresh all data for new tenant
+            window.location.reload()
+        } catch (error: any) {
+            console.error('Failed to switch tenant:', error)
+            toast.error('Failed to switch tenant', {
+                description: error.response?.data?.message || 'Please try again',
             })
         } finally {
             loading.value = false
@@ -147,6 +161,16 @@ export const useTenantStore = defineStore('tenant', () => {
 
             tenants.value = tenants.value.filter(t => t.uuid !== uuid)
 
+            // If deleted tenant was current, switch to first available
+            if (currentTenant.value?.uuid === uuid) {
+                if (tenants.value.length > 0) {
+                    await switchTenant(tenants.value[0].uuid)
+                } else {
+                    currentTenant.value = null
+                    localStorage.removeItem('selected-tenant-id')
+                }
+            }
+
             toast.success('Tenant deleted', {
                 description: 'Tenant has been removed successfully',
             })
@@ -168,8 +192,8 @@ export const useTenantStore = defineStore('tenant', () => {
         activeTenants,
         hasTenants,
         isAdmin,
-        detectTenantFromDomain,
         fetchCurrentTenant,
+        switchTenant,
         fetchTenants,
         createTenant,
         updateTenant,
