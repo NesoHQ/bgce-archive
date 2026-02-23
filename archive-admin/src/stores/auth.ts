@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
+import { useTenantStore } from './tenant'
 import { authService, userService } from '@/services'
 import type { User, LoginRequest, RegisterRequest } from '@/types/api'
 
@@ -27,6 +28,13 @@ export const useAuthStore = defineStore('auth', () => {
         user.value = response.data.user
         localStorage.setItem('auth-token', response.data.token)
         localStorage.setItem('user', JSON.stringify(response.data.user))
+
+        // Initialize tenant data after successful login
+        const tenantStore = useTenantStore()
+        await Promise.all([
+          tenantStore.fetchCurrentTenant(),
+          tenantStore.fetchTenants()
+        ])
 
         toast.success('Login Successful', {
           description: 'Welcome back!',
