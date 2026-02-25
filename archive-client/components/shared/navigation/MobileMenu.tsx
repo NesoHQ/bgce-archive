@@ -41,7 +41,7 @@ export function MobileMenu({ isOpen, onClose, navItems }: MobileMenuProps) {
     return (
         <div className="lg:hidden fixed inset-0 z-50 bg-background">
             <div className="h-full overflow-y-auto">
-                <div className="p-4 space-y-2">
+                <div className="p-4 space-y-1">
                     {navItems.map((item) => {
                         const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
 
@@ -51,8 +51,8 @@ export function MobileMenu({ isOpen, onClose, navItems }: MobileMenuProps) {
                                     <button
                                         onClick={() => setExpandedSection(expandedSection === "explore" ? null : "explore")}
                                         className={cn(
-                                            "w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium transition-colors",
-                                            isActive ? "bg-primary/10 text-primary" : "hover:bg-accent"
+                                            "w-full flex items-center justify-between px-4 py-3 rounded-md text-sm font-medium transition-colors",
+                                            isActive ? "bg-primary/10 text-primary" : "hover:bg-accent text-foreground"
                                         )}
                                     >
                                         {item.label}
@@ -63,13 +63,13 @@ export function MobileMenu({ isOpen, onClose, navItems }: MobileMenuProps) {
                                         )}
                                     </button>
                                     {expandedSection === "explore" && (
-                                        <div className="ml-4 mt-2 space-y-1">
+                                        <div className="ml-4 mt-1 space-y-1">
                                             {exploreItems.map((subItem) => (
                                                 <Link
                                                     key={subItem.href}
                                                     href={subItem.href}
                                                     onClick={onClose}
-                                                    className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
+                                                    className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
                                                 >
                                                     {subItem.label}
                                                 </Link>
@@ -86,8 +86,8 @@ export function MobileMenu({ isOpen, onClose, navItems }: MobileMenuProps) {
                                 href={item.href}
                                 onClick={onClose}
                                 className={cn(
-                                    "block px-4 py-3 rounded-lg text-sm font-medium transition-colors",
-                                    isActive ? "bg-primary/10 text-primary" : "hover:bg-accent"
+                                    "block px-4 py-3 rounded-md text-sm font-medium transition-colors",
+                                    isActive ? "bg-primary/10 text-primary" : "hover:bg-accent text-foreground"
                                 )}
                             >
                                 {item.label}
@@ -99,7 +99,7 @@ export function MobileMenu({ isOpen, onClose, navItems }: MobileMenuProps) {
                     <div>
                         <button
                             onClick={() => setExpandedSection(expandedSection === "resources" ? null : "resources")}
-                            className="w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium hover:bg-accent transition-colors"
+                            className="w-full flex items-center justify-between px-4 py-3 rounded-md text-sm font-medium hover:bg-accent transition-colors text-foreground"
                         >
                             Resources
                             {expandedSection === "resources" ? (
@@ -109,13 +109,13 @@ export function MobileMenu({ isOpen, onClose, navItems }: MobileMenuProps) {
                             )}
                         </button>
                         {expandedSection === "resources" && (
-                            <div className="ml-4 mt-2 space-y-1">
+                            <div className="ml-4 mt-1 space-y-1">
                                 {resourceItems.map((item) => (
                                     <Link
                                         key={item.href}
                                         href={item.href}
                                         onClick={onClose}
-                                        className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
+                                        className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
                                     >
                                         {item.label}
                                     </Link>
@@ -128,8 +128,8 @@ export function MobileMenu({ isOpen, onClose, navItems }: MobileMenuProps) {
                 {/* Auth Section */}
                 <div className="p-4 border-t mt-4">
                     {isAuthenticated && user ? (
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-muted">
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-3 px-3 py-2 rounded-md bg-muted">
                                 <Avatar className="h-10 w-10">
                                     <AvatarFallback className="bg-primary/20 text-primary text-sm font-semibold">
                                         {user.username.charAt(0).toUpperCase()}
