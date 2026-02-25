@@ -15,7 +15,12 @@ header[data-navigation="main"] {
     z-index: 2147483646 !important;
 }
 
+/* Auth page back button needs to be clickable */
+[data-auth-back-button="true"] {
+    z-index: 50 !important;
+}
+
 /* Everything else gets auto z-index */
-body *:not(header):not(header *):not([data-nav-dropdown]):not([data-mobile-drawer]):not([data-mobile-drawer] *) {
+body *:not(header):not(header *):not([data-nav-dropdown]):not([data-mobile-drawer]):not([data-mobile-drawer] *):not([data-auth-back-button]) {
     z-index: auto !important;
 }

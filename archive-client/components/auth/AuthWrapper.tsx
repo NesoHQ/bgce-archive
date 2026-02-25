@@ -36,12 +36,17 @@ export function AuthWrapper({
   className,
 }: AuthWrapperProps) {
   return (
-    <div className="relative flex mt-10 min-h-[calc(100vh-140px)] w-full items-center justify-center p-4 md:p-8 overflow-hidden">
-      <div className="absolute top-4 left-4 md:top-8 md:left-8 z-20">
+    <div className="relative flex min-h-screen w-full items-center justify-center p-4 md:p-8 overflow-hidden">
+      {/* Back to Home Button - Top Left Corner */}
+      <div
+        className="z-50"
+        data-auth-back-button="true"
+        style={{ position: 'fixed', top: '1rem', left: '1rem' }}
+      >
         <Button
           variant="ghost"
           asChild
-          className="group text-muted-foreground hover:text-primary transition-colors"
+          className="group text-muted-foreground hover:text-primary dark:hover:text-[oklch(0.85_0.28_260)] transition-colors border-2 border-transparent hover:border-border dark:hover:border-[oklch(0.75_0.22_260)] hover:bg-accent dark:hover:bg-[oklch(0.28_0.06_260)]"
         >
           <Link href="/">
             <ChevronLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
