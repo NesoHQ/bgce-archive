@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/shared/Navbar";
+import { MainNavigation } from "@/components/shared/MainNavigation";
 import Footer from "@/components/shared/Footer";
 
 export default function HomeLayout({
@@ -8,7 +8,7 @@ export default function HomeLayout({
 }>) {
   return (
     <div suppressHydrationWarning>
-      <Navbar />
+      <MainNavigation />
       {children}
       <Footer />
     </div>
