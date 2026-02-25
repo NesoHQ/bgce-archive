@@ -1,15 +1,15 @@
+import { ComingSoon } from "@/components/shared/ComingSoon";
+import { GraduationCap } from "lucide-react";
+
 export default function InterviewPrepPage() {
     return (
         <div className="min-h-screen">
-            <section className="py-12">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-4xl font-bold text-foreground mb-4">Interview Prep</h1>
-                    <p className="text-muted-foreground">Master coding interviews with curated problems</p>
-                </div>
-            </section>
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-                <p className="text-muted-foreground">Coming soon...</p>
-            </div>
+            <ComingSoon
+                title="Interview Preparation"
+                description="Comprehensive interview prep resources including coding patterns, system design, behavioral questions, and company-specific guides."
+                icon={GraduationCap}
+                estimatedDate="Q2 2024"
+            />
         </div>
     );
 }

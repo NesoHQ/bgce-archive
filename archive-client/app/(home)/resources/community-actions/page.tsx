@@ -1,15 +1,15 @@
+import { ComingSoon } from "@/components/shared/ComingSoon";
+import { Users } from "lucide-react";
+
 export default function CommunityActionsPage() {
     return (
         <div className="min-h-screen">
-            <section className="py-12">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-4xl font-bold text-foreground mb-4">Community Actions</h1>
-                    <p className="text-muted-foreground">Get involved with community initiatives</p>
-                </div>
-            </section>
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-                <p className="text-muted-foreground">Coming soon...</p>
-            </div>
+            <ComingSoon
+                title="Community Actions"
+                description="Engage with the community through events, challenges, hackathons, and collaborative initiatives. Build connections and grow together."
+                icon={Users}
+                estimatedDate="Q3 2024"
+            />
         </div>
     );
 }

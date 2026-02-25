@@ -1,15 +1,15 @@
+import { ComingSoon } from "@/components/shared/ComingSoon";
+import { BarChart3 } from "lucide-react";
+
 export default function BenchmarkPage() {
     return (
         <div className="min-h-screen">
-            <section className="py-12">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-4xl font-bold text-foreground mb-4">Benchmark</h1>
-                    <p className="text-muted-foreground">Compare performance and compete with the community</p>
-                </div>
-            </section>
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-                <p className="text-muted-foreground">Coming soon...</p>
-            </div>
+            <ComingSoon
+                title="Performance Benchmarks"
+                description="Compare performance metrics, analyze system benchmarks, and track improvements across different technologies and frameworks."
+                icon={BarChart3}
+                estimatedDate="Q3 2024"
+            />
         </div>
     );
 }
