@@ -112,14 +112,15 @@ export default function CoursesPage() {
 
     return (
         <div className="min-h-screen">
-            {/* Breadcrumb */}
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-2">
-                <CoursesBreadcrumb />
-            </div>
-
-            {/* Compact Header */}
-            <section className="py-3 border-b border-border/50 bg-gradient-to-b from-background to-muted/20">
+            {/* Combined Breadcrumb & Header Section */}
+            <section className="py-4 border-b border-border/50 bg-gradient-to-b from-background to-muted/20">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                    {/* Breadcrumb */}
+                    <div className="mb-3">
+                        <CoursesBreadcrumb />
+                    </div>
+
+                    {/* Header */}
                     <div className="flex items-center gap-2 mb-1">
                         <div className="p-1.5 rounded-lg bg-primary/10 dark:bg-primary/20">
                             <BookOpen className="h-4 w-4 text-primary" />
@@ -268,67 +269,67 @@ export default function CoursesPage() {
                                         <div className="text-2xl">{course.thumbnail}</div>
 
                                         {/* Floating Badges on Thumbnail */}
-                                        <div className="absolute top-1 left-1 flex flex-wrap gap-0.5">
+                                        <div className="absolute top-1.5 left-1.5 flex flex-wrap gap-1">
                                             {course.trending && (
-                                                <span className="px-1 py-0.5 rounded bg-primary/90 dark:bg-primary/80 text-white text-[7px] font-black flex items-center gap-0.5 shadow-sm backdrop-blur-sm leading-none">
-                                                    <TrendingUp className="h-1.5 w-1.5" />
+                                                <span className="px-1.5 py-1 rounded bg-primary/90 dark:bg-primary/80 text-white text-[8px] font-black flex items-center gap-0.5 shadow-sm backdrop-blur-sm leading-none">
+                                                    <TrendingUp className="h-2 w-2" />
                                                     HOT
                                                 </span>
                                             )}
                                             {course.price === "Free" && (
-                                                <span className="px-1 py-0.5 rounded bg-green-500/90 dark:bg-green-500/80 text-white text-[7px] font-black shadow-sm backdrop-blur-sm leading-none">
+                                                <span className="px-1.5 py-1 rounded bg-green-500/90 dark:bg-green-500/80 text-white text-[8px] font-black shadow-sm backdrop-blur-sm leading-none">
                                                     FREE
                                                 </span>
                                             )}
                                         </div>
 
                                         {/* Level Badge on Thumbnail */}
-                                        <div className="absolute top-1 right-1">
-                                            <span className="px-1.5 py-0.5 rounded bg-card/90 dark:bg-card/80 border border-border/50 dark:border-input/50 text-[8px] font-black text-foreground shadow-sm backdrop-blur-sm leading-none">
+                                        <div className="absolute top-1.5 right-1.5">
+                                            <span className="px-2 py-1 rounded bg-card/90 dark:bg-card/80 border border-border/50 dark:border-input/50 text-[9px] font-black text-foreground shadow-sm backdrop-blur-sm leading-none">
                                                 {course.level.toUpperCase()}
                                             </span>
                                         </div>
 
                                         {/* Rating Badge on Thumbnail */}
-                                        <div className="absolute bottom-1 right-1 flex items-center gap-0.5 px-1 py-0.5 rounded bg-card/90 dark:bg-card/80 border border-border/50 dark:border-input/50 shadow-sm backdrop-blur-sm">
-                                            <Star className="h-2 w-2 fill-yellow-400 text-yellow-400" />
-                                            <span className="text-[7px] font-black text-foreground leading-none">{course.rating}</span>
+                                        <div className="absolute bottom-1.5 right-1.5 flex items-center gap-1 px-1.5 py-1 rounded bg-card/90 dark:bg-card/80 border border-border/50 dark:border-input/50 shadow-sm backdrop-blur-sm">
+                                            <Star className="h-2.5 w-2.5 fill-yellow-400 text-yellow-400" />
+                                            <span className="text-[8px] font-black text-foreground leading-none">{course.rating}</span>
                                         </div>
                                     </div>
 
-                                    <div className="p-2">
-                                        {/* Title - Bigger */}
-                                        <h3 className="text-xs font-black text-foreground mb-1 group-hover:text-primary dark:group-hover:text-[oklch(0.85_0.28_260)] dark:group-hover:drop-shadow-[0_0_8px_oklch(0.65_0.18_260/0.3)] transition-all line-clamp-2 leading-tight tracking-tight">
+                                    <div className="p-2.5">
+                                        {/* Title - More Readable */}
+                                        <h3 className="text-sm font-black text-foreground mb-1.5 group-hover:text-primary dark:group-hover:text-[oklch(0.85_0.28_260)] dark:group-hover:drop-shadow-[0_0_8px_oklch(0.65_0.18_260/0.3)] transition-all line-clamp-2 leading-tight tracking-tight">
                                             {course.title}
                                         </h3>
 
-                                        {/* Description - Bigger */}
-                                        <p className="text-[9px] text-muted-foreground mb-1.5 line-clamp-2 leading-relaxed">
+                                        {/* Description - More Readable */}
+                                        <p className="text-[10px] text-muted-foreground mb-2 line-clamp-2 leading-relaxed">
                                             {course.description}
                                         </p>
 
                                         {/* Rich Meta Info Grid */}
-                                        <div className="grid grid-cols-3 gap-1 mb-1.5">
-                                            <div className="flex flex-col items-center justify-center p-0.5 rounded bg-accent/50 dark:bg-accent/30 border border-border/50 dark:border-input/30">
-                                                <Clock className="h-2 w-2 text-primary mb-0.5" />
-                                                <span className="text-[7px] font-black text-foreground leading-none">{course.duration}</span>
+                                        <div className="grid grid-cols-3 gap-1.5 mb-2">
+                                            <div className="flex flex-col items-center justify-center p-1 rounded bg-accent/50 dark:bg-accent/30 border border-border/50 dark:border-input/30">
+                                                <Clock className="h-2.5 w-2.5 text-primary mb-0.5" />
+                                                <span className="text-[8px] font-black text-foreground leading-none">{course.duration}</span>
                                             </div>
-                                            <div className="flex flex-col items-center justify-center p-0.5 rounded bg-accent/50 dark:bg-accent/30 border border-border/50 dark:border-input/30">
-                                                <Users className="h-2 w-2 text-primary mb-0.5" />
-                                                <span className="text-[7px] font-black text-foreground leading-none">{(course.students / 1000).toFixed(1)}K</span>
+                                            <div className="flex flex-col items-center justify-center p-1 rounded bg-accent/50 dark:bg-accent/30 border border-border/50 dark:border-input/30">
+                                                <Users className="h-2.5 w-2.5 text-primary mb-0.5" />
+                                                <span className="text-[8px] font-black text-foreground leading-none">{(course.students / 1000).toFixed(1)}K</span>
                                             </div>
-                                            <div className="flex flex-col items-center justify-center p-0.5 rounded bg-accent/50 dark:bg-accent/30 border border-border/50 dark:border-input/30">
-                                                <BookOpen className="h-2 w-2 text-primary mb-0.5" />
-                                                <span className="text-[7px] font-black text-foreground leading-none">{course.topic.slice(0, 4)}</span>
+                                            <div className="flex flex-col items-center justify-center p-1 rounded bg-accent/50 dark:bg-accent/30 border border-border/50 dark:border-input/30">
+                                                <BookOpen className="h-2.5 w-2.5 text-primary mb-0.5" />
+                                                <span className="text-[8px] font-black text-foreground leading-none">{course.topic.slice(0, 4)}</span>
                                             </div>
                                         </div>
 
                                         {/* Footer with Price */}
-                                        <div className="flex items-center justify-between pt-1 border-t border-border dark:border-input/50">
-                                            <span className="text-[7px] text-muted-foreground font-bold uppercase tracking-wide">
+                                        <div className="flex items-center justify-between pt-1.5 border-t border-border dark:border-input/50">
+                                            <span className="text-[8px] text-muted-foreground font-bold uppercase tracking-wide">
                                                 Enroll Now
                                             </span>
-                                            <span className="text-xs font-black text-primary dark:text-primary group-hover:text-primary dark:group-hover:text-[oklch(0.85_0.28_260)] transition-colors">
+                                            <span className="text-sm font-black text-primary dark:text-primary group-hover:text-primary dark:group-hover:text-[oklch(0.85_0.28_260)] transition-colors">
                                                 {course.price}
                                             </span>
                                         </div>
