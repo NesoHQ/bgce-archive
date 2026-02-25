@@ -256,69 +256,69 @@ export default function CoursesPage() {
                         </div>
 
                         {/* Ultra Compact Courses Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-2.5">
                             {filteredCourses.map((course) => (
                                 <Link
                                     key={course.id}
                                     href={`/explore/courses/${course.id}`}
-                                    className="group bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-border dark:border-input backdrop-blur-sm rounded-lg overflow-hidden hover:shadow-xl dark:hover:shadow-[0_8px_32px_oklch(0.65_0.18_260/0.3)] hover:border-primary/50 dark:hover:border-[oklch(0.75_0.22_260)] transition-all duration-300 hover:-translate-y-0.5"
+                                    className="group bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-border dark:border-input backdrop-blur-sm rounded-md overflow-hidden hover:shadow-lg dark:hover:shadow-[0_4px_20px_oklch(0.65_0.18_260/0.3)] hover:border-primary/50 dark:hover:border-[oklch(0.75_0.22_260)] transition-all duration-300 hover:-translate-y-0.5"
                                 >
-                                    {/* Ultra Compact Thumbnail */}
-                                    <div className="aspect-[2/1] bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 dark:from-primary/30 dark:via-primary/15 dark:to-primary/5 flex items-center justify-center text-4xl border-b-2 border-border dark:border-input group-hover:border-primary/30 transition-colors">
+                                    {/* Minimal Thumbnail */}
+                                    <div className="aspect-[3/1.5] bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 dark:from-primary/30 dark:via-primary/15 dark:to-primary/5 flex items-center justify-center text-3xl border-b border-border dark:border-input group-hover:border-primary/30 transition-colors">
                                         {course.thumbnail}
                                     </div>
 
-                                    <div className="p-2.5">
-                                        {/* Ultra Compact Badges */}
-                                        <div className="flex items-center gap-1 mb-1.5">
-                                            <span className="px-1.5 py-0.5 rounded-full bg-accent dark:bg-accent/50 text-[9px] font-bold border border-border/50 dark:border-input/50">
-                                                {course.level}
+                                    <div className="p-2">
+                                        {/* Minimal Badges */}
+                                        <div className="flex items-center gap-0.5 mb-1">
+                                            <span className="px-1 py-0.5 rounded-full bg-accent dark:bg-accent/50 text-[8px] font-bold border border-border/50 dark:border-input/50 leading-none">
+                                                {course.level.slice(0, 3)}
                                             </span>
                                             {course.price === "Free" && (
-                                                <span className="px-1.5 py-0.5 rounded-full bg-green-500/10 dark:bg-green-500/20 text-green-600 dark:text-green-400 text-[9px] font-bold border border-green-500/20">
+                                                <span className="px-1 py-0.5 rounded-full bg-green-500/10 dark:bg-green-500/20 text-green-600 dark:text-green-400 text-[8px] font-bold border border-green-500/20 leading-none">
                                                     Free
                                                 </span>
                                             )}
                                             {course.trending && (
-                                                <span className="px-1.5 py-0.5 rounded-full bg-primary/10 dark:bg-primary/20 text-primary text-[9px] font-bold flex items-center gap-0.5 border border-primary/20">
-                                                    <TrendingUp className="h-2 w-2" />
+                                                <span className="px-1 py-0.5 rounded-full bg-primary/10 dark:bg-primary/20 text-primary text-[8px] font-bold flex items-center gap-0.5 border border-primary/20 leading-none">
+                                                    <TrendingUp className="h-1.5 w-1.5" />
                                                     Hot
                                                 </span>
                                             )}
                                         </div>
 
                                         {/* Title */}
-                                        <h3 className="text-xs font-bold text-foreground mb-1 group-hover:text-primary dark:group-hover:text-[oklch(0.85_0.28_260)] dark:group-hover:drop-shadow-[0_0_8px_oklch(0.65_0.18_260/0.3)] transition-all line-clamp-2 leading-tight">
+                                        <h3 className="text-[11px] font-bold text-foreground mb-0.5 group-hover:text-primary dark:group-hover:text-[oklch(0.85_0.28_260)] dark:group-hover:drop-shadow-[0_0_8px_oklch(0.65_0.18_260/0.3)] transition-all line-clamp-2 leading-tight">
                                             {course.title}
                                         </h3>
 
                                         {/* Description */}
-                                        <p className="text-[10px] text-muted-foreground mb-2 line-clamp-2 leading-snug">
+                                        <p className="text-[9px] text-muted-foreground mb-1.5 line-clamp-2 leading-snug">
                                             {course.description}
                                         </p>
 
                                         {/* Meta Info */}
-                                        <div className="flex items-center gap-2 text-[9px] text-muted-foreground mb-2">
+                                        <div className="flex items-center gap-1.5 text-[8px] text-muted-foreground mb-1.5">
                                             <div className="flex items-center gap-0.5">
-                                                <Clock className="h-2.5 w-2.5" />
+                                                <Clock className="h-2 w-2" />
                                                 <span className="font-bold">{course.duration}</span>
                                             </div>
                                             <div className="flex items-center gap-0.5">
-                                                <Star className="h-2.5 w-2.5 fill-yellow-400 text-yellow-400" />
+                                                <Star className="h-2 w-2 fill-yellow-400 text-yellow-400" />
                                                 <span className="font-bold">{course.rating}</span>
                                             </div>
                                             <div className="flex items-center gap-0.5">
-                                                <Users className="h-2.5 w-2.5" />
+                                                <Users className="h-2 w-2" />
                                                 <span className="font-bold">{(course.students / 1000).toFixed(1)}K</span>
                                             </div>
                                         </div>
 
                                         {/* Footer */}
-                                        <div className="flex items-center justify-between pt-2 border-t border-border dark:border-input/50">
-                                            <span className="text-[9px] text-muted-foreground font-semibold">
-                                                {course.students.toLocaleString()} enrolled
+                                        <div className="flex items-center justify-between pt-1.5 border-t border-border dark:border-input/50">
+                                            <span className="text-[8px] text-muted-foreground font-semibold">
+                                                {(course.students / 1000).toFixed(1)}K enrolled
                                             </span>
-                                            <span className="text-xs font-bold text-primary dark:text-primary group-hover:text-primary dark:group-hover:text-[oklch(0.85_0.28_260)] transition-colors">
+                                            <span className="text-[11px] font-bold text-primary dark:text-primary group-hover:text-primary dark:group-hover:text-[oklch(0.85_0.28_260)] transition-colors">
                                                 {course.price}
                                             </span>
                                         </div>
