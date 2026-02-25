@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Search, Clock, Star, TrendingUp, BookOpen, Users, Filter, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search, Clock, Star, TrendingUp, BookOpen, Users, Filter, X, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CoursesBreadcrumb } from "@/components/shared/CoursesBreadcrumb";
+import { Portal } from "@/components/ui/Portal";
 import Link from "next/link";
 
 export default function CoursesPage() {
@@ -13,6 +14,19 @@ export default function CoursesPage() {
     const [showFreeOnly, setShowFreeOnly] = useState(false);
     const [showNewOnly, setShowNewOnly] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+    // Prevent body scroll when drawer is open
+    useEffect(() => {
+        if (showMobileFilters) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [showMobileFilters]);
 
     const levels = ["Beginner", "Intermediate", "Advanced"];
     const topics = ["AWS", "Java", "Python", "System Design", "DevOps", "Go", "Kubernetes", "Docker"];
@@ -132,9 +146,172 @@ export default function CoursesPage() {
             </section>
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                {/* Mobile Filter Button */}
+                <div className="lg:hidden mb-4">
+                    <Button
+                        onClick={() => setShowMobileFilters(true)}
+                        variant="outline"
+                        className="w-full h-10 border-2 dark:border-input dark:hover:border-[oklch(0.75_0.22_260)] dark:hover:bg-[oklch(0.28_0.06_260)] dark:hover:text-[oklch(0.85_0.28_260)] font-bold"
+                    >
+                        <SlidersHorizontal className="h-4 w-4 mr-2" />
+                        Filters & Search
+                        {activeFiltersCount > 0 && (
+                            <span className="ml-2 px-2 py-0.5 rounded-full bg-primary text-white text-xs">
+                                {activeFiltersCount}
+                            </span>
+                        )}
+                    </Button>
+                </div>
+
+                {/* Mobile Filter Drawer */}
+                {showMobileFilters && (
+                    <Portal>
+                        <div
+                            data-mobile-drawer="true"
+                            className="fixed inset-0 lg:hidden"
+                            style={{ zIndex: 2147483646 }}
+                        >
+                            {/* Backdrop */}
+                            <div
+                                className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
+                                onClick={() => setShowMobileFilters(false)}
+                            />
+
+                            {/* Drawer */}
+                            <div className="absolute inset-x-0 bottom-0 bg-card border-t-2 border-border dark:border-input rounded-t-2xl shadow-2xl max-h-[85vh] overflow-y-auto animate-in slide-in-from-bottom duration-300">
+                                {/* Drawer Header */}
+                                <div className="sticky top-0 bg-card/95 backdrop-blur-sm border-b border-border dark:border-input p-4 flex items-center justify-between z-10">
+                                    <div className="flex items-center gap-2">
+                                        <SlidersHorizontal className="h-5 w-5 text-primary" />
+                                        <h2 className="text-lg font-bold text-foreground">Filters & Search</h2>
+                                    </div>
+                                    <button
+                                        onClick={() => setShowMobileFilters(false)}
+                                        className="p-2 rounded-lg hover:bg-accent dark:hover:bg-accent/50 transition-colors"
+                                    >
+                                        <X className="h-5 w-5" />
+                                    </button>
+                                </div>
+
+                                {/* Drawer Content */}
+                                <div className="p-4 space-y-4">
+                                    {/* Search */}
+                                    <div>
+                                        <label className="text-sm font-bold text-foreground mb-2 flex items-center gap-1.5 uppercase tracking-wide">
+                                            <Search className="h-3.5 w-3.5" />
+                                            Search Courses
+                                        </label>
+                                        <div className="relative">
+                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                            <Input
+                                                placeholder="Find courses..."
+                                                value={searchQuery}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                                className="pl-10 h-11 text-base border-2 dark:bg-input/30 dark:border-input dark:hover:border-primary/50 dark:focus:border-primary transition-colors"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Quick Filters */}
+                                    <div className="p-3 rounded-lg border-2 border-border dark:border-input bg-card/50 dark:bg-card/30 backdrop-blur-sm">
+                                        <label className="text-sm font-bold text-foreground mb-2 flex items-center gap-1.5 uppercase tracking-wide">
+                                            <Filter className="h-3.5 w-3.5" />
+                                            Quick Filters
+                                        </label>
+                                        <div className="space-y-2">
+                                            <label className="flex items-center gap-2 cursor-pointer group p-2 rounded-md hover:bg-accent/50 dark:hover:bg-accent/30 transition-colors">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={showNewOnly}
+                                                    onChange={(e) => setShowNewOnly(e.target.checked)}
+                                                    className="rounded border-border w-5 h-5 text-primary focus:ring-primary/20 dark:bg-input/50 dark:border-input"
+                                                />
+                                                <span className="text-sm font-medium text-foreground group-hover:text-primary dark:group-hover:text-[oklch(0.85_0.28_260)] transition-colors">Trending Courses</span>
+                                            </label>
+                                            <label className="flex items-center gap-2 cursor-pointer group p-2 rounded-md hover:bg-accent/50 dark:hover:bg-accent/30 transition-colors">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={showFreeOnly}
+                                                    onChange={(e) => setShowFreeOnly(e.target.checked)}
+                                                    className="rounded border-border w-5 h-5 text-primary focus:ring-primary/20 dark:bg-input/50 dark:border-input"
+                                                />
+                                                <span className="text-sm font-medium text-foreground group-hover:text-primary dark:group-hover:text-[oklch(0.85_0.28_260)] transition-colors">Free Courses Only</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    {/* Skill Level */}
+                                    <div>
+                                        <label className="text-sm font-bold text-foreground mb-2 block uppercase tracking-wide">Skill Level</label>
+                                        <div className="grid grid-cols-3 gap-2">
+                                            {levels.map((level) => (
+                                                <button
+                                                    key={level}
+                                                    onClick={() => setSelectedLevel(selectedLevel === level ? null : level)}
+                                                    className={`text-center px-3 py-2.5 rounded-lg text-xs font-bold transition-all border-2 ${selectedLevel === level
+                                                        ? "bg-primary text-white dark:text-white border-primary shadow-md dark:shadow-[0_0_12px_oklch(0.65_0.18_260/0.3)]"
+                                                        : "bg-card/50 dark:bg-card/30 border-border dark:border-input hover:border-primary/50 dark:hover:border-[oklch(0.75_0.22_260)] hover:bg-accent dark:hover:bg-[oklch(0.28_0.06_260)] text-foreground dark:hover:text-[oklch(0.85_0.28_260)]"
+                                                        }`}
+                                                >
+                                                    {level}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Topics */}
+                                    <div>
+                                        <label className="text-sm font-bold text-foreground mb-2 block uppercase tracking-wide">Topics</label>
+                                        <div className="flex flex-wrap gap-2">
+                                            {topics.map((topic) => (
+                                                <button
+                                                    key={topic}
+                                                    onClick={() => setSelectedTopic(selectedTopic === topic ? null : topic)}
+                                                    className={`px-3 py-2 rounded-full text-xs font-bold transition-all border-2 ${selectedTopic === topic
+                                                        ? "bg-primary text-white dark:text-white border-primary shadow-md dark:shadow-[0_0_8px_oklch(0.65_0.18_260/0.3)]"
+                                                        : "bg-card/50 dark:bg-card/30 border-border dark:border-input hover:border-primary/50 dark:hover:border-[oklch(0.75_0.22_260)] hover:bg-accent dark:hover:bg-[oklch(0.28_0.06_260)] text-foreground dark:hover:text-[oklch(0.85_0.28_260)]"
+                                                        }`}
+                                                >
+                                                    {topic}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Action Buttons */}
+                                    <div className="flex gap-2 pt-2">
+                                        {activeFiltersCount > 0 && (
+                                            <Button
+                                                variant="outline"
+                                                onClick={() => {
+                                                    setSelectedLevel(null);
+                                                    setSelectedTopic(null);
+                                                    setShowFreeOnly(false);
+                                                    setShowNewOnly(false);
+                                                    setSearchQuery("");
+                                                }}
+                                                className="flex-1 h-11 text-sm font-bold border-2 dark:border-input dark:hover:border-[oklch(0.75_0.22_260)] dark:hover:bg-[oklch(0.28_0.06_260)] dark:hover:text-[oklch(0.85_0.28_260)]"
+                                            >
+                                                <X className="h-4 w-4 mr-2" />
+                                                Clear All
+                                            </Button>
+                                        )}
+                                        <Button
+                                            onClick={() => setShowMobileFilters(false)}
+                                            className="flex-1 h-11 text-sm font-bold bg-gradient-to-r from-[oklch(0.4_0.14_260)] to-[oklch(0.35_0.12_260)] hover:from-[oklch(0.45_0.16_260)] hover:to-[oklch(0.4_0.14_260)] dark:from-[oklch(0.65_0.18_260)] dark:to-[oklch(0.6_0.16_260)] dark:hover:from-[oklch(0.75_0.22_260)] dark:hover:to-[oklch(0.7_0.2_260)] text-white dark:text-white"
+                                        >
+                                            Show {filteredCourses.length} Course{filteredCourses.length !== 1 ? 's' : ''}
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </Portal>
+                )}
+
                 <div className="flex flex-col lg:flex-row gap-4">
-                    {/* Ultra Compact Filters Sidebar */}
-                    <aside className="lg:w-48 flex-shrink-0">
+                    {/* Desktop Filters Sidebar - Hidden on Mobile */}
+                    <aside className="hidden lg:block lg:w-48 flex-shrink-0">
                         <div className="sticky top-20 space-y-3">
                             {/* Search */}
                             <div>
@@ -257,12 +434,12 @@ export default function CoursesPage() {
                         </div>
 
                         {/* Super Compact & Rich Courses Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 sm:gap-2.5 md:gap-3">
                             {filteredCourses.map((course) => (
                                 <Link
                                     key={course.id}
                                     href={`/explore/courses/${course.id}`}
-                                    className="group relative bg-gradient-to-br from-card via-card/95 to-card/80 dark:from-card dark:via-card/95 dark:to-card/50 border border-border dark:border-input backdrop-blur-sm rounded-lg overflow-hidden hover:shadow-lg dark:hover:shadow-[0_4px_20px_oklch(0.65_0.18_260/0.3)] hover:border-primary/50 dark:hover:border-[oklch(0.75_0.22_260)] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02]"
+                                    className="group relative bg-gradient-to-br from-card via-card/95 to-card/80 dark:from-card dark:via-card/95 dark:to-card/50 border border-border dark:border-input backdrop-blur-sm rounded-lg overflow-hidden hover:shadow-lg dark:hover:shadow-[0_4px_20px_oklch(0.65_0.18_260/0.3)] hover:border-primary/50 dark:hover:border-[oklch(0.75_0.22_260)] transition-all duration-300 hover:-translate-y-1 active:scale-95"
                                 >
                                     {/* Compact Thumbnail with Overlay */}
                                     <div className="relative aspect-[5/2] bg-gradient-to-br from-primary/25 via-primary/15 to-primary/5 dark:from-primary/35 dark:via-primary/20 dark:to-primary/5 flex items-center justify-center border-b border-border dark:border-input group-hover:border-primary/40 transition-colors">
@@ -297,14 +474,14 @@ export default function CoursesPage() {
                                         </div>
                                     </div>
 
-                                    <div className="p-2.5">
+                                    <div className="p-2.5 sm:p-3">
                                         {/* Title - More Readable */}
-                                        <h3 className="text-sm font-black text-foreground mb-1.5 group-hover:text-primary dark:group-hover:text-[oklch(0.85_0.28_260)] dark:group-hover:drop-shadow-[0_0_8px_oklch(0.65_0.18_260/0.3)] transition-all line-clamp-2 leading-tight tracking-tight">
+                                        <h3 className="text-sm sm:text-base font-black text-foreground mb-1.5 group-hover:text-primary dark:group-hover:text-[oklch(0.85_0.28_260)] dark:group-hover:drop-shadow-[0_0_8px_oklch(0.65_0.18_260/0.3)] transition-all line-clamp-2 leading-tight tracking-tight">
                                             {course.title}
                                         </h3>
 
                                         {/* Description - More Readable */}
-                                        <p className="text-[10px] text-muted-foreground mb-2 line-clamp-2 leading-relaxed">
+                                        <p className="text-[10px] sm:text-xs text-muted-foreground mb-2 line-clamp-2 leading-relaxed">
                                             {course.description}
                                         </p>
 

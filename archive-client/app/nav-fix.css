@@ -10,7 +10,12 @@ header[data-navigation="main"] {
     z-index: 2147483647 !important;
 }
 
+/* Mobile filter drawer needs high z-index */
+[data-mobile-drawer="true"] {
+    z-index: 2147483646 !important;
+}
+
 /* Everything else gets auto z-index */
-body *:not(header):not(header *):not([data-nav-dropdown]) {
+body *:not(header):not(header *):not([data-nav-dropdown]):not([data-mobile-drawer]):not([data-mobile-drawer] *) {
     z-index: auto !important;
 }

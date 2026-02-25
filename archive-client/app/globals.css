@@ -169,7 +169,7 @@ html {
 
   /* Force navigation to stay on top - CRITICAL */
   header[data-navigation="main"] {
-    z-index: 999999 !important;
+    z-index: 9998 !important;
     position: sticky !important;
     top: 0 !important;
     isolation: isolate !important;
