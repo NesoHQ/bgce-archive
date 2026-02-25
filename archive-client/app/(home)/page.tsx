@@ -6,7 +6,7 @@ import { SkeletonCardGrid } from "@/components/shared/SkeletonCard";
 
 export default function HomePage() {
   return (
-    <div>
+    <>
       <WelcomeSection />
       <Suspense fallback={<div className="py-16"><SkeletonCardGrid count={4} /></div>}>
         <PopularCoursesSection />
@@ -14,6 +14,6 @@ export default function HomePage() {
       <Suspense fallback={<div className="py-16"><SkeletonCardGrid count={3} /></div>}>
         <CommunityTalksSection />
       </Suspense>
-    </div>
+    </>
   );
 }

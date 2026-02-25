@@ -6,7 +6,7 @@ import { ArrowRight, Code2, Zap, Terminal } from "lucide-react";
 
 export function WelcomeSection() {
     return (
-        <section className="relative overflow-hidden border-b border-border">
+        <section className="relative overflow-hidden">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12 relative">
                 <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                     {/* Left Content */}
@@ -20,13 +20,13 @@ export function WelcomeSection() {
                         {/* Headline */}
                         <div className="space-y-3">
                             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground leading-[1.15]">
-                                Master Go.{" "}
+                                Master Skills.{" "}
                                 <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 dark:from-primary dark:via-primary/90 dark:to-primary/70 bg-clip-text text-transparent">
                                     Build Better.
                                 </span>
                             </h1>
                             <p className="text-base text-muted-foreground leading-relaxed max-w-xl">
-                                Learn from expert-led courses, build real-world projects, and join a thriving community of Go developers.
+                                Learn from expert-led courses, build real-world projects, and join a thriving community of developers.
                             </p>
                         </div>
 

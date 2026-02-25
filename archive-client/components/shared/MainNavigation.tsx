@@ -176,8 +176,8 @@ export function MainNavigation() {
     { href: "/projects", label: "Projects" },
     { href: "/models", label: "Models" },
     { href: "/benchmark", label: "Benchmark" },
-    { href: "/discussion", label: "Discussion" },
     { href: "/roadmap", label: "Roadmap" },
+    { href: "/discussion", label: "Discussion" },
     { href: "/blogs", label: "Blogs" },
     { href: "/support", label: "Support" },
   ];
