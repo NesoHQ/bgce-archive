@@ -1,10 +1,110 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Code2, Zap, Terminal, BookOpen, Users, Award, Rocket } from "lucide-react";
 
+type TechStack = "go" | "docker" | "k8s";
+
+const codeExamples = {
+    go: {
+        filename: "server.go",
+        lines: [
+            'package main',
+            '',
+            'import (',
+            '    "net/http"',
+            '    "github.com/gin-gonic/gin"',
+            ')',
+            '',
+            'func main() {',
+            '    r := gin.Default()',
+            '    r.GET("/api/v1", handler)',
+            '    r.Run(":8080")',
+            '}',
+        ]
+    },
+    docker: {
+        filename: "Dockerfile",
+        lines: [
+            'FROM golang:1.21-alpine AS builder',
+            '',
+            'WORKDIR /app',
+            'COPY go.* ./',
+            'RUN go mod download',
+            '',
+            'COPY . .',
+            'RUN go build -o server .',
+            '',
+            'FROM alpine:latest',
+            'COPY --from=builder /app/server .',
+            'CMD ["./server"]',
+        ]
+    },
+    k8s: {
+        filename: "deployment.yaml",
+        lines: [
+            'apiVersion: apps/v1',
+            'kind: Deployment',
+            'metadata:',
+            '  name: api-server',
+            'spec:',
+            '  replicas: 3',
+            '  selector:',
+            '    matchLabels:',
+            '      app: api',
+            '  template:',
+            '    metadata:',
+            '      labels:',
+            '        app: api',
+            '    spec:',
+            '      containers:',
+            '        - name: server',
+            '          image: api:latest',
+            '          ports:',
+            '            - containerPort: 8080',
+        ]
+    }
+};
+
 export function WelcomeSection() {
+    const [activeTech, setActiveTech] = useState<TechStack>("go");
+    const [displayedLines, setDisplayedLines] = useState<string[]>([]);
+    const [isTyping, setIsTyping] = useState(false);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        // Clear any existing interval
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+        }
+
+        setDisplayedLines([]);
+        setIsTyping(true);
+
+        const currentCode = codeExamples[activeTech];
+        let lineIndex = 0;
+
+        intervalRef.current = setInterval(() => {
+            if (lineIndex < currentCode.lines.length) {
+                setDisplayedLines(prev => [...prev, currentCode.lines[lineIndex]]);
+                lineIndex++;
+            } else {
+                if (intervalRef.current) {
+                    clearInterval(intervalRef.current);
+                }
+                setIsTyping(false);
+            }
+        }, 80);
+
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+        };
+    }, [activeTech]);
+
     return (
         <section className="relative overflow-hidden">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12 relative">
@@ -127,40 +227,23 @@ export function WelcomeSection() {
                                         <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-br from-green-500 to-green-600 shadow-sm" />
                                     </div>
                                     <div className="flex-1 text-center">
-                                        <span className="text-[10px] font-mono text-muted-foreground">server.go</span>
+                                        <span className="text-[10px] font-mono text-muted-foreground">{codeExamples[activeTech].filename}</span>
                                     </div>
                                 </div>
 
                                 {/* Code Content */}
-                                <div className="p-4 font-mono text-xs space-y-1.5 bg-gradient-to-br from-background/50 to-muted/30 dark:from-background/30 dark:to-muted/20">
-                                    <div className="text-muted-foreground">
-                                        <span className="text-purple-500 dark:text-purple-400">package</span> main
-                                    </div>
-                                    <div className="h-2" />
-                                    <div className="text-muted-foreground">
-                                        <span className="text-purple-500 dark:text-purple-400">import</span> (
-                                    </div>
-                                    <div className="pl-3 text-green-600 dark:text-green-400">
-                                        "net/http"
-                                    </div>
-                                    <div className="pl-3 text-green-600 dark:text-green-400">
-                                        "github.com/gin-gonic/gin"
-                                    </div>
-                                    <div className="text-muted-foreground">)</div>
-                                    <div className="h-2" />
-                                    <div className="text-muted-foreground">
-                                        <span className="text-purple-500 dark:text-purple-400">func</span> <span className="text-blue-600 dark:text-blue-400">main</span>() {"{"}
-                                    </div>
-                                    <div className="pl-3 text-muted-foreground">
-                                        r := gin.<span className="text-yellow-600 dark:text-yellow-400">Default</span>()
-                                    </div>
-                                    <div className="pl-3 text-muted-foreground">
-                                        r.<span className="text-yellow-600 dark:text-yellow-400">GET</span>(<span className="text-green-600 dark:text-green-400">"/api/v1"</span>, handler)
-                                    </div>
-                                    <div className="pl-3 text-muted-foreground">
-                                        r.<span className="text-yellow-600 dark:text-yellow-400">Run</span>(<span className="text-green-600 dark:text-green-400">":8080"</span>)
-                                    </div>
-                                    <div className="text-muted-foreground">{"}"}</div>
+                                <div className="p-4 text-xs space-y-1.5 bg-gradient-to-br from-background/50 to-muted/30 dark:from-background/30 dark:to-muted/20 h-[320px] overflow-y-auto custom-scrollbar font-mono">
+                                    {displayedLines.map((line, index) => (
+                                        <div
+                                            key={`${activeTech}-${index}`}
+                                            className="text-muted-foreground whitespace-pre"
+                                        >
+                                            {line || '\u00A0'}
+                                        </div>
+                                    ))}
+                                    {isTyping && (
+                                        <span className="inline-block w-1.5 h-3.5 bg-primary animate-pulse ml-0.5" />
+                                    )}
                                 </div>
                             </div>
 
@@ -172,22 +255,60 @@ export function WelcomeSection() {
                                 <Terminal className="h-4 w-4 text-primary" />
                             </div>
 
-                            {/* Tech Stack Badges */}
+                            {/* Tech Stack Buttons */}
                             <div className="absolute -bottom-6 right-4 flex items-center gap-2">
-                                <div className="px-2 py-1 rounded-md bg-card border border-border shadow-lg backdrop-blur-sm">
-                                    <span className="text-[9px] font-semibold text-primary">Go</span>
-                                </div>
-                                <div className="px-2 py-1 rounded-md bg-card border border-border shadow-lg backdrop-blur-sm">
-                                    <span className="text-[9px] font-semibold text-primary">Docker</span>
-                                </div>
-                                <div className="px-2 py-1 rounded-md bg-card border border-border shadow-lg backdrop-blur-sm">
-                                    <span className="text-[9px] font-semibold text-primary">K8s</span>
-                                </div>
+                                <button
+                                    onClick={() => setActiveTech("go")}
+                                    className={`px-3 py-1.5 rounded-md border shadow-lg backdrop-blur-sm transition-all ${activeTech === "go"
+                                            ? "bg-primary text-primary-foreground border-primary"
+                                            : "bg-card border-border hover:border-primary/50"
+                                        }`}
+                                >
+                                    <span className="text-[9px] font-semibold">Go</span>
+                                </button>
+                                <button
+                                    onClick={() => setActiveTech("docker")}
+                                    className={`px-3 py-1.5 rounded-md border shadow-lg backdrop-blur-sm transition-all ${activeTech === "docker"
+                                            ? "bg-primary text-primary-foreground border-primary"
+                                            : "bg-card border-border hover:border-primary/50"
+                                        }`}
+                                >
+                                    <span className="text-[9px] font-semibold">Docker</span>
+                                </button>
+                                <button
+                                    onClick={() => setActiveTech("k8s")}
+                                    className={`px-3 py-1.5 rounded-md border shadow-lg backdrop-blur-sm transition-all ${activeTech === "k8s"
+                                            ? "bg-primary text-primary-foreground border-primary"
+                                            : "bg-card border-border hover:border-primary/50"
+                                        }`}
+                                >
+                                    <span className="text-[9px] font-semibold">K8s</span>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <style jsx>{`
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 4px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: hsl(var(--primary) / 0.3);
+                    border-radius: 2px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: hsl(var(--primary) / 0.5);
+                }
+                .custom-scrollbar {
+                    scrollbar-width: thin;
+                    scrollbar-color: hsl(var(--primary) / 0.3) transparent;
+                }
+            `}</style>
         </section>
     );
 }

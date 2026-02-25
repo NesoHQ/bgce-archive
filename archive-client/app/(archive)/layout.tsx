@@ -1,5 +1,5 @@
-import { Navbar } from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
+import { MainNavigation } from "@/components/shared/MainNavigation";
 
 export default function ArchiveLayout({
   children,
@@ -8,7 +8,7 @@ export default function ArchiveLayout({
 }>) {
   return (
     <>
-      <Navbar />
+      <MainNavigation />
       <main id="main-content">
         {children}
       </main>
