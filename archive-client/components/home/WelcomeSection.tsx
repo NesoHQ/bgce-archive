@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Code2, Zap, Terminal } from "lucide-react";
+import { ArrowRight, Code2, Zap, Terminal, BookOpen, Users, Award, Rocket } from "lucide-react";
 
 export function WelcomeSection() {
     return (
@@ -12,22 +12,63 @@ export function WelcomeSection() {
                     {/* Left Content */}
                     <div className="space-y-5 lg:pr-8">
                         {/* Badge */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 border border-primary/20 dark:border-primary/30 text-primary text-[10px] font-mono uppercase tracking-wider backdrop-blur-sm">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 border border-primary/20 dark:border-primary/30 text-primary text-[10px] font-semibold uppercase tracking-wider backdrop-blur-sm">
                             <Zap className="h-2.5 w-2.5" />
-                            Best Golang Community Ever
+                            Professional Developer Platform
                         </div>
 
                         {/* Headline */}
                         <div className="space-y-3">
                             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground leading-[1.15]">
-                                Master Skills.{" "}
+                                Master Modern Development.{" "}
                                 <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 dark:from-primary dark:via-primary/90 dark:to-primary/70 bg-clip-text text-transparent">
-                                    Build Better.
+                                    Build Production-Ready Systems.
                                 </span>
                             </h1>
                             <p className="text-base text-muted-foreground leading-relaxed max-w-xl">
-                                Learn from expert-led courses, build real-world projects, and join a thriving community of developers.
+                                Comprehensive learning platform for backend engineering, cloud infrastructure, and distributed systems.
+                                Learn Go, microservices, DevOps, and system design from industry practitioners.
                             </p>
+                        </div>
+
+                        {/* Key Features */}
+                        <div className="grid grid-cols-2 gap-3">
+                            <div className="flex items-start gap-2">
+                                <div className="p-1.5 rounded-md bg-primary/10 mt-0.5">
+                                    <BookOpen className="h-3.5 w-3.5 text-primary" />
+                                </div>
+                                <div>
+                                    <div className="text-xs font-semibold text-foreground">Structured Curriculum</div>
+                                    <div className="text-[10px] text-muted-foreground">From basics to advanced</div>
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-2">
+                                <div className="p-1.5 rounded-md bg-primary/10 mt-0.5">
+                                    <Rocket className="h-3.5 w-3.5 text-primary" />
+                                </div>
+                                <div>
+                                    <div className="text-xs font-semibold text-foreground">Real-World Projects</div>
+                                    <div className="text-[10px] text-muted-foreground">Production-grade code</div>
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-2">
+                                <div className="p-1.5 rounded-md bg-primary/10 mt-0.5">
+                                    <Users className="h-3.5 w-3.5 text-primary" />
+                                </div>
+                                <div>
+                                    <div className="text-xs font-semibold text-foreground">Active Community</div>
+                                    <div className="text-[10px] text-muted-foreground">Expert mentorship</div>
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-2">
+                                <div className="p-1.5 rounded-md bg-primary/10 mt-0.5">
+                                    <Award className="h-3.5 w-3.5 text-primary" />
+                                </div>
+                                <div>
+                                    <div className="text-xs font-semibold text-foreground">Career Growth</div>
+                                    <div className="text-[10px] text-muted-foreground">Interview preparation</div>
+                                </div>
+                            </div>
                         </div>
 
                         {/* CTA Buttons */}
@@ -38,7 +79,7 @@ export function WelcomeSection() {
                                 className="h-10 px-5 rounded-lg bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:scale-105 transition-all group"
                             >
                                 <Link href="/explore/courses">
-                                    Start Learning
+                                    Explore Courses
                                     <ArrowRight className="ml-2 h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
                                 </Link>
                             </Button>
@@ -49,32 +90,39 @@ export function WelcomeSection() {
                                 className="h-10 px-5 rounded-lg border-2 bg-gradient-to-r from-background to-muted/50 hover:from-muted/50 hover:to-muted transition-all"
                             >
                                 <Link href="/archive">
-                                    Browse Archive
+                                    View Archive
                                 </Link>
                             </Button>
                         </div>
 
                         {/* Stats */}
-                        <div className="flex items-center gap-6 pt-2">
-                            <div>
-                                <div className="text-2xl font-bold bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">500+</div>
-                                <div className="text-xs text-muted-foreground">Courses</div>
+                        <div className="grid grid-cols-3 gap-4 pt-2">
+                            <div className="relative group">
+                                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg blur-sm group-hover:blur-md transition-all" />
+                                <div className="relative bg-gradient-to-br from-card to-card/80 dark:from-card/50 dark:to-card/30 border border-border rounded-lg p-3 backdrop-blur-sm">
+                                    <div className="text-2xl font-bold bg-gradient-to-br from-primary to-primary/70 bg-clip-text text-transparent mb-0.5">500+</div>
+                                    <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Learning Paths</div>
+                                </div>
                             </div>
-                            <div className="w-px h-10 bg-gradient-to-b from-transparent via-border to-transparent" />
-                            <div>
-                                <div className="text-2xl font-bold bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">10K+</div>
-                                <div className="text-xs text-muted-foreground">Learners</div>
+                            <div className="relative group">
+                                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg blur-sm group-hover:blur-md transition-all" />
+                                <div className="relative bg-gradient-to-br from-card to-card/80 dark:from-card/50 dark:to-card/30 border border-border rounded-lg p-3 backdrop-blur-sm">
+                                    <div className="text-2xl font-bold bg-gradient-to-br from-primary to-primary/70 bg-clip-text text-transparent mb-0.5">10K+</div>
+                                    <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Active Developers</div>
+                                </div>
                             </div>
-                            <div className="w-px h-10 bg-gradient-to-b from-transparent via-border to-transparent" />
-                            <div>
-                                <div className="text-2xl font-bold bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">1K+</div>
-                                <div className="text-xs text-muted-foreground">Projects</div>
+                            <div className="relative group">
+                                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg blur-sm group-hover:blur-md transition-all" />
+                                <div className="relative bg-gradient-to-br from-card to-card/80 dark:from-card/50 dark:to-card/30 border border-border rounded-lg p-3 backdrop-blur-sm">
+                                    <div className="text-2xl font-bold bg-gradient-to-br from-primary to-primary/70 bg-clip-text text-transparent mb-0.5">1K+</div>
+                                    <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Code Projects</div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Right Visual */}
-                    <div className="relative hidden lg:block">
+                    <div className="relative hidden lg:block lg:pl-8">
                         <div className="relative">
                             {/* Code Window */}
                             <div className="rounded-xl border-2 border-border bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 shadow-2xl shadow-primary/10 overflow-hidden backdrop-blur-sm">
@@ -86,7 +134,7 @@ export function WelcomeSection() {
                                         <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-br from-green-500 to-green-600 shadow-sm" />
                                     </div>
                                     <div className="flex-1 text-center">
-                                        <span className="text-[10px] font-mono text-muted-foreground">main.go</span>
+                                        <span className="text-[10px] font-mono text-muted-foreground">server.go</span>
                                     </div>
                                 </div>
 
@@ -95,16 +143,29 @@ export function WelcomeSection() {
                                     <div className="text-muted-foreground">
                                         <span className="text-purple-500 dark:text-purple-400">package</span> main
                                     </div>
-                                    <div className="h-3" />
+                                    <div className="h-2" />
                                     <div className="text-muted-foreground">
-                                        <span className="text-purple-500 dark:text-purple-400">import</span> <span className="text-green-600 dark:text-green-400">"fmt"</span>
+                                        <span className="text-purple-500 dark:text-purple-400">import</span> (
                                     </div>
-                                    <div className="h-3" />
+                                    <div className="pl-3 text-green-600 dark:text-green-400">
+                                        "net/http"
+                                    </div>
+                                    <div className="pl-3 text-green-600 dark:text-green-400">
+                                        "github.com/gin-gonic/gin"
+                                    </div>
+                                    <div className="text-muted-foreground">)</div>
+                                    <div className="h-2" />
                                     <div className="text-muted-foreground">
                                         <span className="text-purple-500 dark:text-purple-400">func</span> <span className="text-blue-600 dark:text-blue-400">main</span>() {"{"}
                                     </div>
                                     <div className="pl-3 text-muted-foreground">
-                                        fmt.<span className="text-yellow-600 dark:text-yellow-400">Println</span>(<span className="text-green-600 dark:text-green-400">"Welcome to BGCE!"</span>)
+                                        r := gin.<span className="text-yellow-600 dark:text-yellow-400">Default</span>()
+                                    </div>
+                                    <div className="pl-3 text-muted-foreground">
+                                        r.<span className="text-yellow-600 dark:text-yellow-400">GET</span>(<span className="text-green-600 dark:text-green-400">"/api/v1"</span>, handler)
+                                    </div>
+                                    <div className="pl-3 text-muted-foreground">
+                                        r.<span className="text-yellow-600 dark:text-yellow-400">Run</span>(<span className="text-green-600 dark:text-green-400">":8080"</span>)
                                     </div>
                                     <div className="text-muted-foreground">{"}"}</div>
                                 </div>
@@ -116,6 +177,19 @@ export function WelcomeSection() {
                             </div>
                             <div className="absolute -bottom-3 -left-3 p-3 rounded-lg bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-border shadow-xl backdrop-blur-sm">
                                 <Terminal className="h-4 w-4 text-primary" />
+                            </div>
+
+                            {/* Tech Stack Badges */}
+                            <div className="absolute -bottom-6 right-4 flex items-center gap-2">
+                                <div className="px-2 py-1 rounded-md bg-card border border-border shadow-lg backdrop-blur-sm">
+                                    <span className="text-[9px] font-semibold text-primary">Go</span>
+                                </div>
+                                <div className="px-2 py-1 rounded-md bg-card border border-border shadow-lg backdrop-blur-sm">
+                                    <span className="text-[9px] font-semibold text-primary">Docker</span>
+                                </div>
+                                <div className="px-2 py-1 rounded-md bg-card border border-border shadow-lg backdrop-blur-sm">
+                                    <span className="text-[9px] font-semibold text-primary">K8s</span>
+                                </div>
                             </div>
                         </div>
                     </div>
