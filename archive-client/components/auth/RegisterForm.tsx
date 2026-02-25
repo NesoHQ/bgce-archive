@@ -24,6 +24,7 @@ export function RegisterForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [passwordStrength, setPasswordStrength] = useState(0);
   const [formData, setFormData] = useState({
     username: "",
     name: "",
@@ -31,6 +32,32 @@ export function RegisterForm() {
     password: "",
     confirmPassword: "",
   });
+
+  // Calculate password strength
+  const calculatePasswordStrength = (password: string) => {
+    let strength = 0;
+    if (password.length >= 8) strength += 25;
+    if (password.length >= 12) strength += 25;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength += 25;
+    if (/\d/.test(password)) strength += 15;
+    if (/[^a-zA-Z0-9]/.test(password)) strength += 10;
+    return Math.min(100, strength);
+  };
+
+  const getPasswordStrengthLabel = () => {
+    if (passwordStrength === 0) return "";
+    if (passwordStrength < 40) return "Weak";
+    if (passwordStrength < 70) return "Fair";
+    if (passwordStrength < 90) return "Good";
+    return "Strong";
+  };
+
+  const getPasswordStrengthColor = () => {
+    if (passwordStrength < 40) return "bg-red-500";
+    if (passwordStrength < 70) return "bg-yellow-500";
+    if (passwordStrength < 90) return "bg-blue-500";
+    return "bg-green-500";
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,7 +95,13 @@ export function RegisterForm() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    // Update password strength when password changes
+    if (name === "password") {
+      setPasswordStrength(calculatePasswordStrength(value));
+    }
   };
 
   return (
@@ -192,6 +225,37 @@ export function RegisterForm() {
               </span>
             </Button>
           </div>
+          {/* Password Strength Indicator */}
+          {formData.password && (
+            <div className="space-y-2 pt-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">Password strength:</span>
+                <span className={`font-semibold ${passwordStrength < 40 ? 'text-red-500' :
+                    passwordStrength < 70 ? 'text-yellow-500' :
+                      passwordStrength < 90 ? 'text-blue-500' : 'text-green-500'
+                  }`}>
+                  {getPasswordStrengthLabel()}
+                </span>
+              </div>
+              <div className="h-2 bg-muted rounded-full overflow-hidden">
+                <div
+                  className={`h-full transition-all duration-300 ${getPasswordStrengthColor()}`}
+                  style={{ width: `${passwordStrength}%` }}
+                />
+              </div>
+              <div className="text-xs text-muted-foreground space-y-1">
+                <p className={formData.password.length >= 8 ? 'text-green-500' : ''}>
+                  • At least 8 characters
+                </p>
+                <p className={/[a-z]/.test(formData.password) && /[A-Z]/.test(formData.password) ? 'text-green-500' : ''}>
+                  • Mix of uppercase and lowercase
+                </p>
+                <p className={/\d/.test(formData.password) ? 'text-green-500' : ''}>
+                  • At least one number
+                </p>
+              </div>
+            </div>
+          )}
         </div>
         <div className="space-y-2">
           <label

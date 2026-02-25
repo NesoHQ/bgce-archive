@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, MessageSquare, ThumbsUp, Eye } from "lucide-react";
+import { ArrowRight, MessageSquare, ThumbsUp, Eye, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
@@ -19,6 +19,7 @@ export function CommunityTalksSection() {
       likes: 89,
       comments: 23,
       category: "Architecture",
+      trending: true,
     },
     {
       id: 2,
@@ -32,6 +33,7 @@ export function CommunityTalksSection() {
       likes: 156,
       comments: 45,
       category: "Performance",
+      trending: true,
     },
     {
       id: 3,
@@ -45,6 +47,7 @@ export function CommunityTalksSection() {
       likes: 234,
       comments: 67,
       category: "Tutorial",
+      trending: false,
     },
     {
       id: 4,
@@ -58,6 +61,7 @@ export function CommunityTalksSection() {
       likes: 142,
       comments: 38,
       category: "Best Practices",
+      trending: false,
     },
     {
       id: 5,
@@ -71,6 +75,7 @@ export function CommunityTalksSection() {
       likes: 198,
       comments: 52,
       category: "DevOps",
+      trending: false,
     },
     {
       id: 6,
@@ -84,19 +89,24 @@ export function CommunityTalksSection() {
       likes: 112,
       comments: 29,
       category: "Testing",
+      trending: false,
     },
   ];
 
   return (
-    <section className="py-16 lg:py-24 bg-muted/30">
+    <section className="py-20 lg:py-28 bg-muted/30">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h2 className="text-3xl font-bold text-foreground">Community Talks</h2>
-            <p className="text-muted-foreground mt-2">Learn from community experts and share your knowledge</p>
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-12 gap-4">
+          <div className="space-y-3">
+            <h2 className="text-4xl lg:text-5xl font-bold text-foreground tracking-tight">Community Talks</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl">Learn from community experts and share your knowledge</p>
           </div>
-          <Button variant="ghost" asChild className="hidden sm:flex">
+          <Button
+            variant="ghost"
+            asChild
+            className="hidden sm:flex hover:bg-accent hover:scale-105 transition-all duration-200"
+          >
             <Link href="/blogs">
               View All
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -105,58 +115,74 @@ export function CommunityTalksSection() {
         </div>
 
         {/* Talks Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {talks.map((talk) => (
             <Link
               key={talk.id}
               href={`/blogs/${talk.id}`}
-              className="group bg-card border border-border rounded-xl p-6 hover:shadow-xl hover:shadow-primary/5 hover:border-primary/50 transition-all duration-300"
+              className="group relative bg-card border-2 border-border rounded-2xl p-6 
+                hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10 
+                hover:border-primary/50 hover:ring-2 hover:ring-primary/20
+                transition-all duration-300 ease-out
+                focus:outline-none focus:ring-2 focus:ring-primary/50"
             >
+              {/* Trending Indicator */}
+              {talk.trending && (
+                <div className="absolute -top-2 -right-2 p-2 rounded-full bg-primary shadow-lg">
+                  <TrendingUp className="h-3 w-3 text-primary-foreground" />
+                </div>
+              )}
+
               {/* Category Badge */}
-              <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-4">
+              <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-4 border border-primary/20">
                 {talk.category}
               </div>
 
               {/* Title */}
-              <h3 className="text-lg font-semibold text-foreground mb-4 group-hover:text-primary transition-colors line-clamp-2">
+              <h3 className="text-xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors line-clamp-2 min-h-[3.5rem] leading-tight">
                 {talk.title}
               </h3>
 
               {/* Author Info */}
-              <div className="flex items-center gap-3 mb-4">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-primary/20 text-primary text-xs font-semibold">
+              <div className="flex items-center gap-3 mb-5 pb-5 border-b border-border">
+                <Avatar className="h-10 w-10 ring-2 ring-primary/20">
+                  <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary text-sm font-bold">
                     {talk.author.avatar}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground">{talk.author.name}</p>
+                  <p className="text-sm font-semibold text-foreground truncate">{talk.author.name}</p>
                   <p className="text-xs text-muted-foreground">{talk.date}</p>
                 </div>
               </div>
 
               {/* Engagement Stats */}
-              <div className="flex items-center gap-4 text-xs text-muted-foreground pt-4 border-t border-border">
-                <div className="flex items-center gap-1">
-                  <Eye className="h-3 w-3" />
-                  {talk.views.toLocaleString()}
+              <div className="flex items-center gap-5 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1.5 group/stat hover:text-primary transition-colors">
+                  <Eye className="h-4 w-4" />
+                  <span className="font-medium">{talk.views.toLocaleString()}</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <ThumbsUp className="h-3 w-3" />
-                  {talk.likes}
+                <div className="flex items-center gap-1.5 group/stat hover:text-primary transition-colors">
+                  <ThumbsUp className="h-4 w-4" />
+                  <span className="font-medium">{talk.likes}</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <MessageSquare className="h-3 w-3" />
-                  {talk.comments}
+                <div className="flex items-center gap-1.5 group/stat hover:text-primary transition-colors">
+                  <MessageSquare className="h-4 w-4" />
+                  <span className="font-medium">{talk.comments}</span>
                 </div>
+              </div>
+
+              {/* Hover Arrow */}
+              <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <ArrowRight className="h-5 w-5 text-primary" />
               </div>
             </Link>
           ))}
         </div>
 
         {/* Mobile View All Button */}
-        <div className="mt-8 sm:hidden">
-          <Button variant="outline" asChild className="w-full">
+        <div className="mt-10 sm:hidden">
+          <Button variant="outline" asChild className="w-full min-h-[48px] rounded-xl border-2">
             <Link href="/blogs">
               View All Talks
               <ArrowRight className="ml-2 h-4 w-4" />

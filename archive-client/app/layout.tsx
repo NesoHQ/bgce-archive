@@ -4,6 +4,9 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { KrakensAnalytics } from "@/components/krakens-analytics";
+import { ToastProvider } from "@/components/ui/toast";
+import { SkipToContent } from "@/components/shared/SkipToContent";
+import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -34,6 +37,7 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
+                <SkipToContent />
                 <KrakensAnalytics />
 
                 <ThemeProvider
@@ -42,9 +46,13 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <AuthProvider>
-                        {children}
-                    </AuthProvider>
+                    <ToastProvider>
+                        <ErrorBoundary>
+                            <AuthProvider>
+                                {children}
+                            </AuthProvider>
+                        </ErrorBoundary>
+                    </ToastProvider>
                 </ThemeProvider>
             </body>
         </html>

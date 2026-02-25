@@ -21,30 +21,30 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
   const publishedDate =
     isApiPost(article) && article.published_at
       ? new Date(article.published_at).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+      : isApiPost(article) && article.created_at
+        ? new Date(article.created_at).toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
           year: "numeric",
         })
-      : isApiPost(article) && article.created_at
-        ? new Date(article.created_at).toLocaleDateString("en-US", {
+        : "date" in article
+          ? new Date(article.date).toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
             year: "numeric",
           })
-        : "date" in article
-          ? new Date(article.date).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            })
           : "N/A";
 
   const tags =
     isApiPost(article) && article.keywords
       ? article.keywords
-          .split(",")
-          .map((k) => k.trim())
-          .filter(Boolean)
+        .split(",")
+        .map((k) => k.trim())
+        .filter(Boolean)
       : "tags" in article
         ? article.tags
         : [];
@@ -64,11 +64,13 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
 
   return (
     <Link href={postUrl}>
-      <div className="h-full rounded-md bg-gradient-to-br from-card/60 to-card/40  border border-gray-200  dark:border-white/10 backdrop-blur-md hover:border-primary/40 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 cursor-pointer group overflow-hidden relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="h-full rounded-2xl bg-gradient-to-br from-card/80 to-card/60 border-2 border-border backdrop-blur-md 
+        hover:border-primary/50 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10 hover:ring-2 hover:ring-primary/20
+        transition-all duration-300 ease-out cursor-pointer group overflow-hidden relative">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
         <div className="relative">
-          <div className="p-6 space-y-4">
+          <div className="p-6 space-y-5">
             {(isFeatured || isPinned) && (
               <div className="flex flex-wrap gap-2">
                 {isFeatured && (
@@ -85,7 +87,7 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
               </div>
             )}
 
-            <h3 className="text-xl font-bold leading-tight line-clamp-2 group-hover:text-primary transition-colors duration-300">
+            <h3 className="text-xl font-bold leading-tight line-clamp-2 group-hover:text-primary transition-colors duration-300 min-h-[3.5rem]">
               {article.title}
             </h3>
 
@@ -101,7 +103,7 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
                   <Badge
                     key={i}
                     variant="outline"
-                    className="text-[10px] font-mono uppercase tracking-wider px-3 py-1 rounded-full border-white/20 hover:bg-primary/10 hover:border-primary/30 transition-all"
+                    className="text-[10px] font-mono uppercase tracking-wider px-3 py-1.5 rounded-full border-border hover:bg-primary/10 hover:border-primary/30 transition-all"
                   >
                     #{tag}
                   </Badge>
@@ -109,7 +111,7 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
                 {tags.length > 3 && (
                   <Badge
                     variant="outline"
-                    className="text-[10px] font-mono uppercase tracking-wider px-3 py-1 rounded-full border-white/20 bg-primary/5"
+                    className="text-[10px] font-mono uppercase tracking-wider px-3 py-1.5 rounded-full border-border bg-primary/5"
                   >
                     +{tags.length - 3}
                   </Badge>
@@ -118,34 +120,34 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
             )}
           </div>
 
-          <div className="px-6 py-4 bg-gradient-to-r from-muted/90 to-muted/70 border-t-2 border-white/10">
+          <div className="px-6 py-5 bg-gradient-to-r from-muted/90 to-muted/70 border-t-2 border-border">
             <div className="grid grid-cols-3 gap-4 text-xs font-mono">
               <div className="text-center group/stat">
-                <div className="p-2 rounded-xl bg-primary/10 inline-block mb-2 group-hover/stat:bg-primary/20 transition-colors">
-                  <Calendar className="h-3.5 w-3.5 text-primary mx-auto" />
+                <div className="p-2.5 rounded-xl bg-primary/10 inline-block mb-2 group-hover/stat:bg-primary/20 group-hover/stat:scale-110 transition-all duration-200">
+                  <Calendar className="h-4 w-4 text-primary mx-auto" />
                 </div>
-                <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">
                   Published
                 </div>
-                <div className="font-bold mt-1">{publishedDate}</div>
+                <div className="font-bold mt-1.5 text-foreground">{publishedDate}</div>
               </div>
               <div className="text-center group/stat">
-                <div className="p-2 rounded-xl bg-primary/10 inline-block mb-2 group-hover/stat:bg-primary/20 transition-colors">
-                  <Clock className="h-3.5 w-3.5 text-primary mx-auto" />
+                <div className="p-2.5 rounded-xl bg-primary/10 inline-block mb-2 group-hover/stat:bg-primary/20 group-hover/stat:scale-110 transition-all duration-200">
+                  <Clock className="h-4 w-4 text-primary mx-auto" />
                 </div>
-                <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">
                   Read
                 </div>
-                <div className="font-bold mt-1">{readingTime} min</div>
+                <div className="font-bold mt-1.5 text-foreground">{readingTime} min</div>
               </div>
               <div className="text-center group/stat">
-                <div className="p-2 rounded-xl bg-primary/10 inline-block mb-2 group-hover/stat:bg-primary/20 transition-colors">
-                  <Eye className="h-3.5 w-3.5 text-primary mx-auto" />
+                <div className="p-2.5 rounded-xl bg-primary/10 inline-block mb-2 group-hover/stat:bg-primary/20 group-hover/stat:scale-110 transition-all duration-200">
+                  <Eye className="h-4 w-4 text-primary mx-auto" />
                 </div>
-                <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">
                   Views
                 </div>
-                <div className="font-bold mt-1">{viewCount}</div>
+                <div className="font-bold mt-1.5 text-foreground">{viewCount}</div>
               </div>
             </div>
           </div>

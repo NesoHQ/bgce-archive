@@ -7,7 +7,7 @@ import ArticleCard from "./ArchiveCard";
 import { PaginationDemo } from "./Pagination";
 import { Article } from "@/types/blog.type";
 import ArticleList from "./ArticleList";
-import { Code2, Layers } from "lucide-react";
+import { NoSearchResults, NoContent } from "@/components/shared/EmptyState";
 
 const ArchiveWrapper = ({
   articles: initialArticles,
@@ -98,17 +98,11 @@ const ArchiveWrapper = ({
         />
 
         {articles.length === 0 ? (
-          <div className="text-center py-24">
-            <div className="p-12 rounded-[2rem] bg-card/50 border border-white/10 backdrop-blur-md inline-block shadow-lg">
-              <Code2 className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <p className="text-lg text-muted-foreground font-mono">
-                No articles found.
-              </p>
-              <p className="text-sm text-muted-foreground mt-2">
-                Try adjusting your search or filters
-              </p>
-            </div>
-          </div>
+          searchQuery ? (
+            <NoSearchResults query={searchQuery} />
+          ) : (
+            <NoContent type="articles" />
+          )
         ) : (
           <>
             {viewMode === "grid" && (

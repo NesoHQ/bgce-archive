@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ModeToggle } from "./ModeToggle";
+import { GlobalSearch } from "./GlobalSearch";
 import { TopNav } from "./TopNav";
 import { Portal } from "@/components/ui/Portal";
 import { cn } from "@/lib/utils";
@@ -245,8 +246,9 @@ export function MainNavigation() {
                 </button>
               </div>
 
-              {/* Right Side - Theme Toggle & Auth */}
+              {/* Right Side - Search, Theme Toggle & Auth */}
               <div className="hidden lg:flex items-center gap-3">
+                <GlobalSearch />
                 <ModeToggle />
                 {isAuthenticated && user ? (
                   <button

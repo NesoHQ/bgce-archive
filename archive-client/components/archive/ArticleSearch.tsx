@@ -114,6 +114,14 @@ export function ArticleSearch({
 
   return (
     <div className="w-full space-y-6 py-6">
+      {/* Results Count */}
+      <div className="flex items-center justify-between">
+        <div className="text-sm text-muted-foreground font-mono">
+          Showing <span className="font-bold text-primary">{filteredCount}</span> of{" "}
+          <span className="font-bold text-foreground">{totalCount}</span> articles
+        </div>
+      </div>
+
       {/* Search and Filters Row */}
       <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
         {/* Search with enhanced styling */}
@@ -190,11 +198,10 @@ export function ArticleSearch({
             variant={viewMode === "grid" ? "default" : "ghost"}
             size="sm"
             onClick={() => setViewMode("grid")}
-            className={`h-14 px-6 rounded-none transition-all cursor-pointer ${
-              viewMode === "grid"
+            className={`h-14 px-6 rounded-none transition-all cursor-pointer ${viewMode === "grid"
                 ? "bg-primary text-primary-foreground shadow-lg"
                 : "hover:bg-primary/10"
-            }`}
+              }`}
           >
             <Grid className="h-5 w-5" />
           </Button>
@@ -205,11 +212,10 @@ export function ArticleSearch({
             variant={viewMode === "list" ? "default" : "ghost"}
             size="sm"
             onClick={() => setViewMode("list")}
-            className={`h-14 px-6 rounded-none transition-all cursor-pointer ${
-              viewMode === "list"
+            className={`h-14 px-6 rounded-none transition-all cursor-pointer ${viewMode === "list"
                 ? "bg-primary text-primary-foreground shadow-lg"
                 : "hover:bg-primary/10"
-            }`}
+              }`}
           >
             <List className="h-5 w-5" />
           </Button>

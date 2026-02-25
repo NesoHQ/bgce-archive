@@ -9,7 +9,9 @@ export default function ArchiveLayout({
   return (
     <>
       <Navbar />
-      {children}
+      <main id="main-content">
+        {children}
+      </main>
       <Footer />
     </>
   );
