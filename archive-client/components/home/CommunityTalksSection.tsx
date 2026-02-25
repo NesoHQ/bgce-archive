@@ -94,13 +94,17 @@ export function CommunityTalksSection() {
   ];
 
   return (
-    <section className="py-20 lg:py-28 bg-muted/30">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 lg:py-20 relative overflow-hidden">
+      {/* Gradient Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background dark:from-background dark:via-primary/10 dark:to-background" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-cyan-500/5 via-primary/5 to-purple-500/5 dark:from-cyan-500/15 dark:via-primary/15 dark:to-purple-500/15 rounded-full blur-3xl" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-12 gap-4">
-          <div className="space-y-3">
-            <h2 className="text-4xl lg:text-5xl font-bold text-foreground tracking-tight">Community Talks</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl">Learn from community experts and share your knowledge</p>
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-10 gap-4">
+          <div className="space-y-2">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground tracking-tight">Community Talks</h2>
+            <p className="text-base text-muted-foreground max-w-2xl">Learn from community experts and share your knowledge</p>
           </div>
           <Button
             variant="ghost"
@@ -115,38 +119,31 @@ export function CommunityTalksSection() {
         </div>
 
         {/* Talks Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {talks.map((talk) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {talks.slice(0, 3).map((talk) => (
             <Link
               key={talk.id}
               href={`/blogs/${talk.id}`}
-              className="group relative bg-card border-2 border-border rounded-2xl p-6 
-                hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10 
+              className="group relative bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-border rounded-xl p-5 
+                hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/10 
                 hover:border-primary/50 hover:ring-2 hover:ring-primary/20
-                transition-all duration-300 ease-out
+                transition-all duration-300 ease-out backdrop-blur-sm
                 focus:outline-none focus:ring-2 focus:ring-primary/50"
             >
-              {/* Trending Indicator */}
-              {talk.trending && (
-                <div className="absolute -top-2 -right-2 p-2 rounded-full bg-primary shadow-lg">
-                  <TrendingUp className="h-3 w-3 text-primary-foreground" />
-                </div>
-              )}
-
               {/* Category Badge */}
-              <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-4 border border-primary/20">
+              <div className="inline-flex items-center px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-3 border border-primary/20">
                 {talk.category}
               </div>
 
               {/* Title */}
-              <h3 className="text-xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors line-clamp-2 min-h-[3.5rem] leading-tight">
+              <h3 className="text-lg font-bold text-foreground mb-3 group-hover:text-primary transition-colors line-clamp-2 min-h-[3.5rem] leading-tight">
                 {talk.title}
               </h3>
 
               {/* Author Info */}
-              <div className="flex items-center gap-3 mb-5 pb-5 border-b border-border">
-                <Avatar className="h-10 w-10 ring-2 ring-primary/20">
-                  <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary text-sm font-bold">
+              <div className="flex items-center gap-3 mb-4 pb-4 border-b border-border">
+                <Avatar className="h-8 w-8 ring-2 ring-primary/20">
+                  <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary text-xs font-bold">
                     {talk.author.avatar}
                   </AvatarFallback>
                 </Avatar>
@@ -157,32 +154,32 @@ export function CommunityTalksSection() {
               </div>
 
               {/* Engagement Stats */}
-              <div className="flex items-center gap-5 text-sm text-muted-foreground">
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1.5 group/stat hover:text-primary transition-colors">
-                  <Eye className="h-4 w-4" />
-                  <span className="font-medium">{talk.views.toLocaleString()}</span>
+                  <Eye className="h-3.5 w-3.5" />
+                  <span className="font-medium text-xs">{talk.views.toLocaleString()}</span>
                 </div>
                 <div className="flex items-center gap-1.5 group/stat hover:text-primary transition-colors">
-                  <ThumbsUp className="h-4 w-4" />
-                  <span className="font-medium">{talk.likes}</span>
+                  <ThumbsUp className="h-3.5 w-3.5" />
+                  <span className="font-medium text-xs">{talk.likes}</span>
                 </div>
                 <div className="flex items-center gap-1.5 group/stat hover:text-primary transition-colors">
-                  <MessageSquare className="h-4 w-4" />
-                  <span className="font-medium">{talk.comments}</span>
+                  <MessageSquare className="h-3.5 w-3.5" />
+                  <span className="font-medium text-xs">{talk.comments}</span>
                 </div>
               </div>
 
               {/* Hover Arrow */}
-              <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <ArrowRight className="h-5 w-5 text-primary" />
+              <div className="absolute bottom-5 right-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <ArrowRight className="h-4 w-4 text-primary" />
               </div>
             </Link>
           ))}
         </div>
 
         {/* Mobile View All Button */}
-        <div className="mt-10 sm:hidden">
-          <Button variant="outline" asChild className="w-full min-h-[48px] rounded-xl border-2">
+        <div className="mt-8 sm:hidden">
+          <Button variant="outline" asChild className="w-full h-12 rounded-xl border-2">
             <Link href="/blogs">
               View All Talks
               <ArrowRight className="ml-2 h-4 w-4" />

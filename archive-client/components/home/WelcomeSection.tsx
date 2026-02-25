@@ -2,89 +2,137 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Users, BookOpen, Award, ChevronDown } from "lucide-react";
+import { ArrowRight, Code2, Zap, Terminal } from "lucide-react";
 
 export function WelcomeSection() {
     return (
-        <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 via-background to-background min-h-[85vh] flex items-center">
-            {/* Animated Background Elements */}
-            <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute top-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 animate-pulse" />
-                <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2 animate-pulse" style={{ animationDelay: '1s' }} />
-                <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-primary/5 rounded-full blur-2xl -translate-x-1/2 -translate-y-1/2 animate-pulse" style={{ animationDelay: '2s' }} />
-            </div>
+        <section className="relative overflow-hidden border-b border-border">
+            {/* Gradient Background - Light & Dark Mode */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/5 dark:from-primary/10 dark:via-background dark:to-primary/10" />
 
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
-                <div className="max-w-5xl mx-auto text-center space-y-10">
-                    {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold animate-fade-in backdrop-blur-sm hover:bg-primary/15 transition-colors">
-                        <Sparkles className="h-4 w-4 animate-pulse" />
-                        Welcome to BGCE Archive
-                    </div>
+            {/* Tech Grid Background */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:48px_48px]" />
 
-                    {/* Headline */}
-                    <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-foreground animate-fade-in-up leading-tight">
-                        Learn, Build, and Grow with the{" "}
-                        <span className="relative inline-block">
-                            <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent animate-gradient">
-                                Best Golang Community
-                            </span>
-                            <span className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-primary/50 via-primary/30 to-transparent rounded-full" />
-                        </span>
-                    </h1>
+            {/* Animated Gradient Orbs */}
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-primary/20 via-primary/10 to-transparent dark:from-primary/30 dark:via-primary/15 dark:to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s' }} />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-500/10 via-purple-500/10 to-transparent dark:from-blue-500/20 dark:via-purple-500/20 dark:to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '6s', animationDelay: '1s' }} />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-cyan-500/5 to-primary/5 dark:from-cyan-500/15 dark:to-primary/15 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '5s', animationDelay: '2s' }} />
 
-                    {/* Subheadline */}
-                    <p className="text-xl sm:text-2xl text-muted-foreground max-w-3xl mx-auto animate-fade-in-up delay-200 leading-relaxed">
-                        Access expert-led courses, hands-on projects, and a thriving community of developers.
-                        Start your journey to mastering Go and beyond.
-                    </p>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 relative">
+                <div className="max-w-6xl mx-auto">
+                    <div className="grid lg:grid-cols-2 gap-12 items-center">
+                        {/* Left Content */}
+                        <div className="space-y-8">
+                            {/* Badge */}
+                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 border border-primary/20 dark:border-primary/30 text-primary text-xs font-mono uppercase tracking-wider backdrop-blur-sm">
+                                <Zap className="h-3 w-3" />
+                                Best Golang Community Ever
+                            </div>
 
-                    {/* CTA Buttons */}
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-300 pt-4">
-                        <Button
-                            size="lg"
-                            asChild
-                            className="min-h-[56px] px-8 rounded-2xl shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 hover:scale-105 active:scale-95 transition-all duration-200 text-base font-semibold group"
-                        >
-                            <Link href="/explore/courses">
-                                Explore Courses
-                                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                            </Link>
-                        </Button>
-                        <Button
-                            size="lg"
-                            variant="outline"
-                            asChild
-                            className="min-h-[56px] px-8 rounded-2xl border-2 hover:bg-accent hover:scale-105 active:scale-95 transition-all duration-200 text-base font-semibold"
-                        >
-                            <Link href="/projects">
-                                Browse Projects
-                            </Link>
-                        </Button>
-                    </div>
+                            {/* Headline */}
+                            <div className="space-y-4">
+                                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.1]">
+                                    Master Go.{" "}
+                                    <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 dark:from-primary dark:via-primary/90 dark:to-primary/70 bg-clip-text text-transparent">
+                                        Build Better.
+                                    </span>
+                                </h1>
+                                <p className="text-lg text-muted-foreground leading-relaxed max-w-xl">
+                                    Learn from expert-led courses, build real-world projects, and join a thriving community of Go developers.
+                                </p>
+                            </div>
 
-                    {/* Trust Indicators */}
-                    <div className="flex flex-wrap items-center justify-center gap-6 pt-8 text-sm text-muted-foreground animate-fade-in-up delay-500">
-                        <div className="flex items-center gap-2">
-                            <Award className="h-4 w-4 text-primary" />
-                            <span>Industry Recognized</span>
+                            {/* CTA Buttons */}
+                            <div className="flex flex-wrap items-center gap-4">
+                                <Button
+                                    size="lg"
+                                    asChild
+                                    className="h-12 px-6 rounded-xl bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:scale-105 transition-all group"
+                                >
+                                    <Link href="/explore/courses">
+                                        Start Learning
+                                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                                    </Link>
+                                </Button>
+                                <Button
+                                    size="lg"
+                                    variant="outline"
+                                    asChild
+                                    className="h-12 px-6 rounded-xl border-2 bg-gradient-to-r from-background to-muted/50 hover:from-muted/50 hover:to-muted transition-all"
+                                >
+                                    <Link href="/archive">
+                                        Browse Archive
+                                    </Link>
+                                </Button>
+                            </div>
+
+                            {/* Stats */}
+                            <div className="flex items-center gap-8 pt-4">
+                                <div>
+                                    <div className="text-3xl font-bold bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">500+</div>
+                                    <div className="text-sm text-muted-foreground">Courses</div>
+                                </div>
+                                <div className="w-px h-12 bg-gradient-to-b from-transparent via-border to-transparent" />
+                                <div>
+                                    <div className="text-3xl font-bold bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">10K+</div>
+                                    <div className="text-sm text-muted-foreground">Learners</div>
+                                </div>
+                                <div className="w-px h-12 bg-gradient-to-b from-transparent via-border to-transparent" />
+                                <div>
+                                    <div className="text-3xl font-bold bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">1K+</div>
+                                    <div className="text-sm text-muted-foreground">Projects</div>
+                                </div>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <Users className="h-4 w-4 text-primary" />
-                            <span>10K+ Active Learners</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <BookOpen className="h-4 w-4 text-primary" />
-                            <span>500+ Resources</span>
+
+                        {/* Right Visual */}
+                        <div className="relative hidden lg:block">
+                            <div className="relative">
+                                {/* Code Window */}
+                                <div className="rounded-2xl border-2 border-border bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 shadow-2xl shadow-primary/10 overflow-hidden backdrop-blur-sm">
+                                    {/* Window Header */}
+                                    <div className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-muted to-muted/80 dark:from-muted/80 dark:to-muted/50 border-b border-border backdrop-blur-sm">
+                                        <div className="flex gap-1.5">
+                                            <div className="w-3 h-3 rounded-full bg-gradient-to-br from-red-500 to-red-600 shadow-sm" />
+                                            <div className="w-3 h-3 rounded-full bg-gradient-to-br from-yellow-500 to-yellow-600 shadow-sm" />
+                                            <div className="w-3 h-3 rounded-full bg-gradient-to-br from-green-500 to-green-600 shadow-sm" />
+                                        </div>
+                                        <div className="flex-1 text-center">
+                                            <span className="text-xs font-mono text-muted-foreground">main.go</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Code Content */}
+                                    <div className="p-6 font-mono text-sm space-y-2 bg-gradient-to-br from-background/50 to-muted/30 dark:from-background/30 dark:to-muted/20">
+                                        <div className="text-muted-foreground">
+                                            <span className="text-purple-500 dark:text-purple-400">package</span> main
+                                        </div>
+                                        <div className="h-4" />
+                                        <div className="text-muted-foreground">
+                                            <span className="text-purple-500 dark:text-purple-400">import</span> <span className="text-green-600 dark:text-green-400">"fmt"</span>
+                                        </div>
+                                        <div className="h-4" />
+                                        <div className="text-muted-foreground">
+                                            <span className="text-purple-500 dark:text-purple-400">func</span> <span className="text-blue-600 dark:text-blue-400">main</span>() {"{"}
+                                        </div>
+                                        <div className="pl-4 text-muted-foreground">
+                                            fmt.<span className="text-yellow-600 dark:text-yellow-400">Println</span>(<span className="text-green-600 dark:text-green-400">"Welcome to BGCE!"</span>)
+                                        </div>
+                                        <div className="text-muted-foreground">{"}"}</div>
+                                    </div>
+                                </div>
+
+                                {/* Floating Elements */}
+                                <div className="absolute -top-4 -right-4 p-4 rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-xl shadow-primary/30">
+                                    <Code2 className="h-6 w-6" />
+                                </div>
+                                <div className="absolute -bottom-4 -left-4 p-4 rounded-xl bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-border shadow-xl backdrop-blur-sm">
+                                    <Terminal className="h-6 w-6 text-primary" />
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
-            </div>
-
-            {/* Scroll Indicator */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-                <ChevronDown className="h-6 w-6 text-muted-foreground" />
             </div>
         </section>
     );

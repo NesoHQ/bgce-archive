@@ -40,8 +40,12 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-background border-t border-primary/20 text-foreground pt-16 pb-8 px-4 sm:px-6 lg:px-8 mt-20 rounded-t-[60px] shadow-[0_-20px_60px_rgba(120,119,198,0.15)]" suppressHydrationWarning>
-      <div className="max-w-7xl mx-auto">
+    <footer className="relative bg-gradient-to-b from-background via-muted/20 to-muted/40 dark:from-background dark:via-muted/30 dark:to-muted/50 border-t border-primary/20 text-foreground pt-16 pb-8 px-4 sm:px-6 lg:px-8 mt-20 rounded-t-[60px] shadow-[0_-20px_60px_rgba(120,119,198,0.15)] overflow-hidden" suppressHydrationWarning>
+      {/* Gradient Orbs */}
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-primary/10 to-transparent dark:from-primary/20 dark:to-transparent rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-gradient-to-bl from-blue-500/10 to-transparent dark:from-blue-500/20 dark:to-transparent rounded-full blur-3xl" />
+
+      <div className="max-w-7xl mx-auto relative">
         {/* Top Actions Row */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-16">
           <div>

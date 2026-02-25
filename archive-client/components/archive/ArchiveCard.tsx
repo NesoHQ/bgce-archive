@@ -64,10 +64,10 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
 
   return (
     <Link href={postUrl}>
-      <div className="h-full rounded-2xl bg-gradient-to-br from-card/80 to-card/60 border-2 border-border backdrop-blur-md 
+      <div className="h-full rounded-2xl bg-gradient-to-br from-card/90 to-card/70 dark:from-card dark:to-card/60 border-2 border-border backdrop-blur-sm 
         hover:border-primary/50 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10 hover:ring-2 hover:ring-primary/20
         transition-all duration-300 ease-out cursor-pointer group overflow-hidden relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent dark:from-primary/10 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
         <div className="relative">
           <div className="p-6 space-y-5">
