@@ -2,6 +2,11 @@
 @import "tw-animate-css";
 @import "./nav-fix.css";
 
+/* Ensure body is transparent to show gradients */
+body {
+  background: transparent;
+}
+
 /* Smooth scroll behavior */
 html {
   scroll-behavior: smooth;

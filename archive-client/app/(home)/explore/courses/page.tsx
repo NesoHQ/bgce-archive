@@ -108,9 +108,9 @@ export default function CoursesPage() {
     });
 
     return (
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen">
             {/* Header */}
-            <section className="bg-gradient-to-b from-primary/5 to-background py-12">
+            <section className="py-12">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <h1 className="text-4xl font-bold text-foreground mb-4">Courses</h1>
                     <p className="text-muted-foreground">Learn from expert-led courses and advance your career</p>
@@ -231,7 +231,7 @@ export default function CoursesPage() {
                                 <Link
                                     key={course.id}
                                     href={`/explore/courses/${course.id}`}
-                                    className="group bg-card border border-border rounded-xl overflow-hidden hover:shadow-xl hover:shadow-primary/5 hover:border-primary/50 transition-all duration-300"
+                                    className="group bg-gradient-to-br from-card/90 to-card/70 dark:from-card dark:to-card/60 border-2 border-border backdrop-blur-sm rounded-xl overflow-hidden hover:shadow-xl hover:shadow-primary/10 hover:ring-2 hover:ring-primary/20 hover:border-primary/50 transition-all duration-300"
                                 >
                                     {/* Thumbnail */}
                                     <div className="aspect-video bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-6xl">

@@ -124,9 +124,9 @@ export default function BlogsPage() {
     });
 
     return (
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen">
             {/* Header */}
-            <section className="bg-gradient-to-b from-primary/5 to-background py-12">
+            <section className="py-12">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <h1 className="text-4xl font-bold text-foreground mb-4">Community Blogs</h1>
                     <p className="text-muted-foreground">Insights, tutorials, and stories from our community</p>
@@ -172,7 +172,7 @@ export default function BlogsPage() {
                         <Link
                             key={blog.id}
                             href={`/blogs/${blog.id}`}
-                            className="group bg-card border border-border rounded-xl p-6 hover:shadow-xl hover:shadow-primary/5 hover:border-primary/50 transition-all duration-300"
+                            className="group bg-gradient-to-br from-card/90 to-card/70 dark:from-card dark:to-card/60 border-2 border-border rounded-xl p-6 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/50 hover:ring-2 hover:ring-primary/20 transition-all duration-300 backdrop-blur-sm"
                         >
                             {/* Tags */}
                             <div className="flex flex-wrap gap-2 mb-4">

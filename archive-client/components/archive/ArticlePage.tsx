@@ -74,7 +74,7 @@ const ArticlePage = ({ post }: ArticlePageProps) => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background relative">
+    <div className="min-h-screen relative">
       {/* Reading Progress Bar */}
       <div className="fixed top-0 left-0 right-0 h-1 bg-muted/30 z-50">
         <div

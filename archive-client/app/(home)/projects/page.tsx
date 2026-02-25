@@ -36,8 +36,8 @@ export default function ProjectsPage() {
     ];
 
     return (
-        <div className="min-h-screen bg-background">
-            <section className="bg-gradient-to-b from-primary/5 to-background py-12">
+        <div className="min-h-screen">
+            <section className="py-12">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <h1 className="text-4xl font-bold text-foreground mb-4">Projects</h1>
                     <p className="text-muted-foreground">Build real-world applications with guided templates</p>
@@ -50,7 +50,7 @@ export default function ProjectsPage() {
                         <Link
                             key={project.id}
                             href={`/projects/${project.id}`}
-                            className="group bg-card border border-border rounded-xl p-6 hover:shadow-xl hover:shadow-primary/5 hover:border-primary/50 transition-all duration-300"
+                            className="group bg-gradient-to-br from-card/90 to-card/70 dark:from-card dark:to-card/60 border-2 border-border backdrop-blur-sm rounded-xl p-6 hover:shadow-xl hover:shadow-primary/10 hover:ring-2 hover:ring-primary/20 hover:border-primary/50 transition-all duration-300"
                         >
                             <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                                 <Folder className="h-6 w-6 text-primary" />

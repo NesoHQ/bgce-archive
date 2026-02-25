@@ -7,6 +7,7 @@ import { KrakensAnalytics } from "@/components/krakens-analytics";
 import { ToastProvider } from "@/components/ui/toast";
 import { SkipToContent } from "@/components/shared/SkipToContent";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
+import { GradientBackground } from "@/components/shared/GradientBackground";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default function RootLayout({
             >
                 <SkipToContent />
                 <KrakensAnalytics />
+                <GradientBackground />
 
                 <ThemeProvider
                     attribute="class"

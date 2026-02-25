@@ -95,10 +95,6 @@ export function CommunityTalksSection() {
 
   return (
     <section className="py-16 lg:py-20 relative overflow-hidden">
-      {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background dark:from-background dark:via-primary/10 dark:to-background" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-cyan-500/5 via-primary/5 to-purple-500/5 dark:from-cyan-500/15 dark:via-primary/15 dark:to-purple-500/15 rounded-full blur-3xl" />
-
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-10 gap-4">

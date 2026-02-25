@@ -7,17 +7,6 @@ import { ArrowRight, Code2, Zap, Terminal } from "lucide-react";
 export function WelcomeSection() {
     return (
         <section className="relative overflow-hidden border-b border-border">
-            {/* Gradient Background - Light & Dark Mode */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/5 dark:from-primary/10 dark:via-background dark:to-primary/10" />
-
-            {/* Tech Grid Background */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:48px_48px]" />
-
-            {/* Animated Gradient Orbs */}
-            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-primary/20 via-primary/10 to-transparent dark:from-primary/30 dark:via-primary/15 dark:to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s' }} />
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-500/10 via-purple-500/10 to-transparent dark:from-blue-500/20 dark:via-purple-500/20 dark:to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDuration: '6s', animationDelay: '1s' }} />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-cyan-500/5 to-primary/5 dark:from-cyan-500/15 dark:to-primary/15 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '5s', animationDelay: '2s' }} />
-
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 relative">
                 <div className="max-w-6xl mx-auto">
                     <div className="grid lg:grid-cols-2 gap-12 items-center">

@@ -67,11 +67,6 @@ export function PopularCoursesSection() {
 
     return (
         <section className="py-16 lg:py-20 relative overflow-hidden">
-            {/* Gradient Background */}
-            <div className="absolute inset-0 bg-gradient-to-b from-muted/30 via-muted/10 to-background dark:from-muted/50 dark:via-muted/20 dark:to-background" />
-            <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-gradient-to-br from-blue-500/10 to-transparent dark:from-blue-500/20 dark:to-transparent rounded-full blur-3xl" />
-            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-gradient-to-tl from-purple-500/10 to-transparent dark:from-purple-500/20 dark:to-transparent rounded-full blur-3xl" />
-
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
                 {/* Section Header */}
                 <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-10 gap-4">

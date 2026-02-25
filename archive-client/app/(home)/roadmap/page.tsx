@@ -133,9 +133,9 @@ export default function RoadmapPage() {
     };
 
     return (
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen">
             {/* Header */}
-            <section className="bg-gradient-to-b from-primary/5 to-background py-16">
+            <section className="py-16">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="max-w-3xl mx-auto text-center space-y-4">
                         <h1 className="text-4xl lg:text-5xl font-bold text-foreground">Product Roadmap</h1>
@@ -188,7 +188,7 @@ export default function RoadmapPage() {
 
                                             {/* Content Card */}
                                             <div className="md:ml-20">
-                                                <div className={`bg-card border ${config.borderColor} rounded-xl p-6 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300`}>
+                                                <div className={`bg-card border ${config.borderColor} rounded-xl p-6 hover:shadow-xl hover:shadow-primary/10 hover:ring-2 hover:ring-primary/20 transition-all duration-300`}>
                                                     {/* Header */}
                                                     <div className="flex items-start justify-between mb-4">
                                                         <div className="flex-1">

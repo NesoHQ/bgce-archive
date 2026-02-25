@@ -62,9 +62,9 @@ export default function ExplorePage() {
     ];
 
     return (
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen">
             {/* Hero Section */}
-            <section className="bg-gradient-to-b from-primary/5 to-background py-16 lg:py-24">
+            <section className="py-16 lg:py-24">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="max-w-3xl mx-auto text-center space-y-4">
                         <h1 className="text-4xl lg:text-5xl font-bold text-foreground">
@@ -87,7 +87,7 @@ export default function ExplorePage() {
                                 <Link
                                     key={section.href}
                                     href={section.href}
-                                    className="group relative bg-card border border-border rounded-xl p-8 hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/50 transition-all duration-300 overflow-hidden"
+                                    className="group relative bg-gradient-to-br from-card/90 to-card/70 dark:from-card dark:to-card/60 border-2 border-border backdrop-blur-sm rounded-xl p-8 hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/50 transition-all duration-300 overflow-hidden"
                                 >
                                     {/* Background Gradient */}
                                     <div className={`absolute inset-0 bg-gradient-to-br ${section.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />

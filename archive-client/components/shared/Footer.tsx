@@ -40,7 +40,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-gradient-to-b from-background via-muted/20 to-muted/40 dark:from-background dark:via-muted/30 dark:to-muted/50 border-t border-primary/20 text-foreground pt-16 pb-8 px-4 sm:px-6 lg:px-8 mt-20 rounded-t-[60px] shadow-[0_-20px_60px_rgba(120,119,198,0.15)] overflow-hidden" suppressHydrationWarning>
+    <footer className="relative bg-gradient-to-b from-transparent via-muted/10 to-muted/20 dark:from-transparent dark:via-muted/20 dark:to-muted/30 border-t border-primary/20 text-foreground pt-16 pb-8 px-4 sm:px-6 lg:px-8 mt-20 rounded-t-[60px] shadow-[0_-20px_60px_rgba(120,119,198,0.15)] overflow-hidden backdrop-blur-sm" suppressHydrationWarning>
       {/* Gradient Orbs */}
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-primary/10 to-transparent dark:from-primary/20 dark:to-transparent rounded-full blur-3xl" />
       <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-gradient-to-bl from-blue-500/10 to-transparent dark:from-blue-500/20 dark:to-transparent rounded-full blur-3xl" />

@@ -114,9 +114,9 @@ export default function CheatsheetPage() {
     });
 
     return (
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen">
             {/* Header */}
-            <section className="bg-gradient-to-b from-primary/5 to-background py-12">
+            <section className="py-12">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <h1 className="text-4xl font-bold text-foreground mb-4">Cheatsheets</h1>
                     <p className="text-muted-foreground">Quick reference guides for developers</p>
@@ -183,7 +183,7 @@ export default function CheatsheetPage() {
                         <Link
                             key={sheet.id}
                             href={`/resources/cheatsheet/${sheet.id}`}
-                            className="group relative bg-card border border-border rounded-xl overflow-hidden hover:shadow-xl hover:shadow-primary/5 hover:border-primary/50 transition-all duration-300"
+                            className="group relative bg-gradient-to-br from-card/90 to-card/70 dark:from-card dark:to-card/60 border-2 border-border backdrop-blur-sm rounded-xl overflow-hidden hover:shadow-xl hover:shadow-primary/10 hover:ring-2 hover:ring-primary/20 hover:border-primary/50 transition-all duration-300"
                         >
                             {/* Background Gradient */}
                             <div className={`absolute inset-0 bg-gradient-to-br ${sheet.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
