@@ -152,11 +152,9 @@ export default function RoadmapPage() {
                         {/* Completed Column */}
                         <div className="space-y-3">
                             <div className="flex items-center gap-2.5 mb-4">
-                                <div className="p-2 rounded-lg bg-green-500/10 border border-green-500/20">
-                                    <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
-                                </div>
+                                <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
                                 <h2 className="text-sm font-bold text-foreground">Completed</h2>
-                                <span className="text-xs font-semibold text-green-600 dark:text-green-400 ml-auto">
+                                <span className="ml-auto flex items-center justify-center h-5 w-5 rounded-full bg-green-500/10 text-xs font-semibold text-green-600 dark:text-green-400">
                                     {roadmapItems.completed.length}
                                 </span>
                             </div>
@@ -192,11 +190,9 @@ export default function RoadmapPage() {
                         {/* In Progress Column */}
                         <div className="space-y-3">
                             <div className="flex items-center gap-2.5 mb-4">
-                                <div className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                                    <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                                </div>
+                                <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                                 <h2 className="text-sm font-bold text-foreground">In Progress</h2>
-                                <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 ml-auto">
+                                <span className="ml-auto flex items-center justify-center h-5 w-5 rounded-full bg-blue-500/10 text-xs font-semibold text-blue-600 dark:text-blue-400">
                                     {roadmapItems.inProgress.length}
                                 </span>
                             </div>
@@ -247,11 +243,9 @@ export default function RoadmapPage() {
                         {/* Planned Column */}
                         <div className="space-y-3">
                             <div className="flex items-center gap-2.5 mb-4">
-                                <div className="p-2 rounded-lg bg-purple-500/10 border border-purple-500/20">
-                                    <Sparkles className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                                </div>
+                                <Sparkles className="h-4 w-4 text-purple-600 dark:text-purple-400" />
                                 <h2 className="text-sm font-bold text-foreground">Planned</h2>
-                                <span className="text-xs font-semibold text-purple-600 dark:text-purple-400 ml-auto">
+                                <span className="ml-auto flex items-center justify-center h-5 w-5 rounded-full bg-purple-500/10 text-xs font-semibold text-purple-600 dark:text-purple-400">
                                     {roadmapItems.planned.length}
                                 </span>
                             </div>
@@ -287,12 +281,10 @@ export default function RoadmapPage() {
                         {/* Changelog Column */}
                         <div className="space-y-3">
                             <div className="flex items-center gap-2.5 mb-4">
-                                <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
-                                    <GitBranch className="h-4 w-4 text-primary" />
-                                </div>
+                                <GitBranch className="h-4 w-4 text-primary" />
                                 <h2 className="text-sm font-bold text-foreground">Changelog</h2>
-                                <span className="text-xs font-semibold text-primary ml-auto">
-                                    Latest
+                                <span className="ml-auto flex items-center justify-center h-5 w-5 rounded-full bg-primary/10 text-[10px] font-semibold text-primary">
+                                    {roadmapItems.changelog.length}
                                 </span>
                             </div>
 
