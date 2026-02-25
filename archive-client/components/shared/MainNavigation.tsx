@@ -464,14 +464,14 @@ export function MainNavigation() {
             style={{
               top: `${dropdownPositions.explore.top}px`,
               left: `${dropdownPositions.explore.left}px`,
-              width: '800px'
+              width: '680px'
             }}
           >
-            <div className="bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-border rounded-xl shadow-2xl overflow-hidden backdrop-blur-sm">
+            <div className="bg-gradient-to-br from-card to-card/95 dark:from-card dark:to-card/90 border border-border rounded-lg shadow-2xl overflow-hidden backdrop-blur-sm">
               <div className="flex">
                 {/* Left Side - Main Sections */}
-                <div className="flex-1 p-4 border-r border-border">
-                  <div className="space-y-1">
+                <div className="flex-1 p-3 border-r border-border">
+                  <div className="space-y-0.5">
                     {/* Courses Section */}
                     <div
                       onMouseEnter={() => setSelectedSection('courses')}
@@ -482,17 +482,17 @@ export function MainNavigation() {
                           setExploreOpen(false);
                           setSelectedSection(null);
                         }}
-                        className="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-accent transition-colors duration-200 group"
+                        className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-accent transition-colors duration-150 group"
                       >
-                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-200">
-                          <exploreItems.courses.icon className="h-5 w-5 text-primary" />
+                        <div className="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-150">
+                          <exploreItems.courses.icon className="h-4 w-4 text-primary" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors duration-200 flex items-center justify-between">
+                          <div className="font-semibold text-xs text-foreground group-hover:text-primary transition-colors duration-150 flex items-center justify-between">
                             {exploreItems.courses.label}
-                            <ChevronDown className="h-4 w-4 -rotate-90" />
+                            <ChevronDown className="h-3.5 w-3.5 -rotate-90" />
                           </div>
-                          <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                          <div className="text-[10px] text-muted-foreground mt-0.5 line-clamp-1">
                             {exploreItems.courses.desc}
                           </div>
                         </div>
@@ -509,17 +509,17 @@ export function MainNavigation() {
                           setExploreOpen(false);
                           setSelectedSection(null);
                         }}
-                        className="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-accent transition-colors duration-200 group"
+                        className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-accent transition-colors duration-150 group"
                       >
-                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-200">
-                          <exploreItems.practice.icon className="h-5 w-5 text-primary" />
+                        <div className="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-150">
+                          <exploreItems.practice.icon className="h-4 w-4 text-primary" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors duration-200 flex items-center justify-between">
+                          <div className="font-semibold text-xs text-foreground group-hover:text-primary transition-colors duration-150 flex items-center justify-between">
                             {exploreItems.practice.label}
-                            <ChevronDown className="h-4 w-4 -rotate-90" />
+                            <ChevronDown className="h-3.5 w-3.5 -rotate-90" />
                           </div>
-                          <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                          <div className="text-[10px] text-muted-foreground mt-0.5 line-clamp-1">
                             {exploreItems.practice.desc}
                           </div>
                         </div>
@@ -536,17 +536,17 @@ export function MainNavigation() {
                           setExploreOpen(false);
                           setSelectedSection(null);
                         }}
-                        className="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-accent transition-colors duration-200 group"
+                        className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-accent transition-colors duration-150 group"
                       >
-                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-200">
-                          <exploreItems.getHired.icon className="h-5 w-5 text-primary" />
+                        <div className="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-150">
+                          <exploreItems.getHired.icon className="h-4 w-4 text-primary" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors duration-200 flex items-center justify-between">
+                          <div className="font-semibold text-xs text-foreground group-hover:text-primary transition-colors duration-150 flex items-center justify-between">
                             {exploreItems.getHired.label}
-                            <ChevronDown className="h-4 w-4 -rotate-90" />
+                            <ChevronDown className="h-3.5 w-3.5 -rotate-90" />
                           </div>
-                          <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                          <div className="text-[10px] text-muted-foreground mt-0.5 line-clamp-1">
                             {exploreItems.getHired.desc}
                           </div>
                         </div>
@@ -557,13 +557,13 @@ export function MainNavigation() {
 
                 {/* Right Side - Sub Items */}
                 <div
-                  className="w-80 p-4 bg-muted/30"
+                  className="w-64 p-3 bg-muted/20"
                   onMouseLeave={() => setSelectedSection(null)}
                 >
                   {selectedSection === 'courses' && (
-                    <div className="space-y-1">
-                      <div className="px-3 py-2 mb-2">
-                        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <div className="space-y-0.5">
+                      <div className="px-2 py-1.5 mb-1">
+                        <h3 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
                           Course Types
                         </h3>
                       </div>
@@ -575,7 +575,7 @@ export function MainNavigation() {
                             setExploreOpen(false);
                             setSelectedSection(null);
                           }}
-                          className="block px-3 py-2.5 rounded-lg text-sm font-medium text-foreground hover:bg-accent hover:text-primary transition-colors duration-200"
+                          className="block px-2 py-1.5 rounded-md text-xs font-medium text-foreground hover:bg-accent hover:text-primary transition-colors duration-150"
                         >
                           {item.label}
                         </Link>
@@ -584,9 +584,9 @@ export function MainNavigation() {
                   )}
 
                   {selectedSection === 'practice' && (
-                    <div className="space-y-1">
-                      <div className="px-3 py-2 mb-2">
-                        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <div className="space-y-0.5">
+                      <div className="px-2 py-1.5 mb-1">
+                        <h3 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
                           Practice Options
                         </h3>
                       </div>
@@ -600,16 +600,16 @@ export function MainNavigation() {
                               setExploreOpen(false);
                               setSelectedSection(null);
                             }}
-                            className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-accent transition-colors duration-200 group"
+                            className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-accent transition-colors duration-150 group"
                           >
-                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-200">
-                              <Icon className="h-4 w-4 text-primary" />
+                            <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-150">
+                              <Icon className="h-3 w-3 text-primary" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors duration-200">
+                              <div className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors duration-150">
                                 {item.label}
                               </div>
-                              <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                              <div className="text-[10px] text-muted-foreground mt-0.5 line-clamp-1">
                                 {item.desc}
                               </div>
                             </div>
@@ -620,9 +620,9 @@ export function MainNavigation() {
                   )}
 
                   {selectedSection === 'getHired' && (
-                    <div className="space-y-1">
-                      <div className="px-3 py-2 mb-2">
-                        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <div className="space-y-0.5">
+                      <div className="px-2 py-1.5 mb-1">
+                        <h3 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
                           Career Resources
                         </h3>
                       </div>
@@ -636,16 +636,16 @@ export function MainNavigation() {
                               setExploreOpen(false);
                               setSelectedSection(null);
                             }}
-                            className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-accent transition-colors duration-200 group"
+                            className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-accent transition-colors duration-150 group"
                           >
-                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-200">
-                              <Icon className="h-4 w-4 text-primary" />
+                            <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-150">
+                              <Icon className="h-3 w-3 text-primary" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors duration-200">
+                              <div className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors duration-150">
                                 {item.label}
                               </div>
-                              <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                              <div className="text-[10px] text-muted-foreground mt-0.5 line-clamp-1">
                                 {item.desc}
                               </div>
                             </div>
@@ -658,8 +658,8 @@ export function MainNavigation() {
                   {!selectedSection && (
                     <div className="flex items-center justify-center h-full">
                       <div className="text-center text-muted-foreground">
-                        <BookOpen className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                        <p className="text-xs">Hover over a section to see options</p>
+                        <BookOpen className="h-6 w-6 mx-auto mb-1.5 opacity-40" />
+                        <p className="text-[10px]">Hover to see options</p>
                       </div>
                     </div>
                   )}
@@ -681,11 +681,11 @@ export function MainNavigation() {
             style={{
               top: `${dropdownPositions.resources.top}px`,
               right: `${dropdownPositions.resources.right}px`,
-              width: '240px'
+              width: '200px'
             }}
           >
-            <div className="bg-background border border-border rounded-lg shadow-2xl overflow-hidden">
-              <div className="p-2">
+            <div className="bg-card border border-border rounded-lg shadow-2xl overflow-hidden">
+              <div className="p-1.5">
                 {resourceItems.map((item) => {
                   const Icon = item.icon;
                   return (
@@ -693,10 +693,10 @@ export function MainNavigation() {
                       key={item.href}
                       href={item.href}
                       onClick={() => setResourcesOpen(false)}
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-accent transition-colors duration-200 group"
+                      className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-accent transition-colors duration-150 group"
                     >
-                      <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
-                      <span className="text-sm font-medium">{item.label}</span>
+                      <Icon className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-colors duration-150" />
+                      <span className="text-xs font-medium">{item.label}</span>
                     </Link>
                   );
                 })}
@@ -717,51 +717,51 @@ export function MainNavigation() {
             style={{
               top: `${dropdownPositions.profile.top}px`,
               right: `${dropdownPositions.profile.right}px`,
-              width: '240px'
+              width: '220px'
             }}
           >
-            <div className="bg-background border border-border rounded-lg shadow-2xl overflow-hidden">
-              <div className="p-3 border-b bg-muted/30">
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-10 w-10">
-                    <AvatarFallback className="bg-primary/20 text-primary text-sm font-semibold">
+            <div className="bg-card border border-border rounded-lg shadow-2xl overflow-hidden">
+              <div className="p-2 border-b bg-muted/20">
+                <div className="flex items-center gap-2">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-primary/20 text-primary text-xs font-semibold">
                       {user.username.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{user.username}</p>
-                    <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                    <p className="text-xs font-medium truncate">{user.username}</p>
+                    <p className="text-[10px] text-muted-foreground truncate">{user.email}</p>
                   </div>
                 </div>
               </div>
-              <div className="p-2">
+              <div className="p-1.5">
                 <Link
                   href="/profile"
                   onClick={() => setProfileOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-accent transition-colors duration-200 group"
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-accent transition-colors duration-150 group"
                 >
-                  <User className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
-                  <span className="text-sm font-medium">Profile</span>
+                  <User className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-colors duration-150" />
+                  <span className="text-xs font-medium">Profile</span>
                 </Link>
                 <Link
                   href="/settings"
                   onClick={() => setProfileOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-accent transition-colors duration-200 group"
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-accent transition-colors duration-150 group"
                 >
-                  <Settings className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
-                  <span className="text-sm font-medium">Settings</span>
+                  <Settings className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-colors duration-150" />
+                  <span className="text-xs font-medium">Settings</span>
                 </Link>
               </div>
-              <div className="p-2 border-t">
+              <div className="p-1.5 border-t">
                 <button
                   onClick={() => {
                     setProfileOpen(false);
                     logout();
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-destructive/10 text-destructive transition-colors duration-200"
+                  className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-destructive/10 text-destructive transition-colors duration-150"
                 >
-                  <LogOut className="h-4 w-4" />
-                  <span className="text-sm font-medium">Logout</span>
+                  <LogOut className="h-3.5 w-3.5" />
+                  <span className="text-xs font-medium">Logout</span>
                 </button>
               </div>
             </div>
