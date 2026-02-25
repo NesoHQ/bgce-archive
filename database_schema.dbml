@@ -1,0 +1,597 @@
+// BGCE Archive - Complete Database Schema
+// Database Diagram for dbdiagram.io
+// Supports all features from archive-client, archive-admin, cortex, and postal
+
+// ============================================
+// CORE ENTITIES (Cortex Service)
+// ============================================
+
+Table tenants {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  name varchar(255) [not null]
+  slug varchar(255) [unique, not null]
+  domain varchar(255) [unique]
+  status varchar(20) [not null, default: 'active'] // active, inactive, suspended
+  plan varchar(20) [not null, default: 'free'] // free, starter, professional, enterprise
+  settings jsonb
+  meta jsonb
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (slug)
+    (domain)
+    (status)
+  }
+}
+
+Table users {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  tenant_id int [ref: > tenants.id]
+  username varchar(50) [unique, not null]
+  email varchar(255) [unique, not null]
+  password_hash varchar(255) [not null]
+  full_name varchar(255)
+  role varchar(20) [not null, default: 'viewer'] // admin, editor, viewer
+  status varchar(20) [not null, default: 'active'] // active, inactive, suspended
+  avatar_url varchar(500)
+  bio text
+  location varchar(255)
+  website varchar(500)
+  github_username varchar(100)
+  twitter_username varchar(100)
+  linkedin_url varchar(500)
+  last_login_at timestamp
+  email_verified_at timestamp
+  meta jsonb
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (email)
+    (username)
+    (tenant_id)
+    (role)
+    (status)
+  }
+}
+
+Table categories {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  tenant_id int [ref: > tenants.id]
+  parent_id int [ref: > categories.id]
+  slug varchar(255) [unique, not null]
+  label varchar(255) [not null]
+  description text
+  icon varchar(100)
+  color varchar(50)
+  order_no int [default: 0]
+  creator_id int [ref: > users.id]
+  created_by int [ref: > users.id, not null]
+  updated_by int [ref: > users.id]
+  approved_by int [ref: > users.id]
+  deleted_by int [ref: > users.id]
+  status varchar(20) [not null, default: 'pending'] // pending, approved, rejected, deleted
+  approved_at timestamp
+  deleted_at timestamp
+  meta jsonb
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (slug)
+    (parent_id)
+    (tenant_id)
+    (status)
+    (created_by)
+  }
+}
+
+// ============================================
+// CONTENT ENTITIES (Postal Service)
+// ============================================
+
+Table posts {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  tenant_id int [ref: > tenants.id]
+  order_no int [unique, not null]
+  title varchar(500) [not null]
+  slug varchar(500) [unique, not null]
+  summary text
+  content text [not null]
+  thumbnail_url varchar(500)
+  category_id int [ref: > categories.id, not null]
+  sub_category_id int [ref: > categories.id]
+  meta_title varchar(500)
+  meta_description text
+  keywords text
+  og_image varchar(500)
+  status varchar(20) [not null, default: 'draft'] // draft, published, archived, deleted
+  is_public boolean [not null, default: true]
+  is_featured boolean [not null, default: false]
+  is_pinned boolean [not null, default: false]
+  published_at timestamp
+  archived_at timestamp
+  created_by int [ref: > users.id, not null]
+  updated_by int [ref: > users.id]
+  view_count int [not null, default: 0]
+  like_count int [not null, default: 0]
+  comment_count int [not null, default: 0]
+  bookmark_count int [not null, default: 0]
+  version int [not null, default: 1]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+  
+  indexes {
+    (slug)
+    (category_id)
+    (sub_category_id)
+    (tenant_id)
+    (status)
+    (is_featured)
+    (is_pinned)
+    (created_by)
+    (published_at)
+  }
+}
+
+Table post_versions {
+  id int [pk, increment]
+  post_id int [ref: > posts.id, not null]
+  version_no int [not null]
+  title varchar(500) [not null]
+  content text [not null]
+  summary text
+  edited_by int [ref: > users.id, not null]
+  change_note text
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (post_id, version_no) [unique]
+    (post_id)
+  }
+}
+
+Table post_tags {
+  id int [pk, increment]
+  post_id int [ref: > posts.id, not null]
+  tag_id int [ref: > tags.id, not null]
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (post_id, tag_id) [unique]
+    (post_id)
+    (tag_id)
+  }
+}
+
+Table tags {
+  id int [pk, increment]
+  tenant_id int [ref: > tenants.id]
+  name varchar(100) [unique, not null]
+  slug varchar(100) [unique, not null]
+  description text
+  usage_count int [not null, default: 0]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (slug)
+    (tenant_id)
+    (usage_count)
+  }
+}
+
+// ============================================
+// COMMUNITY FEATURES
+// ============================================
+
+Table comments {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  tenant_id int [ref: > tenants.id]
+  post_id int [ref: > posts.id, not null]
+  user_id int [ref: > users.id]
+  parent_id int [ref: > comments.id]
+  author_name varchar(255) [not null]
+  author_email varchar(255) [not null]
+  content text [not null]
+  status varchar(20) [not null, default: 'pending'] // pending, approved, rejected, spam
+  moderation_reason text
+  like_count int [not null, default: 0]
+  reply_count int [not null, default: 0]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+  
+  indexes {
+    (post_id)
+    (user_id)
+    (parent_id)
+    (tenant_id)
+    (status)
+    (created_at)
+  }
+}
+
+Table discussions {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  tenant_id int [ref: > tenants.id]
+  user_id int [ref: > users.id, not null]
+  category_id int [ref: > categories.id]
+  title varchar(500) [not null]
+  slug varchar(500) [unique, not null]
+  content text [not null]
+  status varchar(20) [not null, default: 'open'] // open, closed, locked
+  is_pinned boolean [not null, default: false]
+  is_featured boolean [not null, default: false]
+  view_count int [not null, default: 0]
+  upvote_count int [not null, default: 0]
+  comment_count int [not null, default: 0]
+  last_activity_at timestamp
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+  
+  indexes {
+    (slug)
+    (user_id)
+    (category_id)
+    (tenant_id)
+    (status)
+    (is_pinned)
+    (last_activity_at)
+  }
+}
+
+Table discussion_replies {
+  id int [pk, increment]
+  discussion_id int [ref: > discussions.id, not null]
+  user_id int [ref: > users.id, not null]
+  parent_id int [ref: > discussion_replies.id]
+  content text [not null]
+  upvote_count int [not null, default: 0]
+  is_solution boolean [not null, default: false]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+  
+  indexes {
+    (discussion_id)
+    (user_id)
+    (parent_id)
+    (is_solution)
+  }
+}
+
+Table likes {
+  id int [pk, increment]
+  user_id int [ref: > users.id, not null]
+  likeable_type varchar(50) [not null] // post, comment, discussion, discussion_reply
+  likeable_id int [not null]
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (user_id, likeable_type, likeable_id) [unique]
+    (likeable_type, likeable_id)
+  }
+}
+
+Table bookmarks {
+  id int [pk, increment]
+  user_id int [ref: > users.id, not null]
+  post_id int [ref: > posts.id, not null]
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (user_id, post_id) [unique]
+    (user_id)
+    (post_id)
+  }
+}
+
+Table follows {
+  id int [pk, increment]
+  follower_id int [ref: > users.id, not null]
+  following_id int [ref: > users.id, not null]
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (follower_id, following_id) [unique]
+    (follower_id)
+    (following_id)
+  }
+}
+
+// ============================================
+// SUPPORT & MODERATION
+// ============================================
+
+Table support_tickets {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  tenant_id int [ref: > tenants.id]
+  user_id int [ref: > users.id]
+  user_name varchar(255) [not null]
+  user_email varchar(255) [not null]
+  subject varchar(500) [not null]
+  message text [not null]
+  status varchar(20) [not null, default: 'open'] // open, in_progress, resolved, closed
+  priority varchar(20) [not null, default: 'medium'] // low, medium, high, urgent
+  category varchar(50) [not null] // bug, feature, question, feedback, other
+  assigned_to int [ref: > users.id]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (user_id)
+    (tenant_id)
+    (status)
+    (priority)
+    (assigned_to)
+  }
+}
+
+Table support_ticket_replies {
+  id int [pk, increment]
+  ticket_id int [ref: > support_tickets.id, not null]
+  user_id int [ref: > users.id, not null]
+  message text [not null]
+  is_staff boolean [not null, default: false]
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (ticket_id)
+    (user_id)
+  }
+}
+
+Table moderation_strategies {
+  id int [pk, increment]
+  tenant_id int [ref: > tenants.id]
+  name varchar(255) [not null]
+  type varchar(50) [not null] // keyword, ai, manual, auto_approve
+  enabled boolean [not null, default: true]
+  priority int [not null, default: 0]
+  config jsonb [not null]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (tenant_id)
+    (type)
+    (enabled)
+    (priority)
+  }
+}
+
+// ============================================
+// LEARNING RESOURCES
+// ============================================
+
+Table courses {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  tenant_id int [ref: > tenants.id]
+  title varchar(500) [not null]
+  slug varchar(500) [unique, not null]
+  description text
+  thumbnail_url varchar(500)
+  level varchar(20) [not null] // beginner, intermediate, advanced
+  topic varchar(100) [not null]
+  duration_hours int
+  rating decimal(3,2) [default: 0]
+  students_count int [not null, default: 0]
+  price varchar(50) // Free, $49, etc
+  is_trending boolean [not null, default: false]
+  is_free boolean [not null, default: false]
+  instructor_id int [ref: > users.id]
+  status varchar(20) [not null, default: 'draft'] // draft, published, archived
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (slug)
+    (tenant_id)
+    (level)
+    (topic)
+    (status)
+    (is_trending)
+  }
+}
+
+Table cheatsheets {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  tenant_id int [ref: > tenants.id]
+  title varchar(500) [not null]
+  slug varchar(500) [unique, not null]
+  description text
+  category varchar(100) [not null]
+  tags varchar(500)
+  read_time varchar(20)
+  downloads_count int [not null, default: 0]
+  views_count int [not null, default: 0]
+  rating decimal(3,2) [default: 0]
+  is_popular boolean [not null, default: false]
+  file_url varchar(500)
+  created_by int [ref: > users.id, not null]
+  status varchar(20) [not null, default: 'published']
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (slug)
+    (tenant_id)
+    (category)
+    (status)
+  }
+}
+
+Table projects {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  tenant_id int [ref: > tenants.id]
+  user_id int [ref: > users.id, not null]
+  title varchar(500) [not null]
+  slug varchar(500) [unique, not null]
+  description text
+  thumbnail_url varchar(500)
+  github_url varchar(500)
+  demo_url varchar(500)
+  tech_stack varchar(500)
+  difficulty varchar(20) // beginner, intermediate, advanced
+  upvote_count int [not null, default: 0]
+  view_count int [not null, default: 0]
+  is_featured boolean [not null, default: false]
+  status varchar(20) [not null, default: 'published']
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (slug)
+    (user_id)
+    (tenant_id)
+    (status)
+    (is_featured)
+  }
+}
+
+// ============================================
+// NOTIFICATIONS & ACTIVITY
+// ============================================
+
+Table notifications {
+  id int [pk, increment]
+  user_id int [ref: > users.id, not null]
+  type varchar(50) [not null] // comment, like, follow, mention, reply
+  title varchar(255) [not null]
+  message text
+  link varchar(500)
+  is_read boolean [not null, default: false]
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (user_id)
+    (is_read)
+    (created_at)
+  }
+}
+
+Table activity_logs {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  tenant_id int [ref: > tenants.id]
+  action varchar(100) [not null]
+  entity_type varchar(50) [not null]
+  entity_id int [not null]
+  ip_address varchar(45)
+  user_agent text
+  metadata jsonb
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (user_id)
+    (tenant_id)
+    (entity_type, entity_id)
+    (created_at)
+  }
+}
+
+// ============================================
+// ANALYTICS & STATISTICS
+// ============================================
+
+Table post_views {
+  id int [pk, increment]
+  post_id int [ref: > posts.id, not null]
+  user_id int [ref: > users.id]
+  ip_address varchar(45)
+  user_agent text
+  referrer varchar(500)
+  viewed_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (post_id)
+    (user_id)
+    (viewed_at)
+  }
+}
+
+Table tenant_stats {
+  id int [pk, increment]
+  tenant_id int [ref: > tenants.id, not null]
+  date date [not null]
+  total_users int [not null, default: 0]
+  total_posts int [not null, default: 0]
+  total_comments int [not null, default: 0]
+  total_views int [not null, default: 0]
+  active_users int [not null, default: 0]
+  new_users int [not null, default: 0]
+  new_posts int [not null, default: 0]
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (tenant_id, date) [unique]
+    (tenant_id)
+    (date)
+  }
+}
+
+// ============================================
+// FILE MANAGEMENT
+// ============================================
+
+Table media_files {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  tenant_id int [ref: > tenants.id]
+  user_id int [ref: > users.id, not null]
+  filename varchar(500) [not null]
+  original_filename varchar(500) [not null]
+  file_path varchar(1000) [not null]
+  file_url varchar(1000) [not null]
+  mime_type varchar(100) [not null]
+  file_size bigint [not null]
+  width int
+  height int
+  alt_text varchar(500)
+  caption text
+  usage_count int [not null, default: 0]
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (user_id)
+    (tenant_id)
+    (mime_type)
+  }
+}
+
+// ============================================
+// SEARCH & INDEXING
+// ============================================
+
+Table search_index {
+  id int [pk, increment]
+  tenant_id int [ref: > tenants.id]
+  searchable_type varchar(50) [not null] // post, discussion, course, project
+  searchable_id int [not null]
+  title varchar(500) [not null]
+  content text [not null]
+  tags varchar(500)
+  search_vector tsvector
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (tenant_id)
+    (searchable_type, searchable_id) [unique]
+    (search_vector) [type: gin]
+  }
+}
