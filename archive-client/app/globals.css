@@ -420,3 +420,118 @@ html {
 .prose strong {
   @apply font-semibold text-foreground;
 }
+
+
+/* Enhanced Vibrant Dark Mode Hover States */
+.dark a:hover:not(.no-vibrant),
+.dark button:hover:not(.no-vibrant):not(:disabled),
+.dark [role="button"]:hover {
+  color: oklch(0.85 0.28 260) !important;
+  text-shadow: 0 0 8px oklch(0.65 0.18 260 / 0.3);
+  transition: all 0.2s ease-in-out;
+}
+
+.dark .hover\:text-primary:hover {
+  color: oklch(0.85 0.28 260) !important;
+  text-shadow: 0 0 8px oklch(0.65 0.18 260 / 0.3);
+}
+
+.dark .group:hover .group-hover\:text-primary {
+  color: oklch(0.85 0.28 260) !important;
+  text-shadow: 0 0 8px oklch(0.65 0.18 260 / 0.3);
+}
+
+.dark .hover\:bg-accent:hover {
+  background-color: oklch(0.3 0.08 260) !important;
+  box-shadow: 0 0 12px oklch(0.65 0.18 260 / 0.15);
+}
+
+/* Vibrant icon hovers in dark mode */
+.dark .group:hover svg,
+.dark button:hover:not(:disabled) svg,
+.dark a:hover svg {
+  color: oklch(0.85 0.28 260) !important;
+  filter: drop-shadow(0 0 4px oklch(0.65 0.18 260 / 0.4));
+  transition: all 0.2s ease-in-out;
+}
+
+/* Navigation link vibrant hovers */
+.dark nav a:hover,
+.dark nav button:hover:not(:disabled) {
+  color: oklch(0.88 0.3 260) !important;
+  text-shadow: 0 0 10px oklch(0.65 0.18 260 / 0.4);
+}
+
+/* Card and dropdown item hovers */
+.dark .hover\:bg-accent:hover,
+.dark [class*="hover:bg-accent"]:hover {
+  background-color: oklch(0.3 0.08 260) !important;
+  box-shadow: 0 0 16px oklch(0.65 0.18 260 / 0.2);
+}
+
+/* Primary button vibrant hover */
+.dark .bg-primary:hover:not(:disabled),
+.dark button.bg-primary:hover:not(:disabled) {
+  background-color: oklch(0.78 0.24 260) !important;
+  box-shadow: 0 4px 20px oklch(0.65 0.18 260 / 0.4), 0 0 30px oklch(0.65 0.18 260 / 0.2);
+  transform: translateY(-1px);
+}
+
+/* Link underline vibrant color */
+.dark a[class*="underline"]:hover {
+  color: oklch(0.88 0.3 260) !important;
+  text-decoration-color: oklch(0.88 0.3 260) !important;
+  text-shadow: 0 0 8px oklch(0.65 0.18 260 / 0.3);
+}
+
+/* Enhanced border glow on hover */
+.dark [class*="hover:border"]:hover {
+  border-color: oklch(0.75 0.22 260) !important;
+  box-shadow: 0 0 12px oklch(0.65 0.18 260 / 0.3), inset 0 0 8px oklch(0.65 0.18 260 / 0.1);
+}
+
+/* Card hover effects */
+.dark .group:hover [class*="bg-primary/10"],
+.dark .group:hover [class*="bg-primary/20"] {
+  background-color: oklch(0.65 0.18 260 / 0.3) !important;
+  box-shadow: 0 0 16px oklch(0.65 0.18 260 / 0.3);
+}
+
+/* Dropdown and menu item hovers */
+.dark [class*="rounded-lg"]:hover:not(:disabled),
+.dark [class*="rounded-md"]:hover:not(:disabled) {
+  box-shadow: 0 2px 12px oklch(0.65 0.18 260 / 0.15);
+}
+
+/* Enhanced shadow for elevated elements */
+.dark .hover\:shadow-lg:hover,
+.dark .hover\:shadow-xl:hover {
+  box-shadow: 0 8px 32px oklch(0.65 0.18 260 / 0.3), 0 0 24px oklch(0.65 0.18 260 / 0.2) !important;
+}
+
+/* Outline button enhanced hover */
+.dark button[class*="outline"]:hover:not(:disabled),
+.dark [class*="variant-outline"]:hover {
+  background-color: oklch(0.3 0.08 260) !important;
+  border-color: oklch(0.78 0.24 260) !important;
+  box-shadow: 0 0 16px oklch(0.65 0.18 260 / 0.25), inset 0 0 12px oklch(0.65 0.18 260 / 0.1);
+  color: oklch(0.88 0.3 260) !important;
+}
+
+/* Ghost button enhanced hover */
+.dark button[class*="ghost"]:hover:not(:disabled) {
+  background-color: oklch(0.28 0.06 260) !important;
+  box-shadow: 0 0 12px oklch(0.65 0.18 260 / 0.2);
+  color: oklch(0.88 0.3 260) !important;
+}
+
+/* Scale and glow effects for interactive elements */
+.dark button:hover:not(:disabled):not(.no-vibrant) {
+  box-shadow: 0 0 20px oklch(0.65 0.18 260 / 0.25);
+}
+
+/* Enhanced focus states */
+.dark *:focus-visible {
+  outline-color: oklch(0.78 0.24 260) !important;
+  box-shadow: 0 0 0 3px oklch(0.65 0.18 260 / 0.3);
+}
