@@ -1,0 +1,10 @@
+header[data-navigation="main"] {
+    z-index: 2147483647 !important;
+    position: sticky !important;
+    top: 0 !important;
+    background: hsl(var(--background)) !important;
+}
+
+body *:not(header):not(header *) {
+    z-index: auto !important;
+}

@@ -191,7 +191,7 @@ export function Navbar() {
   const closeSheet = () => setIsOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full flex flex-col transition-all duration-500">
+    <header data-navigation="main" className="sticky top-0 w-full flex flex-col transition-all duration-500 bg-background">
       <TopNav />
       <nav
         className={cn(

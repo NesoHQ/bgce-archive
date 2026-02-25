@@ -7,10 +7,10 @@ export default function ArchiveLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div suppressHydrationWarning>
+    <>
       <Navbar />
       {children}
       <Footer />
-    </div>
+    </>
   );
 }

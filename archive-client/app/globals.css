@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./nav-fix.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -47,10 +48,10 @@
   --radius: 0.5rem;
 
   /* Modern Professional Light Theme */
-  --background: oklch(
-    0.99 0.003 260
-  ); /* Very clean, almost white with a hint of coolness */
-  --foreground: oklch(0.12 0.03 260); /* Deep slate for primary text */
+  --background: oklch(0.99 0.003 260);
+  /* Very clean, almost white with a hint of coolness */
+  --foreground: oklch(0.12 0.03 260);
+  /* Deep slate for primary text */
 
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.12 0.03 260);
@@ -58,7 +59,8 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.12 0.03 260);
 
-  --primary: oklch(0.4 0.14 260); /* Professional Deep Indigo */
+  --primary: oklch(0.4 0.14 260);
+  /* Professional Deep Indigo */
   --primary-foreground: oklch(0.98 0.005 260);
 
   --secondary: oklch(0.95 0.01 260);
@@ -87,16 +89,20 @@
 
 .dark {
   /* Modern Professional Dark Theme */
-  --background: oklch(0.1 0.02 260); /* Deep Slate/Navy background */
-  --foreground: oklch(0.95 0.01 260); /* Soft white */
+  --background: oklch(0.1 0.02 260);
+  /* Deep Slate/Navy background */
+  --foreground: oklch(0.95 0.01 260);
+  /* Soft white */
 
-  --card: oklch(0.14 0.025 260); /* Slightly lighter panel */
+  --card: oklch(0.14 0.025 260);
+  /* Slightly lighter panel */
   --card-foreground: oklch(0.95 0.01 260);
 
   --popover: oklch(0.14 0.025 260);
   --popover-foreground: oklch(0.95 0.01 260);
 
-  --primary: oklch(0.6 0.15 260); /* Lighter Indigo for dark mode visibility */
+  --primary: oklch(0.6 0.15 260);
+  /* Lighter Indigo for dark mode visibility */
   --primary-foreground: oklch(0.1 0.02 260);
 
   --secondary: oklch(0.2 0.03 260);
@@ -130,6 +136,27 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Force navigation to stay on top - CRITICAL */
+  header[data-navigation="main"] {
+    z-index: 999999 !important;
+    position: sticky !important;
+    top: 0 !important;
+    isolation: isolate !important;
+  }
+
+  /* Ensure all page sections stay below navigation */
+  main,
+  section,
+  article {
+    position: relative !important;
+    z-index: 1 !important;
+  }
+
+  /* Override any transforms or filters that create stacking contexts */
+  section.relative {
+    z-index: 1 !important;
   }
 }
 

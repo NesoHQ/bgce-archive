@@ -1,5 +1,5 @@
-import { MainNavigation } from "@/components/shared/MainNavigation";
 import Footer from "@/components/shared/Footer";
+import { MainNavigation } from "@/components/shared/MainNavigation";
 
 export default function HomeLayout({
   children,
@@ -7,10 +7,10 @@ export default function HomeLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div suppressHydrationWarning>
+    <>
       <MainNavigation />
       {children}
       <Footer />
-    </div>
+    </>
   );
 }

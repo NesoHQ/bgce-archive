@@ -14,19 +14,20 @@ export async function getCategories(): Promise<ApiCategory[]> {
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to fetch categories: ${response.statusText}`);
+            // Silently return empty array if backend is unavailable
+            return [];
         }
 
         const result: ApiResponse<ApiCategory[]> = await response.json();
 
         if (!result.status) {
-            throw new Error(result.message || 'Failed to fetch categories');
+            return [];
         }
 
         // Filter only top-level categories (no parent_id or parent_id is null/undefined/0)
         return result.data.filter(cat => !cat.parent_id || cat.parent_id === null);
     } catch (error) {
-        console.error('Error fetching categories:', error);
+        // Silently return empty array if fetch fails (backend not running)
         return [];
     }
 }

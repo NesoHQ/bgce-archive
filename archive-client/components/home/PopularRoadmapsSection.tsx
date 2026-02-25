@@ -52,12 +52,12 @@ export function PopularRoadmapsSection() {
         <section className="py-16 lg:py-24 bg-background">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
-                <div className="flex items-start justify-between mb-8">
+                <div className="flex items-center justify-between mb-8">
                     <div>
                         <h2 className="text-3xl font-bold text-foreground">Popular Roadmaps & Learning Guides</h2>
                         <p className="text-muted-foreground mt-2">Structured paths to achieve your learning goals</p>
                     </div>
-                    <Button variant="ghost" asChild>
+                    <Button variant="ghost" asChild className="hidden sm:flex">
                         <Link href="/roadmap">
                             View All
                             <ArrowRight className="ml-2 h-4 w-4" />
@@ -125,7 +125,15 @@ export function PopularRoadmapsSection() {
                     ))}
                 </div>
 
-
+                {/* Mobile View All Button */}
+                <div className="mt-8 sm:hidden">
+                    <Button variant="outline" asChild className="w-full">
+                        <Link href="/roadmap">
+                            View All Roadmaps
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
+                    </Button>
+                </div>
             </div>
         </section>
     );
