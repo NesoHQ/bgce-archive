@@ -302,7 +302,7 @@ export function MainNavigation() {
                     <Button variant="ghost" size="sm" asChild>
                       <Link href="/login">Login</Link>
                     </Button>
-                    <Button size="sm" asChild>
+                    <Button size="sm" asChild className="dark:text-white">
                       <Link href="/register">Sign up</Link>
                     </Button>
                   </>
@@ -441,7 +441,7 @@ export function MainNavigation() {
                         Login
                       </Link>
                     </Button>
-                    <Button asChild className="w-full">
+                    <Button asChild className="w-full dark:text-white">
                       <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
                         Sign up
                       </Link>

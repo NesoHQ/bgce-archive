@@ -304,7 +304,7 @@ export function WelcomeSection() {
                             <Button
                                 size="default"
                                 asChild
-                                className="h-10 px-5 rounded-lg bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:scale-105 transition-all group"
+                                className="h-10 px-5 rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all group bg-gradient-to-r from-[oklch(0.4_0.14_260)] to-[oklch(0.35_0.12_260)] hover:from-[oklch(0.45_0.16_260)] hover:to-[oklch(0.4_0.14_260)] dark:from-[oklch(0.65_0.18_260)] dark:to-[oklch(0.6_0.16_260)] dark:hover:from-[oklch(0.75_0.22_260)] dark:hover:to-[oklch(0.7_0.2_260)] text-white dark:text-white"
                             >
                                 <Link href="/explore/courses">
                                     Explore Courses
@@ -315,7 +315,7 @@ export function WelcomeSection() {
                                 size="default"
                                 variant="outline"
                                 asChild
-                                className="h-10 px-5 rounded-lg border-2 bg-gradient-to-r from-background to-muted/50 hover:from-muted/50 hover:to-muted transition-all"
+                                className="h-10 px-5 rounded-lg border-2 hover:border-primary/50 dark:hover:border-[oklch(0.75_0.22_260)] dark:hover:bg-[oklch(0.28_0.06_260)] dark:hover:text-[oklch(0.85_0.26_260)] transition-all"
                             >
                                 <Link href="/archive">
                                     View Archive

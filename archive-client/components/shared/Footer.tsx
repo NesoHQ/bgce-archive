@@ -53,7 +53,7 @@ export default function Footer() {
             <p className="text-muted-foreground">Start your learning journey today</p>
           </div>
           <Button
-            className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-medium px-6 h-10"
+            className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-medium px-6 h-10 dark:text-white"
             asChild
           >
             <Link href="/register">Create an account</Link>

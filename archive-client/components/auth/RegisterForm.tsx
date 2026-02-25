@@ -231,8 +231,8 @@ export function RegisterForm() {
               <div className="flex items-center justify-between text-xs">
                 <span className="text-muted-foreground">Password strength:</span>
                 <span className={`font-semibold ${passwordStrength < 40 ? 'text-red-500' :
-                    passwordStrength < 70 ? 'text-yellow-500' :
-                      passwordStrength < 90 ? 'text-blue-500' : 'text-green-500'
+                  passwordStrength < 70 ? 'text-yellow-500' :
+                    passwordStrength < 90 ? 'text-blue-500' : 'text-green-500'
                   }`}>
                   {getPasswordStrengthLabel()}
                 </span>
@@ -296,7 +296,7 @@ export function RegisterForm() {
         <Button
           type="submit"
           disabled={isLoading}
-          className="w-full h-11 text-base font-medium shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-[0.98]"
+          className="w-full h-11 text-base font-medium shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-[0.98] dark:text-white"
         >
           {isLoading ? (
             <>
