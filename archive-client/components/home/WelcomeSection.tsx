@@ -96,27 +96,20 @@ export function WelcomeSection() {
                         </div>
 
                         {/* Stats */}
-                        <div className="grid grid-cols-3 gap-4 pt-2">
-                            <div className="relative group">
-                                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg blur-sm group-hover:blur-md transition-all" />
-                                <div className="relative bg-gradient-to-br from-card to-card/80 dark:from-card/50 dark:to-card/30 border border-border rounded-lg p-3 backdrop-blur-sm">
-                                    <div className="text-2xl font-bold bg-gradient-to-br from-primary to-primary/70 bg-clip-text text-transparent mb-0.5">500+</div>
-                                    <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Learning Paths</div>
-                                </div>
+                        <div className="inline-flex items-center gap-6 px-5 py-3 rounded-full bg-gradient-to-r from-muted/50 via-muted/30 to-muted/50 border border-border/50 backdrop-blur-sm">
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-2xl font-bold bg-gradient-to-br from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent tracking-tight">500+</span>
+                                <span className="text-xs font-semibold text-muted-foreground/80 tracking-wide">Courses</span>
                             </div>
-                            <div className="relative group">
-                                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg blur-sm group-hover:blur-md transition-all" />
-                                <div className="relative bg-gradient-to-br from-card to-card/80 dark:from-card/50 dark:to-card/30 border border-border rounded-lg p-3 backdrop-blur-sm">
-                                    <div className="text-2xl font-bold bg-gradient-to-br from-primary to-primary/70 bg-clip-text text-transparent mb-0.5">10K+</div>
-                                    <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Active Developers</div>
-                                </div>
+                            <div className="w-px h-5 bg-gradient-to-b from-transparent via-border to-transparent" />
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-2xl font-bold bg-gradient-to-br from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent tracking-tight">10K+</span>
+                                <span className="text-xs font-semibold text-muted-foreground/80 tracking-wide">Developers</span>
                             </div>
-                            <div className="relative group">
-                                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg blur-sm group-hover:blur-md transition-all" />
-                                <div className="relative bg-gradient-to-br from-card to-card/80 dark:from-card/50 dark:to-card/30 border border-border rounded-lg p-3 backdrop-blur-sm">
-                                    <div className="text-2xl font-bold bg-gradient-to-br from-primary to-primary/70 bg-clip-text text-transparent mb-0.5">1K+</div>
-                                    <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Code Projects</div>
-                                </div>
+                            <div className="w-px h-5 bg-gradient-to-b from-transparent via-border to-transparent" />
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-2xl font-bold bg-gradient-to-br from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent tracking-tight">98%</span>
+                                <span className="text-xs font-semibold text-muted-foreground/80 tracking-wide">Satisfaction</span>
                             </div>
                         </div>
                     </div>
