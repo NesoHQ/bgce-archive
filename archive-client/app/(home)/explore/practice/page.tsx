@@ -1,15 +1,30 @@
+import { ComingSoon } from "@/components/shared/ComingSoon";
+import { Code2, Trophy, Target } from "lucide-react";
+
 export default function PracticePage() {
     return (
-        <div className="min-h-screen">
-            <section className="py-12">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-4xl font-bold text-foreground mb-4">Practice</h1>
-                    <p className="text-muted-foreground">Sharpen your skills with coding challenges</p>
-                </div>
-            </section>
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-                <p className="text-muted-foreground">Coming soon...</p>
-            </div>
-        </div>
+        <ComingSoon
+            icon={Code2}
+            title="Practice Coding Challenges"
+            description="Sharpen your programming skills with hands-on coding challenges, algorithm problems, and real-world scenarios. Track your progress and compete with the community."
+            estimatedDate="Q2 2026"
+            features={[
+                {
+                    icon: Target,
+                    title: "Skill-Based Challenges",
+                    description: "Practice problems organized by difficulty and topic"
+                },
+                {
+                    icon: Trophy,
+                    title: "Leaderboards",
+                    description: "Compete with developers worldwide"
+                },
+                {
+                    icon: Code2,
+                    title: "Real-World Problems",
+                    description: "Solve challenges based on actual industry scenarios"
+                }
+            ]}
+        />
     );
 }
