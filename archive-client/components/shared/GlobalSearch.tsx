@@ -62,14 +62,14 @@ export function GlobalSearch() {
                     id: 1,
                     title: "Getting Started with Go",
                     slug: "getting-started-with-go",
-                    type: "article",
+                    type: "article" as const,
                     excerpt: "Learn the basics of Go programming language...",
                 },
                 {
                     id: 2,
                     title: "Backend Development Roadmap",
                     slug: "backend-development",
-                    type: "roadmap",
+                    type: "roadmap" as const,
                     excerpt: "Complete guide to becoming a backend developer...",
                 },
             ].filter((item) =>
