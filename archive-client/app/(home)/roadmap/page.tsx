@@ -1,249 +1,354 @@
-import { CheckCircle2, Circle, Clock } from "lucide-react";
+import { CheckCircle2, Circle, Clock, Sparkles, GitBranch, Calendar, Zap } from "lucide-react";
 
 export default function RoadmapPage() {
-    const roadmapItems = [
-        {
-            id: 1,
-            title: "Platform Launch",
-            description: "Initial release of the BGCE Archive platform with core features",
-            status: "completed",
-            date: "Q4 2023",
-            features: [
-                "User authentication and profiles",
-                "Course catalog and browsing",
-                "Basic community features",
-                "Content management system",
-            ],
-        },
-        {
-            id: 2,
-            title: "Enhanced Learning Experience",
-            description: "Improved course delivery and interactive learning features",
-            status: "completed",
-            date: "Q1 2024",
-            features: [
-                "Interactive code playgrounds",
-                "Progress tracking and certificates",
-                "Video streaming optimization",
-                "Mobile responsive design",
-            ],
-        },
-        {
-            id: 3,
-            title: "Community & Collaboration",
-            description: "Building a thriving community with collaboration tools",
-            status: "in-progress",
-            date: "Q2 2024",
-            features: [
-                "Discussion forums and threads",
-                "Project showcase platform",
-                "Peer code review system",
-                "Live coding sessions",
-            ],
-        },
-        {
-            id: 4,
-            title: "Advanced Features",
-            description: "AI-powered features and advanced learning tools",
-            status: "in-progress",
-            date: "Q2-Q3 2024",
-            features: [
-                "AI-powered code suggestions",
-                "Personalized learning paths",
-                "Mock interview platform",
-                "Real-time collaboration tools",
-            ],
-        },
-        {
-            id: 5,
-            title: "Cloud Labs & Environments",
-            description: "Hands-on practice with cloud-based development environments",
-            status: "planned",
-            date: "Q3 2024",
-            features: [
-                "Cloud-based IDE integration",
-                "Pre-configured development environments",
-                "Kubernetes playground",
-                "AWS/GCP sandbox environments",
-            ],
-        },
-        {
-            id: 6,
-            title: "Career Development",
-            description: "Tools and resources for career advancement",
-            status: "planned",
-            date: "Q4 2024",
-            features: [
-                "Job board integration",
-                "Resume builder and review",
-                "Interview preparation tools",
-                "Mentorship program",
-            ],
-        },
-        {
-            id: 7,
-            title: "Enterprise Features",
-            description: "Team and organization management capabilities",
-            status: "planned",
-            date: "Q1 2025",
-            features: [
-                "Team dashboards and analytics",
-                "Custom learning paths for teams",
-                "SSO and enterprise authentication",
-                "Bulk licensing and management",
-            ],
-        },
-    ];
-
-    const getStatusConfig = (status: string) => {
-        switch (status) {
-            case "completed":
-                return {
-                    icon: CheckCircle2,
-                    color: "text-green-600 dark:text-green-400",
-                    bgColor: "bg-green-500/10",
-                    borderColor: "border-green-500/50",
-                    label: "Completed",
-                };
-            case "in-progress":
-                return {
-                    icon: Clock,
-                    color: "text-blue-600 dark:text-blue-400",
-                    bgColor: "bg-blue-500/10",
-                    borderColor: "border-blue-500/50",
-                    label: "In Progress",
-                };
-            case "planned":
-                return {
-                    icon: Circle,
-                    color: "text-muted-foreground",
-                    bgColor: "bg-muted",
-                    borderColor: "border-border",
-                    label: "Planned",
-                };
-            default:
-                return {
-                    icon: Circle,
-                    color: "text-muted-foreground",
-                    bgColor: "bg-muted",
-                    borderColor: "border-border",
-                    label: "Unknown",
-                };
-        }
+    const roadmapItems = {
+        completed: [
+            {
+                id: 1,
+                title: "Platform Launch",
+                date: "Q4 2023",
+                features: [
+                    "User authentication",
+                    "Course catalog",
+                    "Community features",
+                    "Content management",
+                ],
+            },
+            {
+                id: 2,
+                title: "Enhanced Learning",
+                date: "Q1 2024",
+                features: [
+                    "Code playgrounds",
+                    "Progress tracking",
+                    "Video optimization",
+                    "Mobile responsive",
+                ],
+            },
+        ],
+        inProgress: [
+            {
+                id: 3,
+                title: "Community Tools",
+                date: "Q2 2024",
+                progress: 65,
+                features: [
+                    "Discussion forums",
+                    "Project showcase",
+                    "Code review",
+                    "Live sessions",
+                ],
+            },
+            {
+                id: 4,
+                title: "AI Features",
+                date: "Q2-Q3 2024",
+                progress: 40,
+                features: [
+                    "AI suggestions",
+                    "Personalized paths",
+                    "Mock interviews",
+                    "Collaboration tools",
+                ],
+            },
+        ],
+        planned: [
+            {
+                id: 5,
+                title: "Cloud Labs",
+                date: "Q3 2024",
+                features: [
+                    "Cloud-based IDE",
+                    "Pre-configured envs",
+                    "K8s playground",
+                    "Cloud sandbox",
+                ],
+            },
+            {
+                id: 6,
+                title: "Career Tools",
+                date: "Q4 2024",
+                features: [
+                    "Job board",
+                    "Resume builder",
+                    "Interview prep",
+                    "Mentorship",
+                ],
+            },
+            {
+                id: 7,
+                title: "Enterprise",
+                date: "Q1 2025",
+                features: [
+                    "Team dashboards",
+                    "Custom paths",
+                    "SSO auth",
+                    "Bulk licensing",
+                ],
+            },
+        ],
+        changelog: [
+            {
+                id: 1,
+                version: "v2.1.0",
+                date: "Feb 20",
+                type: "feature",
+                changes: [
+                    "Dark mode support",
+                    "Enhanced search",
+                    "Mobile nav fixes",
+                    "Performance boost",
+                ],
+            },
+            {
+                id: 2,
+                version: "v2.0.0",
+                date: "Jan 15",
+                type: "major",
+                changes: [
+                    "UI redesign",
+                    "New course player",
+                    "Enhanced profiles",
+                    "Bug fixes",
+                ],
+            },
+            {
+                id: 3,
+                version: "v1.5.0",
+                date: "Dec 10",
+                type: "feature",
+                changes: [
+                    "Progress tracking",
+                    "Certificate system",
+                    "Performance",
+                    "Security updates",
+                ],
+            },
+        ],
     };
 
     return (
         <div className="min-h-screen">
-            {/* Header */}
-            <section className="py-16">
+            {/* Compact Header */}
+            <section className="py-8 border-b border-border">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="max-w-3xl mx-auto text-center space-y-4">
-                        <h1 className="text-4xl lg:text-5xl font-bold text-foreground">Product Roadmap</h1>
-                        <p className="text-lg text-muted-foreground">
-                            Our journey to build the best learning platform for developers. See what we've accomplished and what's coming next.
-                        </p>
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-2xl lg:text-3xl font-bold text-foreground mb-1">Product Roadmap</h1>
+                            <p className="text-sm text-muted-foreground">Track our progress and upcoming features</p>
+                        </div>
+                        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
+                            <Zap className="h-3.5 w-3.5 text-primary" />
+                            <span className="text-xs font-semibold text-primary">Live Updates</span>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* Roadmap Timeline */}
-            <section className="py-16 lg:py-24">
+            {/* Roadmap Grid */}
+            <section className="py-6">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="max-w-4xl mx-auto">
-                        {/* Legend */}
-                        <div className="flex flex-wrap items-center justify-center gap-6 mb-12 pb-8 border-b border-border">
-                            {["completed", "in-progress", "planned"].map((status) => {
-                                const config = getStatusConfig(status);
-                                const Icon = config.icon;
-                                return (
-                                    <div key={status} className="flex items-center gap-2">
-                                        <div className={`p-1.5 rounded-full ${config.bgColor}`}>
-                                            <Icon className={`h-4 w-4 ${config.color}`} />
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                        {/* Completed Column */}
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-2.5 mb-4">
+                                <div className="p-2 rounded-lg bg-green-500/10 border border-green-500/20">
+                                    <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
+                                </div>
+                                <h2 className="text-sm font-bold text-foreground">Completed</h2>
+                                <span className="text-xs font-semibold text-green-600 dark:text-green-400 ml-auto">
+                                    {roadmapItems.completed.length}
+                                </span>
+                            </div>
+
+                            <div className="space-y-3">
+                                {roadmapItems.completed.map((item) => (
+                                    <div
+                                        key={item.id}
+                                        className="group bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-green-500/20 rounded-lg p-4 hover:shadow-lg hover:shadow-green-500/10 hover:border-green-500/40 hover:ring-2 hover:ring-green-500/20 transition-all duration-200 backdrop-blur-sm"
+                                    >
+                                        <div className="flex items-start justify-between gap-3 mb-3">
+                                            <h3 className="text-sm font-semibold text-foreground group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors leading-tight">
+                                                {item.title}
+                                            </h3>
+                                            <div className="flex items-center gap-1 text-[10px] font-medium text-green-600 dark:text-green-400 flex-shrink-0">
+                                                <Calendar className="h-3 w-3" />
+                                                <span>{item.date}</span>
+                                            </div>
                                         </div>
-                                        <span className="text-sm font-medium text-foreground">{config.label}</span>
+                                        <div className="space-y-2">
+                                            {item.features.map((feature, idx) => (
+                                                <div key={idx} className="flex items-start gap-2">
+                                                    <CheckCircle2 className="h-3.5 w-3.5 mt-0.5 flex-shrink-0 text-green-600 dark:text-green-400" />
+                                                    <span className="text-xs text-muted-foreground leading-relaxed">{feature}</span>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
-                                );
-                            })}
-                        </div>
-
-                        {/* Timeline */}
-                        <div className="relative">
-                            {/* Vertical Line */}
-                            <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-border hidden md:block" />
-
-                            {/* Timeline Items */}
-                            <div className="space-y-8">
-                                {roadmapItems.map((item, index) => {
-                                    const config = getStatusConfig(item.status);
-                                    const Icon = config.icon;
-
-                                    return (
-                                        <div key={item.id} className="relative">
-                                            {/* Timeline Dot */}
-                                            <div className="absolute left-6 -translate-x-1/2 hidden md:block">
-                                                <div className={`p-2 rounded-full ${config.bgColor} border-4 border-background`}>
-                                                    <Icon className={`h-5 w-5 ${config.color}`} />
-                                                </div>
-                                            </div>
-
-                                            {/* Content Card */}
-                                            <div className="md:ml-20">
-                                                <div className={`bg-card border ${config.borderColor} rounded-xl p-6 hover:shadow-xl hover:shadow-primary/10 hover:ring-2 hover:ring-primary/20 transition-all duration-300`}>
-                                                    {/* Header */}
-                                                    <div className="flex items-start justify-between mb-4">
-                                                        <div className="flex-1">
-                                                            <div className="flex items-center gap-3 mb-2">
-                                                                <h3 className="text-xl font-semibold text-foreground">{item.title}</h3>
-                                                                <span className={`px-3 py-1 rounded-full ${config.bgColor} ${config.color} text-xs font-medium`}>
-                                                                    {config.label}
-                                                                </span>
-                                                            </div>
-                                                            <p className="text-sm text-muted-foreground">{item.description}</p>
-                                                        </div>
-                                                        <span className="text-sm font-medium text-primary ml-4 flex-shrink-0">
-                                                            {item.date}
-                                                        </span>
-                                                    </div>
-
-                                                    {/* Features List */}
-                                                    <div className="space-y-2">
-                                                        {item.features.map((feature, featureIndex) => (
-                                                            <div key={featureIndex} className="flex items-start gap-2">
-                                                                <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${item.status === "completed"
-                                                                        ? "text-green-600 dark:text-green-400"
-                                                                        : "text-muted-foreground"
-                                                                    }`} />
-                                                                <span className="text-sm text-foreground">{feature}</span>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
+                                ))}
                             </div>
                         </div>
 
-                        {/* Call to Action */}
-                        <div className="mt-16 text-center">
-                            <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl p-8">
-                                <h3 className="text-2xl font-semibold text-foreground mb-3">Have a Feature Request?</h3>
-                                <p className="text-muted-foreground mb-6">
-                                    We'd love to hear your ideas! Share your feedback and help shape the future of BGCE Archive.
-                                </p>
-                                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        {/* In Progress Column */}
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-2.5 mb-4">
+                                <div className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                                    <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                                </div>
+                                <h2 className="text-sm font-bold text-foreground">In Progress</h2>
+                                <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 ml-auto">
+                                    {roadmapItems.inProgress.length}
+                                </span>
+                            </div>
+
+                            <div className="space-y-3">
+                                {roadmapItems.inProgress.map((item) => (
+                                    <div
+                                        key={item.id}
+                                        className="group bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-blue-500/20 rounded-lg p-4 hover:shadow-lg hover:shadow-blue-500/10 hover:border-blue-500/40 hover:ring-2 hover:ring-blue-500/20 transition-all duration-200 backdrop-blur-sm"
+                                    >
+                                        <div className="flex items-start justify-between gap-3 mb-3">
+                                            <h3 className="text-sm font-semibold text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
+                                                {item.title}
+                                            </h3>
+                                            <div className="flex items-center gap-1 text-[10px] font-medium text-blue-600 dark:text-blue-400 flex-shrink-0">
+                                                <Calendar className="h-3 w-3" />
+                                                <span>{item.date}</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Progress Bar */}
+                                        <div className="mb-3">
+                                            <div className="flex items-center justify-between mb-1.5">
+                                                <span className="text-[10px] font-medium text-muted-foreground">Progress</span>
+                                                <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400">{item.progress}%</span>
+                                            </div>
+                                            <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                                                <div
+                                                    className="h-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full transition-all duration-500"
+                                                    style={{ width: `${item.progress}%` }}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            {item.features.map((feature, idx) => (
+                                                <div key={idx} className="flex items-start gap-2">
+                                                    <Clock className="h-3.5 w-3.5 mt-0.5 flex-shrink-0 text-blue-600 dark:text-blue-400" />
+                                                    <span className="text-xs text-muted-foreground leading-relaxed">{feature}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Planned Column */}
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-2.5 mb-4">
+                                <div className="p-2 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                                    <Sparkles className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                                </div>
+                                <h2 className="text-sm font-bold text-foreground">Planned</h2>
+                                <span className="text-xs font-semibold text-purple-600 dark:text-purple-400 ml-auto">
+                                    {roadmapItems.planned.length}
+                                </span>
+                            </div>
+
+                            <div className="space-y-3">
+                                {roadmapItems.planned.map((item) => (
+                                    <div
+                                        key={item.id}
+                                        className="group bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-border rounded-lg p-4 hover:shadow-lg hover:shadow-purple-500/10 hover:border-purple-500/40 hover:ring-2 hover:ring-purple-500/20 transition-all duration-200 backdrop-blur-sm"
+                                    >
+                                        <div className="flex items-start justify-between gap-3 mb-3">
+                                            <h3 className="text-sm font-semibold text-foreground group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors leading-tight">
+                                                {item.title}
+                                            </h3>
+                                            <div className="flex items-center gap-1 text-[10px] font-medium text-muted-foreground flex-shrink-0">
+                                                <Calendar className="h-3 w-3" />
+                                                <span>{item.date}</span>
+                                            </div>
+                                        </div>
+                                        <div className="space-y-2">
+                                            {item.features.map((feature, idx) => (
+                                                <div key={idx} className="flex items-start gap-2">
+                                                    <Circle className="h-3.5 w-3.5 mt-0.5 flex-shrink-0 text-muted-foreground" />
+                                                    <span className="text-xs text-muted-foreground leading-relaxed">{feature}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Changelog Column */}
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-2.5 mb-4">
+                                <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
+                                    <GitBranch className="h-4 w-4 text-primary" />
+                                </div>
+                                <h2 className="text-sm font-bold text-foreground">Changelog</h2>
+                                <span className="text-xs font-semibold text-primary ml-auto">
+                                    Latest
+                                </span>
+                            </div>
+
+                            <div className="space-y-3">
+                                {roadmapItems.changelog.map((item) => (
+                                    <div
+                                        key={item.id}
+                                        className="group bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-border rounded-lg p-4 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/40 hover:ring-2 hover:ring-primary/20 transition-all duration-200 backdrop-blur-sm"
+                                    >
+                                        <div className="flex items-center justify-between gap-3 mb-3">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-xs font-bold text-primary">{item.version}</span>
+                                                {item.type === 'major' && (
+                                                    <span className="text-[9px] font-semibold text-orange-600 dark:text-orange-400 bg-orange-500/10 px-1.5 py-0.5 rounded">
+                                                        MAJOR
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <span className="text-[10px] font-medium text-muted-foreground flex-shrink-0">
+                                                {item.date}
+                                            </span>
+                                        </div>
+                                        <div className="space-y-2">
+                                            {item.changes.map((change, idx) => (
+                                                <div key={idx} className="flex items-start gap-2">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                                                    <span className="text-xs text-muted-foreground leading-relaxed">{change}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Compact CTA */}
+                    <div className="mt-8">
+                        <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent rounded-lg p-4 border border-primary/20">
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                                <div>
+                                    <h3 className="text-base font-semibold text-foreground mb-0.5">Have a Feature Request?</h3>
+                                    <p className="text-xs text-muted-foreground">Help us build the features you need</p>
+                                </div>
+                                <div className="flex items-center gap-2">
                                     <a
                                         href="/discussion/new"
-                                        className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+                                        className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-xs font-medium hover:bg-primary/90 transition-colors whitespace-nowrap"
                                     >
                                         Submit Feedback
                                     </a>
                                     <a
                                         href="/discussion"
-                                        className="px-6 py-3 bg-accent text-foreground rounded-lg font-medium hover:bg-accent/80 transition-colors"
+                                        className="px-4 py-2 bg-accent text-foreground rounded-lg text-xs font-medium hover:bg-accent/80 transition-colors whitespace-nowrap"
                                     >
-                                        Join Discussion
+                                        Discuss
                                     </a>
                                 </div>
                             </div>
