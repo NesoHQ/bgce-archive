@@ -428,6 +428,7 @@ export function MainNavigation() {
         <Portal>
           <div
             ref={exploreDropdownRef}
+            data-nav-dropdown="true"
             className="fixed z-[11000] animate-in fade-in slide-in-from-top-2 duration-200"
             style={{
               top: `${dropdownPositions.explore.top}px`,
@@ -470,102 +471,102 @@ export function MainNavigation() {
       }
 
       {/* Resources Dropdown - Fixed positioning below button */}
-      {
-        resourcesOpen && (
-          <Portal>
-            <div
-              ref={resourcesDropdownRef}
-              className="fixed z-[11000] animate-in fade-in slide-in-from-top-2 duration-200"
-              style={{
-                top: `${dropdownPositions.resources.top}px`,
-                right: `${dropdownPositions.resources.right}px`,
-                width: '240px'
-              }}
-            >
-              <div className="bg-background border border-border rounded-lg shadow-2xl overflow-hidden">
-                <div className="p-2">
-                  {resourceItems.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        onClick={() => setResourcesOpen(false)}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-accent transition-colors duration-200 group"
-                      >
-                        <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
-                        <span className="text-sm font-medium">{item.label}</span>
-                      </Link>
-                    );
-                  })}
-                </div>
+      {resourcesOpen && (
+        <Portal>
+          <div
+            ref={resourcesDropdownRef}
+            data-nav-dropdown="true"
+            className="fixed z-[11000] animate-in fade-in slide-in-from-top-2 duration-200"
+            style={{
+              top: `${dropdownPositions.resources.top}px`,
+              right: `${dropdownPositions.resources.right}px`,
+              width: '240px'
+            }}
+          >
+            <div className="bg-background border border-border rounded-lg shadow-2xl overflow-hidden">
+              <div className="p-2">
+                {resourceItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setResourcesOpen(false)}
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-accent transition-colors duration-200 group"
+                    >
+                      <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
+                      <span className="text-sm font-medium">{item.label}</span>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
-          </Portal>
-        )
+          </div>
+        </Portal>
+      )
       }
 
       {/* Profile Dropdown - Fixed positioning below button */}
-      {
-        profileOpen && user && (
-          <Portal>
-            <div
-              ref={profileDropdownRef}
-              className="fixed z-[11000] animate-in fade-in slide-in-from-top-2 duration-200"
-              style={{
-                top: `${dropdownPositions.profile.top}px`,
-                right: `${dropdownPositions.profile.right}px`,
-                width: '240px'
-              }}
-            >
-              <div className="bg-background border border-border rounded-lg shadow-2xl overflow-hidden">
-                <div className="p-3 border-b bg-muted/30">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-10 w-10">
-                      <AvatarFallback className="bg-primary/20 text-primary text-sm font-semibold">
-                        {user.username.charAt(0).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">{user.username}</p>
-                      <p className="text-xs text-muted-foreground truncate">{user.email}</p>
-                    </div>
+      {profileOpen && user && (
+        <Portal>
+          <div
+            ref={profileDropdownRef}
+            data-nav-dropdown="true"
+            className="fixed z-[11000] animate-in fade-in slide-in-from-top-2 duration-200"
+            style={{
+              top: `${dropdownPositions.profile.top}px`,
+              right: `${dropdownPositions.profile.right}px`,
+              width: '240px'
+            }}
+          >
+            <div className="bg-background border border-border rounded-lg shadow-2xl overflow-hidden">
+              <div className="p-3 border-b bg-muted/30">
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-10 w-10">
+                    <AvatarFallback className="bg-primary/20 text-primary text-sm font-semibold">
+                      {user.username.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{user.username}</p>
+                    <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                   </div>
                 </div>
-                <div className="p-2">
-                  <Link
-                    href="/profile"
-                    onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-accent transition-colors duration-200 group"
-                  >
-                    <User className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
-                    <span className="text-sm font-medium">Profile</span>
-                  </Link>
-                  <Link
-                    href="/settings"
-                    onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-accent transition-colors duration-200 group"
-                  >
-                    <Settings className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
-                    <span className="text-sm font-medium">Settings</span>
-                  </Link>
-                </div>
-                <div className="p-2 border-t">
-                  <button
-                    onClick={() => {
-                      setProfileOpen(false);
-                      logout();
-                    }}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-destructive/10 text-destructive transition-colors duration-200"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    <span className="text-sm font-medium">Logout</span>
-                  </button>
-                </div>
+              </div>
+              <div className="p-2">
+                <Link
+                  href="/profile"
+                  onClick={() => setProfileOpen(false)}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-accent transition-colors duration-200 group"
+                >
+                  <User className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
+                  <span className="text-sm font-medium">Profile</span>
+                </Link>
+                <Link
+                  href="/settings"
+                  onClick={() => setProfileOpen(false)}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-accent transition-colors duration-200 group"
+                >
+                  <Settings className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
+                  <span className="text-sm font-medium">Settings</span>
+                </Link>
+              </div>
+              <div className="p-2 border-t">
+                <button
+                  onClick={() => {
+                    setProfileOpen(false);
+                    logout();
+                  }}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-destructive/10 text-destructive transition-colors duration-200"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span className="text-sm font-medium">Logout</span>
+                </button>
               </div>
             </div>
-          </Portal>
-        )
+          </div>
+        </Portal>
+      )
       }
     </>
   );

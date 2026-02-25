@@ -5,6 +5,12 @@ header[data-navigation="main"] {
     background: hsl(var(--background)) !important;
 }
 
-body *:not(header):not(header *) {
+/* Navigation dropdowns also need to be on top */
+[data-nav-dropdown="true"] {
+    z-index: 2147483647 !important;
+}
+
+/* Everything else gets auto z-index */
+body *:not(header):not(header *):not([data-nav-dropdown]) {
     z-index: auto !important;
 }
