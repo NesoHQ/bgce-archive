@@ -127,15 +127,44 @@ export function MainNavigation() {
     };
   }, [exploreOpen, resourcesOpen, profileOpen]);
 
-  const exploreItems = [
-    { icon: BookOpen, label: "Courses", href: "/explore/courses", desc: "Expert-led courses to master new skills" },
-    { icon: Brain, label: "Practice", href: "/explore/practice", desc: "Coding challenges and exercises" },
-    { icon: Folder, label: "Projects", href: "/explore/projects", desc: "Real-world project templates" },
-    { icon: Cloud, label: "Cloud Labs", href: "/explore/cloud-labs", desc: "Interactive cloud environments" },
-    { icon: Briefcase, label: "Get Hired", href: "/explore/get-hired", desc: "Career resources and job prep" },
-    { icon: Target, label: "Mock Interview", href: "/explore/mock-interview", desc: "Practice technical interviews" },
-    { icon: Code, label: "Interview Prep", href: "/explore/interview-prep", desc: "Ace your coding interviews" },
-  ];
+  const exploreItems = {
+    courses: {
+      label: "Courses",
+      icon: BookOpen,
+      href: "/explore/courses",
+      desc: "Expert-led courses to master new skills",
+      subItems: [
+        { label: "Programming", href: "/explore/courses?type=programming" },
+        { label: "Web Development", href: "/explore/courses?type=web-dev" },
+        { label: "Backend", href: "/explore/courses?type=backend" },
+        { label: "DevOps", href: "/explore/courses?type=devops" },
+        { label: "Cloud", href: "/explore/courses?type=cloud" },
+        { label: "Databases", href: "/explore/courses?type=databases" },
+      ]
+    },
+    practice: {
+      label: "Practice",
+      icon: Brain,
+      href: "/explore/practice",
+      desc: "Coding challenges and exercises",
+      subItems: [
+        { label: "Projects", href: "/explore/projects", icon: Folder, desc: "Real-world project templates" },
+        { label: "Cloud Labs", href: "/explore/cloud-labs", icon: Cloud, desc: "Interactive cloud environments" },
+      ]
+    },
+    getHired: {
+      label: "Get Hired",
+      icon: Briefcase,
+      href: "/explore/get-hired",
+      desc: "Career resources and job prep",
+      subItems: [
+        { label: "Mock Interview", href: "/explore/mock-interview", icon: Target, desc: "Practice technical interviews" },
+        { label: "Interview Prep", href: "/explore/interview-prep", icon: Code, desc: "Ace your coding interviews" },
+      ]
+    }
+  };
+
+  const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
   const resourceItems = [
     { icon: Mail, label: "Newsletter", href: "/resources/newsletter" },
@@ -310,7 +339,7 @@ export function MainNavigation() {
                   </button>
                   {!exploreCollapsed && (
                     <div className="ml-4 mt-1 space-y-1">
-                      {exploreItems.map((item) => {
+                      {Object.values(exploreItems).map((item) => {
                         const Icon = item.icon;
                         return (
                           <Link
@@ -435,35 +464,205 @@ export function MainNavigation() {
             style={{
               top: `${dropdownPositions.explore.top}px`,
               left: `${dropdownPositions.explore.left}px`,
-              width: '640px'
+              width: '800px'
             }}
           >
-            <div className="bg-background border border-border rounded-xl shadow-2xl overflow-hidden">
-              <div className="p-4">
-                <div className="space-y-1">
-                  {exploreItems.map((item) => {
-                    const Icon = item.icon;
-                    return (
+            <div className="bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-border rounded-xl shadow-2xl overflow-hidden backdrop-blur-sm">
+              <div className="flex">
+                {/* Left Side - Main Sections */}
+                <div className="flex-1 p-4 border-r border-border">
+                  <div className="space-y-1">
+                    {/* Courses Section */}
+                    <div
+                      onMouseEnter={() => setSelectedSection('courses')}
+                    >
                       <Link
-                        key={item.href}
-                        href={item.href}
-                        onClick={() => setExploreOpen(false)}
+                        href={exploreItems.courses.href}
+                        onClick={() => {
+                          setExploreOpen(false);
+                          setSelectedSection(null);
+                        }}
                         className="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-accent transition-colors duration-200 group"
                       >
                         <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-200">
-                          <Icon className="h-5 w-5 text-primary" />
+                          <exploreItems.courses.icon className="h-5 w-5 text-primary" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors duration-200">
-                            {item.label}
+                          <div className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors duration-200 flex items-center justify-between">
+                            {exploreItems.courses.label}
+                            <ChevronDown className="h-4 w-4 -rotate-90" />
                           </div>
                           <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
-                            {item.desc}
+                            {exploreItems.courses.desc}
                           </div>
                         </div>
                       </Link>
-                    );
-                  })}
+                    </div>
+
+                    {/* Practice Section */}
+                    <div
+                      onMouseEnter={() => setSelectedSection('practice')}
+                    >
+                      <Link
+                        href={exploreItems.practice.href}
+                        onClick={() => {
+                          setExploreOpen(false);
+                          setSelectedSection(null);
+                        }}
+                        className="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-accent transition-colors duration-200 group"
+                      >
+                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-200">
+                          <exploreItems.practice.icon className="h-5 w-5 text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors duration-200 flex items-center justify-between">
+                            {exploreItems.practice.label}
+                            <ChevronDown className="h-4 w-4 -rotate-90" />
+                          </div>
+                          <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                            {exploreItems.practice.desc}
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+
+                    {/* Get Hired Section */}
+                    <div
+                      onMouseEnter={() => setSelectedSection('getHired')}
+                    >
+                      <Link
+                        href={exploreItems.getHired.href}
+                        onClick={() => {
+                          setExploreOpen(false);
+                          setSelectedSection(null);
+                        }}
+                        className="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-accent transition-colors duration-200 group"
+                      >
+                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-200">
+                          <exploreItems.getHired.icon className="h-5 w-5 text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors duration-200 flex items-center justify-between">
+                            {exploreItems.getHired.label}
+                            <ChevronDown className="h-4 w-4 -rotate-90" />
+                          </div>
+                          <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                            {exploreItems.getHired.desc}
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Side - Sub Items */}
+                <div
+                  className="w-80 p-4 bg-muted/30"
+                  onMouseLeave={() => setSelectedSection(null)}
+                >
+                  {selectedSection === 'courses' && (
+                    <div className="space-y-1">
+                      <div className="px-3 py-2 mb-2">
+                        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                          Course Types
+                        </h3>
+                      </div>
+                      {exploreItems.courses.subItems.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => {
+                            setExploreOpen(false);
+                            setSelectedSection(null);
+                          }}
+                          className="block px-3 py-2.5 rounded-lg text-sm font-medium text-foreground hover:bg-accent hover:text-primary transition-colors duration-200"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+
+                  {selectedSection === 'practice' && (
+                    <div className="space-y-1">
+                      <div className="px-3 py-2 mb-2">
+                        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                          Practice Options
+                        </h3>
+                      </div>
+                      {exploreItems.practice.subItems.map((item) => {
+                        const Icon = item.icon;
+                        return (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            onClick={() => {
+                              setExploreOpen(false);
+                              setSelectedSection(null);
+                            }}
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-accent transition-colors duration-200 group"
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-200">
+                              <Icon className="h-4 w-4 text-primary" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors duration-200">
+                                {item.label}
+                              </div>
+                              <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                                {item.desc}
+                              </div>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {selectedSection === 'getHired' && (
+                    <div className="space-y-1">
+                      <div className="px-3 py-2 mb-2">
+                        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                          Career Resources
+                        </h3>
+                      </div>
+                      {exploreItems.getHired.subItems.map((item) => {
+                        const Icon = item.icon;
+                        return (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            onClick={() => {
+                              setExploreOpen(false);
+                              setSelectedSection(null);
+                            }}
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-accent transition-colors duration-200 group"
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-200">
+                              <Icon className="h-4 w-4 text-primary" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors duration-200">
+                                {item.label}
+                              </div>
+                              <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                                {item.desc}
+                              </div>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {!selectedSection && (
+                    <div className="flex items-center justify-center h-full">
+                      <div className="text-center text-muted-foreground">
+                        <BookOpen className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                        <p className="text-xs">Hover over a section to see options</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
