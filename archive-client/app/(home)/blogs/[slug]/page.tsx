@@ -1,17 +1,17 @@
-import { getPostById } from "@/lib/api";
+import { getPostBySlug } from "@/lib/api";
 import { notFound } from "next/navigation";
 import BlogDetailsClient from "./BlogDetailsClient";
 import type { Metadata } from "next";
 
 interface PageProps {
     params: Promise<{
-        id: string;
+        slug: string;
     }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-    const { id } = await params;
-    const post = await getPostById(parseInt(id));
+    const { slug } = await params;
+    const post = await getPostBySlug(slug);
 
     if (!post) {
         return {
@@ -32,8 +32,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function BlogDetailsPage({ params }: PageProps) {
-    const { id } = await params;
-    const post = await getPostById(parseInt(id));
+    const { slug } = await params;
+    const post = await getPostBySlug(slug);
 
     if (!post || post.status !== "published" || !post.is_public) {
         notFound();

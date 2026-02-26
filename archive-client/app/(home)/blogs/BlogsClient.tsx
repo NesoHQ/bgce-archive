@@ -280,7 +280,7 @@ export default function BlogsClient({ posts }: BlogsClientProps) {
                             {filteredBlogs.map((blog) => (
                                 <Link
                                     key={blog.id}
-                                    href={`/blogs/${blog.id}`}
+                                    href={`/blogs/${blog.slug}`}
                                     className="group relative bg-gradient-to-br from-card via-card/95 to-card/80 dark:from-card dark:via-card/95 dark:to-card/50 border border-border dark:border-input backdrop-blur-sm rounded-lg overflow-hidden hover:shadow-lg dark:hover:shadow-[0_4px_20px_oklch(0.65_0.18_260/0.3)] hover:border-primary/50 dark:hover:border-[oklch(0.75_0.22_260)] transition-all duration-300 hover:-translate-y-0.5 p-3 sm:p-4"
                                 >
                                     {/* Header with Tags and Featured Badge */}

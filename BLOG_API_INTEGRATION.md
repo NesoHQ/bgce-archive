@@ -18,15 +18,16 @@ Successfully migrated the blog pages from mock data to real API integration with
 - Sorting: Newest, Most Viewed, Featured
 - Mobile-responsive filter drawer
 - Compact, user-friendly UI matching the upgraded design system
+- Links to blog details using slug: `/blogs/[slug]`
 
-### 2. Blog Details Page (`/blogs/[id]`)
-**File:** `archive-client/app/(home)/blogs/[id]/page.tsx`
+### 2. Blog Details Page (`/blogs/[slug]`)
+**File:** `archive-client/app/(home)/blogs/[slug]/page.tsx`
 - Converted to Server Component
-- Fetches post by ID from Postal API using `getPostById()`
+- Fetches post by slug from Postal API using `getPostBySlug()`
 - Generates dynamic metadata (SEO)
 - Returns 404 if post not found or not published
 
-**File:** `archive-client/app/(home)/blogs/[id]/BlogDetailsClient.tsx` (NEW)
+**File:** `archive-client/app/(home)/blogs/[slug]/BlogDetailsClient.tsx` (NEW)
 - Client component for blog details display
 - Markdown rendering with `react-markdown` and `remark-gfm`
 - Full article layout with:
@@ -49,7 +50,7 @@ GET /api/v1/posts?status=published&limit=100
 
 **Blog Details:**
 ```
-GET /api/v1/posts/{id}
+GET /api/v1/posts/slug/{slug}
 ```
 
 ### API Response Structure
@@ -167,7 +168,7 @@ NEXT_PUBLIC_POSTAL_API_URL=https://postal.nesohq.org/api/v1
 
 ### Production Testing
 - Blog listing: `https://your-domain.com/blogs`
-- Blog details: `https://your-domain.com/blogs/92`
+- Blog details: `https://your-domain.com/blogs/class-8-8-variables-and-data-types`
 
 ## Example API Responses
 
@@ -269,7 +270,7 @@ NEXT_PUBLIC_POSTAL_API_URL=https://postal.nesohq.org/api/v1
 ## Routes Generated
 
 - `/blogs` - Blog listing (Server Component with 3min cache)
-- `/blogs/[id]` - Blog details (Dynamic route with 10min cache)
+- `/blogs/[slug]` - Blog details (Dynamic route with 10min cache, uses slug instead of ID)
 
 ---
 
