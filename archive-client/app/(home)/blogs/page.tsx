@@ -1,4 +1,4 @@
-import { getPosts } from "@/lib/api";
+import { getPosts, getCategories } from "@/lib/api";
 import BlogsClient from "./BlogsClient";
 import type { Metadata } from "next";
 
@@ -8,8 +8,11 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogsPage() {
-    // Fetch all published posts
-    const posts = await getPosts({ limit: 100 });
+    // Fetch all published posts and categories
+    const [posts, categories] = await Promise.all([
+        getPosts({ limit: 100 }),
+        getCategories(),
+    ]);
 
-    return <BlogsClient posts={posts} />;
+    return <BlogsClient initialPosts={posts} categories={categories} />;
 }

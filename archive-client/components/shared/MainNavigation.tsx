@@ -193,7 +193,7 @@ export function MainNavigation() {
 
   return (
     <>
-      <header data-navigation="main" className="sticky top-0 w-full bg-background">
+      <header data-navigation="main" className="sticky top-0 w-full bg-background z-[1000]">
         <TopNav />
         <nav className={cn(
           "transition-all duration-200 border-b bg-background",
