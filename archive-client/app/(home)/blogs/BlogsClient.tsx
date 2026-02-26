@@ -30,6 +30,7 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
     const [categorySearch, setCategorySearch] = useState("");
     const [showAllCategories, setShowAllCategories] = useState(false);
     const [isLoadingSubcategories, setIsLoadingSubcategories] = useState(false);
+    const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
 
     // Fetch subcategories when category is selected
     useEffect(() => {
@@ -72,6 +73,7 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
         .filter((post) => {
             if (searchQuery && !post.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
                 !post.summary?.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+            if (showFeaturedOnly && !post.is_featured) return false;
             return true;
         })
         .sort((a, b) => {
@@ -89,7 +91,7 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
             }
         });
 
-    const activeFiltersCount = [searchQuery, selectedCategory, selectedSubcategory].filter(Boolean).length;
+    const activeFiltersCount = [searchQuery, selectedCategory, selectedSubcategory, showFeaturedOnly].filter(Boolean).length;
 
     // Prevent body scroll when drawer is open
     useEffect(() => {
@@ -165,6 +167,7 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
         setSelectedSubcategory(null);
         setCategorySearch("");
         setShowAllCategories(false);
+        setShowFeaturedOnly(false);
     };
 
     const getSelectedCategoryName = () => {
@@ -319,7 +322,7 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
                                             {[
                                                 { value: "new", label: "Newest", icon: Clock },
                                                 { value: "views", label: "Most Viewed", icon: Eye },
-                                                { value: "featured", label: "Featured", icon: Flame },
+                                                { value: "featured", label: "Featured First", icon: Flame },
                                             ].map((option) => (
                                                 <button
                                                     key={option.value}
@@ -333,6 +336,25 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
                                                     {option.label}
                                                 </button>
                                             ))}
+                                        </div>
+
+                                        {/* Featured Filter Toggle */}
+                                        <div className="mt-3">
+                                            <button
+                                                onClick={() => setShowFeaturedOnly(!showFeaturedOnly)}
+                                                className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-bold transition-all border-2 flex items-center justify-between ${showFeaturedOnly
+                                                    ? "bg-orange-500/10 text-orange-600 border-orange-500/20"
+                                                    : "bg-card/50 border-border hover:border-primary/50 text-foreground"
+                                                    }`}
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    <Flame className="h-4 w-4" />
+                                                    <span>Featured Only</span>
+                                                </div>
+                                                <div className={`w-11 h-6 rounded-full transition-all relative flex-shrink-0 ${showFeaturedOnly ? "bg-orange-500" : "bg-muted-foreground/30"}`}>
+                                                    <div className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow-sm transition-all duration-200 ${showFeaturedOnly ? "left-[22px]" : "left-1"}`} />
+                                                </div>
+                                            </button>
                                         </div>
                                     </div>
                                     <div className="flex gap-2 pt-2">
@@ -542,7 +564,7 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
                                     {[
                                         { value: "new", label: "Newest", icon: Clock },
                                         { value: "views", label: "Most Viewed", icon: Eye },
-                                        { value: "featured", label: "Featured", icon: Flame },
+                                        { value: "featured", label: "Featured First", icon: Flame },
                                     ].map((option) => (
                                         <button
                                             key={option.value}
@@ -556,6 +578,25 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
                                             <span>{option.label}</span>
                                         </button>
                                     ))}
+                                </div>
+
+                                {/* Featured Filter Toggle */}
+                                <div className="mt-2 pt-2 border-t border-border">
+                                    <button
+                                        onClick={() => setShowFeaturedOnly(!showFeaturedOnly)}
+                                        className={`w-full text-left px-2 py-1.5 rounded text-xs font-medium transition-all flex items-center justify-between ${showFeaturedOnly
+                                            ? "bg-orange-500/10 text-orange-600 border border-orange-500/20"
+                                            : "hover:bg-muted text-foreground border border-transparent"
+                                            }`}
+                                    >
+                                        <div className="flex items-center gap-1.5">
+                                            <Flame className="h-3 w-3 flex-shrink-0" />
+                                            <span>Featured Only</span>
+                                        </div>
+                                        <div className={`w-7 h-3.5 rounded-full transition-all relative flex-shrink-0 ${showFeaturedOnly ? "bg-orange-500" : "bg-muted-foreground/30"}`}>
+                                            <div className={`absolute top-0.5 w-2.5 h-2.5 rounded-full bg-white shadow-sm transition-all duration-200 ${showFeaturedOnly ? "left-[14px]" : "left-0.5"}`} />
+                                        </div>
+                                    </button>
                                 </div>
                             </div>
                         </div>
