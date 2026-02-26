@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Portal } from "@/components/ui/Portal";
+import { StaticWatermark } from "@/components/ui/StaticWatermark";
 
 type SortOption = "hot" | "new" | "most-discussed";
 type CategoryOption = "all" | "general" | "help" | "showcase" | "feedback";
@@ -370,6 +371,8 @@ export default function DiscussionPage() {
                                     href={`/discussion/${discussion.id}`}
                                     className="group relative bg-gradient-to-br from-card via-card/95 to-card/80 dark:from-card dark:via-card/95 dark:to-card/50 border border-border dark:border-input backdrop-blur-sm rounded-lg overflow-hidden hover:shadow-lg dark:hover:shadow-[0_4px_20px_oklch(0.65_0.18_260/0.3)] hover:border-primary/50 dark:hover:border-[oklch(0.75_0.22_260)] transition-all duration-300 hover:-translate-y-0.5 p-3 sm:p-4"
                                 >
+                                    <StaticWatermark />
+
                                     <div className="flex gap-3">
                                         {/* Upvote Column */}
                                         <div className="hidden sm:flex flex-col items-center gap-1 min-w-[50px]">

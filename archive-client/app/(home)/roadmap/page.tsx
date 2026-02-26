@@ -1,4 +1,5 @@
 import { CheckCircle2, Circle, Clock, Sparkles, GitBranch, Calendar, Zap } from "lucide-react";
+import { StaticWatermark } from "@/components/ui/StaticWatermark";
 
 export default function RoadmapPage() {
     const roadmapItems = {
@@ -163,8 +164,10 @@ export default function RoadmapPage() {
                                 {roadmapItems.completed.map((item) => (
                                     <div
                                         key={item.id}
-                                        className="group bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-green-500/20 rounded-lg p-4 hover:shadow-lg hover:shadow-green-500/10 hover:border-green-500/40 hover:ring-2 hover:ring-green-500/20 transition-all duration-200 backdrop-blur-sm"
+                                        className="group relative bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-green-500/20 rounded-lg p-4 hover:shadow-lg hover:shadow-green-500/10 hover:border-green-500/40 hover:ring-2 hover:ring-green-500/20 transition-all duration-200 backdrop-blur-sm overflow-hidden"
                                     >
+                                        <StaticWatermark />
+
                                         <div className="flex items-start justify-between gap-3 mb-3">
                                             <h3 className="text-sm font-semibold text-foreground group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors leading-tight">
                                                 {item.title}
@@ -201,8 +204,10 @@ export default function RoadmapPage() {
                                 {roadmapItems.inProgress.map((item) => (
                                     <div
                                         key={item.id}
-                                        className="group bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-blue-500/20 rounded-lg p-4 hover:shadow-lg hover:shadow-blue-500/10 hover:border-blue-500/40 hover:ring-2 hover:ring-blue-500/20 transition-all duration-200 backdrop-blur-sm"
+                                        className="group relative bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-blue-500/20 rounded-lg p-4 hover:shadow-lg hover:shadow-blue-500/10 hover:border-blue-500/40 hover:ring-2 hover:ring-blue-500/20 transition-all duration-200 backdrop-blur-sm overflow-hidden"
                                     >
+                                        <StaticWatermark />
+
                                         <div className="flex items-start justify-between gap-3 mb-3">
                                             <h3 className="text-sm font-semibold text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
                                                 {item.title}
@@ -254,8 +259,10 @@ export default function RoadmapPage() {
                                 {roadmapItems.planned.map((item) => (
                                     <div
                                         key={item.id}
-                                        className="group bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-border rounded-lg p-4 hover:shadow-lg hover:shadow-purple-500/10 hover:border-purple-500/40 hover:ring-2 hover:ring-purple-500/20 transition-all duration-200 backdrop-blur-sm"
+                                        className="group relative bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-border rounded-lg p-4 hover:shadow-lg hover:shadow-purple-500/10 hover:border-purple-500/40 hover:ring-2 hover:ring-purple-500/20 transition-all duration-200 backdrop-blur-sm overflow-hidden"
                                     >
+                                        <StaticWatermark />
+
                                         <div className="flex items-start justify-between gap-3 mb-3">
                                             <h3 className="text-sm font-semibold text-foreground group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors leading-tight">
                                                 {item.title}
@@ -292,8 +299,10 @@ export default function RoadmapPage() {
                                 {roadmapItems.changelog.map((item) => (
                                     <div
                                         key={item.id}
-                                        className="group bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-border rounded-lg p-4 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/40 hover:ring-2 hover:ring-primary/20 transition-all duration-200 backdrop-blur-sm"
+                                        className="group relative bg-gradient-to-br from-card to-card/80 dark:from-card dark:to-card/50 border-2 border-border rounded-lg p-4 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/40 hover:ring-2 hover:ring-primary/20 transition-all duration-200 backdrop-blur-sm overflow-hidden"
                                     >
+                                        <StaticWatermark />
+
                                         <div className="flex items-center justify-between gap-3 mb-3">
                                             <div className="flex items-center gap-2">
                                                 <span className="text-xs font-bold text-primary">{item.version}</span>

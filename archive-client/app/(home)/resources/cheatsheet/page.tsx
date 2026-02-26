@@ -6,6 +6,7 @@ import { FileText, Clock, Download, Eye, Search, Filter, X, SlidersHorizontal, S
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Portal } from "@/components/ui/Portal";
+import { StaticWatermark } from "@/components/ui/StaticWatermark";
 
 type SortOption = "popular" | "downloads" | "recent";
 
@@ -448,7 +449,9 @@ export default function CheatsheetPage() {
                                         </div>
                                     </div>
 
-                                    <div className="p-2.5 sm:p-3">
+                                    <div className="p-2.5 sm:p-3 relative">
+                                        <StaticWatermark />
+
                                         {/* Category Badge */}
                                         <div className="mb-1.5">
                                             <span className="inline-block px-1.5 py-0.5 rounded-full bg-primary/10 dark:bg-primary/20 text-primary text-[9px] font-bold uppercase tracking-wide">
