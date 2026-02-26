@@ -206,7 +206,7 @@ export function MainNavigation() {
                 href="/"
                 className="font-bold text-xl bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
               >
-                BGCE Archive
+                NESOHQ
               </Link>
 
               {/* Desktop Navigation */}

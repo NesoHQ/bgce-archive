@@ -317,7 +317,7 @@ export function WelcomeSection() {
                                 asChild
                                 className="h-10 px-5 rounded-lg border-2 hover:border-primary/50 dark:hover:border-[oklch(0.75_0.22_260)] dark:hover:bg-[oklch(0.28_0.06_260)] dark:hover:text-[oklch(0.85_0.26_260)] transition-all"
                             >
-                                <Link href="/archive">
+                                <Link href="/blogs">
                                     View Archive
                                 </Link>
                             </Button>
