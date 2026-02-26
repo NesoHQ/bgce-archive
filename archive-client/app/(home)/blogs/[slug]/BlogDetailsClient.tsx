@@ -9,13 +9,16 @@ import {
     Eye,
     ThumbsUp,
     MessageSquare,
-    Share2,
     Bookmark,
     Twitter,
     Facebook,
     Linkedin,
     Link2,
-    ChevronRight
+    ChevronRight,
+    User,
+    TrendingUp,
+    Hash,
+    Bell
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -55,229 +58,238 @@ export default function BlogDetailsClient({ post }: BlogDetailsClientProps) {
 
     return (
         <div className="min-h-screen bg-background">
-            {/* Header with breadcrumb */}
-            <div className="border-b border-border/50 bg-gradient-to-b from-background to-muted/20">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                        <Link href="/" className="hover:text-primary transition-colors">
-                            Home
-                        </Link>
-                        <ChevronRight className="h-4 w-4" />
-                        <Link href="/blogs" className="hover:text-primary transition-colors">
-                            Blogs
-                        </Link>
-                        <ChevronRight className="h-4 w-4" />
-                        <span className="text-foreground font-medium truncate max-w-[200px]">
-                            {post.title}
-                        </span>
+            {/* Header Breadcrumb */}
+            <div className="border-b border-border/40 bg-muted/20">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-2">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+                            <ChevronRight className="h-3 w-3" />
+                            <Link href="/blogs" className="hover:text-primary transition-colors">Blogs</Link>
+                            <ChevronRight className="h-3 w-3" />
+                            <span className="text-foreground font-medium truncate max-w-[150px] sm:max-w-[300px]">{post.title}</span>
+                        </div>
+                        <Button variant="ghost" size="sm" onClick={() => router.push("/blogs")} className="h-8 text-xs">
+                            <ArrowLeft className="h-3.5 w-3.5 mr-1.5" />
+                            Back
+                        </Button>
                     </div>
-
-                    <Button
-                        variant="ghost"
-                        onClick={() => router.push("/blogs")}
-                        className="group mb-4"
-                    >
-                        <ArrowLeft className="h-4 w-4 mr-2 transition-transform group-hover:-translate-x-1" />
-                        Back to Blogs
-                    </Button>
                 </div>
             </div>
 
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    {/* Main Content */}
-                    <article className="lg:col-span-8">
-                        {/* Article Header */}
-                        <div className="mb-8">
-                            {/* Badges */}
-                            <div className="flex items-center gap-2 mb-4">
+            {/* Main Content */}
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                    {/* Article Content - Left Side */}
+                    <article className="lg:col-span-8 space-y-4">
+
+                        {/* Badges */}
+                        {(post.is_featured || post.is_pinned) && (
+                            <div className="flex items-center gap-2">
                                 {post.is_featured && (
-                                    <Badge className="bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20">
+                                    <Badge className="bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20 h-6 px-2.5">
                                         🔥 Featured
                                     </Badge>
                                 )}
                                 {post.is_pinned && (
-                                    <Badge className="bg-primary/10 text-primary border-primary/20">
+                                    <Badge className="bg-primary/10 text-primary border-primary/20 h-6 px-2.5">
                                         📌 Pinned
                                     </Badge>
                                 )}
                             </div>
+                        )}
 
-                            {/* Title */}
-                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-foreground mb-6 leading-tight">
-                                {post.title}
-                            </h1>
+                        {/* Title */}
+                        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
+                            {post.title}
+                        </h1>
 
-                            {/* Summary */}
-                            {post.summary && (
-                                <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+                        {/* Author & Meta */}
+                        <div className="flex flex-wrap items-center gap-3 pb-4 border-b">
+                            <div className="flex items-center gap-2">
+                                <Avatar className="h-8 w-8 border-2 border-border">
+                                    <AvatarFallback className={`${getAuthorColor(post.created_by)} text-white text-xs font-bold`}>
+                                        {getAuthorInitials(post.created_by)}
+                                    </AvatarFallback>
+                                </Avatar>
+                                <span className="text-sm font-semibold">User {post.created_by}</span>
+                            </div>
+                            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                                <span className="flex items-center gap-1.5">
+                                    <Calendar className="h-4 w-4" />
+                                    {new Date(post.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                                </span>
+                                <span className="flex items-center gap-1.5">
+                                    <Clock className="h-4 w-4" />
+                                    {readTime}
+                                </span>
+                                <span className="flex items-center gap-1.5">
+                                    <Eye className="h-4 w-4" />
+                                    {post.view_count.toLocaleString()}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Summary */}
+                        {post.summary && (
+                            <div className="bg-muted/50 border-l-4 border-primary rounded-r-lg p-4">
+                                <p className="text-sm text-muted-foreground italic leading-relaxed">
                                     {post.summary}
                                 </p>
-                            )}
+                            </div>
+                        )}
 
-                            {/* Author & Meta */}
-                            <div className="flex flex-wrap items-center gap-4 pb-6 border-b border-border">
-                                <div className="flex items-center gap-3">
+                        {/* Tags */}
+                        {tags.length > 0 && (
+                            <div className="flex flex-wrap items-center gap-2">
+                                <Hash className="h-4 w-4 text-muted-foreground" />
+                                {tags.map((tag) => (
+                                    <Badge key={tag} variant="secondary" className="h-6 px-2.5 cursor-pointer hover:bg-primary hover:text-white transition-colors">
+                                        {tag}
+                                    </Badge>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Article Body */}
+                        <div className="prose prose-base dark:prose-invert max-w-none
+                            prose-headings:font-bold prose-headings:text-foreground
+                            prose-h1:text-2xl prose-h1:mb-4 prose-h1:mt-8
+                            prose-h2:text-xl prose-h2:mb-3 prose-h2:mt-6
+                            prose-h3:text-lg prose-h3:mb-2 prose-h3:mt-5
+                            prose-p:text-base prose-p:leading-relaxed prose-p:mb-4
+                            prose-a:text-primary prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
+                            prose-strong:font-bold prose-strong:text-foreground
+                            prose-code:text-primary prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
+                            prose-pre:bg-muted prose-pre:border prose-pre:rounded-lg prose-pre:p-4 prose-pre:my-4
+                            prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-muted/30 prose-blockquote:py-3 prose-blockquote:px-5 prose-blockquote:italic prose-blockquote:my-4
+                            prose-ul:my-4 prose-ol:my-4 prose-li:my-1
+                            prose-img:rounded-lg prose-img:shadow-lg prose-img:my-6
+                            prose-table:my-4 prose-th:p-3 prose-td:p-3
+                            prose-hr:my-8
+                        ">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {post.content}
+                            </ReactMarkdown>
+                        </div>
+                    </article>
+
+                    {/* Sidebar - Right Side */}
+                    <aside className="lg:col-span-4">
+                        <div className="sticky top-20 space-y-4">
+
+                            {/* Actions */}
+                            <div className="bg-card border rounded-lg p-4">
+                                <div className="grid grid-cols-3 gap-2 mb-3">
+                                    <button className="flex flex-col items-center gap-1.5 p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:text-primary transition-colors group">
+                                        <ThumbsUp className="h-5 w-5" />
+                                        <span className="text-xs font-medium">Like</span>
+                                    </button>
+                                    <button className="flex flex-col items-center gap-1.5 p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:text-primary transition-colors group">
+                                        <Bookmark className="h-5 w-5" />
+                                        <span className="text-xs font-medium">Save</span>
+                                    </button>
+                                    <button className="flex flex-col items-center gap-1.5 p-3 rounded-lg bg-muted/50 hover:bg-primary/10 hover:text-primary transition-colors group">
+                                        <MessageSquare className="h-5 w-5" />
+                                        <span className="text-xs font-medium">Comment</span>
+                                    </button>
+                                </div>
+                                <div className="pt-3 border-t">
+                                    <p className="text-xs font-medium text-muted-foreground mb-2">Share</p>
+                                    <div className="flex gap-2">
+                                        <button className="flex-1 p-2 rounded-lg hover:bg-blue-500/10 hover:text-blue-500 transition-colors">
+                                            <Twitter className="h-4 w-4 mx-auto" />
+                                        </button>
+                                        <button className="flex-1 p-2 rounded-lg hover:bg-blue-600/10 hover:text-blue-600 transition-colors">
+                                            <Facebook className="h-4 w-4 mx-auto" />
+                                        </button>
+                                        <button className="flex-1 p-2 rounded-lg hover:bg-blue-700/10 hover:text-blue-700 transition-colors">
+                                            <Linkedin className="h-4 w-4 mx-auto" />
+                                        </button>
+                                        <button className="flex-1 p-2 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors">
+                                            <Link2 className="h-4 w-4 mx-auto" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Stats */}
+                            <div className="bg-card border rounded-lg p-4">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <TrendingUp className="h-4 w-4 text-primary" />
+                                    <h3 className="font-semibold text-sm">Statistics</h3>
+                                </div>
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
+                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                            <Eye className="h-4 w-4" />
+                                            <span>Views</span>
+                                        </div>
+                                        <span className="font-semibold text-sm">{post.view_count.toLocaleString()}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
+                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                            <Clock className="h-4 w-4" />
+                                            <span>Read Time</span>
+                                        </div>
+                                        <span className="font-semibold text-sm">{readTime}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
+                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                            <Calendar className="h-4 w-4" />
+                                            <span>Published</span>
+                                        </div>
+                                        <span className="font-semibold text-sm">
+                                            {new Date(post.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Author */}
+                            <div className="bg-card border rounded-lg p-4">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <User className="h-4 w-4 text-primary" />
+                                    <h3 className="font-semibold text-sm">Author</h3>
+                                </div>
+                                <div className="flex items-center gap-3 mb-3">
                                     <Avatar className="h-12 w-12 border-2 border-border">
                                         <AvatarFallback className={`${getAuthorColor(post.created_by)} text-white font-bold`}>
                                             {getAuthorInitials(post.created_by)}
                                         </AvatarFallback>
                                     </Avatar>
                                     <div>
-                                        <p className="font-semibold text-foreground">User {post.created_by}</p>
-                                        <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                                            <span className="flex items-center gap-1">
-                                                <Calendar className="h-3 w-3" />
-                                                {new Date(post.created_at).toLocaleDateString("en-US", {
-                                                    month: "long",
-                                                    day: "numeric",
-                                                    year: "numeric",
-                                                })}
-                                            </span>
-                                            <span className="flex items-center gap-1">
-                                                <Clock className="h-3 w-3" />
-                                                {readTime}
-                                            </span>
-                                        </div>
+                                        <p className="font-semibold text-sm">User {post.created_by}</p>
+                                        <Badge variant="outline" className="text-xs h-5">Author</Badge>
                                     </div>
                                 </div>
-
-                                {/* Stats */}
-                                <div className="ml-auto flex items-center gap-4 text-sm text-muted-foreground">
-                                    <span className="flex items-center gap-1">
-                                        <Eye className="h-4 w-4" />
-                                        {post.view_count.toLocaleString()}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Article Content */}
-                        <div className="prose prose-lg dark:prose-invert max-w-none mb-8 prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:leading-relaxed prose-pre:bg-muted prose-pre:border prose-pre:border-border prose-code:text-primary prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg prose-img:border prose-img:border-border">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                {post.content}
-                            </ReactMarkdown>
-                        </div>
-
-                        {/* Tags */}
-                        {tags.length > 0 && (
-                            <div className="flex flex-wrap gap-2 mb-8 pb-8 border-b border-border">
-                                {tags.map((tag) => (
-                                    <Badge
-                                        key={tag}
-                                        variant="secondary"
-                                        className="cursor-pointer hover:bg-primary hover:text-white dark:hover:text-white transition-colors"
-                                    >
-                                        #{tag}
-                                    </Badge>
-                                ))}
-                            </div>
-                        )}
-
-                        {/* Actions */}
-                        <div className="flex items-center justify-between mb-8 p-6 rounded-lg border-2 border-border dark:border-input bg-card/50 dark:bg-card/30">
-                            <div className="flex items-center gap-3">
-                                <Button
-                                    variant="outline"
-                                    className="gap-2 border-2 dark:border-input dark:hover:border-[oklch(0.75_0.22_260)] dark:hover:bg-[oklch(0.28_0.06_260)] dark:hover:text-[oklch(0.85_0.28_260)]"
-                                >
-                                    <ThumbsUp className="h-4 w-4" />
-                                    Like
+                                <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
+                                    Community contributor sharing knowledge about programming and development.
+                                </p>
+                                <Button variant="outline" size="sm" className="w-full">
+                                    <User className="h-3.5 w-3.5 mr-1.5" />
+                                    Follow
                                 </Button>
-                                <Button
-                                    variant="outline"
-                                    className="gap-2 border-2 dark:border-input dark:hover:border-[oklch(0.75_0.22_260)] dark:hover:bg-[oklch(0.28_0.06_260)] dark:hover:text-[oklch(0.85_0.28_260)]"
-                                >
-                                    <Bookmark className="h-4 w-4" />
-                                    Save
-                                </Button>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className="text-sm text-muted-foreground mr-2">Share:</span>
-                                <Button size="icon" variant="ghost" className="h-8 w-8">
-                                    <Twitter className="h-4 w-4" />
-                                </Button>
-                                <Button size="icon" variant="ghost" className="h-8 w-8">
-                                    <Facebook className="h-4 w-4" />
-                                </Button>
-                                <Button size="icon" variant="ghost" className="h-8 w-8">
-                                    <Linkedin className="h-4 w-4" />
-                                </Button>
-                                <Button size="icon" variant="ghost" className="h-8 w-8">
-                                    <Link2 className="h-4 w-4" />
-                                </Button>
-                            </div>
-                        </div>
-
-                        {/* Author Bio */}
-                        <div className="p-6 rounded-lg border-2 border-border dark:border-input bg-gradient-to-br from-card via-card/95 to-card/80 dark:from-card dark:via-card/95 dark:to-card/50">
-                            <div className="flex items-start gap-4">
-                                <Avatar className="h-16 w-16 border-2 border-border">
-                                    <AvatarFallback className={`${getAuthorColor(post.created_by)} text-white text-xl font-bold`}>
-                                        {getAuthorInitials(post.created_by)}
-                                    </AvatarFallback>
-                                </Avatar>
-                                <div className="flex-1">
-                                    <h3 className="text-lg font-bold text-foreground mb-2">About User {post.created_by}</h3>
-                                    <p className="text-sm text-muted-foreground mb-3">
-                                        Community contributor sharing knowledge and insights about Go programming and software development.
-                                    </p>
-                                    <Button variant="outline" size="sm" className="border-2">
-                                        Follow
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-
-                    {/* Sidebar */}
-                    <aside className="lg:col-span-4">
-                        <div className="sticky top-20 space-y-6">
-                            {/* Post Info */}
-                            <div className="p-6 rounded-lg border-2 border-border dark:border-input bg-card/50 dark:bg-card/30">
-                                <h3 className="text-lg font-bold text-foreground mb-4">Post Information</h3>
-                                <div className="space-y-3 text-sm">
-                                    <div className="flex justify-between">
-                                        <span className="text-muted-foreground">Published:</span>
-                                        <span className="font-semibold text-foreground">
-                                            {new Date(post.created_at).toLocaleDateString()}
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-muted-foreground">Updated:</span>
-                                        <span className="font-semibold text-foreground">
-                                            {new Date(post.updated_at).toLocaleDateString()}
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-muted-foreground">Views:</span>
-                                        <span className="font-semibold text-foreground">
-                                            {post.view_count.toLocaleString()}
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-muted-foreground">Read Time:</span>
-                                        <span className="font-semibold text-foreground">{readTime}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-muted-foreground">Version:</span>
-                                        <span className="font-semibold text-foreground">v{post.version}</span>
-                                    </div>
-                                </div>
                             </div>
 
                             {/* Newsletter */}
-                            <div className="p-6 rounded-lg border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/5">
-                                <h3 className="text-lg font-bold text-foreground mb-2">Stay Updated</h3>
-                                <p className="text-sm text-muted-foreground mb-4">
+                            <div className="bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-lg p-4">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <Bell className="h-4 w-4 text-primary" />
+                                    <h3 className="font-semibold text-sm">Stay Updated</h3>
+                                </div>
+                                <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
                                     Get the latest articles delivered to your inbox.
                                 </p>
-                                <Button className="w-full bg-gradient-to-r from-[oklch(0.4_0.14_260)] to-[oklch(0.35_0.12_260)] hover:from-[oklch(0.45_0.16_260)] hover:to-[oklch(0.4_0.14_260)] dark:from-[oklch(0.65_0.18_260)] dark:to-[oklch(0.6_0.16_260)] dark:hover:from-[oklch(0.75_0.22_260)] dark:hover:to-[oklch(0.7_0.2_260)] text-white dark:text-white">
+                                <Button className="w-full bg-primary hover:bg-primary/90">
                                     Subscribe
                                 </Button>
                             </div>
+
                         </div>
                     </aside>
+
                 </div>
             </div>
         </div>
