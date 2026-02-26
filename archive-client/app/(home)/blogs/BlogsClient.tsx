@@ -29,13 +29,17 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
     const [expandedCategory, setExpandedCategory] = useState<number | null>(null);
     const [categorySearch, setCategorySearch] = useState("");
     const [showAllCategories, setShowAllCategories] = useState(false);
+    const [isLoadingSubcategories, setIsLoadingSubcategories] = useState(false);
 
     // Fetch subcategories when category is selected
     useEffect(() => {
         if (selectedCategory) {
             const category = categories.find(c => c.id === selectedCategory);
             if (category?.uuid) {
-                getSubcategories(category.uuid).then(setSubcategories);
+                setIsLoadingSubcategories(true);
+                getSubcategories(category.uuid)
+                    .then(setSubcategories)
+                    .finally(() => setIsLoadingSubcategories(false));
             }
         } else {
             setSubcategories([]);
@@ -64,18 +68,6 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
         fetchFilteredPosts();
     }, [selectedCategory, selectedSubcategory]);
 
-    // Prevent body scroll when drawer is open
-    useEffect(() => {
-        if (showMobileFilters) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'unset';
-        }
-        return () => {
-            document.body.style.overflow = 'unset';
-        };
-    }, [showMobileFilters]);
-
     const filteredBlogs = posts
         .filter((post) => {
             if (searchQuery && !post.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
@@ -99,6 +91,35 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
 
     const activeFiltersCount = [searchQuery, selectedCategory, selectedSubcategory].filter(Boolean).length;
 
+    // Prevent body scroll when drawer is open
+    useEffect(() => {
+        if (showMobileFilters) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [showMobileFilters]);
+
+    // Keyboard shortcuts
+    useEffect(() => {
+        const handleKeyPress = (e: KeyboardEvent) => {
+            // Cmd/Ctrl + K to focus search
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                document.querySelector<HTMLInputElement>('input[placeholder*="Search"]')?.focus();
+            }
+            // Escape to clear filters
+            if (e.key === 'Escape' && activeFiltersCount > 0) {
+                clearAllFilters();
+            }
+        };
+        window.addEventListener('keydown', handleKeyPress);
+        return () => window.removeEventListener('keydown', handleKeyPress);
+    }, [activeFiltersCount]);
+
     // Filter categories based on search
     const filteredCategories = useMemo(() => {
         if (!categorySearch) return categories;
@@ -114,6 +135,11 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
     }, [filteredCategories, categorySearch, showAllCategories]);
 
     const hasMoreCategories = filteredCategories.length > 5 && !showAllCategories && !categorySearch;
+
+    // Get post count per category
+    const getCategoryPostCount = (categoryId: number) => {
+        return initialPosts.filter(post => post.category_id === categoryId).length;
+    };
 
     const getAuthorInitials = (userId: number) => `U${userId}`;
     const getAuthorColor = (userId: number) => {
@@ -327,12 +353,12 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
                 )}
 
                 <div className="flex flex-col lg:flex-row gap-4">
-                    {/* Desktop Filters Sidebar - Compact & Professional */}
+                    {/* Desktop Filters Sidebar - Enhanced */}
                     <aside className="hidden lg:block lg:w-56 flex-shrink-0">
                         <div className="sticky top-24 space-y-3">
                             {/* Active Filter Breadcrumb */}
                             {(selectedCategory || selectedSubcategory) && (
-                                <div className="bg-primary/5 border border-primary/20 rounded-lg p-2">
+                                <div className="bg-primary/5 border border-primary/20 rounded-lg p-2 animate-in slide-in-from-top-2 duration-200">
                                     <div className="flex items-center gap-1 text-[10px] mb-1.5">
                                         <span className="text-muted-foreground">Filter:</span>
                                         <span className="font-semibold text-primary truncate">
@@ -342,50 +368,53 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
                                     </div>
                                     <button
                                         onClick={clearAllFilters}
-                                        className="text-[10px] text-primary hover:text-primary/80 font-medium flex items-center gap-1"
+                                        className="text-[10px] text-primary hover:text-primary/80 font-medium flex items-center gap-1 transition-colors"
                                     >
                                         <X className="h-2.5 w-2.5" />
-                                        Clear
+                                        Clear (ESC)
                                     </button>
                                 </div>
                             )}
 
                             {/* Search */}
-                            <div className="bg-card border border-border rounded-lg p-2.5">
+                            <div className="bg-card border border-border rounded-lg p-2.5 hover:border-primary/30 transition-colors">
                                 <label className="text-[10px] font-semibold text-muted-foreground mb-1.5 block uppercase tracking-wider">
                                     Search
                                 </label>
-                                <div className="relative">
-                                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                                <div className="relative group">
+                                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground group-focus-within:text-primary transition-colors" />
                                     <Input
                                         placeholder="Search blogs..."
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        className="pl-7 h-7 text-xs border"
+                                        className="pl-7 h-7 text-xs border focus:border-primary transition-all"
                                     />
+                                    <kbd className="absolute right-2 top-1/2 -translate-y-1/2 px-1 py-0.5 text-[8px] font-mono bg-muted rounded border border-border text-muted-foreground">
+                                        ⌘K
+                                    </kbd>
                                 </div>
                             </div>
 
                             {/* Categories */}
-                            <div className="bg-card border border-border rounded-lg p-2.5">
+                            <div className="bg-card border border-border rounded-lg p-2.5 hover:border-primary/30 transition-colors">
                                 <label className="text-[10px] font-semibold text-muted-foreground mb-1.5 block uppercase tracking-wider">
                                     Categories
                                 </label>
 
                                 {/* Category Search - Only show if more than 10 categories */}
                                 {categories.length > 10 && (
-                                    <div className="relative mb-2">
-                                        <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                                    <div className="relative mb-2 group">
+                                        <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground group-focus-within:text-primary transition-colors" />
                                         <Input
                                             placeholder="Find..."
                                             value={categorySearch}
                                             onChange={(e) => setCategorySearch(e.target.value)}
-                                            className="pl-7 h-6 text-[10px] border"
+                                            className="pl-7 h-6 text-[10px] border focus:border-primary transition-all"
                                         />
                                         {categorySearch && (
                                             <button
                                                 onClick={() => setCategorySearch("")}
-                                                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-0.5 hover:bg-muted rounded"
+                                                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-0.5 hover:bg-muted rounded transition-colors"
                                             >
                                                 <X className="h-2.5 w-2.5 text-muted-foreground" />
                                             </button>
@@ -393,7 +422,7 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
                                     </div>
                                 )}
 
-                                <div className="space-y-1 max-h-[350px] overflow-y-auto pr-1">
+                                <div className="space-y-0.5 max-h-[350px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
                                     {/* All Categories */}
                                     <button
                                         onClick={() => {
@@ -401,60 +430,83 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
                                             setSelectedSubcategory(null);
                                             setExpandedCategory(null);
                                         }}
-                                        className={`w-full text-left px-2 py-1.5 rounded text-xs font-medium transition-colors ${!selectedCategory
-                                            ? "bg-primary text-white"
+                                        className={`w-full text-left px-2 py-1.5 rounded text-xs font-medium transition-all flex items-center justify-between group ${!selectedCategory
+                                            ? "bg-primary text-white shadow-sm"
                                             : "hover:bg-muted text-foreground"
                                             }`}
                                     >
-                                        All Categories
+                                        <span>All Categories</span>
+                                        <span className={`text-[9px] px-1.5 py-0.5 rounded ${!selectedCategory ? "bg-white/20" : "bg-muted group-hover:bg-muted-foreground/10"}`}>
+                                            {posts.length}
+                                        </span>
                                     </button>
 
                                     {/* Category List */}
                                     {displayedCategories.length > 0 ? (
-                                        displayedCategories.map((category) => (
-                                            <div key={category.id}>
-                                                <button
-                                                    onClick={() => {
-                                                        if (selectedCategory === category.id) {
-                                                            setExpandedCategory(expandedCategory === category.id ? null : category.id);
-                                                        } else {
-                                                            setSelectedCategory(category.id);
-                                                            setExpandedCategory(category.id);
-                                                            setSelectedSubcategory(null);
-                                                        }
-                                                    }}
-                                                    className={`w-full text-left px-2 py-1.5 rounded text-xs font-medium transition-colors flex items-center justify-between ${selectedCategory === category.id
-                                                        ? "bg-primary text-white"
-                                                        : "hover:bg-muted text-foreground"
-                                                        }`}
-                                                >
-                                                    <span className="truncate">{category.label}</span>
-                                                    {selectedCategory === category.id && subcategories.length > 0 && (
-                                                        <ChevronDown className={`h-3 w-3 flex-shrink-0 transition-transform ${expandedCategory === category.id ? 'rotate-180' : ''}`} />
-                                                    )}
-                                                </button>
+                                        displayedCategories.map((category) => {
+                                            const postCount = getCategoryPostCount(category.id);
+                                            return (
+                                                <div key={category.id}>
+                                                    <button
+                                                        onClick={() => {
+                                                            if (selectedCategory === category.id) {
+                                                                setExpandedCategory(expandedCategory === category.id ? null : category.id);
+                                                            } else {
+                                                                setSelectedCategory(category.id);
+                                                                setExpandedCategory(category.id);
+                                                                setSelectedSubcategory(null);
+                                                            }
+                                                        }}
+                                                        className={`w-full text-left px-2 py-1.5 rounded text-xs font-medium transition-all flex items-center justify-between gap-1 group ${selectedCategory === category.id
+                                                            ? "bg-primary text-white shadow-sm"
+                                                            : "hover:bg-muted text-foreground"
+                                                            }`}
+                                                    >
+                                                        <span className="truncate flex-1">{category.label}</span>
+                                                        <div className="flex items-center gap-1 flex-shrink-0">
+                                                            {postCount > 0 && (
+                                                                <span className={`text-[9px] px-1.5 py-0.5 rounded ${selectedCategory === category.id ? "bg-white/20" : "bg-muted group-hover:bg-muted-foreground/10"}`}>
+                                                                    {postCount}
+                                                                </span>
+                                                            )}
+                                                            {selectedCategory === category.id && subcategories.length > 0 && (
+                                                                <ChevronDown className={`h-3 w-3 transition-transform ${expandedCategory === category.id ? 'rotate-180' : ''}`} />
+                                                            )}
+                                                        </div>
+                                                    </button>
 
-                                                {/* Subcategories */}
-                                                {selectedCategory === category.id && expandedCategory === category.id && subcategories.length > 0 && (
-                                                    <div className="ml-3 mt-1 space-y-0.5 border-l border-primary/30 pl-2">
-                                                        {subcategories.map((sub) => (
-                                                            <button
-                                                                key={sub.id}
-                                                                onClick={() => setSelectedSubcategory(sub.id)}
-                                                                className={`w-full text-left px-2 py-1 rounded text-[11px] font-medium transition-colors ${selectedSubcategory === sub.id
-                                                                    ? "bg-primary/90 text-white"
-                                                                    : "hover:bg-muted text-muted-foreground"
-                                                                    }`}
-                                                            >
-                                                                {sub.label}
-                                                            </button>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ))
+                                                    {/* Subcategories */}
+                                                    {selectedCategory === category.id && expandedCategory === category.id && (
+                                                        <div className="ml-3 mt-0.5 space-y-0.5 border-l border-primary/30 pl-2 animate-in slide-in-from-top-1 duration-150">
+                                                            {isLoadingSubcategories ? (
+                                                                <div className="px-2 py-1.5 text-[10px] text-muted-foreground">
+                                                                    Loading...
+                                                                </div>
+                                                            ) : subcategories.length > 0 ? (
+                                                                subcategories.map((sub) => (
+                                                                    <button
+                                                                        key={sub.id}
+                                                                        onClick={() => setSelectedSubcategory(sub.id)}
+                                                                        className={`w-full text-left px-2 py-1 rounded text-[11px] font-medium transition-all ${selectedSubcategory === sub.id
+                                                                            ? "bg-primary/90 text-white shadow-sm"
+                                                                            : "hover:bg-muted text-muted-foreground"
+                                                                            }`}
+                                                                    >
+                                                                        {sub.label}
+                                                                    </button>
+                                                                ))
+                                                            ) : (
+                                                                <div className="px-2 py-1.5 text-[10px] text-muted-foreground">
+                                                                    No subcategories
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            );
+                                        })
                                     ) : (
-                                        <div className="text-center py-3">
+                                        <div className="text-center py-4">
                                             <p className="text-[10px] text-muted-foreground">No categories found</p>
                                         </div>
                                     )}
@@ -463,7 +515,7 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
                                     {hasMoreCategories && (
                                         <button
                                             onClick={() => setShowAllCategories(true)}
-                                            className="w-full px-2 py-1.5 rounded text-[10px] font-medium bg-muted hover:bg-muted/80 text-foreground transition-colors flex items-center justify-center gap-1"
+                                            className="w-full px-2 py-1.5 rounded text-[10px] font-medium bg-muted/50 hover:bg-muted text-foreground transition-all flex items-center justify-center gap-1"
                                         >
                                             <ChevronDown className="h-3 w-3" />
                                             {filteredCategories.length - 5} more
@@ -472,7 +524,7 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
                                     {showAllCategories && !categorySearch && (
                                         <button
                                             onClick={() => setShowAllCategories(false)}
-                                            className="w-full px-2 py-1.5 rounded text-[10px] font-medium bg-muted hover:bg-muted/80 text-foreground transition-colors flex items-center justify-center gap-1"
+                                            className="w-full px-2 py-1.5 rounded text-[10px] font-medium bg-muted/50 hover:bg-muted text-foreground transition-all flex items-center justify-center gap-1"
                                         >
                                             <ChevronDown className="h-3 w-3 rotate-180" />
                                             Show less
@@ -482,11 +534,11 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
                             </div>
 
                             {/* Sort By */}
-                            <div className="bg-card border border-border rounded-lg p-2.5">
+                            <div className="bg-card border border-border rounded-lg p-2.5 hover:border-primary/30 transition-colors">
                                 <label className="text-[10px] font-semibold text-muted-foreground mb-1.5 block uppercase tracking-wider">
                                     Sort By
                                 </label>
-                                <div className="space-y-1">
+                                <div className="space-y-0.5">
                                     {[
                                         { value: "new", label: "Newest", icon: Clock },
                                         { value: "views", label: "Most Viewed", icon: Eye },
@@ -495,8 +547,8 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
                                         <button
                                             key={option.value}
                                             onClick={() => setSortBy(option.value as SortOption)}
-                                            className={`w-full text-left px-2 py-1.5 rounded text-xs font-medium transition-colors flex items-center gap-1.5 ${sortBy === option.value
-                                                ? "bg-primary text-white"
+                                            className={`w-full text-left px-2 py-1.5 rounded text-xs font-medium transition-all flex items-center gap-1.5 ${sortBy === option.value
+                                                ? "bg-primary text-white shadow-sm"
                                                 : "hover:bg-muted text-foreground"
                                                 }`}
                                         >
