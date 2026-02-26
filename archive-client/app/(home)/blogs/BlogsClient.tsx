@@ -327,110 +327,92 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
                 )}
 
                 <div className="flex flex-col lg:flex-row gap-4">
-                    {/* Desktop Filters Sidebar - Scalable Design */}
-                    <aside className="hidden lg:block lg:w-64 flex-shrink-0">
-                        <div className="sticky top-24 space-y-4">
+                    {/* Desktop Filters Sidebar - Compact & Professional */}
+                    <aside className="hidden lg:block lg:w-56 flex-shrink-0">
+                        <div className="sticky top-24 space-y-3">
                             {/* Active Filter Breadcrumb */}
                             {(selectedCategory || selectedSubcategory) && (
-                                <div className="bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/30 rounded-xl p-3 shadow-sm">
-                                    <div className="flex items-center gap-1.5 text-xs flex-wrap">
-                                        <span className="text-muted-foreground font-medium">Filtered by:</span>
-                                        <div className="flex items-center gap-1 flex-wrap">
-                                            {selectedCategory && (
-                                                <>
-                                                    <span className="font-bold text-primary">{getSelectedCategoryName()}</span>
-                                                    {selectedSubcategory && (
-                                                        <>
-                                                            <ChevronRight className="h-3 w-3 text-muted-foreground" />
-                                                            <span className="font-bold text-primary">{getSelectedSubcategoryName()}</span>
-                                                        </>
-                                                    )}
-                                                </>
-                                            )}
-                                        </div>
+                                <div className="bg-primary/5 border border-primary/20 rounded-lg p-2">
+                                    <div className="flex items-center gap-1 text-[10px] mb-1.5">
+                                        <span className="text-muted-foreground">Filter:</span>
+                                        <span className="font-semibold text-primary truncate">
+                                            {getSelectedCategoryName()}
+                                            {selectedSubcategory && ` › ${getSelectedSubcategoryName()}`}
+                                        </span>
                                     </div>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
+                                    <button
                                         onClick={clearAllFilters}
-                                        className="w-full mt-2 h-7 text-xs font-semibold hover:bg-primary/10"
+                                        className="text-[10px] text-primary hover:text-primary/80 font-medium flex items-center gap-1"
                                     >
-                                        <X className="h-3 w-3 mr-1" />
-                                        Clear Filters
-                                    </Button>
+                                        <X className="h-2.5 w-2.5" />
+                                        Clear
+                                    </button>
                                 </div>
                             )}
 
-                            {/* Search Card */}
-                            <div className="bg-gradient-to-br from-card to-card/50 border border-border/50 rounded-xl p-4 shadow-sm">
-                                <label className="text-xs font-bold text-foreground mb-2 flex items-center gap-2 uppercase tracking-wide">
-                                    <div className="p-1.5 bg-primary/10 rounded-lg">
-                                        <Search className="h-3.5 w-3.5 text-primary" />
-                                    </div>
-                                    Search Blogs
+                            {/* Search */}
+                            <div className="bg-card border border-border rounded-lg p-2.5">
+                                <label className="text-[10px] font-semibold text-muted-foreground mb-1.5 block uppercase tracking-wider">
+                                    Search
                                 </label>
                                 <div className="relative">
-                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
                                     <Input
-                                        placeholder="Search by title..."
+                                        placeholder="Search blogs..."
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        className="pl-10 h-10 text-sm border-2 focus:border-primary transition-colors"
+                                        className="pl-7 h-7 text-xs border"
                                     />
                                 </div>
                             </div>
 
-                            {/* Category Filter Card - Scalable */}
-                            <div className="bg-gradient-to-br from-card to-card/50 border border-border/50 rounded-xl p-4 shadow-sm">
-                                <label className="text-xs font-bold text-foreground mb-3 flex items-center gap-2 uppercase tracking-wide">
-                                    <div className="p-1.5 bg-primary/10 rounded-lg">
-                                        <FolderTree className="h-3.5 w-3.5 text-primary" />
-                                    </div>
+                            {/* Categories */}
+                            <div className="bg-card border border-border rounded-lg p-2.5">
+                                <label className="text-[10px] font-semibold text-muted-foreground mb-1.5 block uppercase tracking-wider">
                                     Categories
                                 </label>
 
                                 {/* Category Search - Only show if more than 10 categories */}
                                 {categories.length > 10 && (
-                                    <div className="relative mb-3">
-                                        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                                    <div className="relative mb-2">
+                                        <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
                                         <Input
-                                            placeholder="Find category..."
+                                            placeholder="Find..."
                                             value={categorySearch}
                                             onChange={(e) => setCategorySearch(e.target.value)}
-                                            className="pl-8 h-8 text-xs border focus:border-primary transition-colors"
+                                            className="pl-7 h-6 text-[10px] border"
                                         />
                                         {categorySearch && (
                                             <button
                                                 onClick={() => setCategorySearch("")}
-                                                className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 hover:bg-muted rounded"
+                                                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-0.5 hover:bg-muted rounded"
                                             >
-                                                <X className="h-3 w-3 text-muted-foreground" />
+                                                <X className="h-2.5 w-2.5 text-muted-foreground" />
                                             </button>
                                         )}
                                     </div>
                                 )}
 
-                                <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1 custom-scrollbar">
-                                    {/* All Categories Option */}
+                                <div className="space-y-1 max-h-[350px] overflow-y-auto pr-1">
+                                    {/* All Categories */}
                                     <button
                                         onClick={() => {
                                             setSelectedCategory(null);
                                             setSelectedSubcategory(null);
                                             setExpandedCategory(null);
                                         }}
-                                        className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold transition-all border-2 flex items-center gap-2 ${!selectedCategory
-                                            ? "bg-gradient-to-r from-primary to-primary/90 text-white border-primary shadow-md"
-                                            : "bg-muted/30 border-border hover:border-primary/50 hover:bg-muted/50 text-foreground"
+                                        className={`w-full text-left px-2 py-1.5 rounded text-xs font-medium transition-colors ${!selectedCategory
+                                            ? "bg-primary text-white"
+                                            : "hover:bg-muted text-foreground"
                                             }`}
                                     >
-                                        <div className={`w-1.5 h-1.5 rounded-full ${!selectedCategory ? 'bg-white' : 'bg-primary'}`} />
                                         All Categories
                                     </button>
 
                                     {/* Category List */}
                                     {displayedCategories.length > 0 ? (
                                         displayedCategories.map((category) => (
-                                            <div key={category.id} className="space-y-1">
+                                            <div key={category.id}>
                                                 <button
                                                     onClick={() => {
                                                         if (selectedCategory === category.id) {
@@ -441,34 +423,30 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
                                                             setSelectedSubcategory(null);
                                                         }
                                                     }}
-                                                    className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold transition-all border-2 flex items-center justify-between gap-2 ${selectedCategory === category.id
-                                                        ? "bg-gradient-to-r from-primary to-primary/90 text-white border-primary shadow-md"
-                                                        : "bg-muted/30 border-border hover:border-primary/50 hover:bg-muted/50 text-foreground"
+                                                    className={`w-full text-left px-2 py-1.5 rounded text-xs font-medium transition-colors flex items-center justify-between ${selectedCategory === category.id
+                                                        ? "bg-primary text-white"
+                                                        : "hover:bg-muted text-foreground"
                                                         }`}
                                                 >
-                                                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                                                        <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${selectedCategory === category.id ? 'bg-white' : 'bg-primary'}`} />
-                                                        <span className="truncate">{category.label}</span>
-                                                    </div>
+                                                    <span className="truncate">{category.label}</span>
                                                     {selectedCategory === category.id && subcategories.length > 0 && (
-                                                        <ChevronDown className={`h-4 w-4 flex-shrink-0 transition-transform ${expandedCategory === category.id ? 'rotate-180' : ''}`} />
+                                                        <ChevronDown className={`h-3 w-3 flex-shrink-0 transition-transform ${expandedCategory === category.id ? 'rotate-180' : ''}`} />
                                                     )}
                                                 </button>
 
                                                 {/* Subcategories */}
                                                 {selectedCategory === category.id && expandedCategory === category.id && subcategories.length > 0 && (
-                                                    <div className="ml-4 mt-1 space-y-1 border-l-2 border-primary/30 pl-3 animate-in slide-in-from-top-2 duration-200">
+                                                    <div className="ml-3 mt-1 space-y-0.5 border-l border-primary/30 pl-2">
                                                         {subcategories.map((sub) => (
                                                             <button
                                                                 key={sub.id}
                                                                 onClick={() => setSelectedSubcategory(sub.id)}
-                                                                className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold transition-all border flex items-center gap-2 ${selectedSubcategory === sub.id
-                                                                    ? "bg-gradient-to-r from-primary/90 to-primary/80 text-white border-primary/50 shadow-sm"
-                                                                    : "bg-muted/20 border-border/50 hover:border-primary/40 hover:bg-muted/40 text-foreground"
+                                                                className={`w-full text-left px-2 py-1 rounded text-[11px] font-medium transition-colors ${selectedSubcategory === sub.id
+                                                                    ? "bg-primary/90 text-white"
+                                                                    : "hover:bg-muted text-muted-foreground"
                                                                     }`}
                                                             >
-                                                                <div className={`w-1 h-1 rounded-full flex-shrink-0 ${selectedSubcategory === sub.id ? 'bg-white' : 'bg-primary/60'}`} />
-                                                                <span className="truncate">{sub.label}</span>
+                                                                {sub.label}
                                                             </button>
                                                         ))}
                                                     </div>
@@ -476,84 +454,58 @@ export default function BlogsClient({ initialPosts, categories }: BlogsClientPro
                                             </div>
                                         ))
                                     ) : (
-                                        <div className="text-center py-4">
-                                            <p className="text-xs text-muted-foreground">No categories found</p>
+                                        <div className="text-center py-3">
+                                            <p className="text-[10px] text-muted-foreground">No categories found</p>
                                         </div>
                                     )}
 
-                                    {/* Show More/Less Button */}
+                                    {/* Show More/Less */}
                                     {hasMoreCategories && (
                                         <button
                                             onClick={() => setShowAllCategories(true)}
-                                            className="w-full px-3 py-2 rounded-lg text-xs font-semibold bg-muted/30 border border-border hover:border-primary/50 hover:bg-muted/50 text-foreground transition-all flex items-center justify-center gap-2"
+                                            className="w-full px-2 py-1.5 rounded text-[10px] font-medium bg-muted hover:bg-muted/80 text-foreground transition-colors flex items-center justify-center gap-1"
                                         >
-                                            <ChevronDown className="h-3.5 w-3.5" />
-                                            Show {filteredCategories.length - 5} More
+                                            <ChevronDown className="h-3 w-3" />
+                                            {filteredCategories.length - 5} more
                                         </button>
                                     )}
                                     {showAllCategories && !categorySearch && (
                                         <button
                                             onClick={() => setShowAllCategories(false)}
-                                            className="w-full px-3 py-2 rounded-lg text-xs font-semibold bg-muted/30 border border-border hover:border-primary/50 hover:bg-muted/50 text-foreground transition-all flex items-center justify-center gap-2"
+                                            className="w-full px-2 py-1.5 rounded text-[10px] font-medium bg-muted hover:bg-muted/80 text-foreground transition-colors flex items-center justify-center gap-1"
                                         >
-                                            <ChevronDown className="h-3.5 w-3.5 rotate-180" />
-                                            Show Less
+                                            <ChevronDown className="h-3 w-3 rotate-180" />
+                                            Show less
                                         </button>
                                     )}
                                 </div>
                             </div>
 
-                            {/* Sort By Card */}
-                            <div className="bg-gradient-to-br from-card to-card/50 border border-border/50 rounded-xl p-4 shadow-sm">
-                                <label className="text-xs font-bold text-foreground mb-3 flex items-center gap-2 uppercase tracking-wide">
-                                    <div className="p-1.5 bg-primary/10 rounded-lg">
-                                        <TrendingUp className="h-3.5 w-3.5 text-primary" />
-                                    </div>
+                            {/* Sort By */}
+                            <div className="bg-card border border-border rounded-lg p-2.5">
+                                <label className="text-[10px] font-semibold text-muted-foreground mb-1.5 block uppercase tracking-wider">
                                     Sort By
                                 </label>
-                                <div className="space-y-2">
+                                <div className="space-y-1">
                                     {[
-                                        { value: "new", label: "Newest First", icon: Clock },
+                                        { value: "new", label: "Newest", icon: Clock },
                                         { value: "views", label: "Most Viewed", icon: Eye },
                                         { value: "featured", label: "Featured", icon: Flame },
                                     ].map((option) => (
                                         <button
                                             key={option.value}
                                             onClick={() => setSortBy(option.value as SortOption)}
-                                            className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold transition-all border-2 flex items-center gap-2 ${sortBy === option.value
-                                                ? "bg-gradient-to-r from-primary to-primary/90 text-white border-primary shadow-md"
-                                                : "bg-muted/30 border-border hover:border-primary/50 hover:bg-muted/50 text-foreground"
+                                            className={`w-full text-left px-2 py-1.5 rounded text-xs font-medium transition-colors flex items-center gap-1.5 ${sortBy === option.value
+                                                ? "bg-primary text-white"
+                                                : "hover:bg-muted text-foreground"
                                                 }`}
                                         >
-                                            <option.icon className="h-4 w-4 flex-shrink-0" />
+                                            <option.icon className="h-3 w-3 flex-shrink-0" />
                                             <span>{option.label}</span>
                                         </button>
                                     ))}
                                 </div>
                             </div>
-
-                            {/* Active Filters Summary */}
-                            {activeFiltersCount > 0 && (
-                                <div className="bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/30 rounded-xl p-4 shadow-sm">
-                                    <div className="flex items-center justify-between mb-3">
-                                        <span className="text-xs font-bold text-foreground uppercase tracking-wide">
-                                            Active Filters
-                                        </span>
-                                        <span className="px-2 py-0.5 bg-primary text-white text-xs font-bold rounded-full">
-                                            {activeFiltersCount}
-                                        </span>
-                                    </div>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={clearAllFilters}
-                                        className="w-full h-9 text-sm font-semibold border-2 border-primary/50 hover:bg-primary hover:text-white hover:border-primary transition-all"
-                                    >
-                                        <X className="h-4 w-4 mr-2" />
-                                        Clear All Filters
-                                    </Button>
-                                </div>
-                            )}
                         </div>
                     </aside>
 
