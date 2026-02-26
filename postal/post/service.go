@@ -52,6 +52,12 @@ func (s *service) CreatePost(ctx context.Context, req CreatePostRequest, userID 
 		isPinned = *req.IsPinned
 	}
 
+	// Get the next order_no
+	maxOrderNo, err := s.repo.GetMaxOrderNo(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get max order no: %w", err)
+	}
+
 	post := &domain.Post{
 		Title:           req.Title,
 		Slug:            slug,
@@ -70,6 +76,7 @@ func (s *service) CreatePost(ctx context.Context, req CreatePostRequest, userID 
 		IsPinned:        isPinned,
 		CreatedBy:       userID,
 		Version:         1,
+		OrderNo:         maxOrderNo + 1,
 	}
 
 	if err := s.repo.Create(ctx, post); err != nil {
