@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, Clock, Users, Star, Play, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { StaticWatermark } from "@/components/ui/StaticWatermark";
 
 export function PopularCoursesSection() {
     const courses = [
@@ -101,8 +102,10 @@ export function PopularCoursesSection() {
                                 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/10 
                                 hover:border-primary/50 hover:ring-2 hover:ring-primary/20
                                 transition-all duration-300 ease-out backdrop-blur-sm
-                                focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                focus:outline-none focus:ring-2 focus:ring-primary/50 overflow-hidden"
                         >
+                            <StaticWatermark />
+
                             {/* Level Badge */}
                             <div className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold mb-3 border ${getLevelColor(course.level)}`}>
                                 {course.level}

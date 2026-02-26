@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CoursesBreadcrumb } from "@/components/shared/CoursesBreadcrumb";
 import { Portal } from "@/components/ui/Portal";
+import { StaticWatermark } from "@/components/ui/StaticWatermark";
 import Link from "next/link";
 
 export default function CoursesPage() {
@@ -441,6 +442,8 @@ export default function CoursesPage() {
                                     href={`/explore/courses/${course.id}`}
                                     className="group relative bg-gradient-to-br from-card via-card/95 to-card/80 dark:from-card dark:via-card/95 dark:to-card/50 border border-border dark:border-input backdrop-blur-sm rounded-lg overflow-hidden hover:shadow-lg dark:hover:shadow-[0_4px_20px_oklch(0.65_0.18_260/0.3)] hover:border-primary/50 dark:hover:border-[oklch(0.75_0.22_260)] transition-all duration-300 hover:-translate-y-1 active:scale-95"
                                 >
+                                    <StaticWatermark />
+
                                     {/* Compact Thumbnail with Overlay */}
                                     <div className="relative aspect-[5/2] bg-gradient-to-br from-primary/25 via-primary/15 to-primary/5 dark:from-primary/35 dark:via-primary/20 dark:to-primary/5 flex items-center justify-center border-b border-border dark:border-input group-hover:border-primary/40 transition-colors">
                                         <div className="text-2xl">{course.thumbnail}</div>

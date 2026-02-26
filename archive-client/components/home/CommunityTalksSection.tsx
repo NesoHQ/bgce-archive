@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, MessageSquare, ThumbsUp, Eye, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { StaticWatermark } from "@/components/ui/StaticWatermark";
 
 export function CommunityTalksSection() {
   const talks = [
@@ -125,8 +126,10 @@ export function CommunityTalksSection() {
                 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/10 
                 hover:border-primary/50 hover:ring-2 hover:ring-primary/20
                 transition-all duration-300 ease-out backdrop-blur-sm
-                focus:outline-none focus:ring-2 focus:ring-primary/50"
+                focus:outline-none focus:ring-2 focus:ring-primary/50 overflow-hidden"
             >
+              <StaticWatermark />
+
               {/* Category Badge */}
               <div className="inline-flex items-center px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-semibold mb-2.5 border border-primary/20">
                 {talk.category}
