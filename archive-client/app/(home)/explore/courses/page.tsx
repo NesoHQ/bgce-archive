@@ -136,11 +136,22 @@ export default function CoursesPage() {
                     </div>
 
                     {/* Header */}
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
                         <div className="p-1.5 rounded-lg bg-primary/10 dark:bg-primary/20">
                             <BookOpen className="h-4 w-4 text-primary" />
                         </div>
                         <h1 className="text-xl font-bold text-foreground">Professional Courses</h1>
+
+                        {/* Not Operational Badge */}
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-red-500/10 to-rose-500/10 border border-red-500/30 backdrop-blur-sm">
+                            <span className="relative flex h-2 w-2">
+                                <span className="absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                            </span>
+                            <span className="text-[10px] font-semibold text-red-600 dark:text-red-400 uppercase tracking-wide">
+                                Not Operational
+                            </span>
+                        </div>
                     </div>
                     <p className="text-xs text-muted-foreground">Expert-led courses for modern developers</p>
                 </div>

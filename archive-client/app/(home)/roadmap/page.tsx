@@ -133,9 +133,22 @@ export default function RoadmapPage() {
             {/* Compact Header */}
             <section className="py-8 border-b border-border">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between flex-wrap gap-3">
                         <div>
-                            <h1 className="text-2xl lg:text-3xl font-bold text-foreground mb-1">Product Roadmap</h1>
+                            <div className="flex items-center gap-2 mb-1 flex-wrap">
+                                <h1 className="text-2xl lg:text-3xl font-bold text-foreground">Product Roadmap</h1>
+
+                                {/* Not Operational Badge */}
+                                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-red-500/10 to-rose-500/10 border border-red-500/30 backdrop-blur-sm">
+                                    <span className="relative flex h-2 w-2">
+                                        <span className="absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                                    </span>
+                                    <span className="text-[10px] font-semibold text-red-600 dark:text-red-400 uppercase tracking-wide">
+                                        Not Operational
+                                    </span>
+                                </div>
+                            </div>
                             <p className="text-sm text-muted-foreground">Track our progress and upcoming features</p>
                         </div>
                         <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">

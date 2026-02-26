@@ -240,9 +240,22 @@ export function WelcomeSection() {
                     {/* Left Content */}
                     <div className="space-y-5 lg:pr-8">
                         {/* Badge */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 border border-primary/20 dark:border-primary/30 text-primary text-[10px] font-semibold uppercase tracking-wider backdrop-blur-sm">
-                            <Zap className="h-2.5 w-2.5" />
-                            Professional Developer Platform
+                        <div className="flex items-center gap-2 flex-wrap">
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 border border-primary/20 dark:border-primary/30 text-primary text-[10px] font-semibold uppercase tracking-wider backdrop-blur-sm">
+                                <Zap className="h-2.5 w-2.5" />
+                                Professional Developer Platform
+                            </div>
+
+                            {/* Operational Badge */}
+                            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30 backdrop-blur-sm">
+                                <span className="relative flex h-2 w-2">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                </span>
+                                <span className="text-[10px] font-semibold text-green-600 dark:text-green-400 uppercase tracking-wide">
+                                    Operational
+                                </span>
+                            </div>
                         </div>
 
                         {/* Headline */}
