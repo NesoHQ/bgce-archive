@@ -173,12 +173,12 @@ export function MainNavigation() {
   ];
 
   const navLinks = [
+    { href: "/blogs", label: "Blogs" },
+    { href: "/discussion", label: "Discussion" },
     { href: "/projects", label: "Projects" },
+    { href: "/roadmap", label: "Roadmap" },
     { href: "/models", label: "Models" },
     { href: "/benchmark", label: "Benchmark" },
-    { href: "/roadmap", label: "Roadmap" },
-    { href: "/discussion", label: "Discussion" },
-    { href: "/blogs", label: "Blogs" },
     { href: "/support", label: "Support" },
   ];
 
