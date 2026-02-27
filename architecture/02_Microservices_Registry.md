@@ -2,8 +2,9 @@
 
 ## Architecture Overview
 
-BGCE Archive follows a **microservices architecture** with domain-driven design principles. Each service owns its bounded context, communicates via REST APIs and event-driven messaging, and maintains independent deployment cycles.
+BGCE Archive is a comprehensive learning and community platform (Kaggle + Educative + Udemy + Dev Community) built with **microservices architecture** and domain-driven design principles. Each service owns its bounded context, communicates via REST APIs and event-driven messaging, and maintains independent deployment cycles.
 
+**Platform Scope**: Multi-language learning, coding competitions, course marketplace, community features, knowledge archive  
 **Architecture Pattern**: Hexagonal Architecture (Ports & Adapters)  
 **Communication**: Synchronous (REST) + Asynchronous (RabbitMQ)  
 **Data Strategy**: Database-per-service with eventual consistency
@@ -70,14 +71,14 @@ BGCE Archive follows a **microservices architecture** with domain-driven design 
 - User profile management
 - Role-based access control (admin, editor, viewer)
 - Multi-tenant management (domain-based detection)
-- Category & subcategory hierarchy
+- Category & subcategory hierarchy (multi-language support)
 - Category approval workflow
 - Tenant statistics and analytics
 
 **Key Entities**:
-- `users` - User accounts with roles
+- `users` - User accounts with roles and skill levels
 - `tenants` - Multi-tenant instances
-- `categories` - Hierarchical content organization
+- `categories` - Hierarchical content organization (language-agnostic)
 
 **API Endpoints** (18 total):
 ```
@@ -192,7 +193,7 @@ DELETE /api/v1/tags/{id}
 
 ---
 
-### 🔴 Required New Services (7)
+### 🔴 Required New Services (8)
 
 #### 3. Community Service
 **Port**: 8082  
@@ -350,7 +351,74 @@ POST   /api/v1/projects/{id}/upvote
 
 ---
 
-#### 5. Media Service
+#### 5. Competition Service
+**Port**: 8089  
+**Status**: 🔴 Not started  
+**Priority**: HIGH  
+**Complexity**: High  
+**Estimated Effort**: 6 weeks
+
+**Responsibilities**:
+- Competition management (CRUD)
+- Participant registration and teams
+- Submission handling and evaluation
+- Automated testing and scoring
+- Leaderboard management
+- Prize distribution tracking
+- Sandboxed code execution
+- Plagiarism detection
+
+**Key Entities**:
+- `competitions` - Competition details
+- `competition_participants` - User registrations
+- `competition_submissions` - Code submissions
+- `competition_leaderboards` - Rankings
+- `competition_test_cases` - Evaluation criteria
+
+**API Endpoints** (30+ total):
+```
+Competitions:
+GET    /api/v1/competitions
+GET    /api/v1/competitions/{id}
+POST   /api/v1/competitions
+PUT    /api/v1/competitions/{id}
+DELETE /api/v1/competitions/{id}
+POST   /api/v1/competitions/{id}/publish
+POST   /api/v1/competitions/{id}/close
+
+Participation:
+POST   /api/v1/competitions/{id}/register
+GET    /api/v1/competitions/{id}/participants
+POST   /api/v1/competitions/{id}/create-team
+POST   /api/v1/teams/{id}/invite
+
+Submissions:
+POST   /api/v1/competitions/{id}/submit
+GET    /api/v1/competitions/{id}/submissions
+GET    /api/v1/submissions/{id}
+GET    /api/v1/submissions/{id}/results
+
+Leaderboard:
+GET    /api/v1/competitions/{id}/leaderboard
+GET    /api/v1/competitions/{id}/my-rank
+```
+
+**Event Publishers**:
+- `competition.created`
+- `competition.started`
+- `submission.evaluated`
+- `leaderboard.updated`
+
+**Technology Stack**:
+- Go 1.24
+- PostgreSQL
+- Redis for caching (leaderboards, rankings)
+- Docker for sandboxed code execution
+- Message queue for async evaluation
+
+---
+
+#### 6. Media Service
 **Port**: 8086  
 **Status**: 🔴 Not started  
 **Priority**: HIGH  
@@ -779,6 +847,49 @@ The BGCE Archive microservices architecture provides:
 
 **Current Status**: 2/9 services complete (22%)  
 **Next Priority**: Media Service → Community Service → Notification Service
+
+---
+
+**Document Version**: 1.0  
+**Last Updated**: February 2026  
+**Owner**: Engineering Team
+
+
+---
+
+## Service Summary
+
+| Service | Status | Priority | Complexity | Port |
+|---------|--------|----------|------------|------|
+| Cortex (Core) | ✅ Exists | High | Medium | 8080 |
+| Postal (Posts) | ✅ Exists | High | Medium | 8081 |
+| Community | 🔴 New | High | High | 8082 |
+| Learning | 🔴 New | High | Medium | 8083 |
+| Competition | 🔴 New | High | High | 8089 |
+| Media | 🔴 New | High | Medium | 8086 |
+| Search | 🔴 New | Medium | High | 8085 |
+| Support | 🔴 New | Medium | Low | 8084 |
+| Analytics | 🔴 New | Low | Medium | 8087 |
+| Notification | 🔴 New | High | Medium | 8088 |
+
+**Total Services:** 10 microservices  
+**Existing:** 2 services (20%)  
+**New Required:** 8 services (80%)
+
+**Platform Capabilities:**
+- ✅ User management & authentication
+- ✅ Content management (posts, articles)
+- ✅ Multi-tenant white-label
+- 🔴 Community features (comments, discussions)
+- 🔴 Learning platform (courses, progress tracking)
+- 🔴 Competition platform (Kaggle-style challenges)
+- 🔴 Media management (file uploads, CDN)
+- 🔴 Search & recommendations
+- 🔴 Support & moderation
+- 🔴 Analytics & reporting
+- 🔴 Notifications (email, in-app)
+
+**Current Status**: 20% complete - Core infrastructure ready, need to build 8 additional services for full platform functionality (Kaggle + Educative + Udemy + Community features).
 
 ---
 
