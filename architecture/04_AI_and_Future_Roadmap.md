@@ -802,23 +802,6 @@ Table ai_code_reviews {
   }
 }
 
-Table learning_paths {
-  id int [pk, increment]
-  uuid uuid [unique, not null]
-  user_id int [ref: > users.id]
-  title varchar(255) [not null]
-  description text
-  skill_level varchar(20)
-  recommended_courses jsonb
-  progress int [default: 0]
-  ai_generated boolean [default: false]
-  created_at timestamp [not null, default: `now()`]
-  
-  indexes {
-    (user_id)
-  }
-}
-
 Table content_recommendations {
   id int [pk, increment]
   user_id int [ref: > users.id]
