@@ -297,6 +297,38 @@ Table courses {
   }
 }
 
+Table course_modules {
+  id int [pk, increment]
+  course_id int [ref: > courses.id]
+  title varchar(255) [not null]
+  description text
+  order_no int [not null]
+  content text
+  video_url varchar(500)
+  duration_minutes int
+  is_free boolean [default: false]
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (course_id, order_no)
+  }
+}
+
+Table course_enrollments {
+  id int [pk, increment]
+  course_id int [ref: > courses.id]
+  user_id int [ref: > users.id]
+  progress int [default: 0]
+  completed_modules jsonb
+  started_at timestamp [not null, default: `now()`]
+  completed_at timestamp
+  
+  indexes {
+    (user_id, course_id) [unique]
+    (course_id)
+  }
+}
+
 Table cheatsheets {
   id int [pk, increment]
   uuid uuid [unique, not null]
@@ -315,6 +347,284 @@ Table cheatsheets {
   }
 }
 
+Table learning_paths {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  user_id int [ref: > users.id]
+  title varchar(255) [not null]
+  description text
+  skill_level varchar(20)
+  recommended_courses jsonb
+  progress int [default: 0]
+  ai_generated boolean [default: false]
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (user_id)
+  }
+}
+
+Table certifications {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  user_id int [ref: > users.id]
+  course_id int [ref: > courses.id]
+  certificate_url varchar(500)
+  issued_at timestamp [not null, default: `now()`]
+  expires_at timestamp
+  
+  indexes {
+    (user_id)
+    (course_id)
+  }
+}
+
+// ============================================
+// COMPETITIONS & CHALLENGES
+// ============================================
+
+Table competitions {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  tenant_id int [ref: > tenants.id]
+  title varchar(500) [not null]
+  slug varchar(500) [unique, not null]
+  description text
+  rules text
+  prize_pool varchar(100)
+  difficulty varchar(20)
+  category varchar(100)
+  start_date timestamp [not null]
+  end_date timestamp [not null]
+  status varchar(20) [default: 'upcoming']
+  participants_count int [default: 0]
+  submissions_count int [default: 0]
+  created_by int [ref: > users.id]
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (slug)
+    (status)
+    (start_date)
+  }
+}
+
+Table competition_participants {
+  id int [pk, increment]
+  competition_id int [ref: > competitions.id]
+  user_id int [ref: > users.id]
+  team_name varchar(255)
+  registered_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (competition_id, user_id) [unique]
+    (competition_id)
+  }
+}
+
+Table competition_submissions {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  competition_id int [ref: > competitions.id]
+  user_id int [ref: > users.id]
+  code text [not null]
+  language varchar(50)
+  score decimal(10,4)
+  execution_time int
+  memory_used int
+  status varchar(20) [default: 'pending']
+  submitted_at timestamp [not null, default: `now()`]
+  evaluated_at timestamp
+  
+  indexes {
+    (competition_id)
+    (user_id)
+    (score)
+  }
+}
+
+Table competition_leaderboards {
+  id int [pk, increment]
+  competition_id int [ref: > competitions.id]
+  user_id int [ref: > users.id]
+  rank int [not null]
+  score decimal(10,4) [not null]
+  submissions_count int [default: 0]
+  last_submission_at timestamp
+  
+  indexes {
+    (competition_id, rank)
+    (competition_id, user_id) [unique]
+  }
+}
+
+Table competition_test_cases {
+  id int [pk, increment]
+  competition_id int [ref: > competitions.id]
+  input text [not null]
+  expected_output text [not null]
+  is_public boolean [default: false]
+  weight decimal(3,2) [default: 1.0]
+  
+  indexes {
+    (competition_id)
+  }
+}
+
+Table coding_challenges {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  tenant_id int [ref: > tenants.id]
+  title varchar(500) [not null]
+  slug varchar(500) [unique, not null]
+  description text
+  difficulty varchar(20) [not null]
+  category varchar(100)
+  tags jsonb
+  solution_template text
+  test_cases jsonb
+  acceptance_rate decimal(5,2)
+  submissions_count int [default: 0]
+  created_by int [ref: > users.id]
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (slug)
+    (difficulty)
+    (category)
+  }
+}
+
+Table challenge_submissions {
+  id int [pk, increment]
+  challenge_id int [ref: > coding_challenges.id]
+  user_id int [ref: > users.id]
+  code text [not null]
+  language varchar(50)
+  status varchar(20)
+  execution_time int
+  memory_used int
+  submitted_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (challenge_id)
+    (user_id)
+  }
+}
+
+// ============================================
+// DATASETS & MODELS
+// ============================================
+
+Table datasets {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  tenant_id int [ref: > tenants.id]
+  user_id int [ref: > users.id]
+  title varchar(500) [not null]
+  slug varchar(500) [unique, not null]
+  description text
+  category varchar(100)
+  size_bytes bigint
+  file_format varchar(50)
+  download_url varchar(500)
+  license varchar(100)
+  downloads_count int [default: 0]
+  upvote_count int [default: 0]
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (slug)
+    (category)
+    (user_id)
+  }
+}
+
+Table models {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  tenant_id int [ref: > tenants.id]
+  user_id int [ref: > users.id]
+  title varchar(500) [not null]
+  slug varchar(500) [unique, not null]
+  description text
+  model_type varchar(100)
+  framework varchar(50)
+  download_url varchar(500)
+  downloads_count int [default: 0]
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (slug)
+    (model_type)
+  }
+}
+
+// ============================================
+// CAREER & JOBS
+// ============================================
+
+Table jobs {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  tenant_id int [ref: > tenants.id]
+  company_name varchar(255) [not null]
+  title varchar(500) [not null]
+  slug varchar(500) [unique, not null]
+  description text
+  requirements text
+  location varchar(255)
+  remote boolean [default: false]
+  salary_range varchar(100)
+  employment_type varchar(50)
+  experience_level varchar(50)
+  skills_required jsonb
+  applications_count int [default: 0]
+  status varchar(20) [default: 'active']
+  posted_by int [ref: > users.id]
+  posted_at timestamp [not null, default: `now()`]
+  expires_at timestamp
+  
+  indexes {
+    (slug)
+    (status)
+    (posted_at)
+  }
+}
+
+Table job_applications {
+  id int [pk, increment]
+  job_id int [ref: > jobs.id]
+  user_id int [ref: > users.id]
+  resume_url varchar(500)
+  cover_letter text
+  status varchar(20) [default: 'pending']
+  applied_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (job_id, user_id) [unique]
+    (user_id)
+  }
+}
+
+Table portfolios {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  user_id int [ref: > users.id]
+  title varchar(255)
+  bio text
+  website_url varchar(500)
+  github_url varchar(500)
+  linkedin_url varchar(500)
+  resume_url varchar(500)
+  is_public boolean [default: true]
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (user_id) [unique]
+  }
+}
+
 Table projects {
   id int [pk, increment]
   uuid uuid [unique, not null]
@@ -324,11 +634,67 @@ Table projects {
   slug varchar(500) [unique, not null]
   description text
   github_url varchar(500)
+  demo_url varchar(500)
+  tech_stack jsonb
   upvote_count int [default: 0]
+  view_count int [default: 0]
   created_at timestamp [not null, default: `now()`]
   
   indexes {
     (slug)
+    (user_id)
+  }
+}
+
+Table user_skills {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  skill_name varchar(100) [not null]
+  proficiency varchar(20)
+  years_experience int
+  verified boolean [default: false]
+  
+  indexes {
+    (user_id, skill_name) [unique]
+    (user_id)
+  }
+}
+
+// ============================================
+// NEWSLETTER & COMMUNICATION
+// ============================================
+
+Table newsletters {
+  id int [pk, increment]
+  uuid uuid [unique, not null]
+  tenant_id int [ref: > tenants.id]
+  title varchar(255) [not null]
+  content text [not null]
+  status varchar(20) [default: 'draft']
+  scheduled_at timestamp
+  sent_at timestamp
+  recipients_count int [default: 0]
+  open_rate decimal(5,2)
+  click_rate decimal(5,2)
+  created_by int [ref: > users.id]
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (tenant_id)
+    (status)
+  }
+}
+
+Table newsletter_subscriptions {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  email varchar(255) [not null]
+  subscribed boolean [default: true]
+  subscribed_at timestamp [not null, default: `now()`]
+  unsubscribed_at timestamp
+  
+  indexes {
+    (email) [unique]
     (user_id)
   }
 }

@@ -193,7 +193,7 @@ DELETE /api/v1/tags/{id}
 
 ---
 
-### 🔴 Required New Services (8)
+### 🔴 Required New Services (15)
 
 #### 3. Community Service
 **Port**: 8082  
@@ -418,7 +418,344 @@ GET    /api/v1/competitions/{id}/my-rank
 
 ---
 
-#### 6. Media Service
+#### 6. Sandbox Service
+**Port**: 8090  
+**Status**: 🔴 Not started  
+**Priority**: HIGH  
+**Complexity**: High  
+**Estimated Effort**: 6 weeks
+
+**Responsibilities**:
+- Cloud-based coding environments
+- Browser-based IDE integration
+- Code execution sandboxing
+- Multi-language runtime support
+- Resource management and quotas
+- Session persistence
+- Collaborative coding (future)
+
+**Key Entities**:
+- `sandboxes` - Coding environment instances
+- `sandbox_sessions` - User sessions
+- `sandbox_files` - File storage
+
+**API Endpoints** (15+ total):
+```
+Sandboxes:
+POST   /api/v1/sandboxes/create
+GET    /api/v1/sandboxes/{id}
+DELETE /api/v1/sandboxes/{id}
+POST   /api/v1/sandboxes/{id}/execute
+GET    /api/v1/sandboxes/{id}/files
+POST   /api/v1/sandboxes/{id}/files
+PUT    /api/v1/sandboxes/{id}/files/{path}
+DELETE /api/v1/sandboxes/{id}/files/{path}
+```
+
+**Event Publishers**:
+- `sandbox.created`
+- `sandbox.executed`
+- `sandbox.expired`
+
+**Technology Stack**:
+- Go 1.24
+- Docker containers for isolation
+- Kubernetes for orchestration
+- WebSocket for real-time communication
+- Redis for session management
+
+---
+
+#### 7. Interview Service
+**Port**: 8091  
+**Status**: 🔴 Not started  
+**Priority**: MEDIUM  
+**Complexity**: Medium  
+**Estimated Effort**: 4 weeks
+
+**Responsibilities**:
+- Mock interview scheduling
+- Technical assessment creation
+- Interview recording and playback
+- Automated scoring
+- Feedback collection
+- Interview analytics
+
+**Key Entities**:
+- `interviews` - Interview sessions
+- `interview_questions` - Question bank
+- `interview_responses` - User answers
+- `interview_feedback` - Evaluations
+
+**API Endpoints** (20+ total):
+```
+Interviews:
+GET    /api/v1/interviews
+POST   /api/v1/interviews/schedule
+GET    /api/v1/interviews/{id}
+POST   /api/v1/interviews/{id}/start
+POST   /api/v1/interviews/{id}/submit
+GET    /api/v1/interviews/{id}/results
+
+Questions:
+GET    /api/v1/interview-questions
+POST   /api/v1/interview-questions
+GET    /api/v1/interview-questions/{id}
+PUT    /api/v1/interview-questions/{id}
+DELETE /api/v1/interview-questions/{id}
+
+Feedback:
+POST   /api/v1/interviews/{id}/feedback
+GET    /api/v1/interviews/{id}/feedback
+```
+
+**Technology Stack**:
+- Go 1.24
+- PostgreSQL
+- Redis for caching
+- WebRTC for video interviews (future)
+
+---
+
+#### 8. Portfolio Service
+**Port**: 8092  
+**Status**: 🔴 Not started  
+**Priority**: MEDIUM  
+**Complexity**: Medium  
+**Estimated Effort**: 3 weeks
+
+**Responsibilities**:
+- Project showcase management
+- GitHub integration and sync
+- Portfolio website generation
+- Skills tracking and verification
+- Achievement badges
+- Portfolio analytics
+
+**Key Entities**:
+- `portfolios` - User portfolios
+- `projects` - Project details
+- `user_skills` - Skills inventory
+- `achievements` - Badges and awards
+
+**API Endpoints** (15+ total):
+```
+Portfolios:
+GET    /api/v1/portfolios/{username}
+PUT    /api/v1/portfolios
+GET    /api/v1/users/{id}/portfolio
+
+Projects:
+GET    /api/v1/projects
+POST   /api/v1/projects
+GET    /api/v1/projects/{id}
+PUT    /api/v1/projects/{id}
+DELETE /api/v1/projects/{id}
+POST   /api/v1/projects/{id}/upvote
+
+Skills:
+GET    /api/v1/users/{id}/skills
+POST   /api/v1/users/{id}/skills
+DELETE /api/v1/users/{id}/skills/{id}
+```
+
+**Technology Stack**:
+- Go 1.24
+- PostgreSQL
+- GitHub API integration
+- Redis for caching
+
+---
+
+#### 9. Dataset Service
+**Port**: 8093  
+**Status**: 🔴 Not started  
+**Priority**: MEDIUM  
+**Complexity**: Medium  
+**Estimated Effort**: 4 weeks
+
+**Responsibilities**:
+- Dataset hosting and storage
+- Dataset versioning
+- Data preview and exploration
+- Download management
+- License management
+- Dataset search and discovery
+
+**Key Entities**:
+- `datasets` - Dataset metadata
+- `dataset_versions` - Version history
+- `dataset_downloads` - Download tracking
+
+**API Endpoints** (15+ total):
+```
+Datasets:
+GET    /api/v1/datasets
+POST   /api/v1/datasets
+GET    /api/v1/datasets/{id}
+PUT    /api/v1/datasets/{id}
+DELETE /api/v1/datasets/{id}
+POST   /api/v1/datasets/{id}/upload
+GET    /api/v1/datasets/{id}/download
+GET    /api/v1/datasets/{id}/preview
+
+Versions:
+GET    /api/v1/datasets/{id}/versions
+POST   /api/v1/datasets/{id}/versions
+GET    /api/v1/datasets/{id}/versions/{version}
+```
+
+**Technology Stack**:
+- Go 1.24
+- PostgreSQL
+- S3/MinIO for file storage
+- Redis for caching
+
+---
+
+#### 10. Model Service
+**Port**: 8094  
+**Status**: 🔴 Not started  
+**Priority**: LOW  
+**Complexity**: Medium  
+**Estimated Effort**: 3 weeks
+
+**Responsibilities**:
+- AI/ML model hosting
+- Model versioning
+- Model deployment templates
+- Inference API generation
+- Model marketplace
+- Performance benchmarking
+
+**Key Entities**:
+- `models` - Model metadata
+- `model_versions` - Version history
+- `model_deployments` - Deployment configs
+
+**API Endpoints** (12+ total):
+```
+Models:
+GET    /api/v1/models
+POST   /api/v1/models
+GET    /api/v1/models/{id}
+PUT    /api/v1/models/{id}
+DELETE /api/v1/models/{id}
+POST   /api/v1/models/{id}/upload
+GET    /api/v1/models/{id}/download
+
+Deployments:
+POST   /api/v1/models/{id}/deploy
+GET    /api/v1/models/{id}/deployments
+DELETE /api/v1/deployments/{id}
+```
+
+**Technology Stack**:
+- Go 1.24
+- PostgreSQL
+- S3/MinIO for model storage
+- Docker for deployment
+
+---
+
+#### 11. Jobs Service
+**Port**: 8095  
+**Status**: 🔴 Not started  
+**Priority**: MEDIUM  
+**Complexity**: Medium  
+**Estimated Effort**: 4 weeks
+
+**Responsibilities**:
+- Job posting management
+- Application tracking
+- Candidate matching
+- Employer dashboard
+- Job search and filtering
+- Application analytics
+
+**Key Entities**:
+- `jobs` - Job postings
+- `job_applications` - Applications
+- `job_matches` - AI-powered matches
+
+**API Endpoints** (20+ total):
+```
+Jobs:
+GET    /api/v1/jobs
+POST   /api/v1/jobs
+GET    /api/v1/jobs/{id}
+PUT    /api/v1/jobs/{id}
+DELETE /api/v1/jobs/{id}
+POST   /api/v1/jobs/{id}/apply
+
+Applications:
+GET    /api/v1/applications
+GET    /api/v1/applications/{id}
+PUT    /api/v1/applications/{id}/status
+GET    /api/v1/jobs/{id}/applications
+
+Matching:
+GET    /api/v1/jobs/recommended
+GET    /api/v1/candidates/recommended
+```
+
+**Technology Stack**:
+- Go 1.24
+- PostgreSQL
+- Redis for caching
+- ML for job matching
+
+---
+
+#### 12. Newsletter Service
+**Port**: 8096  
+**Status**: 🔴 Not started  
+**Priority**: LOW  
+**Complexity**: Low  
+**Estimated Effort**: 2 weeks
+
+**Responsibilities**:
+- Newsletter creation and management
+- Email campaign scheduling
+- Subscriber management
+- Email template system
+- Analytics and reporting
+- A/B testing
+
+**Key Entities**:
+- `newsletters` - Newsletter campaigns
+- `newsletter_subscriptions` - Subscribers
+- `newsletter_analytics` - Performance metrics
+
+**API Endpoints** (15+ total):
+```
+Newsletters:
+GET    /api/v1/newsletters
+POST   /api/v1/newsletters
+GET    /api/v1/newsletters/{id}
+PUT    /api/v1/newsletters/{id}
+DELETE /api/v1/newsletters/{id}
+POST   /api/v1/newsletters/{id}/send
+POST   /api/v1/newsletters/{id}/schedule
+
+Subscriptions:
+POST   /api/v1/newsletter/subscribe
+POST   /api/v1/newsletter/unsubscribe
+GET    /api/v1/newsletter/subscriptions
+
+Analytics:
+GET    /api/v1/newsletters/{id}/analytics
+```
+
+**Technology Stack**:
+- Go 1.24
+- PostgreSQL
+- SendGrid/AWS SES for email delivery
+- Redis for caching
+
+---
+
+#### 13. Media Service
 **Port**: 8086  
 **Status**: 🔴 Not started  
 **Priority**: HIGH  
@@ -865,16 +1202,23 @@ The BGCE Archive microservices architecture provides:
 | Postal (Posts) | ✅ Exists | High | Medium | 8081 |
 | Community | 🔴 New | High | High | 8082 |
 | Learning | 🔴 New | High | Medium | 8083 |
-| Competition | 🔴 New | High | High | 8089 |
-| Media | 🔴 New | High | Medium | 8086 |
-| Search | 🔴 New | Medium | High | 8085 |
 | Support | 🔴 New | Medium | Low | 8084 |
-| Analytics | 🔴 New | Low | Medium | 8087 |
+| Search | 🔴 New | High | High | 8085 |
+| Media | 🔴 New | High | Medium | 8086 |
+| Analytics | 🔴 New | Medium | Medium | 8087 |
 | Notification | 🔴 New | High | Medium | 8088 |
+| Competition | 🔴 New | High | High | 8089 |
+| Sandbox | 🔴 New | High | High | 8090 |
+| Interview | 🔴 New | Medium | Medium | 8091 |
+| Portfolio | 🔴 New | Medium | Medium | 8092 |
+| Dataset | 🔴 New | Medium | Medium | 8093 |
+| Model | 🔴 New | Low | Medium | 8094 |
+| Jobs | 🔴 New | Medium | Medium | 8095 |
+| Newsletter | 🔴 New | Low | Low | 8096 |
 
-**Total Services:** 10 microservices  
-**Existing:** 2 services (20%)  
-**New Required:** 8 services (80%)
+**Total Services:** 17 microservices  
+**Existing:** 2 services (12%)  
+**New Required:** 15 services (88%)
 
 **Platform Capabilities:**
 - ✅ User management & authentication
@@ -883,13 +1227,21 @@ The BGCE Archive microservices architecture provides:
 - 🔴 Community features (comments, discussions)
 - 🔴 Learning platform (courses, progress tracking)
 - 🔴 Competition platform (Kaggle-style challenges)
+- 🔴 Coding challenges (LeetCode-style)
+- 🔴 Cloud labs / sandboxes
+- 🔴 Mock interviews
+- 🔴 Project portfolios
+- 🔴 Dataset hosting
+- 🔴 AI model hub
+- 🔴 Job board
+- 🔴 Newsletter system
 - 🔴 Media management (file uploads, CDN)
 - 🔴 Search & recommendations
 - 🔴 Support & moderation
 - 🔴 Analytics & reporting
 - 🔴 Notifications (email, in-app)
 
-**Current Status**: 20% complete - Core infrastructure ready, need to build 8 additional services for full platform functionality (Kaggle + Educative + Udemy + Community features).
+**Current Status**: 12% complete - Core infrastructure ready, need to build 15 additional services for full platform functionality (Kaggle + Educative + Udemy + LeetCode + Dev.to combined).
 
 ---
 
