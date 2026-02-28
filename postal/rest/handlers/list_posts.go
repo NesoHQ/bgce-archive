@@ -21,8 +21,8 @@ func (h *Handlers) ListPosts(w http.ResponseWriter, r *http.Request) {
 	filter := post.PostFilter{
 		Limit:     20,
 		Offset:    0,
-		SortBy:    "created_at",
-		SortOrder: "DESC",
+		SortBy:    "order_no",
+		SortOrder: "ASC",
 	}
 
 	if limit := query.Get("limit"); limit != "" {

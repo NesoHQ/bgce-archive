@@ -104,7 +104,7 @@ func (r *postRepository) List(ctx context.Context, filter post.PostFilter, withC
 
 	if !withContent {
 		selectQuery = selectQuery.Select(
-			"id", "slug", "title", "summary", "meta_description", "keywords",
+			"id", "order_no", "slug", "title", "summary", "meta_description", "keywords",
 			"category_id", "sub_category_id", "is_featured", "is_pinned",
 			"status", "created_by", "view_count", "created_at",
 			"CHAR_LENGTH(content) as content_length",
@@ -135,13 +135,23 @@ func (r *postRepository) List(ctx context.Context, filter post.PostFilter, withC
 		selectQuery = selectQuery.Where("title ILIKE ? OR content ILIKE ? OR summary ILIKE ?", searchTerm, searchTerm, searchTerm)
 	}
 
-	sortBy := "created_at"
+	sortBy := "order_no"
 	if filter.SortBy != "" {
 		sortBy = filter.SortBy
 	}
-	sortOrder := "DESC"
+	sortOrder := "ASC"
 	if filter.SortOrder != "" {
 		sortOrder = filter.SortOrder
+	}
+	allowedSortColumns := map[string]bool{
+		"order_no": true, "created_at": true, "title": true,
+		"view_count": true, "id": true,
+	}
+	if !allowedSortColumns[sortBy] {
+		sortBy = "order_no"
+	}
+	if sortOrder != "ASC" && sortOrder != "DESC" {
+		sortOrder = "ASC"
 	}
 	selectQuery = selectQuery.Order(fmt.Sprintf("%s %s", sortBy, sortOrder))
 
