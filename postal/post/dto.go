@@ -85,6 +85,7 @@ type PostResponse struct {
 // PostListItemResponse is a lighter response for list endpoints
 type PostListItemResponse struct {
 	ID              uint              `json:"id"`
+	OrderNo         uint              `json:"order_no"`
 	Slug            string            `json:"slug"`
 	Title           string            `json:"title"`
 	Summary         string            `json:"summary"`
@@ -98,7 +99,8 @@ type PostListItemResponse struct {
 	CreatedBy       uint              `json:"created_by"`
 	ViewCount       int               `json:"view_count"`
 	ContentLength   int               `json:"content_length"` // For read time calculation
-	CreatedAt       time.Time         `json:"created_at"`
+
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type BatchDeleteRequest struct {
@@ -138,6 +140,7 @@ func ToPostResponse(post *domain.Post) *PostResponse {
 func ToPostListItemResponse(post *domain.Post) *PostListItemResponse {
 	return &PostListItemResponse{
 		ID:              post.ID,
+		OrderNo:         post.OrderNo,
 		Slug:            post.Slug,
 		Title:           post.Title,
 		Summary:         post.Summary,
