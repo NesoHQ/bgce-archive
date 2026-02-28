@@ -1,6 +1,6 @@
 module cortex
 
-go 1.24.0
+go 1.26
 
 require (
 	entgo.io/ent v0.14.5
