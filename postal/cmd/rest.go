@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
+	"path/filepath"
 	"time"
 
 	"postal/cache"
@@ -15,6 +17,7 @@ import (
 	"postal/rest/middlewares"
 	"postal/rest/utils"
 
+	_ "github.com/lib/pq"
 	"github.com/spf13/cobra"
 	"github.com/ulule/limiter/v3"
 	"github.com/ulule/limiter/v3/drivers/store/memory"
@@ -43,12 +46,26 @@ func runRESTServer(cmd *cobra.Command, args []string) error {
 	}
 	defer config.CloseDatabase()
 
-	// Run migrations
+	// Run migrations using golang-migrate
 	log.Println("🔄 Running database migrations...")
-	if err := repo.AutoMigrate(db); err != nil {
+	sqlDB, err := sql.Open("postgres", cfg.PostalDBDSN)
+	if err != nil {
+		log.Printf("❌ Failed to connect to database for migrations: %v", err)
+		return fmt.Errorf("failed to connect to database for migrations: %w", err)
+	}
+
+	migrationsPath := filepath.Join(".", "migrations")
+	if err := repo.RunMigrations(repo.MigrationConfig{
+		DB:             sqlDB,
+		MigrationsPath: migrationsPath,
+		DatabaseName:   "postal",
+	}); err != nil {
 		log.Printf("❌ Migration failed: %v", err)
+		sqlDB.Close()
 		return fmt.Errorf("failed to run migrations: %w", err)
 	}
+	sqlDB.Close()
+	log.Println("✅ Migrations completed successfully")
 
 	// Initialize Validator
 	validator := utils.NewValidator()

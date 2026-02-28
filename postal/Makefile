@@ -68,3 +68,73 @@ migrate: ## Run database migrations
 	@echo "Running migrations..."
 	@go run main.go migrate
 	@echo "✅ Migrations complete"
+
+## ------------------------------
+## 🔄 Database Migrations (golang-migrate)
+## ------------------------------
+
+migrate-install: ## Install golang-migrate CLI
+	@echo "Installing golang-migrate..."
+	@go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+	@echo "✅ golang-migrate installed"
+
+migrate-up: ## Apply all pending migrations
+	@echo "Running migrations..."
+	@if [ -z "$(DATABASE_URL)" ]; then \
+		echo "DATABASE_URL not set, using default..."; \
+		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5432/postal_db?sslmode=disable" up; \
+	else \
+		migrate -path ./migrations -database "$(DATABASE_URL)" up; \
+	fi
+	@echo "✅ Migrations applied"
+
+migrate-down: ## Rollback last migration
+	@echo "Rolling back last migration..."
+	@if [ -z "$(DATABASE_URL)" ]; then \
+		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5432/postal_db?sslmode=disable" down 1; \
+	else \
+		migrate -path ./migrations -database "$(DATABASE_URL)" down 1; \
+	fi
+	@echo "✅ Migration rolled back"
+
+migrate-create: ## Create new migration (usage: make migrate-create NAME=add_tags_table)
+	@if [ -z "$(NAME)" ]; then \
+		echo "Usage: make migrate-create NAME=migration_name"; \
+		exit 1; \
+	fi
+	@echo "Creating migration: $(NAME)"
+	@migrate create -ext sql -dir ./migrations -seq $(NAME)
+	@echo "✅ Migration files created"
+
+migrate-force: ## Force migration version (usage: make migrate-force VERSION=1)
+	@if [ -z "$(VERSION)" ]; then \
+		echo "Usage: make migrate-force VERSION=version_number"; \
+		exit 1; \
+	fi
+	@echo "Forcing migration version to $(VERSION)..."
+	@if [ -z "$(DATABASE_URL)" ]; then \
+		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5432/postal_db?sslmode=disable" force $(VERSION); \
+	else \
+		migrate -path ./migrations -database "$(DATABASE_URL)" force $(VERSION); \
+	fi
+	@echo "✅ Migration version forced"
+
+migrate-version: ## Show current migration version
+	@if [ -z "$(DATABASE_URL)" ]; then \
+		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5432/postal_db?sslmode=disable" version; \
+	else \
+		migrate -path ./migrations -database "$(DATABASE_URL)" version; \
+	fi
+
+migrate-goto: ## Migrate to specific version (usage: make migrate-goto VERSION=2)
+	@if [ -z "$(VERSION)" ]; then \
+		echo "Usage: make migrate-goto VERSION=version_number"; \
+		exit 1; \
+	fi
+	@echo "Migrating to version $(VERSION)..."
+	@if [ -z "$(DATABASE_URL)" ]; then \
+		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5432/postal_db?sslmode=disable" goto $(VERSION); \
+	else \
+		migrate -path ./migrations -database "$(DATABASE_URL)" goto $(VERSION); \
+	fi
+	@echo "✅ Migrated to version $(VERSION)"
