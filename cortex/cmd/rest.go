@@ -62,9 +62,10 @@ func APIServerCommand(ctx context.Context) *cobra.Command {
 
 			migrationsPath := filepath.Join(".", "migrations")
 			if err := repo.RunMigrations(repo.MigrationConfig{
-				DB:             sqlDB,
-				MigrationsPath: migrationsPath,
-				DatabaseName:   "cortex",
+				DB:                  sqlDB,
+				MigrationsPath:      migrationsPath,
+				DatabaseName:        "cortex",
+				MigrationsTableName: "cortex_schema_migrations",
 			}); err != nil {
 				slog.Error("Failed to run migrations:", slog.Any("error", err))
 				sqlDB.Close()

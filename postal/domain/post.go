@@ -25,6 +25,9 @@ type Post struct {
 
 	OrderNo uint `gorm:"not null;uniqueIndex" json:"order_no"`
 
+	// Multi-tenant support
+	TenantID *uint `gorm:"index" json:"tenant_id,omitempty"`
+
 	// Content
 	Title     string `gorm:"type:varchar(500);not null" json:"title"`
 	Slug      string `gorm:"type:varchar(500);uniqueIndex;not null" json:"slug"`
@@ -58,6 +61,11 @@ type Post struct {
 
 	// Stats (can be updated via separate service)
 	ViewCount int `gorm:"default:0" json:"view_count"`
+	LikeCount int `gorm:"default:0" json:"like_count"`
+
+	// AI-powered features
+	QualityScore     *float64 `gorm:"type:decimal(3,2)" json:"quality_score,omitempty"`
+	ReadabilityScore *float64 `gorm:"type:decimal(3,2)" json:"readability_score,omitempty"`
 
 	// Version tracking
 	Version int `gorm:"default:1" json:"version"`

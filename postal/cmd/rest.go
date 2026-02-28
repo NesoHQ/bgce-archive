@@ -56,9 +56,10 @@ func runRESTServer(cmd *cobra.Command, args []string) error {
 
 	migrationsPath := filepath.Join(".", "migrations")
 	if err := repo.RunMigrations(repo.MigrationConfig{
-		DB:             sqlDB,
-		MigrationsPath: migrationsPath,
-		DatabaseName:   "postal",
+		DB:                  sqlDB,
+		MigrationsPath:      migrationsPath,
+		DatabaseName:        "postal",
+		MigrationsTableName: "postal_schema_migrations",
 	}); err != nil {
 		log.Printf("❌ Migration failed: %v", err)
 		sqlDB.Close()
