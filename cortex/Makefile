@@ -155,3 +155,67 @@ help: ## Show this help
 	@echo "Default target: $(CYAN)help$(RESET)"
 
 .PHONY: all build start run-server dev test clean docker-build docker-up docker-down docker-logs docker-restart docker-clean install-deps tidy install-proto-deps install-dev-deps install-mockgen prepare build-proto ent-schema ent-gen db-migrate seed seed-docker help
+
+## ------------------------------
+## 🔄 Database Migrations (golang-migrate)
+## ------------------------------
+
+migrate-install: ## Install golang-migrate CLI
+	@echo "$(GREEN)Installing golang-migrate...$(RESET)"
+	go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+
+migrate-up: ## Apply all pending migrations
+	@echo "$(GREEN)Running migrations...$(RESET)"
+	@if [ -z "$(DATABASE_URL)" ]; then \
+		echo "$(YELLOW)DATABASE_URL not set, using default...$(RESET)"; \
+		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5433/cortex_db?sslmode=disable" up; \
+	else \
+		migrate -path ./migrations -database "$(DATABASE_URL)" up; \
+	fi
+
+migrate-down: ## Rollback last migration
+	@echo "$(YELLOW)Rolling back last migration...$(RESET)"
+	@if [ -z "$(DATABASE_URL)" ]; then \
+		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5433/cortex_db?sslmode=disable" down 1; \
+	else \
+		migrate -path ./migrations -database "$(DATABASE_URL)" down 1; \
+	fi
+
+migrate-create: ## Create new migration (usage: make migrate-create NAME=add_user_avatar)
+	@if [ -z "$(NAME)" ]; then \
+		echo "$(YELLOW)Usage: make migrate-create NAME=migration_name$(RESET)"; \
+		exit 1; \
+	fi
+	@echo "$(GREEN)Creating migration: $(NAME)$(RESET)"
+	migrate create -ext sql -dir ./migrations -seq $(NAME)
+
+migrate-force: ## Force migration version (usage: make migrate-force VERSION=1)
+	@if [ -z "$(VERSION)" ]; then \
+		echo "$(YELLOW)Usage: make migrate-force VERSION=version_number$(RESET)"; \
+		exit 1; \
+	fi
+	@echo "$(YELLOW)Forcing migration version to $(VERSION)...$(RESET)"
+	@if [ -z "$(DATABASE_URL)" ]; then \
+		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5433/cortex_db?sslmode=disable" force $(VERSION); \
+	else \
+		migrate -path ./migrations -database "$(DATABASE_URL)" force $(VERSION); \
+	fi
+
+migrate-version: ## Show current migration version
+	@if [ -z "$(DATABASE_URL)" ]; then \
+		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5433/cortex_db?sslmode=disable" version; \
+	else \
+		migrate -path ./migrations -database "$(DATABASE_URL)" version; \
+	fi
+
+migrate-goto: ## Migrate to specific version (usage: make migrate-goto VERSION=2)
+	@if [ -z "$(VERSION)" ]; then \
+		echo "$(YELLOW)Usage: make migrate-goto VERSION=version_number$(RESET)"; \
+		exit 1; \
+	fi
+	@echo "$(GREEN)Migrating to version $(VERSION)...$(RESET)"
+	@if [ -z "$(DATABASE_URL)" ]; then \
+		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5433/cortex_db?sslmode=disable" goto $(VERSION); \
+	else \
+		migrate -path ./migrations -database "$(DATABASE_URL)" goto $(VERSION); \
+	fi

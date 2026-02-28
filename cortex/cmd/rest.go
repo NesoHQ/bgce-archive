@@ -2,19 +2,21 @@ package cmd
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"log/slog"
 	"net"
 	"net/http"
+	"path/filepath"
 
 	"cortex/apm"
 	"cortex/cache"
 	category "cortex/category"
 	"cortex/config"
 	"cortex/ent"
-	"cortex/ent/migrate"
 	"cortex/logger"
 	"cortex/rabbitmq"
+	"cortex/repo"
 	"cortex/rest"
 	"cortex/rest/handlers"
 	"cortex/rest/middlewares"
@@ -50,16 +52,33 @@ func APIServerCommand(ctx context.Context) *cobra.Command {
 				return err
 			}
 
+			// Run database migrations using golang-migrate
+			slog.Info("Running database migrations...")
+			sqlDB, err := sql.Open(cnf.BGCE_DB_DRIVER, cnf.BGCE_DB_DSN)
+			if err != nil {
+				slog.Error("Failed to connect to database for migrations:", slog.Any("error", err))
+				return err
+			}
+
+			migrationsPath := filepath.Join(".", "migrations")
+			if err := repo.RunMigrations(repo.MigrationConfig{
+				DB:             sqlDB,
+				MigrationsPath: migrationsPath,
+				DatabaseName:   "cortex",
+			}); err != nil {
+				slog.Error("Failed to run migrations:", slog.Any("error", err))
+				sqlDB.Close()
+				return err
+			}
+			sqlDB.Close()
+			slog.Info("Database migrations completed successfully")
+
 			rmq := rabbitmq.NewRMQ(cnf)
 			defer rmq.Client.Stop()
 
 			entClient, err := ent.Open(cnf.BGCE_DB_DRIVER, cnf.BGCE_DB_DSN)
 			if err != nil {
 				slog.Error("Failed to connect to bgce database:", slog.Any("error", err))
-				return err
-			}
-			if err := entClient.Schema.Create(backgroundContext, migrate.WithDropIndex(true), migrate.WithDropColumn(true)); err != nil {
-				slog.Error("Failed to create schema:", slog.Any("error", err))
 				return err
 			}
 
