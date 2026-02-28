@@ -37,7 +37,7 @@ func APIServerCommand(ctx context.Context) *cobra.Command {
 		Use:   "serve-rest",
 		Short: "start a rest server",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			backgroundContext := context.Background()
+			_ = context.Background()
 			cnf := config.GetConfig()
 
 			apm.InitAPM(*cnf.Apm)

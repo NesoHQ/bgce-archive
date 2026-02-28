@@ -24,6 +24,9 @@ RUN apk --no-cache add ca-certificates
 # Copy the compiled binary
 COPY --from=builder /app/main .
 
+# Copy migrations directory
+COPY --from=builder /app/migrations ./migrations
+
 # Expose port
 EXPOSE 8080
 
