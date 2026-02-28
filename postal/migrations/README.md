@@ -188,10 +188,19 @@ To fix:
 
 ## Current Migrations
 
-- `000001` - Create posts table (with embeddings, quality scores, tenant support)
-- `000002` - Create post_versions table (version history tracking)
-- `000003` - Create tags table (with embeddings for semantic search)
-- `000004` - Create post_tags junction table (many-to-many relationship)
+- `000001` - Add AI features and quality metrics to posts table (ALTER TABLE)
+- `000002` - Ensure post_versions table indexes (existing table)
+- `000003` - Create tags table (NEW TABLE)
+- `000004` - Create post_tags junction table (NEW TABLE)
+
+## Migration Approach
+
+These migrations use `ALTER TABLE` statements for existing tables and `CREATE TABLE` for new tables:
+- ✅ Your existing data in posts and post_versions is preserved
+- ✅ New columns are added without dropping tables
+- ✅ New tables (tags, post_tags) are created from scratch
+- ✅ Safe to run on live databases
+- ✅ Rollback removes only the new columns/tables
 
 ## Schema Notes
 

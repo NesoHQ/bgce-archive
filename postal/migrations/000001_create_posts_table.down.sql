@@ -1,13 +1,25 @@
--- Drop trigger
-DROP TRIGGER IF EXISTS update_posts_updated_at ON posts;
+-- Rollback: Remove AI features and quality metrics from posts table
 
--- Drop indexes
-DROP INDEX IF EXISTS idx_posts_status;
+-- Remove columns added in this migration
+ALTER TABLE posts DROP COLUMN IF EXISTS like_count;
+ALTER TABLE posts DROP COLUMN IF EXISTS readability_score;
+ALTER TABLE posts DROP COLUMN IF EXISTS quality_score;
+ALTER TABLE posts DROP COLUMN IF EXISTS tenant_id;
+-- ALTER TABLE posts DROP COLUMN IF EXISTS content_embedding;  -- Uncomment if vector column was added
+
+-- Rename column back if needed
+DO $$ 
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'posts' AND column_name = 'thumbnail_url'
+    ) AND NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'posts' AND column_name = 'thumbnail'
+    ) THEN
+        ALTER TABLE posts RENAME COLUMN thumbnail_url TO thumbnail;
+    END IF;
+END $$;
+
+-- Remove index
 DROP INDEX IF EXISTS idx_posts_tenant_id;
-DROP INDEX IF EXISTS idx_posts_category_id;
-DROP INDEX IF EXISTS idx_posts_slug;
-
--- Drop table
-DROP TABLE IF EXISTS posts;
-
--- Note: We don't drop the update_updated_at_column function as it might be used by other tables

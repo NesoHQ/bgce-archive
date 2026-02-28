@@ -188,9 +188,17 @@ To fix:
 
 ## Current Migrations
 
-- `000001` - Create tenants table (with AI quota tracking)
-- `000002` - Create users table (with tenant_id, skill_level, learning_goals, ai_preferences)
-- `000003` - Create categories table (with tenant_id, parent_id, icon, color, embedding support)
+- `000001` - Add AI quota fields to tenants table (ALTER TABLE)
+- `000002` - Add user profile and learning fields to users table (ALTER TABLE)
+- `000003` - Add tenant support and visual fields to categories table (ALTER TABLE)
+
+## Migration Approach
+
+These migrations use `ALTER TABLE` statements to add new columns to your existing tables. This means:
+- ✅ Your existing data is preserved
+- ✅ New columns are added without dropping tables
+- ✅ Safe to run on live databases
+- ✅ Rollback removes only the new columns
 
 ## Schema Notes
 

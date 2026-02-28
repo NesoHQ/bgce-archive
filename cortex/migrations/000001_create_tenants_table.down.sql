@@ -1,12 +1,7 @@
--- Drop trigger
-DROP TRIGGER IF EXISTS update_tenants_updated_at ON tenants;
+-- Rollback: Remove AI quota fields from tenants table
 
--- Drop indexes
-DROP INDEX IF EXISTS idx_tenants_status;
-DROP INDEX IF EXISTS idx_tenants_domain;
-DROP INDEX IF EXISTS idx_tenants_slug;
+-- Remove columns added in this migration
+ALTER TABLE tenants DROP COLUMN IF EXISTS ai_usage_current;
+ALTER TABLE tenants DROP COLUMN IF EXISTS ai_quota_monthly;
 
--- Drop table
-DROP TABLE IF EXISTS tenants;
-
--- Note: We don't drop the update_updated_at_column function as it might be used by other tables
+-- Note: We don't drop indexes or triggers as they may have existed before this migration
