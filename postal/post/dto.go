@@ -11,13 +11,13 @@ type CreatePostRequest struct {
 	Slug            string `json:"slug" validate:"required,min=3,max=500"`
 	Summary         string `json:"summary" validate:"max=1000"`
 	Content         string `json:"content" validate:"required"`
-	Thumbnail       string `json:"thumbnail"`
-	CategoryID      uint   `json:"category_id" validate:"required,min=1"`
-	SubCategoryID   *uint  `json:"sub_category_id"`
-	MetaTitle       string `json:"meta_title" validate:"max=500"`
-	MetaDescription string `json:"meta_description" validate:"max=1000"`
-	Keywords        string `json:"keywords"`
-	OGImage         string `json:"og_image"`
+	Thumbnail       string `json:"thumbnail" validate:"omitempty,url"`
+	CategoryID      uint   `json:"category_id" validate:"required,min=1,gt=0"`
+	SubCategoryID   *uint  `json:"sub_category_id" validate:"omitempty,gt=0"`
+	MetaTitle       string `json:"meta_title" validate:"omitempty,max=500"`
+	MetaDescription string `json:"meta_description" validate:"omitempty,max=1000"`
+	Keywords        string `json:"keywords" validate:"omitempty,max=500"`
+	OGImage         string `json:"og_image" validate:"omitempty,url"`
 	IsPublic        *bool  `json:"is_public"`
 	IsFeatured      *bool  `json:"is_featured"`
 	IsPinned        *bool  `json:"is_pinned"`
