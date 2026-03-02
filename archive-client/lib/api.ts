@@ -10,7 +10,7 @@ export async function getCategories(): Promise<ApiCategory[]> {
             headers: {
                 'Content-Type': 'application/json',
             },
-            next: { revalidate: 120 }, // Cache for 2 minutes (reduced from 5 minutes)
+            cache: 'no-store', // Cache for 2 minutes (reduced from 5 minutes)
         });
 
         if (!response.ok) {
@@ -43,7 +43,7 @@ export async function getSubcategories(parentUuid?: string): Promise<ApiSubcateg
             headers: {
                 'Content-Type': 'application/json',
             },
-            next: { revalidate: 300 }, // Cache for 5 minutes
+            cache: 'no-store', // Cache for 5 minutes
         });
 
         if (!response.ok) {
@@ -71,7 +71,7 @@ export async function getCategoryBySlug(slug: string): Promise<ApiCategory | nul
             headers: {
                 'Content-Type': 'application/json',
             },
-            next: { revalidate: 600 }, // Cache for 10 minutes
+            cache: 'no-store', // Cache for 10 minutes
         });
 
         if (!response.ok) {
@@ -123,7 +123,7 @@ export async function getPosts(params?: {
             headers: {
                 'Content-Type': 'application/json',
             },
-            next: { revalidate: 60 }, // Cache for 1 minute (reduced from 3 minutes)
+            cache: 'no-store',
         });
 
         if (!response.ok) {
@@ -150,7 +150,7 @@ export async function getPostBySlug(slug: string): Promise<ApiPost | null> {
             headers: {
                 'Content-Type': 'application/json',
             },
-            next: { revalidate: 600 }, // Cache for 10 minutes
+            cache: 'no-store',
         });
 
         if (!response.ok) {
@@ -177,7 +177,7 @@ export async function getPostById(id: number): Promise<ApiPost | null> {
             headers: {
                 'Content-Type': 'application/json',
             },
-            next: { revalidate: 600 }, // Cache for 10 minutes
+            cache: 'no-store',
         });
 
         if (!response.ok) {
