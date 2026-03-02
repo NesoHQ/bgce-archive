@@ -18,6 +18,7 @@ jobs:
       archive-client: ${{ steps.filter.outputs.archive-client }}
       cortex: ${{ steps.filter.outputs.cortex }}
       postal: ${{ steps.filter.outputs.postal }}
+      community: ${{ steps.filter.outputs.community }}
     steps:
       - uses: actions/checkout@v4
       
@@ -34,6 +35,8 @@ jobs:
               - 'cortex/**'
             postal:
               - 'postal/**'
+            community:
+              - 'community/**'
 
   type-check:
     needs: detect-changes
