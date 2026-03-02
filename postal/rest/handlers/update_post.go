@@ -41,6 +41,16 @@ func (h *Handlers) UpdatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Validate request using the reusable validator
+	if validationErrs := h.Validator.ValidateStruct(&req); validationErrs != nil {
+		utils.SendJson(w, http.StatusBadRequest, map[string]any{
+			"status":  false,
+			"message": "Validation failed",
+			"errors":  validationErrs.Errors,
+		})
+		return
+	}
+
 	postResp, err := h.PostService.UpdatePost(ctx, uint(id), req, userID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
