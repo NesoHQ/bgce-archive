@@ -1,0 +1,50 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+main
+tmp/
+
+# Test binary
+*.test
+
+# Coverage
+*.out
+
+# Dependencies
+vendor/
+
+# Go workspace
+go.work
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+
+# Documentation
+*.md
+README.md
+docs/
+
+# Build
+dist/
+build/
