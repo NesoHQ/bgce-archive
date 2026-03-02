@@ -141,6 +141,7 @@ func ToPostResponse(post *domain.Post) *PostResponse {
 func ToPostListItemResponse(post *domain.Post) *PostListItemResponse {
 	return &PostListItemResponse{
 		ID:              post.ID,
+		UUID:            post.UUID,
 		OrderNo:         post.OrderNo,
 		Slug:            post.Slug,
 		Title:           post.Title,
