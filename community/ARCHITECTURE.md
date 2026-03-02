@@ -8,7 +8,7 @@ The Community service follows **Domain-Driven Design (DDD)** and **Clean Archite
 
 ```
 community/
-├── domain/              # Pure domain entitie s
+├── domain/              # Pure domain entities
 │   ├── comment.go
 │   └── discussion.go
 ├── comment/             # Comment bounded context

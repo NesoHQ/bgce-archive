@@ -54,7 +54,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        service: [archive-admin, archive-client, cortex, postal]
+        service: [archive-admin, archive-client, cortex, postal, community]
     uses: ./.github/workflows/docker-build.yml
     with:
       service: ${{ matrix.service }}
