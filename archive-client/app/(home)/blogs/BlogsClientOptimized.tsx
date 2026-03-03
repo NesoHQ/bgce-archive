@@ -64,52 +64,6 @@ export default function BlogsClient({
   }, [selectedCategory, categories]);
 
   // Fetch posts when filters change - SERVER SIDE
-  // const fetchFilteredPosts = useCallback(async () => {
-  //     setIsLoading(true);
-  //     try {
-  //         const params: any = {
-  //             limit: pageSize,
-  //             offset: (currentPage - 1) * pageSize,
-  //         };
-
-  //         // Category filters
-  //         if (selectedCategory) params.category_id = selectedCategory;
-  //         if (selectedSubcategory) params.sub_category_id = selectedSubcategory;
-
-  //         // Search
-  //         if (searchQuery) params.search = searchQuery;
-
-  //         // Feature filters
-  //         if (showFeaturedOnly) params.is_featured = true;
-  //         if (showPinnedOnly) params.is_pinned = true;
-
-  //         // Sorting
-  //         if (sortBy === "new") {
-  //             params.sort_by = "created_at";
-  //             params.sort_order = "DESC";
-  //         } else if (sortBy === "views") {
-  //             params.sort_by = "view_count";
-  //             params.sort_order = "DESC";
-  //         } else if (sortBy === "featured") {
-  //             params.is_featured = true;
-  //             params.sort_by = "created_at";
-  //             params.sort_order = "DESC";
-  //         }
-
-  //         const response = await fetch(`${process.env.NEXT_PUBLIC_POSTAL_API_URL || 'http://localhost:8081/api/v1'}/posts?${new URLSearchParams(params).toString()}`);
-  //         const result = await response.json();
-
-  //         if (result.status) {
-  //             setPosts(result.data || []);
-  //             setTotalPosts(result.meta?.total || 0);
-  //         }
-  //     } catch (error) {
-  //         console.error("Error fetching posts:", error);
-  //     } finally {
-  //         setIsLoading(false);
-  //     }
-  // }, [currentPage, pageSize, selectedCategory, selectedSubcategory, searchQuery, showFeaturedOnly, showPinnedOnly, sortBy]);
-
   const fetchFilteredPosts = useCallback(async () => {
     setIsLoading(true);
     try {

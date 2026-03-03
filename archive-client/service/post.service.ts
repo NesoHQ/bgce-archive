@@ -9,59 +9,6 @@ const POSTAL_API_URL =
   process.env.NEXT_PUBLIC_POSTAL_API_URL || "http://localhost:8081/api/v1";
 
 export const postService = {
-  // getPosts: async (params?: {
-  //   status?: string;
-  //   category_id?: number;
-  //   sub_category_id?: number;
-  //   limit?: number;
-  //   offset?: number;
-  // }): Promise<ApiPostListItem[]> => {
-  //   try {
-  //     const queryParams = new URLSearchParams();
-
-  //     // Only fetch published posts for public view
-  //     queryParams.append("status", "published");
-
-  //     if (params?.category_id) {
-  //       queryParams.append("category_id", params.category_id.toString());
-  //     }
-  //     if (params?.sub_category_id) {
-  //       queryParams.append("sub_category_id", params.sub_category_id.toString());
-  //     }
-  //     if (params?.limit) {
-  //       queryParams.append("limit", params.limit.toString());
-  //     }
-  //     if (params?.offset) {
-  //       queryParams.append("offset", params.offset.toString());
-  //     }
-
-  //     const response = await fetch(
-  //       `${POSTAL_API_URL}/posts?${queryParams.toString()}`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       },
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error(`Failed to fetch posts: ${response.statusText}`);
-  //     }
-
-  //     const result: ApiPostListResponse = await response.json();
-
-  //     if (!result.status) {
-  //       throw new Error(result.message || "Failed to fetch posts");
-  //     }
-
-  //     return result.data || [];
-  //   } catch (error) {
-  //     console.error("Error fetching posts:", error);
-  //     return [];
-  //   }
-  // },
-
   getPosts: async (params?: {
     status?: string;
     category_id?: number;
