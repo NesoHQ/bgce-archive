@@ -1,6 +1,7 @@
-import { getPosts, getCategories } from "@/lib/api";
 import BlogsClient from "./BlogsClientOptimized";
 import type { Metadata } from "next";
+import { getPosts } from "@/action/post.action";
+import { getCategories } from "@/action/category.action";
 
 export const metadata: Metadata = {
     title: "Community Blogs - BGCE",

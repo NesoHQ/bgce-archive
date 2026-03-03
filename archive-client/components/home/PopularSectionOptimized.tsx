@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getCategories } from "@/lib/api";
 import type { ApiCategory } from "@/types/blog.type";
 import { CategoryCard } from "./popular/CategoryCard";
 import { ContributorTable } from "./popular/ContributorTable";
 import { fallbackCategories } from "./popular/data";
+import { getCategories } from "@/action/category.action";
 
 export default function PopularSectionOptimized() {
     const [categories, setCategories] = useState<ApiCategory[]>([]);

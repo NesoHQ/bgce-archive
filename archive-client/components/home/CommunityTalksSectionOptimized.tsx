@@ -5,8 +5,8 @@ import { Loader2 } from "lucide-react";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { MobileViewAllButton } from "@/components/shared/MobileViewAllButton";
 import { PostCard } from "@/components/shared/cards/PostCard";
-import { getPosts } from "@/lib/api";
 import type { ApiPostListItem } from "@/types/blog.type";
+import { getPosts } from "@/action/post.action";
 
 export function CommunityTalksSection() {
     const [posts, setPosts] = useState<ApiPostListItem[]>([]);

@@ -5,8 +5,8 @@ import Link from "next/link";
 import { ArrowRight, MessageSquare, ThumbsUp, Eye, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { getPosts } from "@/lib/api";
 import type { ApiPostListItem } from "@/types/blog.type";
+import { getPosts } from "@/action/post.action";
 
 export function CommunityTalksSection() {
   const [posts, setPosts] = useState<ApiPostListItem[]>([]);
