@@ -1,7 +1,7 @@
-import { getPostBySlug } from "@/lib/api";
 import { notFound } from "next/navigation";
 import BlogDetailsClient from "./BlogDetailsClient";
 import type { Metadata } from "next";
+import { getPostBySlug } from "@/action/post.action";
 
 interface PageProps {
     params: Promise<{

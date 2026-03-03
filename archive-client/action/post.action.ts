@@ -1,0 +1,24 @@
+"use server"
+
+import { postService } from "@/service/post.service";
+
+export const getPosts = async (params?: {
+  status?: string;
+  category_id?: number;
+  sub_category_id?: number;
+  limit?: number;
+  offset?: number;
+}) => {
+    const result = await postService.getPosts(params);
+    return result;
+}
+
+export const getPostBySlug = async (slug: string) => {
+    const result = await postService.getPostBySlug(slug);
+    return result;
+}
+
+export const getPostById = async (id: number) => {
+    const result = await postService.getPostById(id);
+    return result;
+}
