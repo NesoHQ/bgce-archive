@@ -18,7 +18,7 @@ export function CommunityTalksSection() {
       try {
         setLoading(true);
         // Fetch all posts first, then filter for featured ones
-        const allPosts = await getPosts({ limit: 100 });
+        const {data: allPosts} = await getPosts({ limit: 100 });
         const featuredPosts = allPosts.filter(post => post.is_featured).slice(0, 3);
         setPosts(featuredPosts);
         setError(null);

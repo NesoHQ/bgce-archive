@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default async function BlogsPage() {
     // Fetch all published posts and categories
-    const [posts, categories] = await Promise.all([
+    const [{data: posts}, categories] = await Promise.all([
         getPosts({ limit: 100 }),
         getCategories(),
     ]);
