@@ -36,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        service: [archive-admin, archive-client, cortex, postal]
+        service: [archive-admin, archive-client, cortex, postal, community]
     
     steps:
       - name: 📥 Checkout code
