@@ -1,36 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { Loader2 } from "lucide-react";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { MobileViewAllButton } from "@/components/shared/MobileViewAllButton";
 import { PostCard } from "@/components/shared/cards/PostCard";
-import type { ApiPostListItem } from "@/types/blog.type";
-import { getPosts } from "@/action/post.action";
+import { usePosts } from "@/hooks/usePosts";
 
 export function CommunityTalksSection() {
-    const [posts, setPosts] = useState<ApiPostListItem[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { posts, isLoading, error } = usePosts({
+        is_featured: true,
+        limit: 3,
+        sort_by: "created_at",
+        sort_order: "DESC"
+    });
 
-    useEffect(() => {
-        async function fetchFeaturedPosts() {
-            try {
-                setLoading(true);
-                const {data: allPosts} = await getPosts({ limit: 100 });
-                const featuredPosts = allPosts.filter(post => post.is_featured).slice(0, 3);
-                setPosts(featuredPosts);
-                setError(null);
-            } catch (err) {
-                console.error('Error fetching featured posts:', err);
-                setError('Failed to load featured posts');
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetchFeaturedPosts();
-    }, []);
+    const featuredPosts = useMemo(() => posts.slice(0, 3), [posts]);
 
     return (
         <section className="py-10 lg:py-12 relative overflow-hidden">
@@ -41,32 +26,28 @@ export function CommunityTalksSection() {
                     viewAllHref="/blogs"
                 />
 
-                {/* Loading State */}
-                {loading && (
+                {isLoading && (
                     <div className="flex items-center justify-center py-12">
                         <Loader2 className="h-8 w-8 animate-spin text-primary" />
                     </div>
                 )}
 
-                {/* Error State */}
-                {error && !loading && (
+                {error && !isLoading && (
                     <div className="text-center py-12">
-                        <p className="text-muted-foreground">{error}</p>
+                        <p className="text-muted-foreground">Failed to load featured posts</p>
                     </div>
                 )}
 
-                {/* Empty State */}
-                {!loading && !error && posts.length === 0 && (
+                {!isLoading && !error && featuredPosts.length === 0 && (
                     <div className="text-center py-12">
                         <p className="text-muted-foreground">No featured posts available at the moment.</p>
                     </div>
                 )}
 
-                {/* Talks Grid */}
-                {!loading && !error && posts.length > 0 && (
+                {!isLoading && !error && featuredPosts.length > 0 && (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {posts.map((post) => (
+                            {featuredPosts.map((post) => (
                                 <PostCard key={post.id} post={post} />
                             ))}
                         </div>

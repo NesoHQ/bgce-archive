@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -18,7 +19,8 @@ import {
     User,
     TrendingUp,
     Hash,
-    Bell
+    Bell,
+    Loader2
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -28,24 +30,61 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 interface BlogDetailsClientProps {
-    post: ApiPost;
+    slug: string;
 }
 
-export default function BlogDetailsClient({ post }: BlogDetailsClientProps) {
-    const router = useRouter();
+const POSTAL_API_URL = process.env.NEXT_PUBLIC_POSTAL_API_URL || "http://localhost:8081/api/v1";
 
-    // Helper functions
+export default function BlogDetailsClient({ slug }: BlogDetailsClientProps) {
+    const router = useRouter();
+    const [post, setPost] = useState<ApiPost | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        async function fetchPost() {
+            try {
+                setIsLoading(true);
+                const response = await fetch(`${POSTAL_API_URL}/posts/slug/${slug}`);
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        router.push('/404');
+                        return;
+                    }
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (!result.status || !result.data) {
+                    throw new Error('Invalid response');
+                }
+
+                const postData = result.data;
+
+                // Check if post is published and public
+                if (postData.status !== 'published' || !postData.is_public) {
+                    router.push('/404');
+                    return;
+                }
+
+                setPost(postData);
+            } catch (err) {
+                console.error('Error fetching post:', err);
+                setError('Failed to load post');
+            } finally {
+                setIsLoading(false);
+            }
+        }
+
+        fetchPost();
+    }, [slug, router]);
+
     const getAuthorInitials = (userId: number) => `U${userId}`;
     const getAuthorColor = (userId: number) => {
         const colors = ["bg-blue-500", "bg-purple-500", "bg-green-500", "bg-red-500", "bg-yellow-500", "bg-pink-500"];
         return colors[userId % colors.length];
-    };
-
-    const calculateReadTime = (content: string) => {
-        const wordsPerMinute = 200;
-        const wordCount = content.split(/\s+/).length;
-        const minutes = Math.ceil(wordCount / wordsPerMinute);
-        return `${minutes} min`;
     };
 
     const getTags = (keywords?: string) => {
@@ -53,8 +92,31 @@ export default function BlogDetailsClient({ post }: BlogDetailsClientProps) {
         return keywords.split(',').map(k => k.trim());
     };
 
+    const formatReadTime = (readTime: number) => {
+        return readTime > 0 ? `${readTime} min` : "1 min";
+    };
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+        );
+    }
+
+    if (error || !post) {
+        return (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <div className="text-center">
+                    <p className="text-muted-foreground mb-4">{error || 'Post not found'}</p>
+                    <Button onClick={() => router.push('/blogs')}>Back to Blogs</Button>
+                </div>
+            </div>
+        );
+    }
+
     const tags = getTags(post.keywords);
-    const readTime = calculateReadTime(post.content);
+    const readTime = formatReadTime(post.read_time);
 
     return (
         <div className="min-h-screen bg-background">

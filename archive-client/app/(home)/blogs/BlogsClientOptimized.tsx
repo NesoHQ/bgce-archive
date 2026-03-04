@@ -11,7 +11,6 @@ import { useCategories } from "@/hooks/useCategories";
 import { useSubcategories } from "@/hooks/useSubcategories";
 import { usePosts } from "@/hooks/usePosts";
 
-// Dynamically import mobile drawer (heavy component)
 const MobileFilterDrawer = dynamic(
   () => import("@/components/blogs/MobileFilterDrawer").then((mod) => ({ default: mod.MobileFilterDrawer })),
   { ssr: false },
@@ -34,17 +33,15 @@ export default function BlogsClient() {
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
   const [showPinnedOnly, setShowPinnedOnly] = useState(false);
 
-  // Direct API calls via hooks - all fire in parallel
-  const { categories, isLoading: isLoadingCategories } = useCategories();
+  const { categories } = useCategories();
 
-  const selectedCategoryUuid = useMemo(() => {
-    if (!selectedCategory) return undefined;
-    return categories.find((c) => c.id === selectedCategory)?.uuid;
-  }, [selectedCategory, categories]);
+  const selectedCategoryUuid = useMemo(() =>
+    categories.find((c) => c.id === selectedCategory)?.uuid,
+    [selectedCategory, categories]
+  );
 
   const { subcategories, isLoading: isLoadingSubcategories } = useSubcategories(selectedCategoryUuid);
 
-  // Build post filters - memoized to prevent unnecessary refetches
   const postFilters = useMemo(() => {
     const filters: any = {
       limit: pageSize,
@@ -75,64 +72,41 @@ export default function BlogsClient() {
   const { posts, total: totalPosts, isLoading: isLoadingPosts } = usePosts(postFilters);
   const totalPages = Math.ceil(totalPosts / pageSize);
 
-  // Reset subcategory when category changes
   useEffect(() => {
-    if (selectedCategory) {
-      setSelectedSubcategory(null);
-    }
+    if (selectedCategory) setSelectedSubcategory(null);
   }, [selectedCategory]);
 
-  // Reset to page 1 when filters change (use transition for non-blocking)
   useEffect(() => {
-    startTransition(() => {
-      setCurrentPage(1);
-    });
+    startTransition(() => setCurrentPage(1));
   }, [selectedCategory, selectedSubcategory, searchQuery, showFeaturedOnly, showPinnedOnly, sortBy, pageSize]);
 
-  // Filter categories based on search - memoized
   const filteredCategories = useMemo(() => {
     if (!categorySearch) return categories;
     const search = categorySearch.toLowerCase();
     return categories.filter((cat) => cat.label.toLowerCase().includes(search));
   }, [categories, categorySearch]);
 
-  // Show only top 5 categories initially - memoized
-  const displayedCategories = useMemo(() => {
-    return (categorySearch || showAllCategories) ? filteredCategories : filteredCategories.slice(0, 5);
-  }, [filteredCategories, categorySearch, showAllCategories]);
+  const displayedCategories = useMemo(() =>
+    (categorySearch || showAllCategories) ? filteredCategories : filteredCategories.slice(0, 5),
+    [filteredCategories, categorySearch, showAllCategories]
+  );
 
   const hasMoreCategories = filteredCategories.length > 5 && !showAllCategories && !categorySearch;
 
-  // Get post count per category - memoized
-  const getCategoryPostCount = useCallback((categoryId: number) => {
-    return posts.filter((post) => post.category_id === categoryId).length;
-  }, [posts]);
+  const getCategoryPostCount = useCallback((categoryId: number) =>
+    posts.filter((post) => post.category_id === categoryId).length,
+    [posts]
+  );
 
   const activeFiltersCount = useMemo(() =>
     [searchQuery, selectedCategory, selectedSubcategory, showFeaturedOnly, showPinnedOnly].filter(Boolean).length,
     [searchQuery, selectedCategory, selectedSubcategory, showFeaturedOnly, showPinnedOnly]
   );
 
-  // Prevent body scroll when drawer is open
   useEffect(() => {
     document.body.style.overflow = showMobileFilters ? "hidden" : "unset";
     return () => { document.body.style.overflow = "unset"; };
   }, [showMobileFilters]);
-
-  // Keyboard shortcuts - memoized handler
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        document.querySelector<HTMLInputElement>('input[placeholder*="Search"]')?.focus();
-      }
-      if (e.key === "Escape" && activeFiltersCount > 0) {
-        clearAllFilters();
-      }
-    };
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [activeFiltersCount]);
 
   const clearAllFilters = useCallback(() => {
     startTransition(() => {
@@ -161,9 +135,7 @@ export default function BlogsClient() {
 
   const goToPage = useCallback((page: number) => {
     if (page >= 1 && page <= totalPages) {
-      startTransition(() => {
-        setCurrentPage(page);
-      });
+      startTransition(() => setCurrentPage(page));
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [totalPages]);
@@ -271,8 +243,8 @@ export default function BlogsClient() {
                       key={page}
                       onClick={() => goToPage(page)}
                       className={`px-3 py-2 rounded-md text-sm font-medium ${page === currentPage
-                          ? "bg-primary text-primary-foreground"
-                          : "border border-input bg-background hover:bg-accent"
+                        ? "bg-primary text-primary-foreground"
+                        : "border border-input bg-background hover:bg-accent"
                         }`}
                     >
                       {page}

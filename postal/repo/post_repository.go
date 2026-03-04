@@ -106,8 +106,7 @@ func (r *postRepository) List(ctx context.Context, filter post.PostFilter, withC
 		selectQuery = selectQuery.Select(
 			"id", "order_no", "uuid", "slug", "title", "summary", "meta_description", "keywords",
 			"category_id", "sub_category_id", "is_featured", "is_pinned",
-			"status", "created_by", "view_count", "created_at",
-			"CHAR_LENGTH(content) as content_length",
+			"status", "created_by", "view_count", "read_time", "created_at",
 		)
 	}
 
@@ -253,7 +252,6 @@ func (r *postRepository) GetMaxOrderNo(ctx context.Context) (uint, error) {
 		Select("COALESCE(MAX(order_no), 0)").
 		Row().
 		Scan(&maxOrderNo)
-
 	if err != nil {
 		return 0, err
 	}

@@ -157,6 +157,7 @@ func ToPostListItemResponse(post *domain.Post) *PostListItemResponse {
 		IsPinned:        post.IsPinned,
 		CreatedBy:       post.CreatedBy,
 		ViewCount:       post.ViewCount,
+		ReadTime:        post.ReadTime,
 		ContentLength:   post.ContentLength,
 		CreatedAt:       post.CreatedAt,
 	}

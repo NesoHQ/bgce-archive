@@ -82,6 +82,7 @@ export interface ApiPost {
   created_by: number;
   updated_by?: number;
   view_count: number;
+  read_time: number;
   version: number;
   created_at: string;
   updated_at: string;

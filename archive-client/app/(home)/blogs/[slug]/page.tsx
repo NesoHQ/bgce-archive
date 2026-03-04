@@ -1,7 +1,5 @@
-import { notFound } from "next/navigation";
 import BlogDetailsClient from "./BlogDetailsClient";
 import type { Metadata } from "next";
-import { getPostBySlug } from "@/action/post.action";
 
 // Force dynamic rendering - no caching
 export const dynamic = "force-dynamic";
@@ -15,33 +13,14 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { slug } = await params;
-    const post = await getPostBySlug(slug);
-
-    if (!post) {
-        return {
-            title: "Blog Not Found",
-        };
-    }
 
     return {
-        title: post.meta_title || post.title,
-        description: post.meta_description || post.summary,
-        keywords: post.keywords,
-        openGraph: {
-            title: post.meta_title || post.title,
-            description: post.meta_description || post.summary,
-            images: post.og_image ? [post.og_image] : [],
-        },
+        title: `${slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')} - BGCE`,
+        description: "Read this article on BGCE Community",
     };
 }
 
 export default async function BlogDetailsPage({ params }: PageProps) {
     const { slug } = await params;
-    const post = await getPostBySlug(slug);
-
-    if (!post || post.status !== "published" || !post.is_public) {
-        notFound();
-    }
-
-    return <BlogDetailsClient post={post} />;
+    return <BlogDetailsClient slug={slug} />;
 }

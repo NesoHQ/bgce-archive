@@ -109,6 +109,17 @@ export const apiClient = {
         return { data: [], total: 0 };
     },
 
+    // Fetch single post by slug
+    async getPostBySlug(slug: string) {
+        const url = `${POSTAL_API_URL}/posts/slug/${slug}`;
+        const result = await fetchWithDedup(url);
+
+        if (result.status && result.data) {
+            return result.data;
+        }
+        return null;
+    },
+
     // Prefetch multiple resources in parallel
     async prefetch(urls: string[]) {
         return Promise.all(urls.map((url) => fetchWithDedup(url).catch(() => null)));
