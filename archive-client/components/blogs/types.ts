@@ -12,5 +12,6 @@ export interface BlogFilters {
 
 export interface BlogsClientProps {
     initialPosts: ApiPostListItem[];
+    initialTotal: number;
     categories: ApiCategory[];
 }

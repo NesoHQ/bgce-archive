@@ -58,6 +58,8 @@ func (s *service) CreatePost(ctx context.Context, req CreatePostRequest, userID 
 		return nil, fmt.Errorf("failed to get max order no: %w", err)
 	}
 
+	readTime := util.CalculateReadTime(&req.Content)
+
 	post := &domain.Post{
 		Title:           req.Title,
 		Slug:            slug,
@@ -73,6 +75,7 @@ func (s *service) CreatePost(ctx context.Context, req CreatePostRequest, userID 
 		Status:          domain.StatusDraft,
 		IsPublic:        isPublic,
 		IsFeatured:      isFeatured,
+		ReadTime:        readTime,
 		IsPinned:        isPinned,
 		CreatedBy:       userID,
 		Version:         1,
@@ -288,6 +291,8 @@ func (s *service) UpdatePost(ctx context.Context, id uint, req UpdatePostRequest
 	if req.Content != nil {
 		post.Content = *req.Content
 		contentChanged = true
+		readTime := util.CalculateReadTime(req.Content)
+		post.ReadTime = readTime
 	}
 	if req.Thumbnail != nil {
 		post.Thumbnail = *req.Thumbnail

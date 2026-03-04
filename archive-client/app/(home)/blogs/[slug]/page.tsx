@@ -1,7 +1,10 @@
-import { getPostBySlug } from "@/lib/api";
 import { notFound } from "next/navigation";
 import BlogDetailsClient from "./BlogDetailsClient";
 import type { Metadata } from "next";
+import { getPostBySlug } from "@/action/post.action";
+
+// Revalidate every 60 seconds (ISR)
+export const revalidate = 60;
 
 interface PageProps {
     params: Promise<{

@@ -5,8 +5,8 @@ import Link from "next/link";
 import { ArrowRight, MessageSquare, ThumbsUp, Eye, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { getPosts } from "@/lib/api";
 import type { ApiPostListItem } from "@/types/blog.type";
+import { getPosts } from "@/action/post.action";
 
 export function CommunityTalksSection() {
   const [posts, setPosts] = useState<ApiPostListItem[]>([]);
@@ -18,7 +18,7 @@ export function CommunityTalksSection() {
       try {
         setLoading(true);
         // Fetch all posts first, then filter for featured ones
-        const allPosts = await getPosts({ limit: 100 });
+        const {data: allPosts} = await getPosts({ limit: 100 });
         const featuredPosts = allPosts.filter(post => post.is_featured).slice(0, 3);
         setPosts(featuredPosts);
         setError(null);

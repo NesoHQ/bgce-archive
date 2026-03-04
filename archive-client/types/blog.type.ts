@@ -102,6 +102,7 @@ export interface ApiPostListItem {
   is_pinned: boolean;
   created_by: number;
   view_count: number;
+  read_time: number;
   content_length: number; // For read time calculation
   created_at: string;
 }
