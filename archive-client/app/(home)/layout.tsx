@@ -9,9 +9,7 @@ export default function HomeLayout({
   return (
     <>
       <MainNavigationOptimized />
-      <main id="main-content">
-        {children}
-      </main>
+      <main id='main-content'>{children}</main>
       <Footer />
     </>
   );
