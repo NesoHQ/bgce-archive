@@ -86,14 +86,8 @@ export default function BlogDetailsClient({ slug }: BlogDetailsClientProps) {
         return colors[userId % colors.length];
     };
 
-    const getTags = (keywords?: string) => {
-        if (!keywords) return [];
-        return keywords.split(',').map(k => k.trim());
-    };
-
-    const formatReadTime = (readTime: number) => {
-        return readTime > 0 ? `${readTime} min` : "1 min";
-    };
+    const tags = post?.keywords ? post.keywords.split(',').map(k => k.trim()).filter(Boolean) : [];
+    const readTime = post?.read_time && post.read_time > 0 ? `${post.read_time} min` : "1 min";
 
     // Don't show loading state - Next.js loading.tsx handles it
     // Just show error or content when ready
@@ -113,8 +107,7 @@ export default function BlogDetailsClient({ slug }: BlogDetailsClientProps) {
         return null;
     }
 
-    const tags = getTags(post.keywords);
-    const readTime = formatReadTime(post.read_time);
+    // Tags and readTime are now calculated above
 
     return (
         <div className="min-h-screen bg-background">

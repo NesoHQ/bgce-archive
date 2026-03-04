@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
 import { Loader2 } from "lucide-react";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { MobileViewAllButton } from "@/components/shared/MobileViewAllButton";
@@ -14,8 +13,6 @@ export function CommunityTalksSection() {
         sort_by: "created_at",
         sort_order: "DESC"
     });
-
-    const featuredPosts = useMemo(() => posts.slice(0, 3), [posts]);
 
     return (
         <section className="py-10 lg:py-12 relative overflow-hidden">
@@ -38,16 +35,16 @@ export function CommunityTalksSection() {
                     </div>
                 )}
 
-                {!isLoading && !error && featuredPosts.length === 0 && (
+                {!isLoading && !error && posts.length === 0 && (
                     <div className="text-center py-12">
                         <p className="text-muted-foreground">No featured posts available at the moment.</p>
                     </div>
                 )}
 
-                {!isLoading && !error && featuredPosts.length > 0 && (
+                {!isLoading && !error && posts.length > 0 && (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {featuredPosts.map((post) => (
+                            {posts.map((post) => (
                                 <PostCard key={post.id} post={post} />
                             ))}
                         </div>

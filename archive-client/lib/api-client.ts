@@ -6,35 +6,8 @@ const POSTAL_API_URL = process.env.NEXT_PUBLIC_POSTAL_API_URL || "http://localho
 // In-flight request cache to prevent duplicate requests
 const inflightRequests = new Map<string, Promise<any>>();
 
-// Simple memory cache for frequently accessed data
-const memoryCache = new Map<string, { data: any; timestamp: number }>();
-const CACHE_TTL = 30000; // 30 seconds
-
-function getCacheKey(url: string): string {
-    return url;
-}
-
-function getFromCache(key: string): any | null {
-    const cached = memoryCache.get(key);
-    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-        return cached.data;
-    }
-    memoryCache.delete(key);
-    return null;
-}
-
-function setCache(key: string, data: any): void {
-    memoryCache.set(key, { data, timestamp: Date.now() });
-}
-
-async function fetchWithDedup(url: string): Promise<any> {
-    const cacheKey = getCacheKey(url);
-
-    // Check memory cache first
-    const cached = getFromCache(cacheKey);
-    if (cached) {
-        return cached;
-    }
+async function fetchWithDedup(url: string, options: RequestInit = {}): Promise<any> {
+    const cacheKey = url;
 
     // Check if request is already in-flight
     if (inflightRequests.has(cacheKey)) {
@@ -43,14 +16,17 @@ async function fetchWithDedup(url: string): Promise<any> {
 
     // Make new request
     const promise = fetch(url, {
-        headers: { "Content-Type": "application/json" },
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers
+        },
     })
         .then(async (res) => {
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             return res.json();
         })
         .then((data) => {
-            setCache(cacheKey, data);
             inflightRequests.delete(cacheKey);
             return data;
         })
@@ -125,9 +101,8 @@ export const apiClient = {
         return Promise.all(urls.map((url) => fetchWithDedup(url).catch(() => null)));
     },
 
-    // Clear cache (useful for forced refresh)
-    clearCache() {
-        memoryCache.clear();
+    // Clear any active requests
+    clearActiveRequests() {
         inflightRequests.clear();
     },
 };

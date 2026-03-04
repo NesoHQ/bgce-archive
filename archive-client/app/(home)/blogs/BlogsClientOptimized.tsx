@@ -72,13 +72,41 @@ export default function BlogsClient() {
   const { posts, total: totalPosts, isLoading: isLoadingPosts } = usePosts(postFilters);
   const totalPages = Math.ceil(totalPosts / pageSize);
 
-  useEffect(() => {
-    if (selectedCategory) setSelectedSubcategory(null);
-  }, [selectedCategory]);
+  const handleCategoryChange = useCallback((categoryId: number | null) => {
+    startTransition(() => {
+      setSelectedCategory(categoryId);
+      setSelectedSubcategory(null);
+      setCurrentPage(1);
+    });
+  }, []);
 
-  useEffect(() => {
-    startTransition(() => setCurrentPage(1));
-  }, [selectedCategory, selectedSubcategory, searchQuery, showFeaturedOnly, showPinnedOnly, sortBy, pageSize]);
+  const handleSubcategoryChange = useCallback((subcategoryId: number | null) => {
+    startTransition(() => {
+      setSelectedSubcategory(subcategoryId);
+      setCurrentPage(1);
+    });
+  }, []);
+
+  const handleSearchChange = useCallback((query: string) => {
+    startTransition(() => {
+      setSearchQuery(query);
+      setCurrentPage(1);
+    });
+  }, []);
+
+  const handleSortChange = useCallback((option: SortOption) => {
+    startTransition(() => {
+      setSortBy(option);
+      setCurrentPage(1);
+    });
+  }, []);
+
+  const handlePageSizeChange = useCallback((size: number) => {
+    startTransition(() => {
+      setPageSize(size);
+      setCurrentPage(1);
+    });
+  }, []);
 
   const filteredCategories = useMemo(() => {
     if (!categorySearch) return categories;
@@ -126,12 +154,11 @@ export default function BlogsClient() {
       if (selectedCategory === categoryId) {
         setExpandedCategory(expandedCategory === categoryId ? null : categoryId);
       } else {
-        setSelectedCategory(categoryId);
+        handleCategoryChange(categoryId);
         setExpandedCategory(categoryId);
-        setSelectedSubcategory(null);
       }
     });
-  }, [selectedCategory, expandedCategory]);
+  }, [selectedCategory, expandedCategory, handleCategoryChange]);
 
   const goToPage = useCallback((page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -155,17 +182,17 @@ export default function BlogsClient() {
             isOpen={showMobileFilters}
             onClose={() => setShowMobileFilters(false)}
             searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
+            onSearchChange={handleSearchChange}
             categories={categories}
             selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
+            onCategoryChange={handleCategoryChange}
             selectedSubcategory={selectedSubcategory}
-            onSubcategoryChange={setSelectedSubcategory}
+            onSubcategoryChange={handleSubcategoryChange}
             subcategories={subcategories}
             expandedCategory={expandedCategory}
             onToggleCategory={handleToggleCategory}
             sortBy={sortBy}
-            onSortChange={setSortBy}
+            onSortChange={handleSortChange}
             showFeaturedOnly={showFeaturedOnly}
             onToggleFeatured={() => setShowFeaturedOnly(!showFeaturedOnly)}
             onClearFilters={clearAllFilters}
@@ -177,17 +204,17 @@ export default function BlogsClient() {
         <div className="flex flex-col lg:flex-row gap-4">
           <BlogSidebar
             searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
+            onSearchChange={handleSearchChange}
             categories={categories}
             selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
+            onCategoryChange={handleCategoryChange}
             selectedSubcategory={selectedSubcategory}
-            onSubcategoryChange={setSelectedSubcategory}
+            onSubcategoryChange={handleSubcategoryChange}
             subcategories={subcategories}
             expandedCategory={expandedCategory}
             onToggleCategory={handleToggleCategory}
             sortBy={sortBy}
-            onSortChange={setSortBy}
+            onSortChange={handleSortChange}
             showFeaturedOnly={showFeaturedOnly}
             onToggleFeatured={() => setShowFeaturedOnly(!showFeaturedOnly)}
             categorySearch={categorySearch}
@@ -214,7 +241,7 @@ export default function BlogsClient() {
                 <span className="text-sm text-muted-foreground">Show</span>
                 <select
                   value={pageSize}
-                  onChange={(e) => setPageSize(Number(e.target.value))}
+                  onChange={(e) => handlePageSizeChange(Number(e.target.value))}
                   className="h-9 w-20 rounded-md border border-input bg-background px-2 py-1 text-sm"
                 >
                   <option value={9}>9</option>
