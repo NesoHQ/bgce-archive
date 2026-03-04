@@ -66,6 +66,7 @@ CREATE TABLE "posts" (
   "readability_score" decimal(3,2),
   "created_by" int,
   "view_count" int DEFAULT 0,
+  "read_time" int DEFAULT 0,
   "like_count" int DEFAULT 0,
   "published_at" timestamp,
   "created_at" timestamp NOT NULL DEFAULT (now())
