@@ -1,7 +1,8 @@
 import { useState, useMemo, useEffect, useCallback, useTransition } from "react";
 import type { SortOption } from "@/components/blogs/types";
+import type { ApiCategory, ApiPostListItem } from "@/types/blog.type";
 
-export function useBlogFilters() {
+export function useBlogFilters(categories: ApiCategory[] = [], posts: ApiPostListItem[] = []) {
     const [isPending, startTransition] = useTransition();
 
     // Filter state
@@ -125,6 +126,27 @@ export function useBlogFilters() {
         [searchQuery, selectedCategory, selectedSubcategory, showFeaturedOnly, showPinnedOnly]
     );
 
+    const filteredCategories = useMemo(() => {
+        if (!categorySearch) return categories;
+        const search = categorySearch.toLowerCase();
+        return categories.filter((cat) => cat.label.toLowerCase().includes(search));
+    }, [categories, categorySearch]);
+
+    const displayedCategories = useMemo(() =>
+        (categorySearch || showAllCategories) ? filteredCategories : filteredCategories.slice(0, 5),
+        [filteredCategories, categorySearch, showAllCategories]
+    );
+
+    const hasMoreCategories = useMemo(() =>
+        filteredCategories.length > 5 && !showAllCategories && !categorySearch,
+        [filteredCategories.length, showAllCategories, categorySearch]
+    );
+
+    const getCategoryPostCount = useCallback((categoryId: number) =>
+        posts.filter((post) => post.category_id === categoryId).length,
+        [posts]
+    );
+
     return {
         // State
         currentPage,
@@ -139,9 +161,11 @@ export function useBlogFilters() {
         showAllCategories,
         showFeaturedOnly,
         showPinnedOnly,
-        isPending,
         postFilters,
         activeFiltersCount,
+        filteredCategories,
+        displayedCategories,
+        hasMoreCategories,
 
         // Setters
         setCategorySearch,

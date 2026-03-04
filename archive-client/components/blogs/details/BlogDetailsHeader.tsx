@@ -22,7 +22,7 @@ export function BlogDetailsHeader({ post }: BlogDetailsHeaderProps) {
                         <ChevronRight className="h-3 w-3" />
                         <span className="text-foreground font-medium truncate max-w-[150px] sm:max-w-[300px]">{post.title}</span>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={() => router.push("/blogs")} className="h-8 text-xs">
+                    <Button variant="ghost" size="sm" onClick={() => router.back()} className="h-8 text-xs">
                         <ArrowLeft className="h-3.5 w-3.5 mr-1.5" />
                         Back
                     </Button>

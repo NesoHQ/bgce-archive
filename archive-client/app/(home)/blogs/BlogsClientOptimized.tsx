@@ -29,38 +29,38 @@ export default function BlogsClient({
   initialPosts,
   initialTotal
 }: BlogsClientProps) {
-  const {
-    currentPage,
-    pageSize,
-    sortBy,
-    searchQuery,
-    debouncedSearch,
-    selectedCategory,
-    selectedSubcategory,
-    expandedCategory,
-    categorySearch,
-    showAllCategories,
-    showFeaturedOnly,
-    showPinnedOnly,
-    isPending,
-    postFilters,
-    activeFiltersCount,
-    setCategorySearch,
-    setShowAllCategories,
-    setShowFeaturedOnly,
-    setShowPinnedOnly,
-    handleCategoryChange,
-    handleSubcategoryChange,
-    handleSearchChange,
-    handleSortChange,
-    handlePageSizeChange,
-    clearAllFilters,
-    handleToggleCategory,
-    goToPage,
-  } = useBlogFilters();
-
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const { categories } = useCategories(initialCategories);
+
+  // Fetch posts with initial data support
+  // We need to call usePosts here to get the 'posts' for the hook below, 
+  // but wait, useBlogFilters needs posts for getCategoryPostCount.
+  // This is a circular dependency if not careful.
+  // Actually, getCategoryPostCount is used in Sidebar.
+
+  // Let's refactor the hook to accept posts later or just compute it in the component if needed.
+  // But wait, the user wants it smaller.
+
+  const {
+    currentPage, pageSize, sortBy, searchQuery, selectedCategory,
+    selectedSubcategory, expandedCategory, categorySearch, showAllCategories,
+    showFeaturedOnly, showPinnedOnly, postFilters, activeFiltersCount,
+    setCategorySearch, setShowAllCategories, setShowFeaturedOnly, setShowPinnedOnly,
+    handleCategoryChange, handleSubcategoryChange, handleSearchChange, handleSortChange,
+    handlePageSizeChange, clearAllFilters, handleToggleCategory, goToPage,
+    displayedCategories, hasMoreCategories
+  } = useBlogFilters(categories, []); // We'll update posts manually or use a ref
+
+  const { posts, total: totalPosts, isLoading: isLoadingPosts } = usePosts(
+    postFilters,
+    initialPosts && initialTotal !== undefined ? { data: initialPosts, total: initialTotal } : undefined
+  );
+
+  // Update getCategoryPostCount to use the latest posts
+  const getCategoryPostCountOptimized = useCallback((categoryId: number) =>
+    posts.filter((post) => post.category_id === categoryId).length,
+    [posts]
+  );
 
   const selectedCategoryUuid = useMemo(() =>
     categories.find((c) => c.id === selectedCategory)?.uuid,
@@ -68,31 +68,7 @@ export default function BlogsClient({
   );
 
   const { subcategories, isLoading: isLoadingSubcategories } = useSubcategories(selectedCategoryUuid);
-
-  const { posts, total: totalPosts, isLoading: isLoadingPosts } = usePosts(
-    postFilters,
-    initialPosts && initialTotal !== undefined ? { data: initialPosts, total: initialTotal } : undefined
-  );
-
   const totalPages = Math.ceil(totalPosts / pageSize);
-
-  const filteredCategories = useMemo(() => {
-    if (!categorySearch) return categories;
-    const search = categorySearch.toLowerCase();
-    return categories.filter((cat) => cat.label.toLowerCase().includes(search));
-  }, [categories, categorySearch]);
-
-  const displayedCategories = useMemo(() =>
-    (categorySearch || showAllCategories) ? filteredCategories : filteredCategories.slice(0, 5),
-    [filteredCategories, categorySearch, showAllCategories]
-  );
-
-  const hasMoreCategories = filteredCategories.length > 5 && !showAllCategories && !categorySearch;
-
-  const getCategoryPostCount = useCallback((categoryId: number) =>
-    posts.filter((post) => post.category_id === categoryId).length,
-    [posts]
-  );
 
   useEffect(() => {
     document.body.style.overflow = showMobileFilters ? "hidden" : "unset";
@@ -155,7 +131,7 @@ export default function BlogsClient({
             onToggleShowAll={() => setShowAllCategories(!showAllCategories)}
             displayedCategories={displayedCategories}
             hasMoreCategories={hasMoreCategories}
-            getCategoryPostCount={getCategoryPostCount}
+            getCategoryPostCount={getCategoryPostCountOptimized}
             totalPosts={totalPosts}
             isLoadingSubcategories={isLoadingSubcategories}
             onClearFilters={clearAllFilters}
