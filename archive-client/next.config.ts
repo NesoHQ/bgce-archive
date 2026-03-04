@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Disable static page generation for dynamic content
+  output: "standalone",
+
   // Image optimization
   images: {
     remotePatterns: [
@@ -37,7 +40,7 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // Headers for better caching
+  // Headers for better caching (but not for dynamic pages)
   async headers() {
     return [
       {
@@ -55,6 +58,15 @@ const nextConfig: NextConfig = {
           {
             key: "Cache-Control",
             value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/blogs/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-store, must-revalidate",
           },
         ],
       },
