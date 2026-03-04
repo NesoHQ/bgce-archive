@@ -23,6 +23,7 @@ type Service interface {
 	HardDeletePost(ctx context.Context, id uint) error
 	BatchUploadPosts(ctx context.Context, userID uint, file *multipart.File) error
 	BatchDeletePosts(ctx context.Context, uuids *[]string) error
+	SeedReadTime(ctx context.Context, userID uint) error
 }
 
 // Repository defines the interface for post persistence

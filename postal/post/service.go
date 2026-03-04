@@ -590,3 +590,39 @@ func (s *service) cachePost(ctx context.Context, post *domain.Post) {
 		}
 	}
 }
+
+func (s *service) SeedReadTime(ctx context.Context, userID uint) error {
+	// 1. Flush Redis first per user requirement
+	if s.cache != nil {
+		if err := s.cache.Flush(ctx); err != nil {
+			log.Printf("Failed to flush redis during seeding: %v", err)
+		}
+	}
+
+	// 2. Fetch all posts including content
+	filter := PostFilter{
+		Limit: 10000, // Fetch all for seeding
+	}
+	posts, _, err := s.repo.List(ctx, filter, true)
+	if err != nil {
+		return fmt.Errorf("failed to fetch posts for seeding: %w", err)
+	}
+
+	// 3. Launch goroutines for each post recalculation
+	for _, p := range posts {
+		go func(post *domain.Post) {
+			// Use a new background context for goroutines to avoid being cancelled with the request
+			bgCtx := context.Background()
+
+			readTime := util.CalculateReadTime(&post.Content)
+			post.ReadTime = readTime
+			post.UpdatedBy = userID
+
+			if err := s.repo.Update(bgCtx, post); err != nil {
+				log.Printf("Failed to update post %d read time in background: %v", post.ID, err)
+			}
+		}(p)
+	}
+
+	return nil
+}

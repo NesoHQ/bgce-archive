@@ -59,6 +59,9 @@ func NewServeMux(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handle
 	mux.HandleFunc("POST /api/v1/posts/{id}/archive", func(w http.ResponseWriter, r *http.Request) {
 		mw.AuthenticateJWT(http.HandlerFunc(h.ArchivePost)).ServeHTTP(w, r)
 	})
+	mux.HandleFunc("POST /api/v1/posts/seed-read-time", func(w http.ResponseWriter, r *http.Request) {
+		mw.AuthenticateJWT(http.HandlerFunc(h.SeedReadTime)).ServeHTTP(w, r)
+	})
 
 	// Setup swagger with its own middleware manager
 	swaggerManager := middlewares.NewManager()
