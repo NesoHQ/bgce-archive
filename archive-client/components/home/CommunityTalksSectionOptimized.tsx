@@ -1,10 +1,10 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { MobileViewAllButton } from "@/components/shared/MobileViewAllButton";
-import { PostCard } from "@/components/shared/cards/PostCard";
+import { BlogCard } from "@/components/blogs/BlogCard";
 import { usePosts } from "@/hooks/usePosts";
+import { SkeletonCardGrid } from "@/components/shared/SkeletonCard";
 
 import type { ApiPostListItem } from "@/types/blog.type";
 
@@ -30,8 +30,8 @@ export function CommunityTalksSection({ initialPosts }: CommunityTalksSectionPro
                 />
 
                 {isLoading && (
-                    <div className="flex items-center justify-center py-12">
-                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    <div className="py-8">
+                        <SkeletonCardGrid count={3} />
                     </div>
                 )}
 
@@ -49,9 +49,9 @@ export function CommunityTalksSection({ initialPosts }: CommunityTalksSectionPro
 
                 {!isLoading && !error && posts.length > 0 && (
                     <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {posts.map((post) => (
-                                <PostCard key={post.id} post={post} />
+                                <BlogCard key={post.id} blog={post} />
                             ))}
                         </div>
 
