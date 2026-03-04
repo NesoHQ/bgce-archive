@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -29,18 +29,25 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 interface BlogDetailsClientProps {
+    initialPost?: ApiPost;
     slug: string;
 }
 
 const POSTAL_API_URL = process.env.NEXT_PUBLIC_POSTAL_API_URL || "http://localhost:8081/api/v1";
 
-export default function BlogDetailsClient({ slug }: BlogDetailsClientProps) {
+export default function BlogDetailsClient({ initialPost, slug }: BlogDetailsClientProps) {
     const router = useRouter();
-    const [post, setPost] = useState<ApiPost | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [post, setPost] = useState<ApiPost | null>(initialPost || null);
+    const [isLoading, setIsLoading] = useState(!initialPost);
     const [error, setError] = useState<string | null>(null);
+    const isFirstRun = useRef(!!initialPost);
 
     useEffect(() => {
+        if (isFirstRun.current) {
+            isFirstRun.current = false;
+            return;
+        }
+
         async function fetchPost() {
             try {
                 setIsLoading(true);
@@ -89,8 +96,6 @@ export default function BlogDetailsClient({ slug }: BlogDetailsClientProps) {
     const tags = post?.keywords ? post.keywords.split(',').map(k => k.trim()).filter(Boolean) : [];
     const readTime = post?.read_time && post.read_time > 0 ? `${post.read_time} min` : "1 min";
 
-    // Don't show loading state - Next.js loading.tsx handles it
-    // Just show error or content when ready
     if (error || (!post && !isLoading)) {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center">
@@ -102,12 +107,9 @@ export default function BlogDetailsClient({ slug }: BlogDetailsClientProps) {
         );
     }
 
-    // Still loading or no post yet - return null to keep showing loading.tsx
     if (!post) {
         return null;
     }
-
-    // Tags and readTime are now calculated above
 
     return (
         <div className="min-h-screen bg-background">
@@ -206,26 +208,28 @@ export default function BlogDetailsClient({ slug }: BlogDetailsClientProps) {
                         )}
 
                         {/* Article Body */}
-                        <div className="prose prose-base dark:prose-invert max-w-none
-                            prose-headings:font-bold prose-headings:text-foreground
-                            prose-h1:text-2xl prose-h1:mb-4 prose-h1:mt-8
-                            prose-h2:text-xl prose-h2:mb-3 prose-h2:mt-6
-                            prose-h3:text-lg prose-h3:mb-2 prose-h3:mt-5
-                            prose-p:text-base prose-p:leading-relaxed prose-p:mb-4
-                            prose-a:text-primary prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
-                            prose-strong:font-bold prose-strong:text-foreground
-                            prose-code:text-primary prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
-                            prose-pre:bg-muted prose-pre:border prose-pre:rounded-lg prose-pre:p-4 prose-pre:my-4
-                            prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-muted/30 prose-blockquote:py-3 prose-blockquote:px-5 prose-blockquote:italic prose-blockquote:my-4
-                            prose-ul:my-4 prose-ol:my-4 prose-li:my-1
-                            prose-img:rounded-lg prose-img:shadow-lg prose-img:my-6
-                            prose-table:my-4 prose-th:p-3 prose-td:p-3
-                            prose-hr:my-8
-                        ">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                {post.content}
-                            </ReactMarkdown>
-                        </div>
+                        {useMemo(() => (
+                            <div className="prose prose-base dark:prose-invert max-w-none
+                                prose-headings:font-bold prose-headings:text-foreground
+                                prose-h1:text-2xl prose-h1:mb-4 prose-h1:mt-8
+                                prose-h2:text-xl prose-h2:mb-3 prose-h2:mt-6
+                                prose-h3:text-lg prose-h3:mb-2 prose-h3:mt-5
+                                prose-p:text-base prose-p:leading-relaxed prose-p:mb-4
+                                prose-a:text-primary prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
+                                prose-strong:font-bold prose-strong:text-foreground
+                                prose-code:text-primary prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
+                                prose-pre:bg-muted prose-pre:border prose-pre:rounded-lg prose-pre:p-4 prose-pre:my-4
+                                prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-muted/30 prose-blockquote:py-3 prose-blockquote:px-5 prose-blockquote:italic prose-blockquote:my-4
+                                prose-ul:my-4 prose-ol:my-4 prose-li:my-1
+                                prose-img:rounded-lg prose-img:shadow-lg prose-img:my-6
+                                prose-table:my-4 prose-th:p-3 prose-td:p-3
+                                prose-hr:my-8
+                            ">
+                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                    {post.content}
+                                </ReactMarkdown>
+                            </div>
+                        ), [post.content])}
                     </article>
 
                     {/* Sidebar - Right Side */}

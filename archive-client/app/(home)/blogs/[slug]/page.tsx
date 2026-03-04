@@ -1,9 +1,10 @@
 import BlogDetailsClient from "./BlogDetailsClient";
 import type { Metadata } from "next";
+import { api } from "@/lib/api";
+import { notFound } from "next/navigation";
 
-// Force dynamic rendering - no caching
+// Force dynamic rendering - no caching per user request
 export const dynamic = "force-dynamic";
-export const revalidate = 0;
 
 interface PageProps {
     params: Promise<{
@@ -13,14 +14,21 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { slug } = await params;
+    const post = await api.getPostBySlug(slug);
 
     return {
-        title: `${slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')} - BGCE`,
-        description: "Read this article on BGCE Community",
+        title: post ? `${post.title} - BGCE` : `${slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')} - BGCE`,
+        description: post ? post.summary : "Read this article on BGCE Community",
     };
 }
 
 export default async function BlogDetailsPage({ params }: PageProps) {
     const { slug } = await params;
-    return <BlogDetailsClient slug={slug} />;
+    const post = await api.getPostBySlug(slug);
+
+    if (!post) {
+        notFound();
+    }
+
+    return <BlogDetailsClient initialPost={post} slug={slug} />;
 }

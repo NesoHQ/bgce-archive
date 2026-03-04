@@ -1,3 +1,4 @@
+import React, { memo } from "react";
 import { Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BlogCard } from "./BlogCard";
@@ -9,7 +10,7 @@ interface BlogGridProps {
     onClearFilters: () => void;
 }
 
-export function BlogGrid({ blogs, isLoading, onClearFilters }: BlogGridProps) {
+export const BlogGrid = memo(function BlogGrid({ blogs, isLoading, onClearFilters }: BlogGridProps) {
     if (isLoading) {
         return (
             <div className="text-center py-12">
@@ -42,4 +43,4 @@ export function BlogGrid({ blogs, isLoading, onClearFilters }: BlogGridProps) {
             ))}
         </div>
     );
-}
+});

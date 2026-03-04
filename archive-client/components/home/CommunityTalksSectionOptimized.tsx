@@ -6,13 +6,19 @@ import { MobileViewAllButton } from "@/components/shared/MobileViewAllButton";
 import { PostCard } from "@/components/shared/cards/PostCard";
 import { usePosts } from "@/hooks/usePosts";
 
-export function CommunityTalksSection() {
+import type { ApiPostListItem } from "@/types/blog.type";
+
+interface CommunityTalksSectionProps {
+    initialPosts?: ApiPostListItem[];
+}
+
+export function CommunityTalksSection({ initialPosts }: CommunityTalksSectionProps) {
     const { posts, isLoading, error } = usePosts({
         is_featured: true,
         limit: 3,
         sort_by: "created_at",
         sort_order: "DESC"
-    });
+    }, initialPosts ? { data: initialPosts, total: initialPosts.length } : undefined);
 
     return (
         <section className="py-10 lg:py-12 relative overflow-hidden">

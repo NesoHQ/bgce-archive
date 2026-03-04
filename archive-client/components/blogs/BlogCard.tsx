@@ -1,3 +1,4 @@
+import React, { memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Eye, Clock, Flame, Sparkles, ImageIcon } from "lucide-react";
@@ -30,7 +31,7 @@ const getTags = (keywords?: string) => {
     return keywords.split(',').map(k => k.trim()).slice(0, 2);
 };
 
-export function BlogCard({ blog }: BlogCardProps) {
+export const BlogCard = memo(function BlogCard({ blog }: BlogCardProps) {
     const blogImage = blog.thumbnail || blog.og_image;
 
     return (
@@ -143,4 +144,4 @@ export function BlogCard({ blog }: BlogCardProps) {
             </div>
         </Link>
     );
-}
+});

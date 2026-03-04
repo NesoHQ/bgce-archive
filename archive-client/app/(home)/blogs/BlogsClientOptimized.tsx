@@ -10,13 +10,24 @@ import type { SortOption } from "@/components/blogs/types";
 import { useCategories } from "@/hooks/useCategories";
 import { useSubcategories } from "@/hooks/useSubcategories";
 import { usePosts } from "@/hooks/usePosts";
+import type { ApiCategory, ApiPostListItem } from "@/types/blog.type";
+
+interface BlogsClientProps {
+  initialCategories?: ApiCategory[];
+  initialPosts?: ApiPostListItem[];
+  initialTotal?: number;
+}
 
 const MobileFilterDrawer = dynamic(
   () => import("@/components/blogs/MobileFilterDrawer").then((mod) => ({ default: mod.MobileFilterDrawer })),
   { ssr: false },
 );
 
-export default function BlogsClient() {
+export default function BlogsClient({
+  initialCategories,
+  initialPosts,
+  initialTotal
+}: BlogsClientProps) {
   const [isPending, startTransition] = useTransition();
 
   // Filter state
@@ -24,6 +35,7 @@ export default function BlogsClient() {
   const [pageSize, setPageSize] = useState(9);
   const [sortBy, setSortBy] = useState<SortOption>("new");
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState<number | null>(null);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -33,7 +45,15 @@ export default function BlogsClient() {
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
   const [showPinnedOnly, setShowPinnedOnly] = useState(false);
 
-  const { categories } = useCategories();
+  // Debouncing search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const { categories } = useCategories(initialCategories);
 
   const selectedCategoryUuid = useMemo(() =>
     categories.find((c) => c.id === selectedCategory)?.uuid,
@@ -50,7 +70,7 @@ export default function BlogsClient() {
 
     if (selectedCategory) filters.category_id = selectedCategory;
     if (selectedSubcategory) filters.sub_category_id = selectedSubcategory;
-    if (searchQuery) filters.search = searchQuery;
+    if (debouncedSearch) filters.search = debouncedSearch;
     if (showFeaturedOnly) filters.is_featured = true;
     if (showPinnedOnly) filters.is_pinned = true;
 
@@ -67,9 +87,12 @@ export default function BlogsClient() {
     }
 
     return filters;
-  }, [currentPage, pageSize, selectedCategory, selectedSubcategory, searchQuery, showFeaturedOnly, showPinnedOnly, sortBy]);
+  }, [currentPage, pageSize, selectedCategory, selectedSubcategory, debouncedSearch, showFeaturedOnly, showPinnedOnly, sortBy]);
 
-  const { posts, total: totalPosts, isLoading: isLoadingPosts } = usePosts(postFilters);
+  const { posts, total: totalPosts, isLoading: isLoadingPosts } = usePosts(
+    postFilters,
+    initialPosts && initialTotal !== undefined ? { data: initialPosts, total: initialTotal } : undefined
+  );
   const totalPages = Math.ceil(totalPosts / pageSize);
 
   const handleCategoryChange = useCallback((categoryId: number | null) => {
