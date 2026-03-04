@@ -25,7 +25,11 @@ import { CheatsheetSection } from "@/components/home/CheatsheetSection";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const featuredPosts = await api.getPosts({ is_featured: true, limit: 3 });
+  const popularPosts = await api.getPosts({
+    sort_by: "view_count",
+    sort_order: "DESC",
+    limit: 3
+  });
 
   return (
     <>
@@ -44,7 +48,7 @@ export default async function HomePage() {
             <SkeletonCardGrid count={3} />
           </div>
         }>
-        <CommunityTalksSection initialPosts={featuredPosts.data} />
+        <CommunityTalksSection initialPosts={popularPosts.data} />
       </Suspense>
       <Suspense
         fallback={
