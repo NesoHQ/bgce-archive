@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import type { ApiSubcategory } from "@/types/blog.type";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
+import { apiClient } from "@/lib/api-client";
 
 export function useSubcategories(parentUuid?: string) {
     const [subcategories, setSubcategories] = useState<ApiSubcategory[]>([]);
@@ -14,33 +13,29 @@ export function useSubcategories(parentUuid?: string) {
             return;
         }
 
+        let mounted = true;
+        setIsLoading(true);
+
         const fetchSubcategories = async () => {
             try {
-                setIsLoading(true);
-                const response = await fetch(
-                    `${API_URL}/sub-categories?parent_uuid=${parentUuid}&status=approved`
-                );
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch subcategories: ${response.status}`);
-                }
-
-                const result = await response.json();
-
-                if (result.status && result.data) {
-                    setSubcategories(result.data);
-                } else {
-                    setSubcategories([]);
+                const data = await apiClient.getSubcategories(parentUuid);
+                if (mounted) {
+                    setSubcategories(data);
+                    setIsLoading(false);
                 }
             } catch (err) {
-                setError(err instanceof Error ? err.message : "Failed to fetch subcategories");
-                console.error("Error fetching subcategories:", err);
-            } finally {
-                setIsLoading(false);
+                if (mounted) {
+                    setError(err instanceof Error ? err.message : "Failed to fetch");
+                    setIsLoading(false);
+                }
             }
         };
 
         fetchSubcategories();
+
+        return () => {
+            mounted = false;
+        };
     }, [parentUuid]);
 
     return { subcategories, isLoading, error };
