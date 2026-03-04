@@ -248,10 +248,12 @@ func (r *postRepository) GetMaxOrderNo(ctx context.Context) (uint, error) {
 	var maxOrderNo uint
 
 	err := r.db.WithContext(ctx).
+		Unscoped().
 		Model(&domain.Post{}).
 		Select("COALESCE(MAX(order_no), 0)").
 		Row().
 		Scan(&maxOrderNo)
+
 	if err != nil {
 		return 0, err
 	}
