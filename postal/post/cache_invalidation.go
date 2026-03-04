@@ -28,7 +28,15 @@ func (s *service) invalidatePostCache(ctx context.Context, post *domain.Post) {
 		}
 	}
 
-	log.Printf("Invalidated cache for post ID=%d, slug=%s", post.ID, post.Slug)
+	// Invalidate by UUID
+	if post.UUID != "" {
+		uuidKey := fmt.Sprintf("post:uuid:%s", post.UUID)
+		if err := s.cache.Del(ctx, uuidKey); err != nil {
+			log.Printf("Failed to invalidate post cache by uuid: %v", err)
+		}
+	}
+
+	log.Printf("Invalidated cache for post ID=%d, slug=%s, uuid=%s", post.ID, post.Slug, post.UUID)
 }
 
 // invalidateListCaches removes all cached list queries

@@ -258,3 +258,7 @@ func (r *postRepository) GetMaxOrderNo(ctx context.Context) (uint, error) {
 
 	return maxOrderNo, nil
 }
+
+func (r *postRepository) IncrementViewCount(ctx context.Context, id uint) error {
+	return r.db.WithContext(ctx).Model(&domain.Post{}).Where("id = ?", id).Update("view_count", gorm.Expr("view_count + ?", 1)).Error
+}

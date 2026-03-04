@@ -30,6 +30,7 @@ func NewServeMux(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handle
 	mux.HandleFunc("GET /api/v1/posts", h.ListPosts)
 	mux.HandleFunc("GET /api/v1/posts/{id}", h.GetPostByID)
 	mux.HandleFunc("GET /api/v1/posts/slug/{slug}", h.GetPostBySlug)
+	mux.HandleFunc("GET /api/v1/posts/uuid/{uuid}", h.GetPostByUUID)
 
 	// Protected routes
 	mux.HandleFunc("POST /api/v1/posts", func(w http.ResponseWriter, r *http.Request) {
