@@ -1,15 +1,15 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { BlogHeader } from "@/components/blogs/BlogHeader";
 import { MobileFilterButton } from "@/components/blogs/MobileFilterButton";
 import { BlogSidebar } from "@/components/blogs/BlogSidebar";
 import { BlogGrid } from "@/components/blogs/BlogGrid";
-import type { BlogsClientProps, SortOption } from "@/components/blogs/types";
-import type { ApiCategory } from "@/types/blog.type";
-import { getSubcategories } from "@/action/subcategory.action";
-import { getPosts } from "@/action/post.action";
+import type { SortOption } from "@/components/blogs/types";
+import { useCategories } from "@/hooks/useCategories";
+import { useSubcategories } from "@/hooks/useSubcategories";
+import { usePosts } from "@/hooks/usePosts";
 
 // Dynamically import mobile drawer (heavy component)
 const MobileFilterDrawer = dynamic(
@@ -20,91 +20,58 @@ const MobileFilterDrawer = dynamic(
   { ssr: false },
 );
 
-export default function BlogsClient({
-  initialPosts,
-  initialTotal,
-  categories,
-}: BlogsClientProps) {
-  // State
-  const [posts, setPosts] = useState(initialPosts);
-  const [totalPosts, setTotalPosts] = useState(initialTotal);
+export default function BlogsClient() {
+  // Filter state
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(9);
   const [sortBy, setSortBy] = useState<SortOption>("new");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const [selectedSubcategory, setSelectedSubcategory] = useState<number | null>(
-    null,
-  );
-  const [subcategories, setSubcategories] = useState<ApiCategory[]>([]);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<number | null>(null);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState<number | null>(null);
   const [categorySearch, setCategorySearch] = useState("");
   const [showAllCategories, setShowAllCategories] = useState(false);
-  const [isLoadingSubcategories, setIsLoadingSubcategories] = useState(false);
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
   const [showPinnedOnly, setShowPinnedOnly] = useState(false);
 
-  const isInitialMount = useRef(true);
+  // Direct API calls via hooks
+  const { categories, isLoading: isLoadingCategories } = useCategories();
 
-  const totalPages = Math.ceil(totalPosts / pageSize);
-
-  // Fetch subcategories when category is selected
-  useEffect(() => {
-    if (selectedCategory) {
-      const category = categories.find((c) => c.id === selectedCategory);
-      if (category?.uuid) {
-        setIsLoadingSubcategories(true);
-        getSubcategories(category.uuid)
-          .then(setSubcategories)
-          .finally(() => setIsLoadingSubcategories(false));
-      }
-    } else {
-      setSubcategories([]);
-      setSelectedSubcategory(null);
-    }
+  const selectedCategoryUuid = useMemo(() => {
+    if (!selectedCategory) return undefined;
+    const category = categories.find((c) => c.id === selectedCategory);
+    return category?.uuid;
   }, [selectedCategory, categories]);
 
-  // Fetch posts when filters change - SERVER SIDE
-  const fetchFilteredPosts = useCallback(async () => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      return;
+  const { subcategories, isLoading: isLoadingSubcategories } = useSubcategories(selectedCategoryUuid);
+
+  // Build post filters
+  const postFilters = useMemo(() => {
+    const filters: any = {
+      limit: pageSize,
+      offset: (currentPage - 1) * pageSize,
+    };
+
+    if (selectedCategory) filters.category_id = selectedCategory;
+    if (selectedSubcategory) filters.sub_category_id = selectedSubcategory;
+    if (searchQuery) filters.search = searchQuery;
+    if (showFeaturedOnly) filters.is_featured = true;
+    if (showPinnedOnly) filters.is_pinned = true;
+
+    if (sortBy === "new") {
+      filters.sort_by = "created_at";
+      filters.sort_order = "DESC";
+    } else if (sortBy === "views") {
+      filters.sort_by = "view_count";
+      filters.sort_order = "DESC";
+    } else if (sortBy === "featured") {
+      filters.is_featured = true;
+      filters.sort_by = "created_at";
+      filters.sort_order = "DESC";
     }
 
-    setIsLoading(true);
-    try {
-      const params: Parameters<typeof getPosts>[0] = {
-        limit: pageSize,
-        offset: (currentPage - 1) * pageSize,
-        category_id: selectedCategory || undefined,
-        sub_category_id: selectedSubcategory || undefined,
-        search: searchQuery || undefined,
-        is_featured: showFeaturedOnly || undefined,
-        is_pinned: showPinnedOnly || undefined,
-      };
-
-      if (sortBy === "new") {
-        params.sort_by = "created_at";
-        params.sort_order = "DESC";
-      } else if (sortBy === "views") {
-        params.sort_by = "view_count";
-        params.sort_order = "DESC";
-      } else if (sortBy === "featured") {
-        params.is_featured = true;
-        params.sort_by = "created_at";
-        params.sort_order = "DESC";
-      }
-
-      const { data, total } = await getPosts(params);
-      setPosts(data);
-      setTotalPosts(total);
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-    } finally {
-      setIsLoading(false);
-    }
+    return filters;
   }, [
     currentPage,
     pageSize,
@@ -116,10 +83,14 @@ export default function BlogsClient({
     sortBy,
   ]);
 
-  // Fetch posts when filters change
+  const { posts, total: totalPosts, isLoading: isLoadingPosts } = usePosts(postFilters);
+
+  const totalPages = Math.ceil(totalPosts / pageSize);
+
+  // Reset subcategory when category changes
   useEffect(() => {
-    fetchFilteredPosts();
-  }, [fetchFilteredPosts]);
+    setSelectedSubcategory(null);
+  }, [selectedCategory]);
 
   // Reset to page 1 when filters change
   useEffect(() => {
@@ -151,10 +122,9 @@ export default function BlogsClient({
   const hasMoreCategories =
     filteredCategories.length > 5 && !showAllCategories && !categorySearch;
 
-  // Get post count per category (approximate from initial load)
+  // Get post count per category (from current posts)
   const getCategoryPostCount = (categoryId: number) => {
-    return initialPosts.filter((post) => post.category_id === categoryId)
-      .length;
+    return posts.filter((post) => post.category_id === categoryId).length;
   };
 
   const activeFiltersCount = [
@@ -290,7 +260,7 @@ export default function BlogsClient({
             {/* Results header with per-page selector */}
             <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <p className="text-sm font-medium text-foreground">
-                {isLoading
+                {isLoadingPosts
                   ? "Loading..."
                   : `${totalPosts} Blog${totalPosts !== 1 ? "s" : ""} found`}
                 {totalPosts > 0 && ` (Page ${currentPage} of ${totalPages})`}
@@ -313,12 +283,12 @@ export default function BlogsClient({
 
             <BlogGrid
               blogs={posts}
-              isLoading={isLoading}
+              isLoading={isLoadingPosts}
               onClearFilters={clearAllFilters}
             />
 
             {/* Pagination */}
-            {totalPages > 1 && !isLoading && (
+            {totalPages > 1 && !isLoadingPosts && (
               <div className="mt-8 flex items-center justify-center gap-2">
                 <button
                   onClick={() => goToPage(currentPage - 1)}
@@ -336,11 +306,10 @@ export default function BlogsClient({
                     <button
                       key={page}
                       onClick={() => goToPage(page)}
-                      className={`px-3 py-2 rounded-md text-sm font-medium ${
-                        page === currentPage
+                      className={`px-3 py-2 rounded-md text-sm font-medium ${page === currentPage
                           ? "bg-primary text-primary-foreground"
                           : "border border-input bg-background hover:bg-accent"
-                      }`}
+                        }`}
                     >
                       {page}
                     </button>

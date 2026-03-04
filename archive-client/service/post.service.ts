@@ -52,6 +52,8 @@ export const postService = {
           headers: {
             "Content-Type": "application/json",
           },
+          cache: "no-store", // Disable Next.js caching
+          next: { revalidate: 0 }, // Disable ISR
         },
       );
 
@@ -82,6 +84,8 @@ export const postService = {
         headers: {
           "Content-Type": "application/json",
         },
+        cache: "no-store", // Disable Next.js caching
+        next: { revalidate: 0 }, // Disable ISR
       });
 
       if (!response.ok) {
@@ -108,6 +112,8 @@ export const postService = {
         headers: {
           "Content-Type": "application/json",
         },
+        cache: "no-store", // Disable Next.js caching
+        next: { revalidate: 0 }, // Disable ISR
       });
 
       if (!response.ok) {
