@@ -19,8 +19,7 @@ import {
     User,
     TrendingUp,
     Hash,
-    Bell,
-    Loader2
+    Bell
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -96,15 +95,9 @@ export default function BlogDetailsClient({ slug }: BlogDetailsClientProps) {
         return readTime > 0 ? `${readTime} min` : "1 min";
     };
 
-    if (isLoading) {
-        return (
-            <div className="min-h-screen bg-background flex items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
-        );
-    }
-
-    if (error || !post) {
+    // Don't show loading state - Next.js loading.tsx handles it
+    // Just show error or content when ready
+    if (error || (!post && !isLoading)) {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center">
                 <div className="text-center">
@@ -113,6 +106,11 @@ export default function BlogDetailsClient({ slug }: BlogDetailsClientProps) {
                 </div>
             </div>
         );
+    }
+
+    // Still loading or no post yet - return null to keep showing loading.tsx
+    if (!post) {
+        return null;
     }
 
     const tags = getTags(post.keywords);
