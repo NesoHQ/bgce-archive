@@ -63,7 +63,7 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64
           build-args: |
-            NEXT_PUBLIC_API_BASE_URL=https://cortex.nesohq.org/api/v1
+            NEXT_PUBLIC_API_URL=https://cortex.nesohq.org/api/v1
             NEXT_PUBLIC_POSTAL_API_URL=https://postal.nesohq.org/api/v1
             NEXT_PUBLIC_KRAKENS_PROJECT_ID=hrd_c3a24d14aa184752400c472a145343928195b6b0300d28b48932e21233e845a0
 

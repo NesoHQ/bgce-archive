@@ -5,7 +5,7 @@
  * Run with: node scripts/test-api.js
  */
 
-const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api/v1';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
 
 async function testAPI() {
     console.log('🔍 Testing API connection...\n');
