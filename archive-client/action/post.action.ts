@@ -15,6 +15,7 @@ export const getPosts = async (params?: {
   sort_order?: "ASC" | "DESC";
 }) => {
   const result = await postService.getPosts(params);
+  console.log("Testing API call");
   return result;
 };
 

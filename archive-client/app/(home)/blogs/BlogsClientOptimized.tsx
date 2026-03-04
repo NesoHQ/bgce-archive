@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import { BlogHeader } from "@/components/blogs/BlogHeader";
 import { MobileFilterButton } from "@/components/blogs/MobileFilterButton";
@@ -22,11 +22,12 @@ const MobileFilterDrawer = dynamic(
 
 export default function BlogsClient({
   initialPosts,
+  initialTotal,
   categories,
 }: BlogsClientProps) {
   // State
   const [posts, setPosts] = useState(initialPosts);
-  const [totalPosts, setTotalPosts] = useState(initialPosts.length);
+  const [totalPosts, setTotalPosts] = useState(initialTotal);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(9);
   const [sortBy, setSortBy] = useState<SortOption>("new");
@@ -44,6 +45,8 @@ export default function BlogsClient({
   const [isLoadingSubcategories, setIsLoadingSubcategories] = useState(false);
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
   const [showPinnedOnly, setShowPinnedOnly] = useState(false);
+
+  const isInitialMount = useRef(true);
 
   const totalPages = Math.ceil(totalPosts / pageSize);
 
@@ -65,6 +68,11 @@ export default function BlogsClient({
 
   // Fetch posts when filters change - SERVER SIDE
   const fetchFilteredPosts = useCallback(async () => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
     setIsLoading(true);
     try {
       const params: Parameters<typeof getPosts>[0] = {
