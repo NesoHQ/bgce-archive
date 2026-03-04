@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback, useTransition } from "react";
 import dynamic from "next/dynamic";
 import { BlogHeader } from "@/components/blogs/BlogHeader";
 import { MobileFilterButton } from "@/components/blogs/MobileFilterButton";
@@ -13,14 +13,13 @@ import { usePosts } from "@/hooks/usePosts";
 
 // Dynamically import mobile drawer (heavy component)
 const MobileFilterDrawer = dynamic(
-  () =>
-    import("@/components/blogs/MobileFilterDrawer").then((mod) => ({
-      default: mod.MobileFilterDrawer,
-    })),
+  () => import("@/components/blogs/MobileFilterDrawer").then((mod) => ({ default: mod.MobileFilterDrawer })),
   { ssr: false },
 );
 
 export default function BlogsClient() {
+  const [isPending, startTransition] = useTransition();
+
   // Filter state
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(9);
@@ -35,18 +34,17 @@ export default function BlogsClient() {
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
   const [showPinnedOnly, setShowPinnedOnly] = useState(false);
 
-  // Direct API calls via hooks
+  // Direct API calls via hooks - all fire in parallel
   const { categories, isLoading: isLoadingCategories } = useCategories();
 
   const selectedCategoryUuid = useMemo(() => {
     if (!selectedCategory) return undefined;
-    const category = categories.find((c) => c.id === selectedCategory);
-    return category?.uuid;
+    return categories.find((c) => c.id === selectedCategory)?.uuid;
   }, [selectedCategory, categories]);
 
   const { subcategories, isLoading: isLoadingSubcategories } = useSubcategories(selectedCategoryUuid);
 
-  // Build post filters
+  // Build post filters - memoized to prevent unnecessary refetches
   const postFilters = useMemo(() => {
     const filters: any = {
       limit: pageSize,
@@ -72,89 +70,61 @@ export default function BlogsClient() {
     }
 
     return filters;
-  }, [
-    currentPage,
-    pageSize,
-    selectedCategory,
-    selectedSubcategory,
-    searchQuery,
-    showFeaturedOnly,
-    showPinnedOnly,
-    sortBy,
-  ]);
+  }, [currentPage, pageSize, selectedCategory, selectedSubcategory, searchQuery, showFeaturedOnly, showPinnedOnly, sortBy]);
 
   const { posts, total: totalPosts, isLoading: isLoadingPosts } = usePosts(postFilters);
-
   const totalPages = Math.ceil(totalPosts / pageSize);
 
   // Reset subcategory when category changes
   useEffect(() => {
-    setSelectedSubcategory(null);
+    if (selectedCategory) {
+      setSelectedSubcategory(null);
+    }
   }, [selectedCategory]);
 
-  // Reset to page 1 when filters change
+  // Reset to page 1 when filters change (use transition for non-blocking)
   useEffect(() => {
-    setCurrentPage(1);
-  }, [
-    selectedCategory,
-    selectedSubcategory,
-    searchQuery,
-    showFeaturedOnly,
-    showPinnedOnly,
-    sortBy,
-    pageSize,
-  ]);
+    startTransition(() => {
+      setCurrentPage(1);
+    });
+  }, [selectedCategory, selectedSubcategory, searchQuery, showFeaturedOnly, showPinnedOnly, sortBy, pageSize]);
 
-  // Filter categories based on search
+  // Filter categories based on search - memoized
   const filteredCategories = useMemo(() => {
     if (!categorySearch) return categories;
-    return categories.filter((cat) =>
-      cat.label.toLowerCase().includes(categorySearch.toLowerCase()),
-    );
+    const search = categorySearch.toLowerCase();
+    return categories.filter((cat) => cat.label.toLowerCase().includes(search));
   }, [categories, categorySearch]);
 
-  // Show only top 5 categories initially
+  // Show only top 5 categories initially - memoized
   const displayedCategories = useMemo(() => {
-    if (categorySearch || showAllCategories) return filteredCategories;
-    return filteredCategories.slice(0, 5);
+    return (categorySearch || showAllCategories) ? filteredCategories : filteredCategories.slice(0, 5);
   }, [filteredCategories, categorySearch, showAllCategories]);
 
-  const hasMoreCategories =
-    filteredCategories.length > 5 && !showAllCategories && !categorySearch;
+  const hasMoreCategories = filteredCategories.length > 5 && !showAllCategories && !categorySearch;
 
-  // Get post count per category (from current posts)
-  const getCategoryPostCount = (categoryId: number) => {
+  // Get post count per category - memoized
+  const getCategoryPostCount = useCallback((categoryId: number) => {
     return posts.filter((post) => post.category_id === categoryId).length;
-  };
+  }, [posts]);
 
-  const activeFiltersCount = [
-    searchQuery,
-    selectedCategory,
-    selectedSubcategory,
-    showFeaturedOnly,
-    showPinnedOnly,
-  ].filter(Boolean).length;
+  const activeFiltersCount = useMemo(() =>
+    [searchQuery, selectedCategory, selectedSubcategory, showFeaturedOnly, showPinnedOnly].filter(Boolean).length,
+    [searchQuery, selectedCategory, selectedSubcategory, showFeaturedOnly, showPinnedOnly]
+  );
 
   // Prevent body scroll when drawer is open
   useEffect(() => {
-    if (showMobileFilters) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
+    document.body.style.overflow = showMobileFilters ? "hidden" : "unset";
+    return () => { document.body.style.overflow = "unset"; };
   }, [showMobileFilters]);
 
-  // Keyboard shortcuts
+  // Keyboard shortcuts - memoized handler
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
-        document
-          .querySelector<HTMLInputElement>('input[placeholder*="Search"]')
-          ?.focus();
+        document.querySelector<HTMLInputElement>('input[placeholder*="Search"]')?.focus();
       }
       if (e.key === "Escape" && activeFiltersCount > 0) {
         clearAllFilters();
@@ -164,33 +134,39 @@ export default function BlogsClient() {
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [activeFiltersCount]);
 
-  const clearAllFilters = () => {
-    setSearchQuery("");
-    setSelectedCategory(null);
-    setSelectedSubcategory(null);
-    setCategorySearch("");
-    setShowAllCategories(false);
-    setShowFeaturedOnly(false);
-    setShowPinnedOnly(false);
-    setCurrentPage(1);
-  };
-
-  const handleToggleCategory = (categoryId: number) => {
-    if (selectedCategory === categoryId) {
-      setExpandedCategory(expandedCategory === categoryId ? null : categoryId);
-    } else {
-      setSelectedCategory(categoryId);
-      setExpandedCategory(categoryId);
+  const clearAllFilters = useCallback(() => {
+    startTransition(() => {
+      setSearchQuery("");
+      setSelectedCategory(null);
       setSelectedSubcategory(null);
-    }
-  };
+      setCategorySearch("");
+      setShowAllCategories(false);
+      setShowFeaturedOnly(false);
+      setShowPinnedOnly(false);
+      setCurrentPage(1);
+    });
+  }, []);
 
-  const goToPage = (page: number) => {
+  const handleToggleCategory = useCallback((categoryId: number) => {
+    startTransition(() => {
+      if (selectedCategory === categoryId) {
+        setExpandedCategory(expandedCategory === categoryId ? null : categoryId);
+      } else {
+        setSelectedCategory(categoryId);
+        setExpandedCategory(categoryId);
+        setSelectedSubcategory(null);
+      }
+    });
+  }, [selectedCategory, expandedCategory]);
+
+  const goToPage = useCallback((page: number) => {
     if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
+      startTransition(() => {
+        setCurrentPage(page);
+      });
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  };
+  }, [totalPages]);
 
   return (
     <div className="min-h-screen">
@@ -202,7 +178,6 @@ export default function BlogsClient() {
           activeFiltersCount={activeFiltersCount}
         />
 
-        {/* Mobile Filter Drawer - Lazy loaded */}
         {showMobileFilters && (
           <MobileFilterDrawer
             isOpen={showMobileFilters}
@@ -257,12 +232,9 @@ export default function BlogsClient() {
           />
 
           <main className="flex-1">
-            {/* Results header with per-page selector */}
             <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <p className="text-sm font-medium text-foreground">
-                {isLoadingPosts
-                  ? "Loading..."
-                  : `${totalPosts} Blog${totalPosts !== 1 ? "s" : ""} found`}
+                {isLoadingPosts ? "Loading..." : `${totalPosts} Blog${totalPosts !== 1 ? "s" : ""} found`}
                 {totalPosts > 0 && ` (Page ${currentPage} of ${totalPages})`}
               </p>
 
@@ -281,13 +253,8 @@ export default function BlogsClient() {
               </div>
             </div>
 
-            <BlogGrid
-              blogs={posts}
-              isLoading={isLoadingPosts}
-              onClearFilters={clearAllFilters}
-            />
+            <BlogGrid blogs={posts} isLoading={isLoadingPosts} onClearFilters={clearAllFilters} />
 
-            {/* Pagination */}
             {totalPages > 1 && !isLoadingPosts && (
               <div className="mt-8 flex items-center justify-center gap-2">
                 <button
@@ -299,10 +266,7 @@ export default function BlogsClient() {
                 </button>
 
                 <div className="flex items-center gap-1">
-                  {Array.from(
-                    { length: Math.min(5, totalPages) },
-                    (_, i) => i + 1,
-                  ).map((page) => (
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => i + 1).map((page) => (
                     <button
                       key={page}
                       onClick={() => goToPage(page)}
@@ -314,9 +278,7 @@ export default function BlogsClient() {
                       {page}
                     </button>
                   ))}
-                  {totalPages > 5 && (
-                    <span className="px-2 text-muted-foreground">...</span>
-                  )}
+                  {totalPages > 5 && <span className="px-2 text-muted-foreground">...</span>}
                   {totalPages > 5 && currentPage < totalPages - 2 && (
                     <button
                       onClick={() => goToPage(totalPages)}
