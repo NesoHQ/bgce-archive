@@ -11,48 +11,49 @@ import { GradientBackground } from "@/components/shared/GradientBackground";
 import { MobileOptimizer } from "@/components/shared/MobileOptimizer";
 
 const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
-    display: "swap",
-    preload: true,
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
 });
 
 const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
-    display: "swap",
-    preload: true,
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {
-    title: "BGCE Archive",
-    description: "Best Golang Community Ever",
-    other: {
-        // Optimize for mobile performance
-        "mobile-web-app-capable": "yes",
-        "apple-mobile-web-app-capable": "yes",
-        "apple-mobile-web-app-status-bar-style": "default",
-    },
+  title: "BGCE Archive",
+  description: "Best Golang Community Ever",
+  other: {
+    // Optimize for mobile performance
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
+  },
 };
 
 export const viewport = {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-    userScalable: true,
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
 };
 
 export default function RootLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    return (
-        <html lang="en" suppressHydrationWarning>
-            <head>
-                {/* Critical mobile performance CSS - loaded immediately */}
-                <style dangerouslySetInnerHTML={{
-                    __html: `
+  return (
+    <html lang='en' suppressHydrationWarning>
+      <head>
+        {/* Critical mobile performance CSS - loaded immediately */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
                         @media (max-width: 768px) {
                             * {
                                 backdrop-filter: none !important;
@@ -82,32 +83,29 @@ export default function RootLayout({
                                 -webkit-overflow-scrolling: touch;
                             }
                         }
-                    `
-                }} />
-            </head>
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-            >
-                <SkipToContent />
-                <KrakensAnalytics />
-                <MobileOptimizer />
-                <GradientBackground />
+                    `,
+          }}
+        />
+      </head>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <SkipToContent />
+        <KrakensAnalytics />
+        <MobileOptimizer />
+        <GradientBackground />
 
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="system"
-                    enableSystem
-                    disableTransitionOnChange
-                >
-                    <ToastProvider>
-                        <ErrorBoundary>
-                            <AuthProvider>
-                                {children}
-                            </AuthProvider>
-                        </ErrorBoundary>
-                    </ToastProvider>
-                </ThemeProvider>
-            </body>
-        </html>
-    );
+        <ThemeProvider
+          attribute='class'
+          defaultTheme='system'
+          enableSystem
+          disableTransitionOnChange>
+          <ToastProvider>
+            <ErrorBoundary>
+              <AuthProvider>{children}</AuthProvider>
+            </ErrorBoundary>
+          </ToastProvider>
+        </ThemeProvider>
+      </body>
+    </html>
+  );
 }
