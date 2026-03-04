@@ -161,27 +161,9 @@ func (s *service) GetPostBySlug(ctx context.Context, slug string) (*PostResponse
 }
 
 func (s *service) ListPosts(ctx context.Context, filter PostFilter) ([]*PostListItemResponse, int64, error) {
-	// Try cache first for list queries
-	if s.cache != nil {
-		cacheKey := s.buildListCacheKey(filter)
-
-		cacheStart := time.Now()
-		cached, err := s.cache.Get(ctx, cacheKey)
-		cacheGetTime := time.Since(cacheStart)
-
-		if err == nil && cached != "" {
-			unmarshalStart := time.Now()
-			var cachedResult struct {
-				Posts []*PostListItemResponse `json:"posts"`
-				Total int64                   `json:"total"`
-			}
-			if err := json.Unmarshal([]byte(cached), &cachedResult); err == nil {
-				unmarshalTime := time.Since(unmarshalStart)
-				log.Printf("Cache HIT - returning post list from Redis (key=%s) [cache_get=%v, unmarshal=%v, total=%v]",
-					cacheKey, cacheGetTime, unmarshalTime, time.Since(cacheStart))
-				return cachedResult.Posts, cachedResult.Total, nil
-			}
-		}
+	// Try to get from full cache first (with pagination slicing)
+	if cachedPosts, cachedTotal, found := s.tryGetFromFullCache(ctx, filter); found {
+		return cachedPosts, cachedTotal, nil
 	}
 
 	// Cache MISS - load from DB
@@ -196,8 +178,8 @@ func (s *service) ListPosts(ctx context.Context, filter PostFilter) ([]*PostList
 		responses[i] = ToPostListItemResponse(post)
 	}
 
-	// Cache the result
-	s.cachePostList(ctx, filter, responses, total)
+	// Cache the full result set (async to not block response)
+	go s.cacheFullResultSet(context.Background(), filter, responses, total)
 
 	return responses, total, nil
 }

@@ -1,10 +1,9 @@
 import BlogsClient from "./BlogsClientOptimized";
 import type { Metadata } from "next";
-import { getPosts } from "@/action/post.action";
-import { getCategories } from "@/action/category.action";
 
-// Revalidate every 60 seconds (ISR)
-export const revalidate = 60;
+// Force dynamic rendering - no caching
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Community Blogs - BGCE",
@@ -12,17 +11,6 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogsPage() {
-  // Fetch all published posts and categories
-  const [postResponse, categories] = await Promise.all([
-    getPosts({ limit: 9, sort_by: "created_at", sort_order: "DESC" }),
-    getCategories(),
-  ]);
-
-  return (
-    <BlogsClient
-      initialPosts={postResponse.data}
-      initialTotal={postResponse.total}
-      categories={categories}
-    />
-  );
+  // No server-side data fetching - let client handle it
+  return <BlogsClient />;
 }

@@ -5,27 +5,17 @@ import type { ApiCategory } from "@/types/blog.type";
 import { CategoryCard } from "./popular/CategoryCard";
 import { ContributorTable } from "./popular/ContributorTable";
 import { fallbackCategories } from "./popular/data";
-import { getCategories } from "@/action/category.action";
+import { useCategories } from "@/hooks/useCategories";
 
 export default function PopularSectionOptimized() {
+    const { categories: apiCategories, isLoading } = useCategories();
     const [categories, setCategories] = useState<ApiCategory[]>([]);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        async function fetchCategories() {
-            try {
-                const data = await getCategories();
-                setCategories(data.length === 0 ? fallbackCategories : data.slice(0, 5));
-            } catch (error) {
-                console.warn("Using fallback categories due to API unavailability");
-                setCategories(fallbackCategories);
-            } finally {
-                setLoading(false);
-            }
+        if (!isLoading) {
+            setCategories(apiCategories.length === 0 ? fallbackCategories : apiCategories.slice(0, 5));
         }
-
-        fetchCategories();
-    }, []);
+    }, [apiCategories, isLoading]);
 
     return (
         <main className="container mx-auto py-16">
@@ -41,7 +31,7 @@ export default function PopularSectionOptimized() {
                         </p>
                     </div>
 
-                    {loading ? (
+                    {isLoading ? (
                         <div className="space-y-3">
                             {[1, 2, 3, 4, 5].map((i) => (
                                 <div
