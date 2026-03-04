@@ -3,8 +3,8 @@ import BlogDetailsClient from "./BlogDetailsClient";
 import type { Metadata } from "next";
 import { getPostBySlug } from "@/action/post.action";
 
-// Force dynamic rendering
-export const dynamic = "force-dynamic";
+// Revalidate every 60 seconds (ISR)
+export const revalidate = 60;
 
 interface PageProps {
     params: Promise<{

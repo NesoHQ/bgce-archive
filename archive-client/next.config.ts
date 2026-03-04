@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Disable static page generation for dynamic content
+  // Use standalone outpugeneration for dynamic content
   output: "standalone",
 
   // Image optimization
@@ -66,7 +66,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value: "no-store, must-revalidate",
+            value: "public, s-maxage=60, stale-while-revalidate=120",
           },
         ],
       },

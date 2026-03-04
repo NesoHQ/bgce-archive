@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import { getPosts } from "@/action/post.action";
 import { getCategories } from "@/action/category.action";
 
-// Force dynamic rendering
-export const dynamic = "force-dynamic";
+// Revalidate every 60 seconds (ISR)
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Community Blogs - BGCE",
