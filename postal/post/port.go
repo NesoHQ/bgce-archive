@@ -24,6 +24,7 @@ type Service interface {
 	BatchUploadPosts(ctx context.Context, userID uint, file *multipart.File) error
 	BatchDeletePosts(ctx context.Context, uuids *[]string) error
 	SeedReadTime(ctx context.Context, userID uint) error
+	IncrementViewCount(ctx context.Context, id uint) error
 }
 
 // Repository defines the interface for post persistence

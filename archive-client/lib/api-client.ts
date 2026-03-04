@@ -96,6 +96,12 @@ export const apiClient = {
         return null;
     },
 
+    // Record post view
+    async incrementViewCount(id: number) {
+        const url = `${POSTAL_API_URL}/posts/${id}/view`;
+        return fetchWithDedup(url, { method: 'POST' }).catch(() => null);
+    },
+
     // Prefetch multiple resources in parallel
     async prefetch(urls: string[]) {
         return Promise.all(urls.map((url) => fetchWithDedup(url).catch(() => null)));

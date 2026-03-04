@@ -32,6 +32,9 @@ func NewServeMux(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handle
 	mux.HandleFunc("GET /api/v1/posts/slug/{slug}", h.GetPostBySlug)
 	mux.HandleFunc("GET /api/v1/posts/uuid/{uuid}", h.GetPostByUUID)
 
+	// Post action routes (public)
+	mux.HandleFunc("POST /api/v1/posts/{id}/view", h.IncrementViewCount)
+
 	// Protected routes
 	mux.HandleFunc("POST /api/v1/posts", func(w http.ResponseWriter, r *http.Request) {
 		mw.AuthenticateJWT(http.HandlerFunc(h.CreatePost)).ServeHTTP(w, r)

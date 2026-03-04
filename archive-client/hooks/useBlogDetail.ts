@@ -9,6 +9,13 @@ export function useBlogDetail(initialPost: ApiPost | undefined, slug: string) {
     const [isLoading, setIsLoading] = useState(!initialPost);
     const [error, setError] = useState<string | null>(null);
     const isFirstRun = useRef(!!initialPost);
+    const hasIncremented = useRef(false);
+    useEffect(() => {
+        if (post && !hasIncremented.current) {
+            apiClient.incrementViewCount(post.id);
+            hasIncremented.current = true;
+        }
+    }, [post]);
 
     useEffect(() => {
         if (isFirstRun.current) {
@@ -45,7 +52,12 @@ export function useBlogDetail(initialPost: ApiPost | undefined, slug: string) {
     }, [slug, router]);
 
     const tags = useMemo(() => post?.keywords ? post.keywords.split(',').map(k => k.trim()).filter(Boolean) : [], [post?.keywords]);
-    const readTime = useMemo(() => post?.read_time && post.read_time > 0 ? `${post.read_time} min` : "1 min", [post?.read_time]);
+    const readTime = useMemo(() => {
+        if (post?.read_time && post.read_time > 0) {
+            return `${post.read_time} min`;
+        }
+        return "1 min"; // Fallback for UI components that expect a string
+    }, [post?.read_time]);
 
     const getAuthorInitials = (userId: number) => `U${userId}`;
     const getAuthorColor = (userId: number) => {

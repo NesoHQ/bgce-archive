@@ -101,71 +101,103 @@ func (s *service) CreatePost(ctx context.Context, req CreatePostRequest, userID 
 }
 
 func (s *service) GetPostByID(ctx context.Context, id uint) (*PostResponse, error) {
-	// Increment view count in DB first
-	if err := s.repo.IncrementViewCount(ctx, id); err != nil {
-		log.Printf("Failed to increment view count for post ID=%d: %v", id, err)
+	// Try cache first
+	if s.cache != nil {
+		cacheKey := fmt.Sprintf("post:id:%d", id)
+		cached, err := s.cache.Get(ctx, cacheKey)
+		if err == nil && cached != "" {
+			var post domain.Post
+			if err := json.Unmarshal([]byte(cached), &post); err == nil {
+				log.Printf("Cache HIT - returning from Redis (id=%d)", id)
+				return ToPostResponse(&post), nil
+			}
+		}
 	}
 
-	// Fetch fresh post from DB
+	// Cache MISS - load from DB
+	log.Printf("Cache MISS - loading from DB (id=%d)", id)
 	post, err := s.repo.GetByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
 
-	// Sync caches
-	s.invalidatePostCache(ctx, post)
+	// Backfill cache
 	s.cachePost(ctx, post)
 
 	return ToPostResponse(post), nil
 }
 
 func (s *service) GetPostByUUID(ctx context.Context, uuid string) (*PostResponse, error) {
+	// Try cache first
+	if s.cache != nil {
+		cacheKey := fmt.Sprintf("post:uuid:%s", uuid)
+		cached, err := s.cache.Get(ctx, cacheKey)
+		if err == nil && cached != "" {
+			var post domain.Post
+			if err := json.Unmarshal([]byte(cached), &post); err == nil {
+				log.Printf("Cache HIT - returning from Redis (uuid=%s)", uuid)
+				return ToPostResponse(&post), nil
+			}
+		}
+	}
+
 	post, err := s.repo.GetByUUID(ctx, uuid)
 	if err != nil {
 		return nil, err
 	}
 
-	// Increment view count
-	if err := s.repo.IncrementViewCount(ctx, post.ID); err != nil {
-		log.Printf("Failed to increment view count for post UUID=%s: %v", uuid, err)
-	}
-
-	// Refetch to get updated count
-	freshPost, err := s.repo.GetByID(ctx, post.ID)
-	if err == nil {
-		post = freshPost
-	}
-
-	// Sync caches
-	s.invalidatePostCache(ctx, post)
+	// Backfill cache
 	s.cachePost(ctx, post)
 
 	return ToPostResponse(post), nil
 }
 
 func (s *service) GetPostBySlug(ctx context.Context, slug string) (*PostResponse, error) {
-	// Fetch fresh from DB to ensure we have ID for increment
+	// Try cache first
+	if s.cache != nil {
+		cacheKey := fmt.Sprintf("post:slug:%s", slug)
+		cached, err := s.cache.Get(ctx, cacheKey)
+		if err == nil && cached != "" {
+			var post domain.Post
+			if err := json.Unmarshal([]byte(cached), &post); err == nil {
+				log.Printf("Cache HIT - returning from Redis (slug=%s)", slug)
+				return ToPostResponse(&post), nil
+			}
+		}
+	}
+
 	post, err := s.repo.GetBySlug(ctx, slug)
 	if err != nil {
 		return nil, err
 	}
 
-	// Increment view count
-	if err := s.repo.IncrementViewCount(ctx, post.ID); err != nil {
-		log.Printf("Failed to increment view count for post slug=%s: %v", slug, err)
-	}
-
-	// Refetch to get updated count
-	freshPost, err := s.repo.GetByID(ctx, post.ID)
-	if err == nil {
-		post = freshPost
-	}
-
-	// Sync caches
-	s.invalidatePostCache(ctx, post)
+	// Backfill cache
 	s.cachePost(ctx, post)
 
 	return ToPostResponse(post), nil
+}
+
+func (s *service) IncrementViewCount(ctx context.Context, id uint) error {
+	// 1. Increment in DB
+	if err := s.repo.IncrementViewCount(ctx, id); err != nil {
+		return err
+	}
+
+	// 2. Load post to get slug and uuid for cache invalidation
+	post, err := s.repo.GetByID(ctx, id)
+	if err != nil {
+		log.Printf("IncrementViewCount: warning, failed to load post for invalidation: %v", err)
+		return nil // Don't fail the request if just cache invalidation fails
+	}
+
+	// 3. Invalidate details caches (ID, Slug, UUID)
+	s.invalidatePostCache(ctx, post)
+
+	// 4. Invalidate list caches (to show updated count in grid)
+	s.invalidateListCaches(ctx)
+
+	log.Printf("IncrementViewCount: success for post ID=%d", id)
+	return nil
 }
 
 func (s *service) ListPosts(ctx context.Context, filter PostFilter) ([]*PostListItemResponse, int64, error) {

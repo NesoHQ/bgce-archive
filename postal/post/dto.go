@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"postal/domain"
+	"postal/util"
 )
 
 type CreatePostRequest struct {
@@ -111,6 +112,11 @@ type BatchDeleteRequest struct {
 }
 
 func ToPostResponse(post *domain.Post) *PostResponse {
+	readTime := post.ReadTime
+	if readTime == 0 && post.Content != "" {
+		readTime = util.CalculateReadTime(&post.Content)
+	}
+
 	return &PostResponse{
 		ID:              post.ID,
 		UUID:            post.UUID,
@@ -126,6 +132,7 @@ func ToPostResponse(post *domain.Post) *PostResponse {
 		Keywords:        post.Keywords,
 		OGImage:         post.OGImage,
 		Status:          post.Status,
+		ReadTime:        readTime,
 		IsPublic:        post.IsPublic,
 		IsFeatured:      post.IsFeatured,
 		IsPinned:        post.IsPinned,
@@ -141,6 +148,12 @@ func ToPostResponse(post *domain.Post) *PostResponse {
 }
 
 func ToPostListItemResponse(post *domain.Post) *PostListItemResponse {
+	readTime := post.ReadTime
+	if readTime == 0 && post.Summary != "" {
+		// Estimate from summary if content is not available
+		readTime = util.CalculateReadTime(&post.Summary)
+	}
+
 	return &PostListItemResponse{
 		ID:              post.ID,
 		UUID:            post.UUID,
@@ -157,7 +170,7 @@ func ToPostListItemResponse(post *domain.Post) *PostListItemResponse {
 		IsPinned:        post.IsPinned,
 		CreatedBy:       post.CreatedBy,
 		ViewCount:       post.ViewCount,
-		ReadTime:        post.ReadTime,
+		ReadTime:        readTime,
 		ContentLength:   post.ContentLength,
 		CreatedAt:       post.CreatedAt,
 	}
