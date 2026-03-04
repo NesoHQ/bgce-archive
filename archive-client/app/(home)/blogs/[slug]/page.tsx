@@ -3,6 +3,9 @@ import BlogDetailsClient from "./BlogDetailsClient";
 import type { Metadata } from "next";
 import { getPostBySlug } from "@/action/post.action";
 
+// Force dynamic rendering
+export const dynamic = "force-dynamic";
+
 interface PageProps {
     params: Promise<{
         slug: string;

@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 import { getPosts } from "@/action/post.action";
 import { getCategories } from "@/action/category.action";
 
+// Force dynamic rendering
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Community Blogs - BGCE",
   description: "Insights, tutorials, and stories from our community",

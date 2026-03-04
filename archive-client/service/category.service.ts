@@ -1,7 +1,7 @@
 import { ApiCategory, ApiResponse } from "@/types/blog.type";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080/api/v1";
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
 
 export const categoryService = {
   getCategories: async (): Promise<ApiCategory[]> => {
@@ -17,22 +17,26 @@ export const categoryService = {
       );
 
       if (!response.ok) {
-        // Silently return empty array if backend is unavailable
+        console.error(`Failed to fetch categories: ${response.status} ${response.statusText}`);
         return [];
       }
 
       const result: ApiResponse<ApiCategory[]> = await response.json();
 
       if (!result.status) {
+        console.error("Category API returned status false:", result.message);
         return [];
       }
 
       // Filter only top-level categories (no parent_id or parent_id is null/undefined/0)
-      return result.data.filter(
+      const categories = result.data.filter(
         (cat) => !cat.parent_id || cat.parent_id === null,
       );
+
+      console.log(`Fetched ${categories.length} categories`);
+      return categories;
     } catch (error) {
-      // Silently return empty array if fetch fails (backend not running)
+      console.error("Error fetching categories:", error);
       return [];
     }
   },

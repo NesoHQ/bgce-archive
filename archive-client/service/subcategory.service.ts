@@ -1,7 +1,7 @@
 import { ApiResponse, ApiSubcategory } from "@/types/blog.type";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080/api/v1";
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
 
 export const subcategoryService = {
   getSubcategories: async (parentUuid?: string): Promise<ApiSubcategory[]> => {
@@ -18,20 +18,22 @@ export const subcategoryService = {
       });
 
       if (!response.ok) {
-        throw new Error(
-          `Failed to fetch subcategories: ${response.statusText}`,
-        );
+        console.error(`Failed to fetch subcategories: ${response.status} ${response.statusText}`);
+        return [];
       }
 
       const result: ApiResponse<ApiSubcategory[] | null> =
         await response.json();
 
       if (!result.status) {
-        throw new Error(result.message || "Failed to fetch subcategories");
+        console.error("Subcategory API returned status false:", result.message);
+        return [];
       }
 
       // Handle null data from backend
-      return result.data || [];
+      const subcategories = result.data || [];
+      console.log(`Fetched ${subcategories.length} subcategories for parent: ${parentUuid || 'all'}`);
+      return subcategories;
     } catch (error) {
       console.error("Error fetching subcategories:", error);
       return [];
