@@ -71,6 +71,7 @@ type PostResponse struct {
 	Status          domain.PostStatus `json:"status"`
 	IsPublic        bool              `json:"is_public"`
 	IsFeatured      bool              `json:"is_featured"`
+	ReadTime        int               `json:"read_time"`
 	IsPinned        bool              `json:"is_pinned"`
 	PublishedAt     *time.Time        `json:"published_at,omitempty"`
 	ArchivedAt      *time.Time        `json:"archived_at,omitempty"`
@@ -95,6 +96,7 @@ type PostListItemResponse struct {
 	Status          domain.PostStatus `json:"status"`
 	SubCategoryID   *uint             `json:"sub_category_id,omitempty"`
 	IsFeatured      bool              `json:"is_featured"`
+	ReadTime        int               `json:"read_time"`
 	IsPinned        bool              `json:"is_pinned"`
 	CreatedBy       uint              `json:"created_by"`
 	ViewCount       int               `json:"view_count"`
