@@ -2,12 +2,14 @@ package middlewares
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
 
+	entuser "cortex/ent/user"
 	"cortex/rest/utils"
 )
 
@@ -22,11 +24,13 @@ const (
 	UserIdKey    contextKey = "userId"
 	UserNameKey  contextKey = "userName"
 	UserEmailKey contextKey = "userEmail"
+	UserRoleKey  contextKey = "userRole"
 )
 
 type authClaims struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
+	Role  string `json:"role"`
 	jwt.RegisteredClaims
 }
 
@@ -79,9 +83,40 @@ func (m *Middlewares) AuthenticateJWT(next http.Handler) http.Handler {
 		ctx := context.WithValue(r.Context(), UserIdKey, userID)
 		ctx = context.WithValue(ctx, UserNameKey, claims.Name)
 		ctx = context.WithValue(ctx, UserEmailKey, claims.Email)
+		ctx = context.WithValue(ctx, UserRoleKey, claims.Role)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
+}
+
+func CheckRole(requiredRoles []entuser.Role, req *http.Request) (bool, error) {
+	roleStr, _ := req.Context().Value(UserRoleKey).(string)
+	if roleStr == "" {
+		return false, fmt.Errorf("user role not found in request context")
+	}
+
+	fmt.Printf("Checking user role: %s against required roles: %v\n", roleStr, requiredRoles)
+
+	userRole := entuser.Role(roleStr)
+
+	switch userRole{
+		case entuser.RoleAdmin, entuser.RoleEditor, entuser.RoleViewer:
+			//valid
+		default:
+			return false, fmt.Errorf("invalid role: %s", roleStr)
+	}
+
+	if len(requiredRoles) == 0 {
+		return false, fmt.Errorf("no roles configured for this route")
+	}
+
+	for _, r := range requiredRoles {
+		if r == userRole {
+			return true, nil
+		}
+	}
+
+	return false, fmt.Errorf("user does not have required role")
 }
 
 func GetUserId(r *http.Request) int {
