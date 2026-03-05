@@ -6,16 +6,16 @@ import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 
 export function ModeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
     setMounted(true);
   }, []);
 
-  const toggleTheme = (event: React.MouseEvent) => {
-    const isDark = theme === "dark";
+  const isDark = resolvedTheme === "dark";
 
+  const toggleTheme = (event: React.MouseEvent) => {
     if (!document.startViewTransition) {
       setTheme(isDark ? "light" : "dark");
       return;
@@ -55,8 +55,6 @@ export function ModeToggle() {
       <div className='h-8 w-14 rounded-full bg-muted/50 border border-border animate-pulse' />
     );
   }
-
-  const isDark = theme === "dark";
 
   return (
     <button
