@@ -1,7 +1,5 @@
 import type { ApiCategory, ApiPostListItem, ApiPost } from "@/types/blog.type";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
-const POSTAL_API_URL = process.env.NEXT_PUBLIC_POSTAL_API_URL || "http://localhost:8081/api/v1";
+import { ENV } from "./runtime-env";
 
 /**
  * Server-side API utility for React Server Components.
@@ -11,7 +9,7 @@ export const api = {
     // Fetch categories on the server
     async getCategories(): Promise<ApiCategory[]> {
         try {
-            const res = await fetch(`${API_URL}/categories?status=approved`, {
+            const res = await fetch(`${ENV.API_URL}/categories?status=approved`, {
                 cache: 'no-store',
                 headers: { "Content-Type": "application/json" }
             });
@@ -41,7 +39,7 @@ export const api = {
                 }
             });
 
-            const res = await fetch(`${POSTAL_API_URL}/posts?${params.toString()}`, {
+            const res = await fetch(`${ENV.POSTAL_API_URL}/posts?${params.toString()}`, {
                 cache: 'no-store',
                 headers: { "Content-Type": "application/json" }
             });
@@ -65,7 +63,7 @@ export const api = {
     // Fetch single post by slug on the server
     async getPostBySlug(slug: string): Promise<ApiPost | null> {
         try {
-            const res = await fetch(`${POSTAL_API_URL}/posts/slug/${slug}`, {
+            const res = await fetch(`${ENV.POSTAL_API_URL}/posts/slug/${slug}`, {
                 cache: 'no-store',
                 headers: { "Content-Type": "application/json" }
             });
