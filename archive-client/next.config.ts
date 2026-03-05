@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // the standalone configuration needs to be managed from environment variables
+  output: 'standalone',
   // Image optimization
   images: {
     remotePatterns: [
