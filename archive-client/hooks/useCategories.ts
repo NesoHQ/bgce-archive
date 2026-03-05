@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import type { ApiCategory } from "@/types/blog.type";
 import { apiClient } from "@/lib/api-client";
 
-export function useCategories() {
-    const [categories, setCategories] = useState<ApiCategory[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+export function useCategories(initialCategories?: ApiCategory[]) {
+    const [categories, setCategories] = useState<ApiCategory[]>(initialCategories || []);
+    const [isLoading, setIsLoading] = useState(!initialCategories);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        if (initialCategories && initialCategories.length > 0) return;
+
         let mounted = true;
 
         const fetchCategories = async () => {

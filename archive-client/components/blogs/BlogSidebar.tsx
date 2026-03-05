@@ -1,3 +1,4 @@
+import React, { memo } from "react";
 import { Search, X, Clock, Eye, Flame, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import type { ApiCategory } from "@/types/blog.type";
@@ -37,7 +38,7 @@ const sortOptions = [
     { value: "featured" as const, label: "Featured First", icon: Flame },
 ];
 
-export function BlogSidebar({
+export const BlogSidebar = memo(function BlogSidebar({
     searchQuery,
     onSearchChange,
     categories,
@@ -153,8 +154,8 @@ export function BlogSidebar({
                                 onSubcategoryChange(null);
                             }}
                             className={`w-full text-left px-2 py-1.5 rounded text-xs font-medium transition-all flex items-center justify-between group ${!selectedCategory
-                                    ? "bg-primary text-white shadow-sm"
-                                    : "hover:bg-muted text-foreground"
+                                ? "bg-primary text-white shadow-sm"
+                                : "hover:bg-muted text-foreground"
                                 }`}
                         >
                             <span>All Categories</span>
@@ -172,8 +173,8 @@ export function BlogSidebar({
                                         <button
                                             onClick={() => onToggleCategory(category.id)}
                                             className={`w-full text-left px-2 py-1.5 rounded text-xs font-medium transition-all flex items-center justify-between gap-1 group ${selectedCategory === category.id
-                                                    ? "bg-primary text-white shadow-sm"
-                                                    : "hover:bg-muted text-foreground"
+                                                ? "bg-primary text-white shadow-sm"
+                                                : "hover:bg-muted text-foreground"
                                                 }`}
                                         >
                                             <span className="truncate flex-1">{category.label}</span>
@@ -202,8 +203,8 @@ export function BlogSidebar({
                                                             key={sub.id}
                                                             onClick={() => onSubcategoryChange(sub.id)}
                                                             className={`w-full text-left px-2 py-1 rounded text-[11px] font-medium transition-all ${selectedSubcategory === sub.id
-                                                                    ? "bg-primary/90 text-white shadow-sm"
-                                                                    : "hover:bg-muted text-muted-foreground"
+                                                                ? "bg-primary/90 text-white shadow-sm"
+                                                                : "hover:bg-muted text-muted-foreground"
                                                                 }`}
                                                         >
                                                             {sub.label}
@@ -258,8 +259,8 @@ export function BlogSidebar({
                                 key={option.value}
                                 onClick={() => onSortChange(option.value)}
                                 className={`w-full text-left px-2 py-1.5 rounded text-xs font-medium transition-all flex items-center gap-1.5 ${sortBy === option.value
-                                        ? "bg-primary text-white shadow-sm"
-                                        : "hover:bg-muted text-foreground"
+                                    ? "bg-primary text-white shadow-sm"
+                                    : "hover:bg-muted text-foreground"
                                     }`}
                             >
                                 <option.icon className="h-3 w-3 flex-shrink-0" />
@@ -273,8 +274,8 @@ export function BlogSidebar({
                         <button
                             onClick={onToggleFeatured}
                             className={`w-full text-left px-2 py-1.5 rounded text-xs font-medium transition-all flex items-center justify-between ${showFeaturedOnly
-                                    ? "bg-orange-500/10 text-orange-600 border border-orange-500/20"
-                                    : "hover:bg-muted text-foreground border border-transparent"
+                                ? "bg-orange-500/10 text-orange-600 border border-orange-500/20"
+                                : "hover:bg-muted text-foreground border border-transparent"
                                 }`}
                         >
                             <div className="flex items-center gap-1.5">
@@ -290,4 +291,4 @@ export function BlogSidebar({
             </div>
         </aside>
     );
-}
+});

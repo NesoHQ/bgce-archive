@@ -1,3 +1,4 @@
+import React, { memo } from "react";
 import Link from "next/link";
 import { ArrowRight, Eye } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -28,7 +29,7 @@ const getInitials = (title: string) => {
     return words.slice(0, 2).map(w => w[0]).join('').toUpperCase();
 };
 
-export function PostCard({ post }: PostCardProps) {
+export const PostCard = memo(function PostCard({ post }: PostCardProps) {
     return (
         <Link
             href={`/blogs/${post.slug}`}
@@ -93,4 +94,4 @@ export function PostCard({ post }: PostCardProps) {
             </div>
         </Link>
     );
-}
+});

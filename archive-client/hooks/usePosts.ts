@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import type { ApiPostListItem } from "@/types/blog.type";
 import { apiClient } from "@/lib/api-client";
 
@@ -14,13 +14,19 @@ interface PostFilters {
     sort_order?: "ASC" | "DESC";
 }
 
-export function usePosts(filters: PostFilters) {
-    const [posts, setPosts] = useState<ApiPostListItem[]>([]);
-    const [total, setTotal] = useState(0);
-    const [isLoading, setIsLoading] = useState(true);
+export function usePosts(filters: PostFilters, initialData?: { data: ApiPostListItem[], total: number }) {
+    const [posts, setPosts] = useState<ApiPostListItem[]>(initialData?.data || []);
+    const [total, setTotal] = useState(initialData?.total || 0);
+    const [isLoading, setIsLoading] = useState(!initialData);
     const [error, setError] = useState<string | null>(null);
+    const isFirstRun = useRef(!!initialData);
 
     const fetchPosts = useCallback(async () => {
+        if (isFirstRun.current) {
+            isFirstRun.current = false;
+            return;
+        }
+
         let mounted = true;
         setIsLoading(true);
 

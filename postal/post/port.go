@@ -23,6 +23,8 @@ type Service interface {
 	HardDeletePost(ctx context.Context, id uint) error
 	BatchUploadPosts(ctx context.Context, userID uint, file *multipart.File) error
 	BatchDeletePosts(ctx context.Context, uuids *[]string) error
+	SeedReadTime(ctx context.Context, userID uint) error
+	IncrementViewCount(ctx context.Context, id uint) error
 }
 
 // Repository defines the interface for post persistence
@@ -40,5 +42,6 @@ type Repository interface {
 	BatchCreate(ctx context.Context, posts *[]domain.Post) error
 	FindExistingSlugs(ctx context.Context, slugs []string) (map[string]bool, error)
 	GetMaxOrderNo(ctx context.Context) (uint, error)
+	IncrementViewCount(ctx context.Context, id uint) error
 	WithTransaction(ctx context.Context, fn func(txRepo Repository) error) error
 }

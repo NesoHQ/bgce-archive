@@ -133,5 +133,21 @@ export const postService = {
         )
 
         return response.data
+    },
+
+    async seedReadTime(): Promise<{ status: boolean; message: string }> {
+        if (API_CONFIG.USE_MOCK_POSTS) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({
+                        status: true,
+                        message: "Redis flushed and read-time seeding started in background"
+                    })
+                }, 1000)
+            })
+        }
+
+        const response = await postalApi.post<{ status: boolean; message: string }>('/posts/seed-read-time')
+        return response.data
     }
 }
