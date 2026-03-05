@@ -65,13 +65,20 @@ func (r *repository) Delete(ctx context.Context, id int) error {
 		Exec(ctx)
 }
 
-func (r *repository) List(ctx context.Context, limit, offset int) ([]*ent.User, error) {
-	return r.client.User.
+func (r *repository) List(ctx context.Context, limit, offset *int) ([]*ent.User, error) {
+	query := r.client.User.
 		Query().
-		Limit(limit).
-		Offset(offset).
-		Order(ent.Desc(user.FieldCreatedAt)).
-		All(ctx)
+		Order(ent.Desc(user.FieldCreatedAt))
+
+	if limit != nil {
+		query = query.Limit(*limit)
+	}
+
+	if offset != nil {
+		query = query.Offset(*offset)
+	}
+
+	return query.All(ctx)
 }
 
 func (r *repository) UpdateLastLogin(ctx context.Context, id int) error {
