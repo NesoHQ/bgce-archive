@@ -14,6 +14,6 @@ type Repository interface {
 	FindByUsername(ctx context.Context, username string) (*ent.User, error)
 	Update(ctx context.Context, user *ent.User) (*ent.User, error)
 	Delete(ctx context.Context, id int) error
-	List(ctx context.Context, limit, offset int) ([]*ent.User, error)
+	List(ctx context.Context, limit, offset *int) ([]*ent.User, error)
 	UpdateLastLogin(ctx context.Context, id int) error
 }
