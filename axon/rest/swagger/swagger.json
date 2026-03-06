@@ -1,0 +1,378 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Axon Notification Service API",
+    "description": "Email and notification management service for BGCE Archive",
+    "version": "1.0.0",
+    "contact": {
+      "name": "BGCE Archive Team"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8088",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/api/v1/notifications/send": {
+      "post": {
+        "summary": "Send a notification",
+        "tags": ["Notifications"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Notification sent successfully"
+          },
+          "400": {
+            "description": "Invalid request body"
+          }
+        }
+      }
+    },
+    "/api/v1/notifications/email": {
+      "post": {
+        "summary": "Send a direct email",
+        "tags": ["Notifications"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Email sent successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/notifications/templates": {
+      "get": {
+        "summary": "List all templates",
+        "tags": ["Templates"],
+        "responses": {
+          "200": {
+            "description": "List of templates"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a template",
+        "tags": ["Templates"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Template"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Template created"
+          }
+        }
+      }
+    },
+    "/api/v1/notifications/templates/{id}": {
+      "get": {
+        "summary": "Get template by ID",
+        "tags": ["Templates"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Template details"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update template",
+        "tags": ["Templates"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Template"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Template updated"
+          }
+        }
+      }
+    },
+    "/api/v1/users/{id}/notification-preferences": {
+      "get": {
+        "summary": "Get user notification preferences",
+        "tags": ["Preferences"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User preferences"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update user notification preferences",
+        "tags": ["Preferences"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserPreference"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Preferences updated"
+          }
+        }
+      }
+    },
+    "/api/v1/users/{id}/notifications": {
+      "get": {
+        "summary": "Get user notification history",
+        "tags": ["Notifications"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notification history"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "tags": ["Health"],
+        "responses": {
+          "200": {
+            "description": "Service is healthy"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SendRequest": {
+        "type": "object",
+        "required": ["recipient", "type"],
+        "properties": {
+          "user_id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["welcome", "password_reset", "email_verify", "comment_reply", "post_published", "course_enrolled", "digest"]
+          },
+          "recipient": {
+            "type": "string",
+            "format": "email"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "template_data": {
+            "type": "object",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "EmailRequest": {
+        "type": "object",
+        "required": ["to", "subject"],
+        "properties": {
+          "to": {
+            "type": "string",
+            "format": "email"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body_html": {
+            "type": "string"
+          },
+          "body_text": {
+            "type": "string"
+          }
+        }
+      },
+      "Template": {
+        "type": "object",
+        "required": ["name", "type", "subject"],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["welcome", "password_reset", "email_verify", "comment_reply", "post_published", "course_enrolled", "digest"]
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body_html": {
+            "type": "string"
+          },
+          "body_text": {
+            "type": "string"
+          },
+          "sendgrid_id": {
+            "type": "string"
+          },
+          "is_active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserPreference": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "email_enabled": {
+            "type": "boolean"
+          },
+          "digest_enabled": {
+            "type": "boolean"
+          },
+          "digest_weekly": {
+            "type": "boolean"
+          },
+          "comment_replies": {
+            "type": "boolean"
+          },
+          "post_updates": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Notification": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "recipient": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "sent", "failed", "delivered"]
+          },
+          "sent_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}

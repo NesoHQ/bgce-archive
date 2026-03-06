@@ -10,28 +10,26 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-
 var DB *gorm.DB
 
 // EnsureDataBaseExists checks if the database exists and creates it if not
 func EnsureDataBaseExists(config *Config) error {
 	// Parse DSN to extract database name
-	dsn := config.PostalDBDSN
+	dsn := config.AxonDBDSN
 	dbName := extractDatabaseName(dsn)
-	
+
 	if dbName == "" {
-		return  fmt.Errorf("could not extract database name from DSN")
+		return fmt.Errorf("could not extract database name from DSN")
 	}
 
-	// connect to postgress database to check/create target database
+	// connect to postgres database to check/create target database
 	defaultDSN := strings.Replace(dsn, "/"+dbName, "/postgres", 1)
 
-	log.Printf("Checking if database '%s' exists...", &dbName)
+	log.Printf("Checking if database '%s' exists...", dbName)
 
 	db, err := gorm.Open(postgres.Open(defaultDSN), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent),
-	}) 
-
+	})
 	if err != nil {
 		return fmt.Errorf("failed to connect to postgres database: %w", err)
 	}
@@ -41,20 +39,18 @@ func EnsureDataBaseExists(config *Config) error {
 	defer sqlDB.Close()
 
 	err = db.Raw("SELECT EXISTS(SELECT 1 FROM pg_database WHERE datname = ?)", dbName).Scan(&exist).Error
-
 	if err != nil {
 		return fmt.Errorf("failed to check database existence %w", err)
 	}
 
 	if !exist {
-		log.Printf("Database '%s' does not exist, creating...", &dbName)
+		log.Printf("Database '%s' does not exist, creating...", dbName)
 		err = db.Exec(fmt.Sprintf("CREATE DATABASE %s", dbName)).Error
-
 		if err != nil {
 			return fmt.Errorf("failed to create database: %w", err)
 		}
 
-		log.Printf("Database '%s' created successfully", &dbName)
+		log.Printf("Database '%s' created successfully", dbName)
 	} else {
 		log.Printf("Database '%s' already exists", dbName)
 	}
@@ -62,9 +58,8 @@ func EnsureDataBaseExists(config *Config) error {
 	return nil
 }
 
-
 // extractDatabaseName extracts the database name from PostgreSQL DSN
-func extractDatabaseName(dsn string) string  {
+func extractDatabaseName(dsn string) string {
 	// DSN format: postgresql://user:pass@host:port/dbname?params
 	parts := strings.Split(dsn, "/")
 
@@ -98,7 +93,7 @@ func InitDatabase(config *Config) (*gorm.DB, error) {
 	}
 
 	// Connect to database
-	DB, err = gorm.Open(postgres.Open(config.PostalDBDSN), &gorm.Config{
+	DB, err = gorm.Open(postgres.Open(config.AxonDBDSN), &gorm.Config{
 		Logger: gormLogger,
 	})
 	if err != nil {
@@ -120,7 +115,7 @@ func InitDatabase(config *Config) (*gorm.DB, error) {
 	return DB, nil
 }
 
-func CloseDatabase() error  {
+func CloseDatabase() error {
 	if DB != nil {
 		sqlDB, err := DB.DB()
 		if err != nil {

@@ -1,17 +1,17 @@
 services:
-  # bgce_cortex:
-  #   image: cortex:local
-  #   container_name: bgce-cortex
+  # bgce_axon:
+  #   image: axon:local
+  #   container_name: bgce-axon
   #   build:
   #     context: .
   #     dockerfile: Dockerfile
   #   ports:
-  #     - "5000:8080"
+  #     - "8088:8088"
   #   environment:
   #     VERSION: 1.0.0
   #     MODE: debug
-  #     SERVICE_NAME: cortex
-  #     HTTP_PORT: 8080
+  #     SERVICE_NAME: axon
+  #     HTTP_PORT: 8088
   #     MIGRATION_SOURCE: migrations
 
   #     # JWT
@@ -27,7 +27,7 @@ services:
   #     RABBITMQ_URL: "amqp://admin:admin@rabbitmq:5672"
   #     RMQ_RECONNECT_DELAY: 5
   #     RMQ_RETRY_INTERVAL: 600
-  #     RMQ_QUEUE_PREFIX: "cortex-dev"
+  #     RMQ_QUEUE_PREFIX: "axon-dev"
 
   #     # Redis
   #     READ_REDIS_URL: "redis://redis:6379"
@@ -35,8 +35,8 @@ services:
   #     ENABLE_REDIS_TLS_MODE: "false"
 
   #     # Postgres DB
-  #     BGCE_DB_DSN: "postgresql://postgres:root@postgres:5432/cortex_db?sslmode=disable"
-  #     BGCE_DB_DRIVER: "postgres"
+  #     AXON_DB_DSN: "postgresql://postgres:root@postgres:5432/axon_db?sslmode=disable"
+  #     AXON_DB_DRIVER: "postgres"
 
   #   depends_on:
   #     postgres:

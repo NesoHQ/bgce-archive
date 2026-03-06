@@ -25,14 +25,14 @@ type Config struct {
 	RabbitMQURL       string
 	RMQReconnectDelay time.Duration
 	RMQRetryInterval  time.Duration
-	RMQQueuePrefix    string
+    RabbitMQQueuePrefix string
 
 	ReadRedisURL       string
 	WriteRedisURL      string
 	EnableRedisTLSMode bool
 
-	PostalDBDSN    string
-	PostalDBDriver string
+	AxonDBDSN    string
+	AxonDBDriver string
 }
 
 var AppConfig *Config

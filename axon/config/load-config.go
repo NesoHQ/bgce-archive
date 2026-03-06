@@ -37,14 +37,14 @@ func LoadConfig() *Config {
 		RabbitMQURL:       getEnv("RABBITMQ_URL", "amqp://guest:guest@localhost:5672"),
 		RMQReconnectDelay: time.Duration(rmqReconnectDelay) * time.Second,
 		RMQRetryInterval:  time.Duration(rmqRetryInterval) * time.Second,
-		RMQQueuePrefix:    getEnv("RMQ_QUEUE_PREFIX", "axon-dev"),
+		RabbitMQQueuePrefix:    getEnv("RMQ_QUEUE_PREFIX", "axon-dev"),
 
 		ReadRedisURL:       getEnv("READ_REDIS_URL", "redis://localhost:6379"),
 		WriteRedisURL:      getEnv("WRITE_REDIS_URL", "redis://localhost:6379"),
 		EnableRedisTLSMode: getEnv("ENABLE_REDIS_TLS_MODE", "false") == "true",
 
-		PostalDBDSN:    getEnv("POSTAL_DB_DSN", "postgresql://postgres:postgres@localhost:5432/axon_db?sslmode=disable"),
-		PostalDBDriver: getEnv("POSTAL_DB_DRIVER", "postgres"),
+		AxonDBDSN:    getEnv("AXON_DB_DSN", "postgresql://postgres:postgres@localhost:5432/axon_db?sslmode=disable"),
+		AxonDBDriver: getEnv("AXON_DB_DRIVER", "postgres"),
 	}
 
 	AppConfig = config
