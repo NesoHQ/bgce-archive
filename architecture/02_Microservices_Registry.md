@@ -265,6 +265,13 @@ DELETE /api/v1/notifications/{id}
 Activity:
 GET    /api/v1/activity/feed
 GET    /api/v1/users/{id}/activity
+
+Contributors:
+GET    /api/v1/contributors
+GET    /api/v1/contributors/{id}
+POST   /api/v1/contributors
+PUT    /api/v1/contributors/{id}
+DELETE /api/v1/contributors/{id}
 ```
 
 **Event Consumers**:
