@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import type { ApiPostListItem } from "@/types/blog.type";
-import { apiClient } from "@/lib/api-client";
+import { getPostsAction } from "@/lib/actions";
 
 interface PostFilters {
     limit?: number;
@@ -31,7 +31,7 @@ export function usePosts(filters: PostFilters, initialData?: { data: ApiPostList
         setIsLoading(true);
 
         try {
-            const result = await apiClient.getPosts(filters);
+            const result = await getPostsAction(filters);
             if (mounted) {
                 setPosts(result.data);
                 setTotal(result.total);
