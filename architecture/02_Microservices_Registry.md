@@ -219,6 +219,7 @@ DELETE /api/v1/tags/{id}
 - `likes` - Polymorphic likes (posts, comments, discussions)
 - `follows` - User relationships
 - `notifications` - User notifications
+- `contributors` - a table to store our community contributor list
 
 **API Endpoints** (35+ total):
 ```
