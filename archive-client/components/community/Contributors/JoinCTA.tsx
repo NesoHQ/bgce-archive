@@ -4,8 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Github, Heart } from "lucide-react";
 import { motion } from "framer-motion";
-
 import Link from "next/link";
+
 export const JoinCTA = () => {
   return (
     <section className='container mx-auto px-4 pb-20'>
