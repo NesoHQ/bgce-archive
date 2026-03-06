@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import type { ApiPost } from "@/types/blog.type";
-import { apiClient } from "@/lib/api-client";
+import { incrementViewCountAction, getPostBySlugAction } from "@/lib/actions";
 
 export function useBlogDetail(initialPost: ApiPost | undefined, slug: string) {
     const router = useRouter();
@@ -10,9 +10,10 @@ export function useBlogDetail(initialPost: ApiPost | undefined, slug: string) {
     const [error, setError] = useState<string | null>(null);
     const isFirstRun = useRef(!!initialPost);
     const hasIncremented = useRef(false);
+
     useEffect(() => {
         if (post && !hasIncremented.current) {
-            apiClient.incrementViewCount(post.id);
+            incrementViewCountAction(post.id);
             hasIncremented.current = true;
         }
     }, [post]);
@@ -26,7 +27,7 @@ export function useBlogDetail(initialPost: ApiPost | undefined, slug: string) {
         async function fetchPost() {
             try {
                 setIsLoading(true);
-                const postData = await apiClient.getPostBySlug(slug);
+                const postData = await getPostBySlugAction(slug);
 
                 if (!postData) {
                     router.push('/404');
