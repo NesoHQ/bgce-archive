@@ -1,8 +1,5 @@
 "use client";
 
-import React from "react";
-import { Code2 } from "lucide-react";
-
 export default function HeroSection() {
   return (
     <section className="relative overflow-hidden py-4 mt-5">

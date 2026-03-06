@@ -6,7 +6,6 @@ import { BlogHeader } from "@/components/blogs/BlogHeader";
 import { MobileFilterButton } from "@/components/blogs/MobileFilterButton";
 import { BlogSidebar } from "@/components/blogs/BlogSidebar";
 import { BlogGrid } from "@/components/blogs/BlogGrid";
-import type { SortOption } from "@/components/blogs/types";
 import { useCategories } from "@/hooks/useCategories";
 import { useSubcategories } from "@/hooks/useSubcategories";
 import { usePosts } from "@/hooks/usePosts";

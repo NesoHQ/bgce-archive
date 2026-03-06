@@ -1,6 +1,5 @@
 "use client";
 
-import { MainNavigationOptimized } from "@/components/shared/MainNavigationOptimized";
 import Footer from "@/components/shared/Footer";
 import { AlertTriangle, ArrowLeft, BookOpen, Search } from "lucide-react";
 import Link from "next/link";
