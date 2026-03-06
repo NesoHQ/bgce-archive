@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import { memo } from "react";
 import { Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BlogCard } from "./BlogCard";

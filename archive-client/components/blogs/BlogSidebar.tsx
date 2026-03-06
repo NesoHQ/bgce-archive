@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import { memo } from "react";
 import { Search, X, Clock, Eye, Flame, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import type { ApiCategory } from "@/types/blog.type";

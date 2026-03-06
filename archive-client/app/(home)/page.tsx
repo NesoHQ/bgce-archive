@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import nextDynamic from "next/dynamic";
 import { WelcomeSection } from "@/components/home/WelcomeSectionOptimized";
 import { SkeletonCardGrid } from "@/components/shared/SkeletonCard";

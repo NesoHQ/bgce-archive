@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import { memo } from "react";
 import Link from "next/link";
 import { ArrowRight, Eye } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";

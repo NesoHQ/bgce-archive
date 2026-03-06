@@ -1,7 +1,5 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
-
 interface CategoryItem {
   title: string;
   description: string;

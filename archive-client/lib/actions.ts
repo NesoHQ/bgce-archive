@@ -1,6 +1,7 @@
 "use server";
 
 import type { ApiCategory, ApiSubcategory, ApiPostListItem, ApiPost } from "@/types/blog.type";
+import type { LoginRequest, RegisterRequest, UserResponse, LoginResponse, ApiResponse } from "./auth-api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
 const POSTAL_API_URL = process.env.NEXT_PUBLIC_POSTAL_API_URL || "http://localhost:8081/api/v1";
@@ -16,10 +17,42 @@ async function serverFetch(url: string, options: RequestInit = {}) {
     });
 
     if (!res.ok) {
-        throw new Error(`HTTP ${res.status} - failed to fetch ${url}`);
+        // Try to parse the error message from the backend
+        let errorMsg = `HTTP ${res.status} - failed to fetch ${url}`;
+        try {
+            const errorData = await res.json();
+            if (errorData && errorData.message) {
+                errorMsg = errorData.message;
+            }
+        } catch (e) {
+            // Ignore JSON parse errors for error responses
+        }
+        throw new Error(errorMsg);
     }
 
     return res.json();
+}
+
+/**
+ * Register a new user
+ */
+export async function registerAction(data: RegisterRequest): Promise<ApiResponse<UserResponse>> {
+    const url = `${API_URL}/auth/register`;
+    return serverFetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+    });
+}
+
+/**
+ * Login a user
+ */
+export async function loginAction(data: LoginRequest): Promise<ApiResponse<LoginResponse>> {
+    const url = `${API_URL}/auth/login`;
+    return serverFetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+    });
 }
 
 /**
