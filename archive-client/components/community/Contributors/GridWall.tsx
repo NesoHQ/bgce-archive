@@ -5,8 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Github, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { IContributor } from "@/app/(home)/resources/community-actions/page";
 
-export const GridWall = ({ contributors }: { contributors: any[] }) => {
+export const GridWall = ({
+  contributors,
+}: {
+  contributors: IContributor[];
+}) => {
   return (
     <section className='container mx-auto px-4'>
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-4 md:px-0'>
@@ -32,7 +37,10 @@ export const GridWall = ({ contributors }: { contributors: any[] }) => {
                 <div className='relative h-full p-6 flex flex-col items-center text-center space-y-4 z-10'>
                   <div className='relative'>
                     <Avatar className='w-20 h-20 ring-4 ring-primary/10 group-hover:ring-primary/30 transition-all duration-500 group-hover:scale-105'>
-                      <AvatarImage src={`https://github.com/${username}.png`} />
+                      <AvatarImage
+                        src={`https://github.com/${username}.png`}
+                        alt={`${contributor.name} avatar`}
+                      />
                       <AvatarFallback className='text-lg font-bold'>
                         {contributor.name[0]}
                       </AvatarFallback>
@@ -57,7 +65,10 @@ export const GridWall = ({ contributors }: { contributors: any[] }) => {
                       variant='ghost'
                       size='sm'
                       className='w-full rounded-xl bg-muted/50 hover:bg-primary hover:text-white transition-all duration-300'>
-                      <Link href={contributor.github} target='_blank'>
+                      <Link
+                        href={contributor.github}
+                        target='_blank'
+                        rel='noopener noreferrer'>
                         <span className='mr-2 font-medium'>View Profile</span>
                         <ExternalLink className='h-3 w-3' />
                       </Link>

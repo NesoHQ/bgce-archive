@@ -1,8 +1,15 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { IContributor } from "@/app/(home)/resources/community-actions/page";
 
-export const HeroSection = ({ contributors }: { contributors: any[] }) => {
+export const HeroSection = ({
+  contributors,
+}: {
+  contributors: IContributor[];
+}) => {
   return (
     <section className='container mx-auto px-4 text-center space-y-6'>
       <motion.div
@@ -43,13 +50,16 @@ export const HeroSection = ({ contributors }: { contributors: any[] }) => {
             const username = contributor.github.split("/").pop();
             return (
               <Avatar key={i} className='border-2 border-background w-10 h-10'>
-                <AvatarImage src={`https://github.com/${username}.png`} />
+                <AvatarImage
+                  src={`https://github.com/${username}.png`}
+                  alt={`${contributor.name} avatar`}
+                />
                 <AvatarFallback>{contributor.name[0]}</AvatarFallback>
               </Avatar>
             );
           })}
           <div className='w-10 h-10 rounded-full bg-primary/20 border-2 border-background flex items-center justify-center text-[10px] font-bold text-primary backdrop-blur-sm'>
-            +{contributors.length}
+            +{Math.max(0, contributors.length - 3)}
           </div>
         </div>
         <div className='text-sm font-medium text-muted-foreground'>

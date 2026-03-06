@@ -1,3 +1,5 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Github, Heart } from "lucide-react";
@@ -28,10 +30,11 @@ export const JoinCTA = () => {
             community.
           </p>
           <div className='flex flex-wrap gap-4'>
-            <Button size='lg' className='group'>
+            <Button asChild size='lg' className='group'>
               <Link
                 href='https://github.com/NesoHQ/bgce-archive'
-                target='_blank'>
+                target='_blank'
+                rel='noopener noreferrer'>
                 <div className='flex '>
                   <Github className='mr-2 h-4 w-4' /> Get Started
                 </div>
