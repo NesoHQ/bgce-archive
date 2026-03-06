@@ -288,7 +288,7 @@ DELETE /api/v1/contributors/{id}
 
 **Technology Stack**:
 - Go 1.24 with standard library HTTP
-- PostgreSQL (GORM or Ent)
+- PostgreSQL (Go SQL)
 - Redis for caching (notification counts, activity feeds)
 - RabbitMQ for event-driven notifications
 
