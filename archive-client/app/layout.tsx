@@ -89,6 +89,18 @@ export default function RootLayout({
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* Inject runtime environment variables */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.__ENV__ = {
+                NEXT_PUBLIC_API_URL: '${process.env.NEXT_PUBLIC_API_URL || ""}',
+                NEXT_PUBLIC_POSTAL_API_URL: '${process.env.NEXT_PUBLIC_POSTAL_API_URL || ""}',
+                NEXT_PUBLIC_KRAKENS_PROJECT_ID: '${process.env.NEXT_PUBLIC_KRAKENS_PROJECT_ID || ""}',
+              };
+            `,
+          }}
+        />
         <SkipToContent />
         <KrakensAnalytics />
         <MobileOptimizer />

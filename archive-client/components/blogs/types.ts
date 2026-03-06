@@ -1,4 +1,4 @@
-import type { ApiPost, ApiPostListItem, ApiCategory } from "@/types/blog.type";
+import type { ApiPostListItem, ApiCategory } from "@/types/blog.type";
 
 export type SortOption = "new" | "views" | "featured";
 

@@ -1,7 +1,9 @@
+import { ENV } from "./runtime-env";
+
 // Optimized API client with request deduplication and parallel fetching
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
-const POSTAL_API_URL = process.env.NEXT_PUBLIC_POSTAL_API_URL || "http://localhost:8081/api/v1";
+const API_URL = ENV.API_URL;
+const POSTAL_API_URL = ENV.POSTAL_API_URL;
 
 // In-flight request cache to prevent duplicate requests
 const inflightRequests = new Map<string, Promise<any>>();

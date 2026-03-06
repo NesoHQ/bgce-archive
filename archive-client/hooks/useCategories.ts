@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { ApiCategory } from "@/types/blog.type";
-import { apiClient } from "@/lib/api-client";
+import { getCategoriesAction } from "@/lib/actions";
 
 export function useCategories(initialCategories?: ApiCategory[]) {
     const [categories, setCategories] = useState<ApiCategory[]>(initialCategories || []);
@@ -14,7 +14,7 @@ export function useCategories(initialCategories?: ApiCategory[]) {
 
         const fetchCategories = async () => {
             try {
-                const data = await apiClient.getCategories();
+                const data = await getCategoriesAction();
                 if (mounted) {
                     setCategories(data);
                     setIsLoading(false);

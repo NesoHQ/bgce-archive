@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { ApiSubcategory } from "@/types/blog.type";
-import { apiClient } from "@/lib/api-client";
+import { getSubcategoriesAction } from "@/lib/actions";
 
 export function useSubcategories(parentUuid?: string) {
     const [subcategories, setSubcategories] = useState<ApiSubcategory[]>([]);
@@ -18,7 +18,7 @@ export function useSubcategories(parentUuid?: string) {
 
         const fetchSubcategories = async () => {
             try {
-                const data = await apiClient.getSubcategories(parentUuid);
+                const data = await getSubcategoriesAction(parentUuid);
                 if (mounted) {
                     setSubcategories(data);
                     setIsLoading(false);

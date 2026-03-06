@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import type { ApiPost } from "@/types/blog.type";
+import { ENV } from "@/lib/runtime-env";
 
-const POSTAL_API_URL = process.env.NEXT_PUBLIC_POSTAL_API_URL || "http://localhost:8081/api/v1";
+const POSTAL_API_URL = ENV.POSTAL_API_URL;
 
 export function usePost(slug: string) {
     const [post, setPost] = useState<ApiPost | null>(null);
