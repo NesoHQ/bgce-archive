@@ -38,8 +38,8 @@ jobs:
                     fi
 
                     # Check minimum length
-                    if [ ${#msg} -lt 5 ]; then
-                      echo "❌ Commit message too short: $msg"
+                    if [ ${#commit_msg} -lt 5 ]; then
+                      echo "❌ Commit message too short: $commit_msg"
                       echo "Message must be at least 5 characters"
                       exit 1
                     fi
