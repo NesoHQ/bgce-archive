@@ -4,33 +4,31 @@ CREATE TABLE IF NOT EXISTS discussions (
   uuid UUID UNIQUE NOT NULL DEFAULT gen_random_uuid(),
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  deleted_at TIMESTAMP,
+ 
 
-  tenant_id INT,
-  user_id INT NOT NULL,
-  category_id INT NOT NULL,
+  tenant_id INT REFERENCES tenants(id),
+  user_id INT NOT NULL REFERENCES users(id),
+  category_id INT NOT NULL REFERENCES categories(id),
 
   title VARCHAR(500) NOT NULL,
   slug VARCHAR(500) UNIQUE NOT NULL,
   content TEXT NOT NULL,
 
   status VARCHAR(20) NOT NULL DEFAULT 'open',
-  is_pinned BOOLEAN DEFAULT false,
 
   upvote_count INT DEFAULT 0,
   view_count INT DEFAULT 0,
-  reply_count INT DEFAULT 0,
-  last_activity_at TIMESTAMP
+  reply_count INT DEFAULT 0
 );
 
-CREATE INDEX IF NOT EXISTS idx_discussions_deleted_at ON discussions(deleted_at);
-CREATE INDEX IF NOT EXISTS idx_discussions_slug ON discussions(slug);
 CREATE INDEX IF NOT EXISTS idx_discussions_user_id ON discussions(user_id);
 CREATE INDEX IF NOT EXISTS idx_discussions_category_id ON discussions(category_id);
 CREATE INDEX IF NOT EXISTS idx_discussions_status ON discussions(status);
+CREATE INDEX IF NOT EXISTS idx_discussions_tenant_id ON discussions(tenant_id);
 
 DROP TRIGGER IF EXISTS update_discussions_updated_at ON discussions;
 CREATE TRIGGER update_discussions_updated_at
     BEFORE UPDATE ON discussions
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
+
