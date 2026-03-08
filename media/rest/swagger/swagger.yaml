@@ -1,0 +1,583 @@
+openapi: 3.0.1
+info:
+  title: "[Media]: File Management Service APIs"
+  description: API for managing media files including images, videos, and documents with upload, optimization, and storage capabilities.
+  version: 1.0.0
+
+servers:
+  - url: https://media.nesohq.org
+    description: Production
+  - url: http://localhost:8086
+    description: Local Development
+
+tags:
+  - name: Health
+    description: Service health check
+  - name: Media
+    description: Media file management operations
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      description: Check if the service is running.
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  service:
+                    type: string
+                    example: media
+                  version:
+                    type: string
+                    example: 1.0.0
+
+  /api/v1/media/upload:
+    post:
+      summary: Upload media file
+      description: Uploads a new media file (image, video, or document) to storage. Requires authentication.
+      tags:
+        - Media
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file to upload
+                tenant_id:
+                  type: integer
+                  description: Optional tenant ID
+                  example: 1
+                user_id:
+                  type: integer
+                  description: Optional user ID
+                  example: 42
+      responses:
+        '201':
+          description: File uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: File uploaded successfully
+                  data:
+                    $ref: '#/components/schemas/UploadResponse'
+        '400':
+          description: Bad request (invalid file type or size)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/media:
+    get:
+      summary: List media files
+      description: Retrieves a paginated list of media files with optional filtering.
+      tags:
+        - Media
+      parameters:
+        - name: tenant_id
+          in: query
+          description: Filter by tenant ID
+          schema:
+            type: integer
+        - name: user_id
+          in: query
+          description: Filter by user ID
+          schema:
+            type: integer
+        - name: mime_type
+          in: query
+          description: Filter by MIME type (e.g., image/jpeg, video/mp4)
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: limit
+          in: query
+          description: Number of items per page
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Media files retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Media files retrieved successfully
+                  data:
+                    $ref: '#/components/schemas/ListMediaResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/media/{id}:
+    get:
+      summary: Get media file by ID
+      description: Retrieves a specific media file by its ID.
+      tags:
+        - Media
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Media file ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Media file retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Media file retrieved successfully
+                  data:
+                    $ref: '#/components/schemas/MediaFileResponse'
+        '404':
+          description: Media file not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Delete media file
+      description: Deletes a media file from storage and database. Requires authentication.
+      tags:
+        - Media
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Media file ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Media file deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Media file deleted successfully
+                  data:
+                    $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Media file not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/media/uuid/{uuid}:
+    get:
+      summary: Get media file by UUID
+      description: Retrieves a specific media file by its UUID.
+      tags:
+        - Media
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          description: Media file UUID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Media file retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Media file retrieved successfully
+                  data:
+                    $ref: '#/components/schemas/MediaFileResponse'
+        '404':
+          description: Media file not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/users/{user_id}/media:
+    get:
+      summary: Get user's media files
+      description: Retrieves all media files uploaded by a specific user.
+      tags:
+        - Media
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User media files retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: User media files retrieved successfully
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MediaFileResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/media/{id}/optimize:
+    post:
+      summary: Optimize image
+      description: Optimizes an image by resizing and/or compressing it. Only works for image files. Requires authentication.
+      tags:
+        - Media
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Media file ID
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OptimizeRequest'
+      responses:
+        '200':
+          description: Image optimized successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Image optimized successfully
+                  data:
+                    $ref: '#/components/schemas/OptimizeResponse'
+        '400':
+          description: Bad request (not an image or invalid parameters)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Media file not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from the authentication service
+
+  schemas:
+    UploadResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        uuid:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        filename:
+          type: string
+          example: profile-picture.jpg
+        file_url:
+          type: string
+          example: https://cdn.example.com/media/d290f1ee-6c54-4b01-90e6-d701748f0851.jpg
+        mime_type:
+          type: string
+          example: image/jpeg
+        file_size:
+          type: integer
+          format: int64
+          example: 1048576
+          description: File size in bytes
+        width:
+          type: integer
+          nullable: true
+          example: 1920
+          description: Image width in pixels (only for images)
+        height:
+          type: integer
+          nullable: true
+          example: 1080
+          description: Image height in pixels (only for images)
+        created_at:
+          type: string
+          format: date-time
+          example: 2024-03-08T10:30:00Z
+
+    MediaFileResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        uuid:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        tenant_id:
+          type: integer
+          nullable: true
+          example: 1
+        user_id:
+          type: integer
+          nullable: true
+          example: 42
+        filename:
+          type: string
+          example: profile-picture.jpg
+        file_path:
+          type: string
+          example: media/2024/03/d290f1ee-6c54-4b01-90e6-d701748f0851.jpg
+        file_url:
+          type: string
+          example: https://cdn.example.com/media/d290f1ee-6c54-4b01-90e6-d701748f0851.jpg
+        mime_type:
+          type: string
+          example: image/jpeg
+        file_size:
+          type: integer
+          format: int64
+          example: 1048576
+        width:
+          type: integer
+          nullable: true
+          example: 1920
+        height:
+          type: integer
+          nullable: true
+          example: 1080
+        created_at:
+          type: string
+          format: date-time
+          example: 2024-03-08T10:30:00Z
+
+    ListMediaResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UploadResponse'
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 20
+        total:
+          type: integer
+          format: int64
+          example: 150
+        total_pages:
+          type: integer
+          example: 8
+
+    DeleteResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Media file deleted successfully
+        success:
+          type: boolean
+          example: true
+
+    OptimizeRequest:
+      type: object
+      required:
+        - quality
+      properties:
+        quality:
+          type: integer
+          minimum: 1
+          maximum: 100
+          example: 85
+          description: JPEG quality (1-100)
+        width:
+          type: integer
+          minimum: 1
+          example: 1024
+          description: Target width in pixels (optional)
+        height:
+          type: integer
+          minimum: 1
+          example: 768
+          description: Target height in pixels (optional)
+
+    OptimizeResponse:
+      type: object
+      properties:
+        original_size:
+          type: integer
+          format: int64
+          example: 2097152
+          description: Original file size in bytes
+        optimized_size:
+          type: integer
+          format: int64
+          example: 524288
+          description: Optimized file size in bytes
+        savings_percentage:
+          type: number
+          format: float
+          example: 75.0
+          description: Percentage of size reduction
+        new_url:
+          type: string
+          example: https://cdn.example.com/media/optimized/d290f1ee-6c54-4b01-90e6-d701748f0851.jpg
+
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Error message
+        data:
+          type: object
+          nullable: true

@@ -1,0 +1,120 @@
+services:
+  media:
+    build: .
+    container_name: media-service
+    ports:
+      - "8086:8086"
+    environment:
+      VERSION: "1.0.0"
+      MODE: "debug"
+      SERVICE_NAME: "media"
+      HTTP_PORT: 8086
+      MIGRATION_SOURCE: "migrations"
+      
+      # JWT Configuration
+      JWT_SECRET: "your-secret-key-change-in-production"
+      
+      # RabbitMQ Configuration
+      RABBITMQ_URL: "amqp://admin:admin@rabbitmq:5672"
+      RMQ_RECONNECT_DELAY: 5
+      RMQ_RETRY_INTERVAL: 600
+      RMQ_QUEUE_PREFIX: "media-dev"
+      
+      # Database Configuration (DSN format)
+      BGCE_DB_DSN: "postgresql://postgres:postgres@postgres:5432/bgce_archive?sslmode=disable"
+      BGCE_DB_DRIVER: "postgres"
+      
+      # MinIO Configuration
+      MINIO_ENDPOINT: "minio:9000"
+      MINIO_ACCESS_KEY: "minioadmin"
+      MINIO_SECRET_KEY: "minioadmin"
+      MINIO_USE_SSL: "false"
+      MINIO_BUCKET_NAME: "bgce-media"
+      MINIO_REGION: "us-east-1"
+      CDN_BASE_URL: "http://localhost:9000"
+      
+      # Upload Configuration
+      MAX_UPLOAD_SIZE_MB: 50
+      ALLOWED_IMAGE_TYPES: "image/jpeg,image/png,image/gif,image/webp"
+      ALLOWED_VIDEO_TYPES: "video/mp4,video/webm,video/ogg"
+      ALLOWED_DOCUMENT_TYPES: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      
+      # Image Processing
+      ENABLE_IMAGE_OPTIMIZATION: "true"
+      THUMBNAIL_WIDTH: 300
+      THUMBNAIL_HEIGHT: 300
+      MAX_IMAGE_WIDTH: 2048
+      MAX_IMAGE_HEIGHT: 2048
+    depends_on:
+      - postgres
+      - minio
+      - rabbitmq
+    networks:
+      - bgce-network
+
+  postgres:
+    image: postgres:14-alpine
+    container_name: media-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bgce_archive
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - bgce-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    container_name: media-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+    networks:
+      - bgce-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: media-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - bgce-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  postgres-data:
+  minio-data:
+  rabbitmq-data:
+
+networks:
+  bgce-network:
+    driver: bridge
