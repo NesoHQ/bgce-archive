@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, LogIn, Mail, Lock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,33 +14,33 @@ export function LoginForm() {
   const router = useRouter();
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const response = await AuthAPI.login(formData);
-
+  const loginMutation = useMutation({
+    mutationFn: AuthAPI.login,
+    onSuccess: (response) => {
       if (response.status && response.data) {
-        // Use auth context to update state
         login(response.data.token, response.data.user);
-
-        // Redirect to home or dashboard
         router.push("/");
       }
-    } catch (error: any) {
-      setError(error.message || "Login failed. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    },
+    onError: (mutationError) => {
+      setError(
+        mutationError instanceof Error
+          ? mutationError.message
+          : "Login failed. Please try again.",
+      );
+    },
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    loginMutation.mutate(formData);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -141,10 +142,10 @@ export function LoginForm() {
         </div>
         <Button
           type="submit"
-          disabled={isLoading}
+          disabled={loginMutation.isPending}
           className="w-full h-11 text-base font-medium shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-[0.98]"
         >
-          {isLoading ? (
+          {loginMutation.isPending ? (
             <>
               <Loader2 className="mr-2 h-5 w-5 animate-spin" />
               Signing in...
