@@ -1,4 +1,4 @@
-import { getCategoriesAction, getPostsAction, getPostBySlugAction } from "./actions";
+import { getCategoriesAction, getPostsAction, getPostBySlugAction, getSubcategoriesAction } from "./actions";
 
 /**
  * Server-side API utility for React Server Components.
@@ -7,5 +7,6 @@ import { getCategoriesAction, getPostsAction, getPostBySlugAction } from "./acti
 export const api = {
     getCategories: getCategoriesAction,
     getPosts: getPostsAction,
-    getPostBySlug: getPostBySlugAction
+    getPostBySlug: getPostBySlugAction,
+    getSubcategories: getSubcategoriesAction
 };
