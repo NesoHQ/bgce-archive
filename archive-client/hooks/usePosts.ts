@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
 import type { ApiPostListItem } from "@/types/blog.type";
-import { getPostsAction } from "@/lib/actions";
+import { api } from "@/lib/api";
 
 interface PostFilters {
     limit?: number;
@@ -15,53 +15,18 @@ interface PostFilters {
 }
 
 export function usePosts(filters: PostFilters, initialData?: { data: ApiPostListItem[], total: number }) {
-    const [posts, setPosts] = useState<ApiPostListItem[]>(initialData?.data || []);
-    const [total, setTotal] = useState(initialData?.total || 0);
-    const [isLoading, setIsLoading] = useState(!initialData);
-    const [error, setError] = useState<string | null>(null);
-    const isFirstRun = useRef(!!initialData);
+    const query = useQuery({
+        queryKey: ["posts", filters],
+        queryFn: () => api.getPosts(filters),
+        initialData,
+        staleTime: 60 * 1000,
+    });
 
-    const fetchPosts = useCallback(async () => {
-        if (isFirstRun.current) {
-            isFirstRun.current = false;
-            return;
-        }
-
-        let mounted = true;
-        setIsLoading(true);
-
-        try {
-            const result = await getPostsAction(filters);
-            if (mounted) {
-                setPosts(result.data);
-                setTotal(result.total);
-                setIsLoading(false);
-            }
-        } catch (err) {
-            if (mounted) {
-                setError(err instanceof Error ? err.message : "Failed to fetch");
-                setIsLoading(false);
-            }
-        }
-
-        return () => {
-            mounted = false;
-        };
-    }, [
-        filters.limit,
-        filters.offset,
-        filters.category_id,
-        filters.sub_category_id,
-        filters.search,
-        filters.is_featured,
-        filters.is_pinned,
-        filters.sort_by,
-        filters.sort_order,
-    ]);
-
-    useEffect(() => {
-        fetchPosts();
-    }, [fetchPosts]);
-
-    return { posts, total, isLoading, error, refetch: fetchPosts };
+    return {
+        posts: query.data?.data ?? [],
+        total: query.data?.total ?? 0,
+        isLoading: query.isLoading,
+        error: query.error instanceof Error ? query.error.message : null,
+        refetch: query.refetch,
+    };
 }
