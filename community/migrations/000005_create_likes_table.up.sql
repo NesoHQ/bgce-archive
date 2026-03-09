@@ -13,7 +13,6 @@ CREATE TABLE IF NOT EXISTS likes (
   UNIQUE(user_id, likeable_type, likeable_id)
 );
 
-CREATE INDEX IF NOT EXISTS idx_likes_user_id ON likes(user_id);
 CREATE INDEX IF NOT EXISTS idx_likes_likeable ON likes(likeable_type, likeable_id);
 
 DROP TRIGGER IF EXISTS update_likes_updated_at ON likes;
