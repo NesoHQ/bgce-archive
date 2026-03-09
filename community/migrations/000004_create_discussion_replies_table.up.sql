@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS discussion_replies (
 );
 
 CREATE INDEX IF NOT EXISTS idx_discussion_replies_discussion_id ON discussion_replies(discussion_id);
-CREATE INDEX IF NOT EXISTS idx_discussion_replies_user_id ON discussion_replies(user_id);
+
 CREATE INDEX IF NOT EXISTS idx_discussion_replies_parent_id ON discussion_replies(parent_id);
 CREATE INDEX IF NOT EXISTS idx_discussion_replies_is_solution ON discussion_replies(is_solution);
 
