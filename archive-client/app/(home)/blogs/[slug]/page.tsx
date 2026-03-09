@@ -2,9 +2,12 @@ import BlogDetailsClient from "./BlogDetailsClient";
 import type { Metadata } from "next";
 import { api } from "@/lib/api";
 import { notFound } from "next/navigation";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { getQueryClient } from "@/lib/get-query-client";
 
 // Force dynamic rendering - no caching per user request
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 interface PageProps {
     params: Promise<{
@@ -24,11 +27,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BlogDetailsPage({ params }: PageProps) {
     const { slug } = await params;
-    const post = await api.getPostBySlug(slug);
+    const queryClient = getQueryClient();
+
+    // Prefetch post data
+    await queryClient.prefetchQuery({
+        queryKey: ["post", slug],
+        queryFn: () => api.getPostBySlug(slug),
+        staleTime: 0,
+    });
+
+    const post = queryClient.getQueryData(["post", slug]) as Awaited<ReturnType<typeof api.getPostBySlug>>;
 
     if (!post) {
         notFound();
     }
 
-    return <BlogDetailsClient initialPost={post} slug={slug} />;
+    return (
+        <HydrationBoundary state={dehydrate(queryClient)}>
+            <BlogDetailsClient slug={slug} />
+        </HydrationBoundary>
+    );
 }
