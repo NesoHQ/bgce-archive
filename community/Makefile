@@ -1,4 +1,4 @@
-.PHONY: help build run dev test clean docker-build docker-up docker-down
+.PHONY: help build run dev test clean docker-build docker-up docker-down migrate-install migrate-up migrate-down migrate-version
 
 help:
 	@echo 'Usage: make [target]'
@@ -45,3 +45,19 @@ docker-down:
 
 docker-logs:
 	@docker compose logs -f
+
+migrate-install: ## Install golang-migrate CLI
+	@echo "Installing golang-migrate..."
+	@go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+	@echo "golang-migrate installed"
+
+migrate-up: ## Run all pending migrations
+	@echo "Running migrations up..."
+	@migrate -path ./migrations -database "postgres://postgres:root@localhost:5432/cortex_db?sslmode=disable" up
+
+migrate-down: ## Rollback last migration
+	@echo "Rolling back last migration..."
+	@migrate -path ./migrations -database "postgres://postgres:root@localhost:5432/cortex_db?sslmode=disable" down 1
+
+migrate-version: ## Show current migration version
+	@migrate -path ./migrations -database "postgres://postgres:root@localhost:5432/cortex_db?sslmode=disable" version
