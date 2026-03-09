@@ -8,5 +8,6 @@
         "formatting.gofumpt": true
     },
     "makefile.configureOnOpen": false,
-    "typescript.autoClosingTags": false
+    "typescript.autoClosingTags": false,
+    "kiroAgent.configureMCP": "Disabled"
 }
