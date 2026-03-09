@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS follows (
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
 
-  follower_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  following_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  follower_id INT NOT NULL ,
+  following_id INT NOT NULL ,
 
   CHECK (follower_id != following_id),
   UNIQUE(follower_id,  following_id)

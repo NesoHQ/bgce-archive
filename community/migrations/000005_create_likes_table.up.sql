@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS likes (
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
 
-  user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  user_id INT NOT NULL ,
 
   likeable_type VARCHAR(50) NOT NULL,
   likeable_id INT NOT NULL,
