@@ -1,42 +1,18 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import type { ApiSubcategory } from "@/types/blog.type";
-import { getSubcategoriesAction } from "@/lib/actions";
+import { api } from "@/lib/api";
 
 export function useSubcategories(parentUuid?: string) {
-    const [subcategories, setSubcategories] = useState<ApiSubcategory[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const { data, isLoading, error } = useQuery<ApiSubcategory[]>({
+        queryKey: ["subcategories", parentUuid],
+        queryFn: () => api.getSubcategories(parentUuid as string),
+        enabled: Boolean(parentUuid),
+        staleTime: 60 * 1000,
+    });
 
-    useEffect(() => {
-        if (!parentUuid) {
-            setSubcategories([]);
-            return;
-        }
-
-        let mounted = true;
-        setIsLoading(true);
-
-        const fetchSubcategories = async () => {
-            try {
-                const data = await getSubcategoriesAction(parentUuid);
-                if (mounted) {
-                    setSubcategories(data);
-                    setIsLoading(false);
-                }
-            } catch (err) {
-                if (mounted) {
-                    setError(err instanceof Error ? err.message : "Failed to fetch");
-                    setIsLoading(false);
-                }
-            }
-        };
-
-        fetchSubcategories();
-
-        return () => {
-            mounted = false;
-        };
-    }, [parentUuid]);
-
-    return { subcategories, isLoading, error };
+    return {
+        subcategories: data ?? [],
+        isLoading,
+        error: error instanceof Error ? error.message : null,
+    };
 }

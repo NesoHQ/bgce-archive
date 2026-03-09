@@ -1,58 +1,49 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type { ApiPost } from "@/types/blog.type";
-import { incrementViewCountAction, getPostBySlugAction } from "@/lib/actions";
+import { incrementViewCountAction } from "@/lib/actions";
+import { api } from "@/lib/api";
 
 export function useBlogDetail(initialPost: ApiPost | undefined, slug: string) {
     const router = useRouter();
-    const [post, setPost] = useState<ApiPost | null>(initialPost || null);
-    const [isLoading, setIsLoading] = useState(!initialPost);
-    const [error, setError] = useState<string | null>(null);
-    const isFirstRun = useRef(!!initialPost);
-    const hasIncremented = useRef(false);
+    const incrementedPostId = useRef<number | null>(null);
+    const incrementViewMutation = useMutation({
+        mutationFn: incrementViewCountAction,
+    });
+
+    const { data, isLoading, error } = useQuery({
+        queryKey: ["post", slug],
+        queryFn: () => api.getPostBySlug(slug),
+        enabled: Boolean(slug),
+        initialData: initialPost,
+        staleTime: 60 * 1000,
+    });
+
+    const post = useMemo(() => {
+        if (!data) return null;
+        if (data.status !== "published" || !data.is_public) return null;
+        return data;
+    }, [data]);
 
     useEffect(() => {
-        if (post && !hasIncremented.current) {
-            incrementViewCountAction(post.id);
-            hasIncremented.current = true;
+        if (post && incrementedPostId.current !== post.id) {
+            incrementViewMutation.mutate(post.id);
+            incrementedPostId.current = post.id;
         }
-    }, [post]);
+    }, [post, incrementViewMutation]);
 
     useEffect(() => {
-        if (isFirstRun.current) {
-            isFirstRun.current = false;
-            return;
+        if (!isLoading && data && !post) {
+            router.push("/404");
         }
 
-        async function fetchPost() {
-            try {
-                setIsLoading(true);
-                const postData = await getPostBySlugAction(slug);
-
-                if (!postData) {
-                    router.push('/404');
-                    return;
-                }
-
-                // Check if post is published and public
-                if (postData.status !== 'published' || !postData.is_public) {
-                    router.push('/404');
-                    return;
-                }
-
-                setPost(postData);
-            } catch (err) {
-                console.error('Error fetching post:', err);
-                setError('Failed to load post');
-            } finally {
-                setIsLoading(false);
-            }
+        if (!isLoading && !data && !error) {
+            router.push("/404");
         }
+    }, [isLoading, data, post, error, router]);
 
-        fetchPost();
-    }, [slug, router]);
-
-    const tags = useMemo(() => post?.keywords ? post.keywords.split(',').map(k => k.trim()).filter(Boolean) : [], [post?.keywords]);
+    const tags = useMemo(() => post?.keywords ? post.keywords.split(",").map(k => k.trim()).filter(Boolean) : [], [post?.keywords]);
     const readTime = useMemo(() => {
         if (post?.read_time && post.read_time > 0) {
             return `${post.read_time} min`;
@@ -69,7 +60,7 @@ export function useBlogDetail(initialPost: ApiPost | undefined, slug: string) {
     return {
         post,
         isLoading,
-        error,
+        error: error instanceof Error ? error.message : null,
         tags,
         readTime,
         getAuthorInitials,
