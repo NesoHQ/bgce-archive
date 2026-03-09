@@ -2,6 +2,9 @@ import { Suspense } from "react";
 import nextDynamic from "next/dynamic";
 import { WelcomeSection } from "@/components/home/WelcomeSectionOptimized";
 import { SkeletonCardGrid } from "@/components/shared/SkeletonCard";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { getQueryClient } from "@/lib/get-query-client";
+import { api } from "@/lib/api";
 
 // Dynamic imports for better code splitting
 const PopularCoursesSection = nextDynamic(
@@ -19,20 +22,26 @@ const PopularCoursesSection = nextDynamic(
 );
 
 import { CommunityTalksSection } from "@/components/home/CommunityTalksSectionOptimized";
-import { api } from "@/lib/api";
 import { CheatsheetSection } from "@/components/home/CheatsheetSection";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const popularPosts = await api.getPosts({
-    sort_by: "view_count",
-    sort_order: "DESC",
-    limit: 3
+  const queryClient = getQueryClient();
+
+  // Prefetch popular posts using TanStack Query
+  await queryClient.prefetchQuery({
+    queryKey: ["posts", { is_featured: true, limit: 3, sort_by: "created_at", sort_order: "DESC" }],
+    queryFn: () => api.getPosts({
+      is_featured: true,
+      limit: 3,
+      sort_by: "created_at",
+      sort_order: "DESC"
+    }),
   });
 
   return (
-    <>
+    <HydrationBoundary state={dehydrate(queryClient)}>
       <WelcomeSection />
       <Suspense
         fallback={
@@ -48,7 +57,7 @@ export default async function HomePage() {
             <SkeletonCardGrid count={3} />
           </div>
         }>
-        <CommunityTalksSection initialPosts={popularPosts.data} />
+        <CommunityTalksSection />
       </Suspense>
       <Suspense
         fallback={
@@ -58,6 +67,6 @@ export default async function HomePage() {
         }>
         <CheatsheetSection />
       </Suspense>
-    </>
+    </HydrationBoundary>
   );
 }

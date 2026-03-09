@@ -1,24 +1,25 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { MobileViewAllButton } from "@/components/shared/MobileViewAllButton";
 import { BlogCard } from "@/components/blogs/BlogCard";
-import { usePosts } from "@/hooks/usePosts";
 import { SkeletonCardGrid } from "@/components/shared/SkeletonCard";
+import { api } from "@/lib/api";
 
-import type { ApiPostListItem } from "@/types/blog.type";
+export function CommunityTalksSection() {
+    const { data: postsData, isLoading, error } = useQuery({
+        queryKey: ["posts", { is_featured: true, limit: 3, sort_by: "created_at", sort_order: "DESC" }],
+        queryFn: () => api.getPosts({
+            is_featured: true,
+            limit: 3,
+            sort_by: "created_at",
+            sort_order: "DESC"
+        }),
+        staleTime: 60 * 1000,
+    });
 
-interface CommunityTalksSectionProps {
-    initialPosts?: ApiPostListItem[];
-}
-
-export function CommunityTalksSection({ initialPosts }: CommunityTalksSectionProps) {
-    const { posts, isLoading, error } = usePosts({
-        is_featured: true,
-        limit: 3,
-        sort_by: "created_at",
-        sort_order: "DESC"
-    }, initialPosts ? { data: initialPosts, total: initialPosts.length } : undefined);
+    const posts = postsData?.data || [];
 
     return (
         <section className="py-10 lg:py-12 relative overflow-hidden">
