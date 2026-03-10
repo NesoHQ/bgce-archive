@@ -1,0 +1,24 @@
+name: Manual Build and Push - Postal
+
+on:
+    workflow_dispatch:
+        inputs:
+            image-tag:
+                description: "Docker image tag"
+                required: false
+                type: string
+                default: "latest"
+
+env:
+    SERVICE_NAME: postal
+
+jobs:
+    build-and-push:
+        permissions:
+            contents: read
+            packages: write
+        uses: ./.github/workflows/docker-build.yml
+        with:
+            service: postal
+            should-build: true
+        secrets: inherit

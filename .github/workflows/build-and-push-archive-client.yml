@@ -1,0 +1,24 @@
+name: Manual Build and Push - Archive Client
+
+on:
+    workflow_dispatch:
+        inputs:
+            image-tag:
+                description: "Docker image tag"
+                required: false
+                type: string
+                default: "latest"
+
+env:
+    SERVICE_NAME: archive-client
+
+jobs:
+    build-and-push:
+        permissions:
+            contents: read
+            packages: write
+        uses: ./.github/workflows/docker-build.yml
+        with:
+            service: archive-client
+            should-build: true
+        secrets: inherit

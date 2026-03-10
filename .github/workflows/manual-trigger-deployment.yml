@@ -1,0 +1,59 @@
+name: Manual Trigger Deployment
+
+on:
+    workflow_dispatch:
+        inputs:
+            service:
+                description: "Service to deploy"
+                required: true
+                type: choice
+                options:
+                    - archive-admin
+                    - archive-client
+                    - cortex
+                    - postal
+                    - community
+            environment:
+                description: "Target environment"
+                required: true
+                type: choice
+                options:
+                    - staging
+                    - production
+                default: staging
+            image-tag:
+                description: "Docker image tag to deploy"
+                required: false
+                type: string
+                default: "latest"
+
+jobs:
+    trigger-deployment:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: 🚀 Trigger Infrastructure Deployment
+              run: |
+                  EVENT_TYPE="deploy-${{ inputs.environment }}"
+
+                  curl -X POST \
+                    -H "Authorization: token ${{ secrets.INFRA_REPO_TOKEN }}" \
+                    -H "Accept: application/vnd.github.v3+json" \
+                    https://api.github.com/repos/opskraken/nesohq-infra/dispatches \
+                    -d "{\"event_type\":\"${EVENT_TYPE}\",\"client_payload\":{\"service\":\"${{ inputs.service }}\",\"tag\":\"${{ inputs.image-tag }}\"}}"
+
+            - name: 📝 Deployment Summary
+              run: |
+                  echo "## 🚀 Deployment Triggered" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "**Status:** ✅ Infrastructure deployment triggered" >> $GITHUB_STEP_SUMMARY
+                  echo "**Service:** ${{ inputs.service }}" >> $GITHUB_STEP_SUMMARY
+                  echo "**Environment:** ${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+                  echo "**Image Tag:** ${{ inputs.image-tag }}" >> $GITHUB_STEP_SUMMARY
+                  echo "**Repository:** nesohq-infra" >> $GITHUB_STEP_SUMMARY
+                  echo "**Event:** deploy-${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+                  echo "**Image Pull Command:**" >> $GITHUB_STEP_SUMMARY
+                  echo '```bash' >> $GITHUB_STEP_SUMMARY
+                  echo "docker pull ghcr.io/nesohq/bgce-archive/${{ inputs.service }}:${{ inputs.image-tag }}" >> $GITHUB_STEP_SUMMARY
+                  echo '```' >> $GITHUB_STEP_SUMMARY
