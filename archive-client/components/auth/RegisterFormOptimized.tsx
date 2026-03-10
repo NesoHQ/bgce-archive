@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import { UserPlus, Mail, User, CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AuthAPI } from "@/lib/auth-api";
@@ -12,7 +13,6 @@ import { usePasswordStrength } from "./register/usePasswordStrength";
 
 export function RegisterFormOptimized() {
     const router = useRouter();
-    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [passwordStrength, setPasswordStrength] = useState(0);
     const { calculatePasswordStrength } = usePasswordStrength();
@@ -23,6 +23,22 @@ export function RegisterFormOptimized() {
         email: "",
         password: "",
         confirmPassword: "",
+    });
+
+    const registerMutation = useMutation({
+        mutationFn: AuthAPI.register,
+        onSuccess: (response) => {
+            if (response.status && response.data) {
+                router.push("/login?registered=true");
+            }
+        },
+        onError: (mutationError) => {
+            setError(
+                mutationError instanceof Error
+                    ? mutationError.message
+                    : "Registration failed. Please try again.",
+            );
+        },
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -39,24 +55,12 @@ export function RegisterFormOptimized() {
             return;
         }
 
-        setIsLoading(true);
-
-        try {
-            const response = await AuthAPI.register({
-                username: formData.username,
-                email: formData.email,
-                password: formData.password,
-                full_name: formData.name,
-            });
-
-            if (response.status && response.data) {
-                router.push("/login?registered=true");
-            }
-        } catch (error: any) {
-            setError(error.message || "Registration failed. Please try again.");
-        } finally {
-            setIsLoading(false);
-        }
+        registerMutation.mutate({
+            username: formData.username,
+            email: formData.email,
+            password: formData.password,
+            full_name: formData.name,
+        });
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,10 +143,10 @@ export function RegisterFormOptimized() {
 
                 <Button
                     type="submit"
-                    disabled={isLoading}
+                    disabled={registerMutation.isPending}
                     className="w-full h-11 text-base font-medium shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-[0.98] dark:text-white"
                 >
-                    {isLoading ? (
+                    {registerMutation.isPending ? (
                         <>
                             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                             Creating account...

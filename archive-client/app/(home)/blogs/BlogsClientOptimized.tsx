@@ -1,44 +1,29 @@
 "use client";
 
 import { useMemo, useEffect, useState, useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { BlogHeader } from "@/components/blogs/BlogHeader";
 import { MobileFilterButton } from "@/components/blogs/MobileFilterButton";
 import { BlogSidebar } from "@/components/blogs/BlogSidebar";
 import { BlogGrid } from "@/components/blogs/BlogGrid";
-import { useCategories } from "@/hooks/useCategories";
-import { useSubcategories } from "@/hooks/useSubcategories";
-import { usePosts } from "@/hooks/usePosts";
 import { useBlogFilters } from "@/hooks/useBlogFilters";
+import { api } from "@/lib/api";
 import type { ApiCategory, ApiPostListItem } from "@/types/blog.type";
-
-interface BlogsClientProps {
-  initialCategories?: ApiCategory[];
-  initialPosts?: ApiPostListItem[];
-  initialTotal?: number;
-}
 
 const MobileFilterDrawer = dynamic(
   () => import("@/components/blogs/MobileFilterDrawer").then((mod) => ({ default: mod.MobileFilterDrawer })),
   { ssr: false },
 );
 
-export default function BlogsClient({
-  initialCategories,
-  initialPosts,
-  initialTotal
-}: BlogsClientProps) {
+export default function BlogsClient() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const { categories } = useCategories(initialCategories);
 
-  // Fetch posts with initial data support
-  // We need to call usePosts here to get the 'posts' for the hook below, 
-  // but wait, useBlogFilters needs posts for getCategoryPostCount.
-  // This is a circular dependency if not careful.
-  // Actually, getCategoryPostCount is used in Sidebar.
-
-  // Let's refactor the hook to accept posts later or just compute it in the component if needed.
-  // But wait, the user wants it smaller.
+  // Fetch categories using TanStack Query
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => api.getCategories(),
+  });
 
   const {
     currentPage, pageSize, sortBy, searchQuery, selectedCategory,
@@ -48,14 +33,18 @@ export default function BlogsClient({
     handleCategoryChange, handleSubcategoryChange, handleSearchChange, handleSortChange,
     handlePageSizeChange, clearAllFilters, handleToggleCategory, goToPage,
     displayedCategories, hasMoreCategories
-  } = useBlogFilters(categories, []); // We'll update posts manually or use a ref
+  } = useBlogFilters(categories, []);
 
-  const { posts, total: totalPosts, isLoading: isLoadingPosts } = usePosts(
-    postFilters,
-    initialPosts && initialTotal !== undefined ? { data: initialPosts, total: initialTotal } : undefined
-  );
+  // Fetch posts using TanStack Query with filters
+  const { data: postsData, isLoading: isLoadingPosts } = useQuery({
+    queryKey: ["posts", postFilters],
+    queryFn: () => api.getPosts(postFilters),
+  });
 
-  // Update getCategoryPostCount to use the latest posts
+  const posts = postsData?.data || [];
+  const totalPosts = postsData?.total || 0;
+
+  // Get category post count
   const getCategoryPostCountOptimized = useCallback((categoryId: number) =>
     posts.filter((post) => post.category_id === categoryId).length,
     [posts]
@@ -66,7 +55,13 @@ export default function BlogsClient({
     [selectedCategory, categories]
   );
 
-  const { subcategories, isLoading: isLoadingSubcategories } = useSubcategories(selectedCategoryUuid);
+  // Fetch subcategories using TanStack Query
+  const { data: subcategories = [], isLoading: isLoadingSubcategories } = useQuery({
+    queryKey: ["subcategories", selectedCategoryUuid],
+    queryFn: () => api.getSubcategories(selectedCategoryUuid!),
+    enabled: !!selectedCategoryUuid,
+  });
+
   const totalPages = Math.ceil(totalPosts / pageSize);
 
   useEffect(() => {

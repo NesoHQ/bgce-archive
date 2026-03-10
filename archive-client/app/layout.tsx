@@ -9,6 +9,7 @@ import { SkipToContent } from "@/components/shared/SkipToContent";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import { GradientBackground } from "@/components/shared/GradientBackground";
 import { MobileOptimizer } from "@/components/shared/MobileOptimizer";
+import { QueryProvider } from "@/components/providers/query-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -106,17 +107,19 @@ export default function RootLayout({
         <MobileOptimizer />
         <GradientBackground />
 
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange>
-          <ToastProvider>
-            <ErrorBoundary>
-              <AuthProvider>{children}</AuthProvider>
-            </ErrorBoundary>
-          </ToastProvider>
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange>
+            <ToastProvider>
+              <ErrorBoundary>
+                <AuthProvider>{children}</AuthProvider>
+              </ErrorBoundary>
+            </ToastProvider>
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );
