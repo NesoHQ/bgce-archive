@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS discussions (
   content TEXT NOT NULL,
 
   status VARCHAR(20) NOT NULL DEFAULT 'open',
-  is_pinned BOOLEAN DEFAULT false,
+  is_pinned BOOLEAN DEFAULT false, 
 
   upvote_count INT DEFAULT 0,
   view_count INT DEFAULT 0,
