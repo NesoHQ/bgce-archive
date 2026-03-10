@@ -31,11 +31,10 @@ export default async function HomePage() {
 
   // Prefetch popular posts using TanStack Query
   await queryClient.prefetchQuery({
-    queryKey: ["posts", { is_featured: true, limit: 3, sort_by: "created_at", sort_order: "DESC" }],
+    queryKey: ["posts", { limit: 3, sort_by: "view_count", sort_order: "DESC" }],
     queryFn: () => api.getPosts({
-      is_featured: true,
       limit: 3,
-      sort_by: "created_at",
+      sort_by: "view_count",
       sort_order: "DESC"
     }),
   });

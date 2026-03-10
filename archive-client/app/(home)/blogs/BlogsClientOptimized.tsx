@@ -39,6 +39,8 @@ export default function BlogsClient() {
   const { data: postsData, isLoading: isLoadingPosts } = useQuery({
     queryKey: ["posts", postFilters],
     queryFn: () => api.getPosts(postFilters),
+    staleTime: 30 * 1000,
+    refetchOnMount: "always",
   });
 
   const posts = postsData?.data || [];

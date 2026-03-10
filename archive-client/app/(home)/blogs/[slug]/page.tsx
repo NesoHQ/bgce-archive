@@ -44,7 +44,7 @@ export default async function BlogDetailsPage({ params }: PageProps) {
 
     return (
         <HydrationBoundary state={dehydrate(queryClient)}>
-            <BlogDetailsClient slug={slug} />
+            <BlogDetailsClient slug={slug} initialPost={post} />
         </HydrationBoundary>
     );
 }

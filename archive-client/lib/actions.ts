@@ -1,5 +1,3 @@
-"use server";
-
 import type {
   ApiCategory,
   ApiSubcategory,
@@ -78,7 +76,7 @@ export async function loginAction(
 export async function getCategoriesAction(): Promise<ApiCategory[]> {
   try {
     const url = `${API_URL}/categories?status=approved`;
-    const result = await serverFetch(url, { cache: "no-store" });
+    const result = await serverFetch(url);
 
     if (result.status && result.data) {
       return result.data.filter(
@@ -100,7 +98,7 @@ export async function getSubcategoriesAction(
 ): Promise<ApiSubcategory[]> {
   try {
     const url = `${API_URL}/sub-categories?parent_uuid=${parentUuid}&status=approved`;
-    const result = await serverFetch(url, { cache: "no-store" });
+    const result = await serverFetch(url);
 
     if (result.status && result.data) {
       return result.data;
@@ -129,7 +127,7 @@ export async function getPostsAction(
     });
 
     const url = `${POSTAL_API_URL}/posts?${params.toString()}`;
-    const result = await serverFetch(url, { cache: "no-store" });
+    const result = await serverFetch(url);
 
     if (result.status && result.data) {
       return {
@@ -152,7 +150,7 @@ export async function getPostBySlugAction(
 ): Promise<ApiPost | null> {
   try {
     const url = `${POSTAL_API_URL}/posts/slug/${slug}`;
-    const result = await serverFetch(url, { cache: "no-store" });
+    const result = await serverFetch(url);
 
     if (result.status && result.data) {
       return result.data;

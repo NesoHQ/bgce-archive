@@ -8,18 +8,18 @@ import { SkeletonCardGrid } from "@/components/shared/SkeletonCard";
 import { api } from "@/lib/api";
 
 export function CommunityTalksSection() {
-    const { data: postsData, isLoading, error } = useQuery({
-        queryKey: ["posts", { is_featured: true, limit: 3, sort_by: "created_at", sort_order: "DESC" }],
+    const { data: posts = [], isLoading, error } = useQuery({
+        queryKey: ["posts", { limit: 3, sort_by: "view_count", sort_order: "DESC" }],
         queryFn: () => api.getPosts({
-            is_featured: true,
             limit: 3,
-            sort_by: "created_at",
+            sort_by: "view_count",
             sort_order: "DESC"
         }),
-        staleTime: 60 * 1000,
+        staleTime: 30 * 1000,
+        refetchOnMount: "always",
+        select: (data) => data.data
     });
 
-    const posts = postsData?.data || [];
 
     return (
         <section className="py-10 lg:py-12 relative overflow-hidden">
