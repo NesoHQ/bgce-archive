@@ -1,4 +1,3 @@
-// @d:\Codes\bgce-archive\axon\rest\swagger\serve-swagger.go
 package swagger
 
 import (
@@ -7,6 +6,8 @@ import (
 	"net/http"
 	"path"
 	"strings"
+
+	"axon/config"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -18,7 +19,10 @@ var distFS embed.FS
 var swaggerFS embed.FS
 
 func serveSwagger(w http.ResponseWriter, r *http.Request) {
-	filePath := chi.URLParam(r, "path")
+	filePath := r.PathValue("path")
+	if filePath == "" {
+		filePath = chi.URLParam(r, "*")
+	}
 
 	// if file path not specified serve index file
 	if filePath == "" || filePath == "/" {
@@ -54,8 +58,13 @@ func serveSwagger(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// SetupSwagger registers swagger routes
 func SetupSwagger(r chi.Router) {
-	r.Get("/swagger/{path}", serveSwagger)
+	cfg := config.LoadConfig()
+
+	if cfg.Mode == "release" {
+		return
+	}
+
+	r.Get("/swagger/*", serveSwagger)
 	r.Get("/swagger", serveSwagger)
 }

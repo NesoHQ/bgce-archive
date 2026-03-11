@@ -24,6 +24,8 @@ build: install-deps ## Build the Go binary
 
 start: build run-server ## Build and start server
 
+run: run-server ## Run the server (alias)
+
 run-server: ## Run the server
 	@echo "$(GREEN)Starting server...$(RESET)"
 	$(SERVER_CMD)
