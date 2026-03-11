@@ -1,13 +1,8 @@
-
-
-Here's the updated [MIGRATION_GUIDE.md](cci:7://file:///d:/Codes/bgce-archive/axon/MIGRATION_GUIDE.md:0:0-0:0) for Axon:
-
-```markdown
 # Database Migration Implementation Guide (Axon Service)
 
 This document describes the implementation of database version control for the **Axon Notification Service** using:
 
-* golang-migrate
+- golang-migrate
 
 ---
 
@@ -28,10 +23,10 @@ db.AutoMigrate(&domain.Notification{}, &domain.Template{}, &domain.UserPreferenc
 
 ### Problems
 
-* ❌ No migration version control
-* ❌ No rollback capability
-* ❌ No migration history
-* ❌ Schema drift between environments
+- ❌ No migration version control
+- ❌ No rollback capability
+- ❌ No migration history
+- ❌ Schema drift between environments
 
 ---
 
@@ -39,11 +34,11 @@ db.AutoMigrate(&domain.Notification{}, &domain.Template{}, &domain.UserPreferenc
 
 Axon now uses:
 
-* ✅ Versioned `.up.sql` / `.down.sql`
-* ✅ Rollback capability
-* ✅ Migration history tracking
-* ✅ Dirty state recovery
-* ✅ Production-safe schema evolution
+- ✅ Versioned `.up.sql` / `.down.sql`
+- ✅ Rollback capability
+- ✅ Migration history tracking
+- ✅ Dirty state recovery
+- ✅ Production-safe schema evolution
 
 ---
 
@@ -79,9 +74,9 @@ go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@lat
 
 Dependencies already added:
 
-* `github.com/golang-migrate/migrate/v4`
-* `github.com/golang-migrate/migrate/v4/database/postgres`
-* `github.com/golang-migrate/migrate/v4/source/file`
+- `github.com/golang-migrate/migrate/v4`
+- `github.com/golang-migrate/migrate/v4/database/postgres`
+- `github.com/golang-migrate/migrate/v4/source/file`
 
 ---
 
@@ -110,7 +105,22 @@ make migrate-up
 make migrate-down
 
 # Create new migration
-make migrate-create NAME=add_notification_metadata
+make migrate-create NAME=migration_name
+
+# Axon Migration Flow:
+# 1. Create notification templates table
+make migrate-create NAME=create_notification_templates
+
+# 2. Create user notification preferences table
+make migrate-create NAME=create_user_notification_preferences
+
+# 3. Create notifications table
+make migrate-create NAME=create_notifications
+
+# After creating migrations:
+# - Edit .up.sql files with table definitions
+# - Edit .down.sql files with rollback statements
+# - Run 'make migrate-up' to apply all migrations
 
 # Check current version
 make migrate-version
@@ -165,10 +175,10 @@ Creates:
 ### `000004_add_notification_metadata.up.sql`
 
 ```sql
-ALTER TABLE notifications 
+ALTER TABLE notifications
 ADD COLUMN IF NOT EXISTS metadata JSONB DEFAULT '{}';
 
-CREATE INDEX IF NOT EXISTS idx_notifications_metadata 
+CREATE INDEX IF NOT EXISTS idx_notifications_metadata
 ON notifications USING GIN (metadata);
 ```
 
@@ -187,54 +197,54 @@ ALTER TABLE notifications DROP COLUMN IF EXISTS metadata;
 
 Stores all notification records
 
-| Column | Type | Description |
-|--------|------|-------------|
-| id | BIGSERIAL | Primary key |
-| user_id | BIGINT | Recipient user ID |
-| type | VARCHAR(50) | welcome, password_reset, etc. |
-| subject | VARCHAR(255) | Email subject |
-| body | TEXT | Email body |
-| recipient | VARCHAR(255) | Email address |
-| status | VARCHAR(50) | pending, sent, failed, delivered |
-| provider_ref | VARCHAR(255) | SendGrid message ID |
-| sent_at | TIMESTAMP | When sent |
-| delivered_at | TIMESTAMP | When delivered |
-| included_in_digest | BOOLEAN | Part of weekly digest |
-| created_at | TIMESTAMP | Record creation |
-| updated_at | TIMESTAMP | Last update |
+| Column             | Type         | Description                      |
+| ------------------ | ------------ | -------------------------------- |
+| id                 | BIGSERIAL    | Primary key                      |
+| user_id            | BIGINT       | Recipient user ID                |
+| type               | VARCHAR(50)  | welcome, password_reset, etc.    |
+| subject            | VARCHAR(255) | Email subject                    |
+| body               | TEXT         | Email body                       |
+| recipient          | VARCHAR(255) | Email address                    |
+| status             | VARCHAR(50)  | pending, sent, failed, delivered |
+| provider_ref       | VARCHAR(255) | SendGrid message ID              |
+| sent_at            | TIMESTAMP    | When sent                        |
+| delivered_at       | TIMESTAMP    | When delivered                   |
+| included_in_digest | BOOLEAN      | Part of weekly digest            |
+| created_at         | TIMESTAMP    | Record creation                  |
+| updated_at         | TIMESTAMP    | Last update                      |
 
 ### 2️⃣ templates
 
 Email templates for different notification types
 
-| Column | Type | Description |
-|--------|------|-------------|
-| id | BIGSERIAL | Primary key |
-| name | VARCHAR(100) | Template name |
-| type | VARCHAR(50) | welcome, password_reset, etc. |
-| subject | VARCHAR(255) | Subject with {{.Variable}} |
-| body_html | TEXT | HTML body |
-| body_text | TEXT | Plain text body |
-| sendgrid_id | VARCHAR(255) | SendGrid dynamic template ID |
-| is_active | BOOLEAN | Active status |
-| created_at | TIMESTAMP | Record creation |
-| updated_at | TIMESTAMP | Last update |
+| Column      | Type         | Description                   |
+| ----------- | ------------ | ----------------------------- |
+| id          | BIGSERIAL    | Primary key                   |
+| name        | VARCHAR(100) | Template name                 |
+| type        | VARCHAR(50)  | welcome, password_reset, etc. |
+| subject     | VARCHAR(255) | Subject with {{.Variable}}    |
+| body_html   | TEXT         | HTML body                     |
+| body_text   | TEXT         | Plain text body               |
+| sendgrid_id | VARCHAR(255) | SendGrid dynamic template ID  |
+| is_active   | BOOLEAN      | Active status                 |
+| created_at  | TIMESTAMP    | Record creation               |
+| updated_at  | TIMESTAMP    | Last update                   |
 
 ### 3️⃣ user_preferences
 
 User notification preferences
 
-| Column | Type | Description |
-|--------|------|-------------|
-| id | BIGSERIAL | Primary key |
-| user_id | BIGINT | User ID (unique) |
-| email_enabled | BOOLEAN | Email notifications on/off |
-| digest_enabled | BOOLEAN | Weekly digest on/off |
-| digest_weekly | BOOLEAN | Weekly digest preference |
-| comment_replies | BOOLEAN | Comment reply notifications |
-| post_updates | BOOLEAN | Post update notifications |
-| created_at | TIMESTAMP | Record creation |
-| updated_at | TIMESTAMP | Last update |
+| Column          | Type      | Description                 |
+| --------------- | --------- | --------------------------- |
+| id              | BIGSERIAL | Primary key                 |
+| user_id         | BIGINT    | User ID (unique)            |
+| email_enabled   | BOOLEAN   | Email notifications on/off  |
+| digest_enabled  | BOOLEAN   | Weekly digest on/off        |
+| digest_weekly   | BOOLEAN   | Weekly digest preference    |
+| comment_replies | BOOLEAN   | Comment reply notifications |
+| post_updates    | BOOLEAN   | Post update notifications   |
+| created_at      | TIMESTAMP | Record creation             |
+| updated_at      | TIMESTAMP | Last update                 |
 
 ---
 
@@ -242,13 +252,13 @@ User notification preferences
 
 The migration includes seed data for default templates:
 
-| Type | Name | Purpose |
-|------|------|---------|
-| welcome | Welcome Email | New user registration |
-| password_reset | Password Reset | Password recovery |
-| email_verify | Email Verification | Email confirmation |
-| comment_reply | Comment Reply | Reply notifications |
-| digest | Weekly Digest | Weekly summary |
+| Type           | Name               | Purpose               |
+| -------------- | ------------------ | --------------------- |
+| welcome        | Welcome Email      | New user registration |
+| password_reset | Password Reset     | Password recovery     |
+| email_verify   | Email Verification | Email confirmation    |
+| comment_reply  | Comment Reply      | Reply notifications   |
+| digest         | Weekly Digest      | Weekly summary        |
 
 ---
 
@@ -327,8 +337,8 @@ ALTER TABLE notifications ADD COLUMN IF NOT EXISTS metadata JSONB DEFAULT '{}';
 ```sql
 BEGIN;
 
-UPDATE notifications 
-SET status = 'sent' 
+UPDATE notifications
+SET status = 'sent'
 WHERE status = 'pending' AND sent_at IS NOT NULL;
 
 COMMIT;
@@ -339,7 +349,7 @@ COMMIT;
 ### 4️⃣ Add Indexes Concurrently in Production
 
 ```sql
-CREATE INDEX CONCURRENTLY idx_notifications_status 
+CREATE INDEX CONCURRENTLY idx_notifications_status
 ON notifications(status);
 ```
 

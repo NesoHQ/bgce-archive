@@ -1,52 +1,58 @@
 services:
-  # bgce_axon:
-  #   image: axon:local
-  #   container_name: bgce-axon
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8088:8088"
-  #   environment:
-  #     VERSION: 1.0.0
-  #     MODE: debug
-  #     SERVICE_NAME: axon
-  #     HTTP_PORT: 8088
-  #     MIGRATION_SOURCE: migrations
+  bgce_axon:
+    image: axon:local
+    container_name: bgce-axon
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8088:8088"
+    environment:
+      VERSION: 1.0.0
+      MODE: debug
+      SERVICE_NAME: axon
+      HTTP_PORT: 8088
+      MIGRATION_SOURCE: migrations
 
-  #     # JWT
-  #     JWT_SECRET: "your-secret-key-change-in-production"
+      # JWT
+      JWT_SECRET: "your-secret-key-change-in-production"
 
-  #     # APM Configuration (optional)
-  #     APM_SERVICE_NAME: ""
-  #     APM_SERVER_URL: ""
-  #     APM_SECRET_TOKEN: ""
-  #     APM_ENVIRONMENT: "development"
+      # APM Configuration (optional)
+      APM_SERVICE_NAME: ""
+      APM_SERVER_URL: ""
+      APM_SECRET_TOKEN: ""
+      APM_ENVIRONMENT: "development"
 
-  #     # RabbitMQ
-  #     RABBITMQ_URL: "amqp://admin:admin@rabbitmq:5672"
-  #     RMQ_RECONNECT_DELAY: 5
-  #     RMQ_RETRY_INTERVAL: 600
-  #     RMQ_QUEUE_PREFIX: "axon-dev"
+      # RabbitMQ
+      RABBITMQ_URL: "amqp://admin:admin@rabbitmq:5672"
+      RMQ_RECONNECT_DELAY: 5
+      RMQ_RETRY_INTERVAL: 600
+      RMQ_QUEUE_PREFIX: "axon-dev"
 
-  #     # Redis
-  #     READ_REDIS_URL: "redis://redis:6379"
-  #     WRITE_REDIS_URL: "redis://redis:6379"
-  #     ENABLE_REDIS_TLS_MODE: "false"
+      # Redis
+      READ_REDIS_URL: "redis://redis:6379"
+      WRITE_REDIS_URL: "redis://redis:6379"
+      ENABLE_REDIS_TLS_MODE: "false"
 
-  #     # Postgres DB
-  #     AXON_DB_DSN: "postgresql://postgres:root@postgres:5432/axon_db?sslmode=disable"
-  #     AXON_DB_DRIVER: "postgres"
+      # Postgres DB - use container name for network access
+      AXON_DB_DSN: "postgresql://postgres:root@postgres:5432/axon_db?sslmode=disable"
+      AXON_DB_DRIVER: "postgres"
 
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #     rabbitmq:
-  #       condition: service_healthy
-  #     redis:
-  #       condition: service_healthy
-  #   networks:
-  #     - bgce-network
+      # Email Configuration
+      EMAIL_PROVIDER: "sendgrid"
+      SENDGRID_API_KEY: "your-api-key-here"
+      EMAIL_FROM: "noreply@bgcearchive.com"
+      EMAIL_FROM_NAME: "BGCE Archive"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - bgce-network
 
   postgres:
     image: postgres:15-alpine
@@ -56,7 +62,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
     ports:
-      - "5432:5432"
+      - "0.0.0.0:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -86,20 +92,20 @@ services:
     networks:
       - bgce-network
 
-  # redis:
-  #   image: redis:7-alpine
-  #   container_name: bgce-redis
-  #   ports:
-  #     - "6379:6379"
-  #   volumes:
-  #     - redis_data:/data
-  #   healthcheck:
-  #     test: ["CMD", "redis-cli", "ping"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
-  #   networks:
-  #     - bgce-network
+  redis:
+    image: redis:7-alpine
+    container_name: bgce-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - bgce-network
 
 networks:
   bgce-network:

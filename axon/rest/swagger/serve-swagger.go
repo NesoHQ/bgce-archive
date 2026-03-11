@@ -46,6 +46,9 @@ func serveSwagger(w http.ResponseWriter, r *http.Request) {
 	}
 	ext := path.Ext(filePath)
 	mimeType := mime.TypeByExtension(ext)
+	if mimeType == "" {
+		mimeType = "application/octet-stream"
+	}
 	w.Header().Add("Content-Type", mimeType)
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)

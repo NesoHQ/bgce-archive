@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Swagger Debug</title>
+</head>
+<body>
+    <h1>Swagger Debug</h1>
+    <p>Checking if swagger.json loads correctly...</p>
+    <iframe id="testFrame" src="http://localhost:8088/swagger" width="100%" height="600px"></iframe>
+    
+    <script>
+        // Test fetching swagger.json directly
+        fetch('http://localhost:8088/swagger/swagger.json')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Swagger JSON loaded:', data.info.title);
+            })
+            .catch(error => {
+                console.error('Error loading swagger.json:', error);
+            });
+    </script>
+</body>
+</html>

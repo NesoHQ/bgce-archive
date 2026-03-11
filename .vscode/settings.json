@@ -1,12 +1,12 @@
 {
+  "editor.formatOnSave": true,
+  "[go]": {
     "editor.formatOnSave": true,
-    "[go]": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "golang.go"
-    },
-    "gopls": {
-        "formatting.gofumpt": true
-    },
-    "makefile.configureOnOpen": false,
-    "typescript.autoClosingTags": false
+    "editor.defaultFormatter": "golang.go"
+  },
+  "gopls": {
+    "formatting.gofumpt": true
+  },
+  "makefile.configureOnOpen": false,
+  "typescript.autoClosingTags": false
 }

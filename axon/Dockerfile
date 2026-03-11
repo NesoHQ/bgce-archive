@@ -10,6 +10,9 @@ RUN go mod download
 # Copy source code
 COPY . .
 
+# Copy .env file if it exists
+COPY .env* ./
+
 # Build the application
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main main.go
 
@@ -28,7 +31,7 @@ COPY --from=builder /app/main .
 COPY --from=builder /app/migrations ./migrations
 
 # Expose port
-EXPOSE 8080
+EXPOSE 8088
 
 # Command to run the executable
-CMD ["/app/main", "serve-rest"]
+CMD ["/app/main", "rest"]
