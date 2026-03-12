@@ -1,14 +1,16 @@
 package cmd
 
 import (
+	"log"
+
 	"axon/cache"
 	"axon/config"
 	"axon/email"
 	"axon/notification"
+	"axon/queue"
 	"axon/repo"
+	"axon/rest"
 	"axon/rest/handlers"
-	"log"
-	"axon/rest"   
 )
 
 func RunRESTServer() error {
@@ -39,7 +41,17 @@ func RunRESTServer() error {
 	}
 	log.Printf("Using email provider: %s", emailProvider.GetName())
 
-	// 5. Initialize repositories
+	// 5. Setup RabbitMQ exchange and queue
+	if err := queue.SetupRabbitMQ(
+		cfg.RabbitMQURL,
+		cfg.RabbitMQExchangeName,
+		cfg.RabbitMQExchangeType,
+		cfg.RabbitMQQueueName,
+	); err != nil {
+		log.Printf("Warning: Failed to setup RabbitMQ: %v", err)
+	}
+
+	// 6. Initialize repositories
 	notificationRepo := repo.NewNotificationRepository(db)
 	preferenceRepo := repo.NewPreferenceRepository(db)
 	templateRepo := repo.NewTemplateRepository(db)
@@ -56,10 +68,10 @@ func RunRESTServer() error {
 	// 7. Initialize HTTP handlers
 	notificationHandler := handlers.NewNotificationHandler(notificationService)
 	templateHandler := handlers.NewTemplateHandler(templateRepo)
-	
+
 	// 8. Start server
 	server := rest.NewServer(cfg.HTTPPort, notificationHandler, templateHandler)
 	log.Printf("Starting Axon server on port %s", cfg.HTTPPort)
-	
+
 	return server.Start()
 }

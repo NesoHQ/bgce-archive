@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS user_notification_preferences (
+CREATE TABLE IF NOT EXISTS user_preferences (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL UNIQUE,
     email_enabled BOOLEAN DEFAULT true,
@@ -11,5 +11,5 @@ CREATE TABLE IF NOT EXISTS user_notification_preferences (
 );
 
 -- Create indexes for performance
-CREATE INDEX IF NOT EXISTS idx_user_notification_preferences_user_id ON user_notification_preferences(user_id);
-CREATE INDEX IF NOT EXISTS idx_user_notification_preferences_email_enabled ON user_notification_preferences(email_enabled);
+CREATE INDEX IF NOT EXISTS idx_user_preferences_user_id ON user_preferences(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_preferences_email_enabled ON user_preferences(email_enabled);

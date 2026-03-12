@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS notification_templates (
+CREATE TABLE IF NOT EXISTS templates (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     type VARCHAR(50) NOT NULL,
@@ -12,5 +12,5 @@ CREATE TABLE IF NOT EXISTS notification_templates (
 );
 
 -- Create indexes for performance
-CREATE INDEX IF NOT EXISTS idx_notification_templates_type ON notification_templates(type);
-CREATE INDEX IF NOT EXISTS idx_notification_templates_active ON notification_templates(is_active);
+CREATE INDEX IF NOT EXISTS idx_templates_type ON templates(type);
+CREATE INDEX IF NOT EXISTS idx_templates_active ON templates(is_active);

@@ -34,10 +34,13 @@ func LoadConfig() *Config {
 		APMSecretToken: getEnv("APM_SECRET_TOKEN", ""),
 		APMEnvironment: getEnv("APM_ENVIRONMENT", "development"),
 
-		RabbitMQURL:       getEnv("RABBITMQ_URL", "amqp://guest:guest@localhost:5672"),
-		RMQReconnectDelay: time.Duration(rmqReconnectDelay) * time.Second,
-		RMQRetryInterval:  time.Duration(rmqRetryInterval) * time.Second,
-		RabbitMQQueuePrefix:    getEnv("RMQ_QUEUE_PREFIX", "axon-dev"),
+		RabbitMQURL:          getEnv("RABBITMQ_URL", "amqp://guest:guest@localhost:5672"),
+		RMQReconnectDelay:    time.Duration(rmqReconnectDelay) * time.Second,
+		RMQRetryInterval:     time.Duration(rmqRetryInterval) * time.Second,
+		RabbitMQQueuePrefix:  getEnv("RMQ_QUEUE_PREFIX", "axon-dev"),
+		RabbitMQExchangeName: getEnv("RMQ_EXCHANGE_NAME", "bgce.events"),
+		RabbitMQExchangeType: getEnv("RMQ_EXCHANGE_TYPE", "topic"),
+		RabbitMQQueueName:    getEnv("RMQ_QUEUE_NAME", "axon-dev.notifications"),
 
 		ReadRedisURL:       getEnv("READ_REDIS_URL", "redis://localhost:6379"),
 		WriteRedisURL:      getEnv("WRITE_REDIS_URL", "redis://localhost:6379"),
@@ -51,7 +54,7 @@ func LoadConfig() *Config {
 	return config
 }
 
-func getEnv(key, defaultValue string) string  {
+func getEnv(key, defaultValue string) string {
 	if value := os.Getenv(key); value != "" {
 		return value
 	}

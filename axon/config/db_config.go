@@ -5,6 +5,8 @@ import (
 	"log"
 	"strings"
 
+	"axon/repo"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -111,6 +113,16 @@ func InitDatabase(config *Config) (*gorm.DB, error) {
 	sqlDB.SetMaxOpenConns(100)
 
 	log.Printf("Database connected successfully")
+
+	// Run migrations
+	if err := repo.RunMigrations(repo.MigrationConfig{
+		DB:                  sqlDB,
+		MigrationsPath:      "migrations",
+		DatabaseName:        "axon",
+		MigrationsTableName: "axon_schema_migrations",
+	}); err != nil {
+		log.Printf("Warning: Failed to run migrations: %v", err)
+	}
 
 	return DB, nil
 }

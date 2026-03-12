@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
 	"axon/cache"
 	"axon/config"
 	"axon/email"
@@ -68,7 +69,7 @@ func RunConsumer() error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	if err := consumer.Start(ctx); err != nil {
+	if err := consumer.Start(ctx, cfg.RabbitMQQueueName); err != nil {
 		log.Fatalf("Failed to start consumer: %v", err)
 	}
 

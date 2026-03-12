@@ -3,15 +3,15 @@ package config
 import "time"
 
 const (
-	DebugMode = "debug"
+	DebugMode   = "debug"
 	ReleaseMode = "release"
 )
 
 type Config struct {
-	Version string
-	Mode string
+	Version     string
+	Mode        string
 	ServiceName string
-	HTTPPort string
+	HTTPPort    string
 
 	JWTSecret string
 
@@ -22,10 +22,13 @@ type Config struct {
 	APMSecretToken string
 	APMEnvironment string
 
-	RabbitMQURL       string
-	RMQReconnectDelay time.Duration
-	RMQRetryInterval  time.Duration
-    RabbitMQQueuePrefix string
+	RabbitMQURL          string
+	RMQReconnectDelay    time.Duration
+	RMQRetryInterval     time.Duration
+	RabbitMQQueuePrefix  string
+	RabbitMQExchangeName string
+	RabbitMQExchangeType string
+	RabbitMQQueueName    string
 
 	ReadRedisURL       string
 	WriteRedisURL      string
