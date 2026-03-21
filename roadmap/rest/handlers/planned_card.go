@@ -2,16 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
-	"time"
 
-	"roadmap/domain"
 	"roadmap/rest/middlewares"
 	"roadmap/rest/utils"
 	"roadmap/roadmap"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func (h *Handlers) AddPlannedCard(w http.ResponseWriter, r *http.Request) {
@@ -22,31 +19,41 @@ func (h *Handlers) AddPlannedCard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := utils.ValidateAddPlannedCard(req.Title, req.Items, req.PlannedAt); err != nil {
+	if err := utils.ValidateAddPlannedCard(req.Title, req.Items); err != nil {
 		fmt.Printf("Validation error: %v\n", err)
 		utils.RespondError(w, err.Error(), http.StatusUnprocessableEntity)
 		return
 	}
 
 	userID := middlewares.GetUserID(r)
-	now := time.Now()
 
-	card := domain.PlannedCard{
-		ID:        primitive.NewObjectID().Hex(),
-		Title:     req.Title,
-		Items:     req.Items,
-		PlannedAt: req.PlannedAt,
-		CreatedBy: int64(userID),
-		CreatedAt: now,
-		UpdatedBy: int64(userID),
-		UpdatedAt: now,
-	}
-
-	if err := h.roadmap.AddPlannedCard(r.Context(), card); err != nil {
+	if err := h.roadmapService.AddPlannedCard(r.Context(), req, int64(userID)); err != nil {
 		fmt.Printf("AddPlannedCard error: %v\n", err)
 		utils.RespondError(w, "failed to add planned card", http.StatusInternalServerError)
 		return
 	}
 
 	utils.RespondJSON(w, http.StatusCreated, map[string]any{"status": true, "message": "planned card added"})
+}
+
+func (h *Handlers) MoveCardToInProgress(w http.ResponseWriter, r *http.Request) {
+	CardID := r.PathValue("id")
+
+	if CardID == "" {
+		utils.RespondError(w, "card_id is required", http.StatusUnprocessableEntity)
+		return
+	}
+	userID := middlewares.GetUserID(r)
+
+	if err := h.roadmapService.MoveCardToInProgress(r.Context(), CardID, int64(userID)); err != nil {
+		fmt.Printf("MoveCardToInProgress error: %v\n", err)
+		if errors.Is(err, roadmap.ErrCardNotFound) {
+			utils.RespondError(w, "planned card not found", http.StatusNotFound)
+			return
+		}
+		utils.RespondError(w, "failed to move card to in progress", http.StatusInternalServerError)
+		return
+	}
+
+	utils.RespondJSON(w, http.StatusOK, map[string]any{"status": true, "message": "card moved to in progress"})
 }
