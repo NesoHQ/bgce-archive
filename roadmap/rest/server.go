@@ -2,6 +2,7 @@ package rest
 
 import (
 	"net/http"
+
 	"roadmap/rest/handlers"
 	"roadmap/rest/middlewares"
 )
@@ -17,7 +18,8 @@ func NewServer(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handler,
 	})
 
 	// Roadmap routes (JWT protected)
-	mux.Handle("POST /api/v1/roadmap/planned", mw.AuthenticateJWT(http.HandlerFunc(h.AddPlannedCard)))
+	mux.Handle("POST /api/v1/planned", mw.AuthenticateJWT(http.HandlerFunc(h.AddPlannedCard)))
+	mux.Handle("PATCH /api/v1/start/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.MoveCardToInProgress)))
 	manager := middlewares.NewManager()
 	handler := manager.With(mux, middlewares.Recover, mw.RateLimiter, middlewares.CORS, middlewares.Logger)
 

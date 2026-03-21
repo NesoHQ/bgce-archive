@@ -3,9 +3,9 @@ package handlers
 import "roadmap/roadmap"
 
 type Handlers struct {
-	roadmap roadmap.Service
+	roadmapService roadmap.Service
 }
 
-func NewHandlers(roadmap roadmap.Service) *Handlers {
-	return &Handlers{roadmap: roadmap}
+func NewHandlers(roadmapService roadmap.Service) *Handlers {
+	return &Handlers{roadmapService: roadmapService}
 }
