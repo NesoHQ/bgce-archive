@@ -5,11 +5,43 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"roadmap/rest/middlewares"
 	"roadmap/rest/utils"
 	"roadmap/roadmap"
 )
+
+func (h *Handlers) GetPlannedCards(w http.ResponseWriter, r *http.Request) {
+	pageStr := r.URL.Query().Get("page")
+	limitStr := r.URL.Query().Get("limit")
+
+	page := 1
+	if p, err := strconv.Atoi(pageStr); err == nil {
+		page = p
+	}
+
+	limit := 10
+	if l, err := strconv.Atoi(limitStr); err == nil {
+		limit = l
+	}
+
+	cards, meta, err := h.roadmapService.GetPlannedCards(r.Context(), page, limit)
+	if err != nil {
+		fmt.Printf("GetPlannedCards error: %v\n", err)
+		utils.RespondError(w, "failed to get planned cards", http.StatusInternalServerError)
+		return
+	}
+
+	response := roadmap.GetPlannedCardsResponse{
+		Success:    true,
+		Message:    "retrieved successfully",
+		Data:       cards,
+		Pagination: meta,
+	}
+
+	utils.RespondJSON(w, http.StatusOK, response)
+}
 
 func (h *Handlers) AddPlannedCard(w http.ResponseWriter, r *http.Request) {
 	var req roadmap.AddPlannedCardRequest
