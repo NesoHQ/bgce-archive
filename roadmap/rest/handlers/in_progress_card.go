@@ -42,30 +42,24 @@ func (h *Handlers) GetInProgressCards(w http.ResponseWriter, r *http.Request) {
 	utils.RespondJSON(w, http.StatusOK, response)
 }
 
-func (h *Handlers) MoveCardToCompleted(w http.ResponseWriter, r *http.Request) {
-	cardID := r.PathValue("id")
-	if cardID == "" {
-		utils.RespondError(w, "card_id is required", http.StatusBadRequest)
+func (h *Handlers) MoveCardToInProgress(w http.ResponseWriter, r *http.Request) {
+	CardID := r.PathValue("id")
+
+	if CardID == "" {
+		utils.RespondError(w, "card_id is required", http.StatusUnprocessableEntity)
 		return
 	}
-
 	userID := middlewares.GetUserID(r)
 
-	err := h.roadmapService.MoveCardToCompleted(r.Context(), cardID, int64(userID))
-	if err != nil {
+	if err := h.roadmapService.MoveCardToInProgress(r.Context(), CardID, int64(userID)); err != nil {
+		fmt.Printf("MoveCardToInProgress error: %v\n", err)
 		if errors.Is(err, roadmap.ErrCardNotFound) {
-			utils.RespondError(w, "card not found", http.StatusNotFound)
+			utils.RespondError(w, "planned card not found", http.StatusNotFound)
 			return
 		}
-		fmt.Printf("MoveCardToCompleted error: %v\n", err)
-		utils.RespondError(w, "failed to move card to completed", http.StatusInternalServerError)
+		utils.RespondError(w, "failed to move card to in progress", http.StatusInternalServerError)
 		return
 	}
 
-	response := roadmap.MoveCardToCompletedResponse{
-		Success: true,
-		Message: "card moved to completed successfully",
-	}
-
-	utils.RespondJSON(w, http.StatusOK, response)
+	utils.RespondJSON(w, http.StatusOK, map[string]any{"status": true, "message": "card moved to in progress"})
 }

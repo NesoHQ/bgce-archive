@@ -16,6 +16,7 @@ type Service interface {
 	AddPlannedCard(ctx context.Context, params AddPlannedCardRequest, userID int64) error
 	MoveCardToInProgress(ctx context.Context, cardID string, updatedBy int64) error
 	MoveCardToCompleted(ctx context.Context, cardID string, updatedBy int64) error
+	MoveCardToPlanned(ctx context.Context, cardID string, updatedBy int64) error
 }
 
 type Repository interface {
@@ -25,6 +26,8 @@ type Repository interface {
 	AddPlannedCard(ctx context.Context, card domain.PlannedCard) error
 	GetPlannedCard(ctx context.Context, cardID string) (domain.PlannedCard, error)
 	GetInProgressCard(ctx context.Context, cardID string) (domain.InProgressCard, error)
+	GetCompletedCard(ctx context.Context, cardID string) (domain.CompletedCard, error)
 	MoveCardToInProgress(ctx context.Context, cardID string, inProgressCard domain.InProgressCard) error
 	MoveCardToCompleted(ctx context.Context, cardID string, completedCard domain.CompletedCard) error
+	MoveCardToPlanned(ctx context.Context, cardID string, plannedCard domain.PlannedCard) error
 }

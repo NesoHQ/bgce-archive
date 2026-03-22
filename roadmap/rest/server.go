@@ -26,6 +26,7 @@ func NewServer(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handler,
 	mux.Handle("POST /api/v1/planned", mw.AuthenticateJWT(http.HandlerFunc(h.AddPlannedCard)))
 	mux.Handle("PATCH /api/v1/start/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.MoveCardToInProgress)))
 	mux.Handle("PATCH /api/v1/complete/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.MoveCardToCompleted)))
+	mux.Handle("PATCH /api/v1/plan/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.MoveCardToPlanned)))
 	manager := middlewares.NewManager()
 	handler := manager.With(mux, middlewares.Recover, mw.RateLimiter, middlewares.CORS, middlewares.Logger)
 
