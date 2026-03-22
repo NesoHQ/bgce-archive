@@ -1,10 +1,12 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
 
+	"roadmap/rest/middlewares"
 	"roadmap/rest/utils"
 	"roadmap/roadmap"
 )
@@ -35,6 +37,34 @@ func (h *Handlers) GetCompletedCards(w http.ResponseWriter, r *http.Request) {
 		Message:    "retrieved successfully",
 		Data:       cards,
 		Pagination: meta,
+	}
+
+	utils.RespondJSON(w, http.StatusOK, response)
+}
+
+func (h *Handlers) MoveCardToCompleted(w http.ResponseWriter, r *http.Request) {
+	cardID := r.PathValue("id")
+	if cardID == "" {
+		utils.RespondError(w, "card_id is required", http.StatusBadRequest)
+		return
+	}
+
+	userID := middlewares.GetUserID(r)
+
+	err := h.roadmapService.MoveCardToCompleted(r.Context(), cardID, int64(userID))
+	if err != nil {
+		if errors.Is(err, roadmap.ErrCardNotFound) {
+			utils.RespondError(w, "card not found", http.StatusNotFound)
+			return
+		}
+		fmt.Printf("MoveCardToCompleted error: %v\n", err)
+		utils.RespondError(w, "failed to move card to completed", http.StatusInternalServerError)
+		return
+	}
+
+	response := roadmap.MoveCardToCompletedResponse{
+		Success: true,
+		Message: "card moved to completed successfully",
 	}
 
 	utils.RespondJSON(w, http.StatusOK, response)

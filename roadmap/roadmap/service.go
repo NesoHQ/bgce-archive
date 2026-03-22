@@ -28,19 +28,37 @@ func (s *service) AddPlannedCard(ctx context.Context, params AddPlannedCardReque
 }
 
 func (s *service) MoveCardToInProgress(ctx context.Context, cardID string, updatedBy int64) error {
+	// If the card is in Planned list
 	plannedCard, err := s.repo.GetPlannedCard(ctx, cardID)
+	if err == nil {
+		inProgressCard := domain.InProgressCard{
+			ID:                   plannedCard.ID,
+			Title:                plannedCard.Title,
+			Items:                plannedCard.Items,
+			CompletionPercentage: 0,
+			StartedAt:            domain.GetPeriodFromTime(time.Now()),
+			CreatedBy:            plannedCard.CreatedBy,
+			CreatedAt:            plannedCard.CreatedAt,
+			UpdatedBy:            updatedBy,
+			UpdatedAt:            time.Now(),
+		}
+		return s.repo.MoveCardToInProgress(ctx, cardID, inProgressCard)
+	}
+
+	// Else if the card is in Completed list
+	completedCard, err := s.repo.GetCompletedCard(ctx, cardID)
 	if err != nil {
 		return err
 	}
 
 	inProgressCard := domain.InProgressCard{
-		ID:                   plannedCard.ID,
-		Title:                plannedCard.Title,
-		Items:                plannedCard.Items,
+		ID:                   completedCard.ID,
+		Title:                completedCard.Title,
+		Items:                completedCard.Items,
 		CompletionPercentage: 0,
 		StartedAt:            domain.GetPeriodFromTime(time.Now()),
-		CreatedBy:            plannedCard.CreatedBy,
-		CreatedAt:            plannedCard.CreatedAt,
+		CreatedBy:            completedCard.CreatedBy,
+		CreatedAt:            completedCard.CreatedAt,
 		UpdatedBy:            updatedBy,
 		UpdatedAt:            time.Now(),
 	}
@@ -95,21 +113,35 @@ func (s *service) GetPlannedCards(ctx context.Context, page, limit int) ([]domai
 }
 
 func (s *service) MoveCardToCompleted(ctx context.Context, cardID string, updatedBy int64) error {
+	// If the card is in InProgress list
 	inProgressCard, err := s.repo.GetInProgressCard(ctx, cardID)
+	if err == nil {
+		completedCard := domain.CompletedCard{
+			ID:          inProgressCard.ID,
+			Title:       inProgressCard.Title,
+			Items:       inProgressCard.Items,
+			CompletedAt: domain.GetPeriodFromTime(time.Now()),
+			CreatedBy:   inProgressCard.CreatedBy,
+			CreatedAt:   inProgressCard.CreatedAt,
+			UpdatedBy:   updatedBy,
+			UpdatedAt:   time.Now(),
+		}
+		return s.repo.MoveCardToCompleted(ctx, cardID, completedCard)
+	}
+
+	// Else if the card is in Planned list
+	plannedCard, err := s.repo.GetPlannedCard(ctx, cardID)
 	if err != nil {
 		return err
 	}
-	if inProgressCard.ID == "" {
-		return ErrCardNotFound
-	}
 
 	completedCard := domain.CompletedCard{
-		ID:          inProgressCard.ID,
-		Title:       inProgressCard.Title,
-		Items:       inProgressCard.Items,
+		ID:          plannedCard.ID,
+		Title:       plannedCard.Title,
+		Items:       plannedCard.Items,
 		CompletedAt: domain.GetPeriodFromTime(time.Now()),
-		CreatedBy:   inProgressCard.CreatedBy,
-		CreatedAt:   inProgressCard.CreatedAt,
+		CreatedBy:   plannedCard.CreatedBy,
+		CreatedAt:   plannedCard.CreatedAt,
 		UpdatedBy:   updatedBy,
 		UpdatedAt:   time.Now(),
 	}
@@ -207,4 +239,41 @@ func (s *service) GetCompletedCards(ctx context.Context, page, limit int) ([]dom
 	}
 
 	return cards, meta, nil
+}
+
+func (s *service) MoveCardToPlanned(ctx context.Context, cardID string, updatedBy int64) error {
+	// If the card is in InProgress list
+	inProgressCard, err := s.repo.GetInProgressCard(ctx, cardID)
+	if err == nil {
+		plannedCard := domain.PlannedCard{
+			ID:        inProgressCard.ID,
+			Title:     inProgressCard.Title,
+			Items:     inProgressCard.Items,
+			PlannedAt: domain.GetPeriodFromTime(time.Now()),
+			CreatedBy: inProgressCard.CreatedBy,
+			CreatedAt: inProgressCard.CreatedAt,
+			UpdatedBy: updatedBy,
+			UpdatedAt: time.Now(),
+		}
+		return s.repo.MoveCardToPlanned(ctx, cardID, plannedCard)
+	}
+
+	// Else if the card is in Completed list
+	completedCard, err := s.repo.GetCompletedCard(ctx, cardID)
+	if err != nil {
+		return err
+	}
+
+	plannedCard := domain.PlannedCard{
+		ID:        completedCard.ID,
+		Title:     completedCard.Title,
+		Items:     completedCard.Items,
+		PlannedAt: domain.GetPeriodFromTime(time.Now()),
+		CreatedBy: completedCard.CreatedBy,
+		CreatedAt: completedCard.CreatedAt,
+		UpdatedBy: updatedBy,
+		UpdatedAt: time.Now(),
+	}
+
+	return s.repo.MoveCardToPlanned(ctx, cardID, plannedCard)
 }
