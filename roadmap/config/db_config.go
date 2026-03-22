@@ -3,6 +3,7 @@ package config
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -17,9 +18,9 @@ func GetDbConnection(dbURI string, dbName string) (*mongo.Database, error) {
 
 	// Temporary debug check
 	clientOptions := options.Client().ApplyURI(dbURI)
-	fmt.Printf("Attempting to connect to hosts: %v\n", clientOptions.Hosts)
+	log.Printf("Attempting to connect to hosts: %v\n", clientOptions.Hosts)
 	if clientOptions.Auth != nil {
-		fmt.Printf("Using Username: %s\n", clientOptions.Auth.Username)
+		log.Printf("Using Username: %s\n", clientOptions.Auth.Username)
 	}
 
 	client, err := mongo.Connect(ctx, clientOptions)
@@ -33,7 +34,7 @@ func GetDbConnection(dbURI string, dbName string) (*mongo.Database, error) {
 		return nil, fmt.Errorf("could not connect to mongodb (ping failed): %w", err)
 	}
 
-	fmt.Println("Successfully connected to MongoDB")
+	log.Println("Successfully connected to MongoDB")
 
 	// 5. Return the specific database instance
 	return client.Database(dbName), nil
@@ -48,6 +49,6 @@ func DisconnectDB(client *mongo.Client) error {
 		return fmt.Errorf("error disconnecting from MongoDB: %w", err)
 	}
 
-	fmt.Println("Successfully disconnected from MongoDB")
+	log.Println("Successfully disconnected from MongoDB")
 	return nil
 }

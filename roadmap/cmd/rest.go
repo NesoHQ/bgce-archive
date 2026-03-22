@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	"roadmap/config"
@@ -16,33 +16,49 @@ import (
 
 func InitRest() {
 	cfg := config.GetConfig()
+	log.Printf("🚀 Starting %s v%s in %s mode", cfg.ServiceName, cfg.Version, cfg.Mode)
+	log.Printf("📊 MongoDB URI: %s", cfg.MongoDBURI)
+	log.Printf("📊 MongoDB DB Name: %s", cfg.MonggoDBName)
+	log.Printf("🔌 Port: %s", cfg.HTTPPort)
 
+	log.Println("🔄 Connecting to MongoDB...")
 	dbConnection, err := config.GetDbConnection(cfg.MongoDBURI, cfg.MonggoDBName)
 	if err != nil {
+		log.Printf("❌ Database connection failed: %v", err)
 		panic(err)
 	}
 	defer config.DisconnectDB(dbConnection.Client())
 
 	// Repos & services
+	log.Println("🔄 Initializing repositories & services...")
 	roadmapRepo := repo.NewRoadmapRepository(dbConnection)
 	roadmapService := roadmap.NewService(roadmapRepo)
 
 	// Handlers
+	log.Println("🔄 Initializing handlers...")
 	h := handlers.NewHandlers(roadmapService)
 
 	// Middlewares
+	log.Println("🔄 Initializing middlewares...")
 	ipStore := limiterMemory.NewStore()
 	mw := middlewares.NewMiddlewares(cfg.JWTSecret, ipStore)
 
 	// Server
+	log.Println("🔄 Creating HTTP server...")
 	handler, err := rest.NewServer(mw, h)
 	if err != nil {
+		log.Printf("❌ Failed to create server: %v", err)
 		panic(err)
 	}
 
 	addr := ":" + cfg.HTTPPort
-	fmt.Printf("Server listening on %s\n", addr)
+	log.Printf("✅ Server ready!")
+	log.Printf("🌐 Listening on http://localhost%s", addr)
+	log.Printf("📚 API Base: http://localhost%s/api/v1", addr)
+	log.Println("Press Ctrl+C to stop")
+
 	if err := http.ListenAndServe(addr, handler); err != nil {
+		log.Printf("❌ Server error: %v", err)
 		panic(err)
 	}
 }
