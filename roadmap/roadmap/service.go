@@ -27,6 +27,61 @@ func (s *service) AddPlannedCard(ctx context.Context, params AddPlannedCardReque
 	return s.repo.AddPlannedCard(ctx, card)
 }
 
+func (s *service) UpdatePlannedCard(ctx context.Context, cardID string, params AddPlannedCardRequest, userID int64) error {
+	plannedCard, err := s.repo.GetPlannedCard(ctx, cardID)
+	if err != nil {
+		return err
+	}
+
+	plannedCard.Title = params.Title
+	plannedCard.Items = params.Items
+	plannedCard.UpdatedBy = userID
+	plannedCard.UpdatedAt = time.Now()
+
+	return s.repo.UpdatePlannedCard(ctx, cardID, plannedCard)
+}
+
+func (s *service) DeletePlannedCard(ctx context.Context, cardID string) error {
+	return s.repo.DeletePlannedCard(ctx, cardID)
+}
+
+func (s *service) UpdateInProgressCard(ctx context.Context, cardID string, params UpdateInProgressCardRequest, userID int64) error {
+	inProgressCard, err := s.repo.GetInProgressCard(ctx, cardID)
+	if err != nil {
+		return err
+	}
+
+	inProgressCard.Title = params.Title
+	inProgressCard.Items = params.Items
+	inProgressCard.CompletionPercentage = params.CompletionPercentage
+	inProgressCard.UpdatedBy = userID
+	inProgressCard.UpdatedAt = time.Now()
+
+	return s.repo.UpdateInProgressCard(ctx, cardID, inProgressCard)
+}
+
+func (s *service) DeleteInProgressCard(ctx context.Context, cardID string) error {
+	return s.repo.DeleteInProgressCard(ctx, cardID)
+}
+
+func (s *service) UpdateCompletedCard(ctx context.Context, cardID string, params UpdateCompletedCardRequest, userID int64) error {
+	completedCard, err := s.repo.GetCompletedCard(ctx, cardID)
+	if err != nil {
+		return err
+	}
+
+	completedCard.Title = params.Title
+	completedCard.Items = params.Items
+	completedCard.UpdatedBy = userID
+	completedCard.UpdatedAt = time.Now()
+
+	return s.repo.UpdateCompletedCard(ctx, cardID, completedCard)
+}
+
+func (s *service) DeleteCompletedCard(ctx context.Context, cardID string) error {
+	return s.repo.DeleteCompletedCard(ctx, cardID)
+}
+
 func (s *service) MoveCardToInProgress(ctx context.Context, cardID string, updatedBy int64) error {
 	// If the card is in Planned list
 	plannedCard, err := s.repo.GetPlannedCard(ctx, cardID)

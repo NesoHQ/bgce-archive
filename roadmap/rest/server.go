@@ -24,6 +24,12 @@ func NewServer(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handler,
 
 	// Roadmap routes (JWT protected)
 	mux.Handle("POST /api/v1/planned", mw.AuthenticateJWT(http.HandlerFunc(h.AddPlannedCard)))
+	mux.Handle("PUT /api/v1/planned/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.UpdatePlannedCard)))
+	mux.Handle("DELETE /api/v1/planned/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.DeletePlannedCard)))
+	mux.Handle("PUT /api/v1/in-progress/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.UpdateInProgressCard)))
+	mux.Handle("DELETE /api/v1/in-progress/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.DeleteInProgressCard)))
+	mux.Handle("PUT /api/v1/completed/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.UpdateCompletedCard)))
+	mux.Handle("DELETE /api/v1/completed/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.DeleteCompletedCard)))
 	mux.Handle("PATCH /api/v1/start/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.MoveCardToInProgress)))
 	mux.Handle("PATCH /api/v1/complete/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.MoveCardToCompleted)))
 	mux.Handle("PATCH /api/v1/plan/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.MoveCardToPlanned)))

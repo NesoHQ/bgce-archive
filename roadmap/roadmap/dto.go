@@ -43,3 +43,14 @@ type MoveCardToCompletedResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
 }
+
+type UpdateInProgressCardRequest struct {
+	Title                string   `json:"title"`
+	Items                []string `json:"items"`
+	CompletionPercentage float64  `json:"completionPercentage"`
+}
+
+type UpdateCompletedCardRequest struct {
+	Title string   `json:"title"`
+	Items []string `json:"items"`
+}

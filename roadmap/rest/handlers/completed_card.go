@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -68,4 +69,59 @@ func (h *Handlers) MoveCardToCompleted(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.RespondJSON(w, http.StatusOK, response)
+}
+
+func (h *Handlers) UpdateCompletedCard(w http.ResponseWriter, r *http.Request) {
+	cardID := r.PathValue("id")
+	if cardID == "" {
+		utils.RespondError(w, "card_id is required", http.StatusUnprocessableEntity)
+		return
+	}
+
+	var req roadmap.UpdateCompletedCardRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		fmt.Printf("Decode error: %v\n", err)
+		utils.RespondError(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	if err := utils.ValidateUpdateCompletedCard(req.Title, req.Items); err != nil {
+		fmt.Printf("Validation error: %v\n", err)
+		utils.RespondError(w, err.Error(), http.StatusUnprocessableEntity)
+		return
+	}
+
+	userID := middlewares.GetUserID(r)
+
+	if err := h.roadmapService.UpdateCompletedCard(r.Context(), cardID, req, int64(userID)); err != nil {
+		fmt.Printf("UpdateCompletedCard error: %v\n", err)
+		if errors.Is(err, roadmap.ErrCardNotFound) {
+			utils.RespondError(w, "completed card not found", http.StatusNotFound)
+			return
+		}
+		utils.RespondError(w, "failed to update completed card", http.StatusInternalServerError)
+		return
+	}
+
+	utils.RespondJSON(w, http.StatusOK, map[string]any{"status": true, "message": "completed card updated"})
+}
+
+func (h *Handlers) DeleteCompletedCard(w http.ResponseWriter, r *http.Request) {
+	cardID := r.PathValue("id")
+	if cardID == "" {
+		utils.RespondError(w, "card_id is required", http.StatusUnprocessableEntity)
+		return
+	}
+
+	if err := h.roadmapService.DeleteCompletedCard(r.Context(), cardID); err != nil {
+		fmt.Printf("DeleteCompletedCard error: %v\n", err)
+		if errors.Is(err, roadmap.ErrCardNotFound) {
+			utils.RespondError(w, "completed card not found", http.StatusNotFound)
+			return
+		}
+		utils.RespondError(w, "failed to delete completed card", http.StatusInternalServerError)
+		return
+	}
+
+	utils.RespondJSON(w, http.StatusOK, map[string]any{"status": true, "message": "completed card deleted"})
 }
