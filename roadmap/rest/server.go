@@ -21,6 +21,7 @@ func NewServer(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handler,
 	mux.Handle("GET /api/v1/planned", http.HandlerFunc(h.GetPlannedCards))
 	mux.Handle("GET /api/v1/in-progress", http.HandlerFunc(h.GetInProgressCards))
 	mux.Handle("GET /api/v1/completed", http.HandlerFunc(h.GetCompletedCards))
+	mux.Handle("GET /api/v1/changelog", http.HandlerFunc(h.GetChangeLogs))
 
 	// Roadmap routes (JWT protected)
 	mux.Handle("POST /api/v1/planned", mw.AuthenticateJWT(http.HandlerFunc(h.AddPlannedCard)))
@@ -33,6 +34,9 @@ func NewServer(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handler,
 	mux.Handle("PATCH /api/v1/start/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.MoveCardToInProgress)))
 	mux.Handle("PATCH /api/v1/complete/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.MoveCardToCompleted)))
 	mux.Handle("PATCH /api/v1/plan/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.MoveCardToPlanned)))
+	mux.Handle("POST /api/v1/changelog", mw.AuthenticateJWT(http.HandlerFunc(h.CreateChangeLog)))
+	mux.Handle("PUT /api/v1/changelog/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.UpdateChangeLog)))
+	mux.Handle("DELETE /api/v1/changelog/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.DeleteChangeLog)))
 	manager := middlewares.NewManager()
 	handler := manager.With(mux, middlewares.Recover, mw.RateLimiter, middlewares.CORS, middlewares.Logger)
 
