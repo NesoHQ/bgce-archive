@@ -11,10 +11,20 @@ import (
 	"roadmap/rest/middlewares"
 	"roadmap/roadmap"
 
+	"github.com/spf13/cobra"
 	limiterMemory "github.com/ulule/limiter/v3/drivers/store/memory"
 )
 
-func InitRest() {
+var restCmd = &cobra.Command{
+	Use:   "rest",
+	Short: "Start the REST API server",
+	Long:  `Start the HTTP REST API server for the Roadmap service`,
+	Run: func(cmd *cobra.Command, args []string) {
+		runRESTServer()
+	},
+}
+
+func runRESTServer() {
 	cfg := config.GetConfig()
 	log.Printf("🚀 Starting %s v%s in %s mode", cfg.ServiceName, cfg.Version, cfg.Mode)
 	log.Printf("📊 MongoDB URI: %s", cfg.MongoDBURI)
