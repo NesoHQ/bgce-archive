@@ -54,3 +54,17 @@ type UpdateCompletedCardRequest struct {
 	Title string   `json:"title"`
 	Items []string `json:"items"`
 }
+
+type CreateChangeLogRequest struct {
+	Title string   `json:"title"`
+	Items []string `json:"items"`
+	Month string   `json:"month"`
+	Year  string   `json:"year"`
+}
+
+type GetChangeLogsResponse struct {
+	Success    bool                   `json:"success"`
+	Message    string                 `json:"message"`
+	Data       []domain.ChangeLogCard `json:"data"`
+	Pagination PaginationMeta         `json:"pagination"`
+}

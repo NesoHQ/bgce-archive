@@ -332,3 +332,84 @@ func (s *service) MoveCardToPlanned(ctx context.Context, cardID string, updatedB
 
 	return s.repo.MoveCardToPlanned(ctx, cardID, plannedCard)
 }
+
+func (s *service) CreateChangeLog(ctx context.Context, params CreateChangeLogRequest, userID int64) error {
+	card := domain.ChangeLogCard{
+		ID:        primitive.NewObjectID().Hex(),
+		Title:     params.Title,
+		Items:     params.Items,
+		Month:     params.Month,
+		Year:      params.Year,
+		CreatedBy: userID,
+		CreatedAt: time.Now(),
+		UpdatedBy: userID,
+		UpdatedAt: time.Now(),
+	}
+	return s.repo.CreateChangeLog(ctx, card)
+}
+
+func (s *service) UpdateChangeLog(ctx context.Context, cardID string, params CreateChangeLogRequest, userID int64) error {
+	card, err := s.repo.GetChangeLog(ctx, cardID)
+	if err != nil {
+		return err
+	}
+
+	card.Title = params.Title
+	card.Items = params.Items
+	card.Month = params.Month
+	card.Year = params.Year
+	card.UpdatedBy = userID
+	card.UpdatedAt = time.Now()
+
+	return s.repo.UpdateChangeLog(ctx, cardID, card)
+}
+
+func (s *service) GetChangeLogs(ctx context.Context, page, limit int) ([]domain.ChangeLogCard, PaginationMeta, error) {
+	if page < 1 {
+		page = 1
+	}
+	if limit < 1 {
+		limit = 10
+	}
+	if limit > 100 {
+		limit = 100
+	}
+
+	cards, totalCount, err := s.repo.GetChangeLogs(ctx, page, limit)
+	if err != nil {
+		return nil, PaginationMeta{}, err
+	}
+
+	totalPages := (totalCount + limit - 1) / limit
+	hasNextPage := page < totalPages
+	hasPreviousPage := page > 1
+
+	var nextPage *int
+	if hasNextPage {
+		np := page + 1
+		nextPage = &np
+	}
+
+	var prevPage *int
+	if hasPreviousPage {
+		pp := page - 1
+		prevPage = &pp
+	}
+
+	meta := PaginationMeta{
+		Total:           totalCount,
+		Page:            page,
+		Limit:           limit,
+		TotalPages:      totalPages,
+		HasNextPage:     hasNextPage,
+		HasPreviousPage: hasPreviousPage,
+		NextPage:        nextPage,
+		PrevPage:        prevPage,
+	}
+
+	return cards, meta, nil
+}
+
+func (s *service) DeleteChangeLog(ctx context.Context, cardID string) error {
+	return s.repo.DeleteChangeLog(ctx, cardID)
+}
