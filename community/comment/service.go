@@ -11,7 +11,7 @@ import (
 
 type service struct {
 	repo    Repository
-	checker moderation.ContentChecker
+	checker moderation.Moderator
 }
 
 func (s *service) ListComments(ctx context.Context, filter CommentFilter) ([]*CommentListItemResponse, int64, error) {
@@ -69,19 +69,26 @@ func (s *service) CreateComment(ctx context.Context, cmd CreateCommentCommand) (
 	}
 
 	status := domain.CommentStatusApproved
-	flagged, err := s.checker.Check(ctx, cmd.Content)
+	result, err := s.checker.Check(ctx, cmd.Content)
 
-	if err != nil || flagged {
+	var toxicityScore *float64
+	if result != nil && result.Flagged {
+		score := severityToScore(result.Severity)
+		toxicityScore = &score
+	}
+
+	if err != nil || result != nil && result.Flagged {
 		status = domain.CommentStatusPending
 	}
 
 	postID := cmd.PostID
 	c := &domain.Comment{
-		PostID:   &postID,
-		UserID:   cmd.UserID,
-		ParentID: cmd.ParentID,
-		Content:  cmd.Content,
-		Status:   status,
+		PostID:        &postID,
+		UserID:        cmd.UserID,
+		ParentID:      cmd.ParentID,
+		Content:       cmd.Content,
+		Status:        status,
+		ToxicityScore: toxicityScore,
 	}
 
 	if err := s.repo.Create(ctx, c); err != nil {
@@ -89,4 +96,17 @@ func (s *service) CreateComment(ctx context.Context, cmd CreateCommentCommand) (
 	}
 
 	return ToCommentResponse(c), nil
+}
+
+func severityToScore(severity string) float64 {
+	switch severity {
+	case "high":
+		return 0.80
+	case "medium":
+		return 0.60
+	case "low":
+		return 0.30
+	default:
+		return 0.00
+	}
 }
