@@ -1,0 +1,29 @@
+# Version control
+.git
+.gitignore
+
+# Environment secrets — never bake into images
+.env
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Go artifacts
+vendor/
+*.test
+*.prof
+cpu.prof
+mem.prof
+
+# Docker & CI
+Dockerfile
+docker-compose*.yml
+Makefile
+README.md
