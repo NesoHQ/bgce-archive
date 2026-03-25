@@ -2,17 +2,14 @@ package moderation
 
 import "context"
 
-// ContentChecker checks whether content violates community guidelines.
-
-type ContentChecker interface {
-	// Check returns flagged=true if the content violates guidelines.
-	Check(ctx context.Context, content string) (flagged bool, err error)
-}
-
-// NoOpChecker always approves content. Used as a fallback
-// rather than refusing to start over a non-critical dependency.
+// NoOpChecker always approves content. Used as a fallback when RegexModerator
+// cannot be initialized — keeps the service running.
 type NoOpChecker struct{}
 
-func (n *NoOpChecker) Check(_ context.Context, _ string) (bool, error) {
-	return false, nil
+func (n *NoOpChecker) Check(_ context.Context, _ string) (*Result, error) {
+	return &Result{
+		Flagged:  false,
+		Severity: "none",
+		Source:   "noop",
+	}, nil
 }
