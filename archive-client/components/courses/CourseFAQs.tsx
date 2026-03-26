@@ -175,9 +175,8 @@ export default function CourseFAQs() {
   const toggle = (idx: number) =>
     setOpenIdx((prev) => (prev === idx ? null : idx));
 
-  // Hydration Error এড়ানোর জন্য ক্লায়েন্টে মাউন্ট হওয়ার আগে ফাঁকা ডিপ রেন্ডার করা হলো
   if (!mounted) {
-    return <div className="min-h-[400px]"></div>;
+    return <div className="min-h-100"></div>;
   }
 
   return (
