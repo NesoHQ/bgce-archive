@@ -31,6 +31,8 @@ type RegexModerator struct {
 
 var _ Moderator = (*RegexModerator)(nil)
 
+var whitespaceRe = regexp.MustCompile(`[\s\.\-\_\*\+]+`)
+
 func NewRegexModerator(configPath string) (*RegexModerator, error) {
 	data, err := os.ReadFile(configPath)
 	if err != nil {
@@ -96,8 +98,7 @@ func (r *RegexModerator) Check(ctx context.Context, content string) (*Result, er
 
 func normalize(text string) string {
 	text = strings.ToLower(text)
-	re := regexp.MustCompile(`[\s\.\-\_\*\+]+`)
-	return re.ReplaceAllString(text, "")
+	return whitespaceRe.ReplaceAllString(text, "")
 }
 
 func maxSeverity(a, b string) string {
