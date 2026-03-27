@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -20,17 +21,25 @@ type slangConfig struct {
 	Rules   []Rule `json:"rules"`
 }
 
-type compiledRule struct {
+type moderationRule struct {
 	regex    *regexp.Regexp
 	severity string
 }
 
+var severityOrder = map[string]int{
+	"none":   0,
+	"low":    1,
+	"medium": 2,
+	"high":   3,
+}
+
 type RegexModerator struct {
-	rules []*compiledRule
+	moderationRules []*moderationRule
 }
 
 var _ Moderator = (*RegexModerator)(nil)
 
+// whitespaceRe compiled once at package level — not per call
 var whitespaceRe = regexp.MustCompile(`[\s\.\-\_\*\+]+`)
 
 func NewRegexModerator(configPath string) (*RegexModerator, error) {
@@ -48,7 +57,7 @@ func NewRegexModerator(configPath string) (*RegexModerator, error) {
 		return nil, fmt.Errorf("no rules found")
 	}
 
-	var compiled []*compiledRule
+	compiled := make([]*moderationRule, 0, len(cfg.Rules))
 
 	for _, rule := range cfg.Rules {
 		pattern := rule.Pattern
@@ -62,21 +71,23 @@ func NewRegexModerator(configPath string) (*RegexModerator, error) {
 			return nil, fmt.Errorf("invalid pattern %q: %w", pattern, err)
 		}
 
-		compiled = append(compiled, &compiledRule{
+		compiled = append(compiled, &moderationRule{
 			regex:    re,
 			severity: rule.Severity,
 		})
 	}
 
-	return &RegexModerator{rules: compiled}, nil
+	sort.Slice(compiled, func(i, j int) bool {
+		return severityOrder[compiled[i].severity] > severityOrder[compiled[j].severity]
+	})
+
+	return &RegexModerator{moderationRules: compiled}, nil
 }
 
 func (r *RegexModerator) Check(ctx context.Context, content string) (*Result, error) {
 	normalized := normalize(content)
 
-	highestSeverity := "none"
-
-	for _, rule := range r.rules {
+	for _, rule := range r.moderationRules {
 		select {
 		case <-ctx.Done():
 			return nil, ctx.Err()
@@ -84,14 +95,19 @@ func (r *RegexModerator) Check(ctx context.Context, content string) (*Result, er
 		}
 
 		if rule.regex.MatchString(normalized) {
-			highestSeverity = maxSeverity(highestSeverity, rule.severity)
+			return &Result{
+				Flagged:  true,
+				Severity: rule.severity,
+				Score:    0,
+				Source:   "regex",
+			}, nil
 		}
 	}
 
 	return &Result{
-		Flagged:  highestSeverity != "none",
-		Severity: highestSeverity,
-		Score:    0, // not used yet
+		Flagged:  false,
+		Severity: "none",
+		Score:    0,
 		Source:   "regex",
 	}, nil
 }
@@ -99,18 +115,4 @@ func (r *RegexModerator) Check(ctx context.Context, content string) (*Result, er
 func normalize(text string) string {
 	text = strings.ToLower(text)
 	return whitespaceRe.ReplaceAllString(text, "")
-}
-
-func maxSeverity(a, b string) string {
-	rank := map[string]int{
-		"none":   0,
-		"low":    1,
-		"medium": 2,
-		"high":   3,
-	}
-
-	if rank[b] > rank[a] {
-		return b
-	}
-	return a
 }
