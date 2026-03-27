@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 	"path/filepath"
 	"time"
@@ -11,6 +12,7 @@ import (
 	"community/comment"
 	"community/config"
 	"community/discussion"
+	"community/moderation"
 	"community/repo"
 	"community/rest"
 	"community/rest/handlers"
@@ -76,9 +78,24 @@ func runRESTServer(cmd *cobra.Command, args []string) error {
 	commentRepo := repo.NewCommentRepository(db)
 	discussionRepo := repo.NewDiscussionRepository(db)
 
+	log.Println("🔄 Initializing content moderation...")
+	slangConfigPath := filepath.Join(".", "config", "slang.json")
+	var checker moderation.Moderator
+	regexModerator, err := moderation.NewRegexModerator(slangConfigPath)
+	if err != nil {
+		slog.Warn("RegexModerator unavailable, falling back to NoOpChecker",
+			"path", slangConfigPath,
+			"error", err,
+		)
+		checker = &moderation.NoOpChecker{}
+	} else {
+		checker = regexModerator
+		log.Println("✅ RegexModerator initialized")
+	}
+
 	// Initialize services
 	log.Println("🔄 Initializing services...")
-	commentService := comment.NewService(commentRepo)
+	commentService := comment.NewService(commentRepo, checker)
 	discussionService := discussion.NewService(discussionRepo)
 
 	// Initialize handlers

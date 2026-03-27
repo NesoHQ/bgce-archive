@@ -25,6 +25,11 @@ func NewServeMux(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handle
 	mux.HandleFunc("GET /api/v1/comments", h.ListComments)
 	mux.HandleFunc("GET /api/v1/discussions", h.ListDiscussions)
 
+	mux.Handle(
+		"POST /api/v1/comments",
+		mw.AuthenticateJWT(http.HandlerFunc(h.CreateComment)),
+	)
+
 	manager := middlewares.NewManager()
 	handler := manager.With(mux, mw.RateLimiter, middlewares.CORS, middlewares.Logger, middlewares.Recover)
 
