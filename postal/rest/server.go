@@ -30,6 +30,10 @@ func NewServeMux(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handle
 	mux.HandleFunc("GET /api/v1/posts", h.ListPosts)
 	mux.HandleFunc("GET /api/v1/posts/{id}", h.GetPostByID)
 	mux.HandleFunc("GET /api/v1/posts/slug/{slug}", h.GetPostBySlug)
+	mux.HandleFunc("GET /api/v1/posts/uuid/{uuid}", h.GetPostByUUID)
+
+	// Post action routes (public)
+	mux.HandleFunc("POST /api/v1/posts/{id}/view", h.IncrementViewCount)
 
 	// Protected routes
 	mux.HandleFunc("POST /api/v1/posts", func(w http.ResponseWriter, r *http.Request) {
@@ -58,6 +62,9 @@ func NewServeMux(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handle
 	})
 	mux.HandleFunc("POST /api/v1/posts/{id}/archive", func(w http.ResponseWriter, r *http.Request) {
 		mw.AuthenticateJWT(http.HandlerFunc(h.ArchivePost)).ServeHTTP(w, r)
+	})
+	mux.HandleFunc("POST /api/v1/posts/seed-read-time", func(w http.ResponseWriter, r *http.Request) {
+		mw.AuthenticateJWT(http.HandlerFunc(h.SeedReadTime)).ServeHTTP(w, r)
 	})
 
 	// Setup swagger with its own middleware manager

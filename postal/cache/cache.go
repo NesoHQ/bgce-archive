@@ -15,6 +15,7 @@ type Cache interface {
 	Del(ctx context.Context, keys ...string) error
 	DelPattern(ctx context.Context, pattern string) error
 	Exists(ctx context.Context, keys ...string) (int64, error)
+	Flush(ctx context.Context) error
 }
 
 type cache struct {

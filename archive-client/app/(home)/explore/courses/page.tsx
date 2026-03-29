@@ -161,7 +161,7 @@ export default function CoursesPage() {
   return (
     <div className="min-h-screen">
       {/* Combined Breadcrumb & Header Section */}
-      <section className="py-4 border-b border-border/50 bg-gradient-to-b from-background to-muted/20">
+      <section className="py-4 border-b border-border/50 bg-linear-to-b from-background to-muted/20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <div className="mb-3">
@@ -178,7 +178,7 @@ export default function CoursesPage() {
             </h1>
 
             {/* Not Operational Badge */}
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-red-500/10 to-rose-500/10 border border-red-500/30 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-linear-to-r from-red-500/10 to-rose-500/10 border border-red-500/30 backdrop-blur-sm">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
@@ -367,7 +367,7 @@ export default function CoursesPage() {
                     )}
                     <Button
                       onClick={() => setShowMobileFilters(false)}
-                      className="flex-1 h-11 text-sm font-bold bg-gradient-to-r from-[oklch(0.4_0.14_260)] to-[oklch(0.35_0.12_260)] hover:from-[oklch(0.45_0.16_260)] hover:to-[oklch(0.4_0.14_260)] dark:from-[oklch(0.65_0.18_260)] dark:to-[oklch(0.6_0.16_260)] dark:hover:from-[oklch(0.75_0.22_260)] dark:hover:to-[oklch(0.7_0.2_260)] text-white dark:text-white"
+                      className="flex-1 h-11 text-sm font-bold bg-linear-to-r from-[oklch(0.4_0.14_260)] to-[oklch(0.35_0.12_260)] hover:from-[oklch(0.45_0.16_260)] hover:to-[oklch(0.4_0.14_260)] dark:from-[oklch(0.65_0.18_260)] dark:to-[oklch(0.6_0.16_260)] dark:hover:from-[oklch(0.75_0.22_260)] dark:hover:to-[oklch(0.7_0.2_260)] text-white dark:text-white"
                     >
                       Show {filteredCourses.length} Course
                       {filteredCourses.length !== 1 ? "s" : ""}
@@ -381,7 +381,7 @@ export default function CoursesPage() {
 
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Desktop Filters Sidebar - Hidden on Mobile */}
-          <aside className="hidden lg:block lg:w-48 flex-shrink-0">
+          <aside className="hidden lg:block lg:w-48 shrink-0">
             <div className="sticky top-20 space-y-3">
               {/* Search */}
               <div>
@@ -525,10 +525,10 @@ export default function CoursesPage() {
                 <Link
                   key={course.id}
                   href={`/explore/courses/${course.id}`}
-                  className="group relative bg-gradient-to-br from-card via-card/95 to-card/80 dark:from-card dark:via-card/95 dark:to-card/50 border border-border dark:border-input backdrop-blur-sm rounded-lg overflow-hidden hover:shadow-lg dark:hover:shadow-[0_4px_20px_oklch(0.65_0.18_260/0.3)] hover:border-primary/50 dark:hover:border-[oklch(0.75_0.22_260)] transition-all duration-300 hover:-translate-y-1 active:scale-95"
+                  className="group relative bg-linear-to-br from-card via-card/95 to-card/80 dark:from-card dark:via-card/95 dark:to-card/50 border border-border dark:border-input backdrop-blur-sm rounded-lg overflow-hidden hover:shadow-lg dark:hover:shadow-[0_4px_20px_oklch(0.65_0.18_260/0.3)] hover:border-primary/50 dark:hover:border-[oklch(0.75_0.22_260)] transition-all duration-300 hover:-translate-y-1 active:scale-95"
                 >
                   {/* Compact Thumbnail with Overlay */}
-                  <div className="relative aspect-[5/2] bg-gradient-to-br from-primary/25 via-primary/15 to-primary/5 dark:from-primary/35 dark:via-primary/20 dark:to-primary/5 flex items-center justify-center border-b border-border dark:border-input group-hover:border-primary/40 transition-colors">
+                  <div className="relative aspect-5/2 bg-linear-to-br from-primary/25 via-primary/15 to-primary/5 dark:from-primary/35 dark:via-primary/20 dark:to-primary/5 flex items-center justify-center border-b border-border dark:border-input group-hover:border-primary/40 transition-colors">
                     <div className="text-2xl">{course.thumbnail}</div>
 
                     {/* Floating Badges on Thumbnail */}
@@ -614,7 +614,7 @@ export default function CoursesPage() {
 
                   {/* Hover Glow Effect */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary/5 via-transparent to-transparent dark:from-primary/10"></div>
+                    <div className="absolute inset-0 bg-linear-to-t from-primary/5 via-transparent to-transparent dark:from-primary/10"></div>
                   </div>
                 </Link>
               ))}

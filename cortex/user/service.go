@@ -166,7 +166,7 @@ func (s *Service) ChangePassword(ctx context.Context, userID int, req ChangePass
 }
 
 // ListUsers retrieves a list of users
-func (s *Service) ListUsers(ctx context.Context, limit, offset int) ([]UserResponse, error) {
+func (s *Service) ListUsers(ctx context.Context, limit, offset *int) ([]UserResponse, error) {
 	users, err := s.repo.List(ctx, limit, offset)
 	if err != nil {
 		return nil, fmt.Errorf("failed to list users: %w", err)

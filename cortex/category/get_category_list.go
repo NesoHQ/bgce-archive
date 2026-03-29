@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"log/slog"
-	"strconv"
 	"time"
 
 	"cortex/ent"
@@ -104,12 +103,18 @@ func (s *service) GetCategoryList(ctx context.Context, filter GetCategoryFilter)
 		})
 	}
 
-	// Cache the result (5 minutes TTL for lists)
+	// Cache the result (30 minutes TTL - categories rarely change)
+	// Cache FULL result set (without pagination) for better reuse
 	if s.cache != nil {
 		cacheKey := buildCategoryListCacheKey(filter)
-		if err := s.cache.SetJSON(ctx, cacheKey, result, 5*time.Minute); err != nil {
+		if err := s.cache.SetJSON(ctx, cacheKey, result, 30*time.Minute); err != nil {
 			slog.ErrorContext(ctx, "Failed to cache category list", logger.Extra(map[string]any{
 				"error": err.Error(),
+			}))
+		} else {
+			slog.InfoContext(ctx, "Cached category list", logger.Extra(map[string]any{
+				"key":   cacheKey,
+				"count": len(result),
 			}))
 		}
 	}
@@ -118,10 +123,9 @@ func (s *service) GetCategoryList(ctx context.Context, filter GetCategoryFilter)
 }
 
 func buildCategoryListCacheKey(filter GetCategoryFilter) string {
+	// Build key WITHOUT limit/offset for better cache reuse
 	key := "category:list"
-	if filter.ID != nil {
-		key += ":id:" + strconv.Itoa(int(*filter.ID))
-	}
+
 	if filter.UUID != nil {
 		key += ":uuid:" + filter.UUID.String()
 	}
@@ -131,11 +135,6 @@ func buildCategoryListCacheKey(filter GetCategoryFilter) string {
 	if filter.Status != nil {
 		key += ":status:" + *filter.Status
 	}
-	if filter.Limit != nil {
-		key += ":limit:" + strconv.Itoa(*filter.Limit)
-	}
-	if filter.Offset != nil {
-		key += ":offset:" + strconv.Itoa(*filter.Offset)
-	}
+	// Note: Removed limit/offset from cache key for better reuse
 	return key
 }

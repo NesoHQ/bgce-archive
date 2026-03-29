@@ -7,3 +7,5 @@ posts_old.csv
 /.windsurf
 /.vscode
 axon/axon
+
+!MIGRATION_SUCCESS_STORY.md

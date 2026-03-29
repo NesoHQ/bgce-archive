@@ -1,0 +1,24 @@
+name: Manual Build and Push - Community
+
+on:
+    workflow_dispatch:
+        inputs:
+            image-tag:
+                description: "Docker image tag"
+                required: false
+                type: string
+                default: "latest"
+
+env:
+    SERVICE_NAME: community
+
+jobs:
+    build-and-push:
+        permissions:
+            contents: read
+            packages: write
+        uses: ./.github/workflows/docker-build.yml
+        with:
+            service: community
+            should-build: true
+        secrets: inherit

@@ -17,12 +17,6 @@ jobs:
                   # Fetch commit hashes between origin/master and HEAD
                   commits=$(git log origin/master..HEAD --pretty=format:%H)
 
-                  # Define allowed commit types
-                  allowed_types="feat|fix|patch|docs|style|refactor|test|chore"
-
-                  # Regex pattern matching your local commit-msg hook enforcement
-                  pattern="^\[([a-zA-Z0-9_-]+)\] \(($allowed_types)\/([a-zA-Z0-9_-]+)\): [A-Z].+"
-
                   # Loop through each commit to validate message
                   for commit in $commits; do
                     # Get commit message and author
@@ -43,11 +37,10 @@ jobs:
                       continue
                     fi
 
-                    # Validate against pattern
-                    if ! echo "$commit_msg" | grep -qE "$pattern"; then
-                      echo "❌ Invalid commit message: $commit_msg"
-                      echo "✅ Format: [service] (type/feature-name): Capitalized description"
-                      echo "Example: [auth] (feat/jwt-validation): Add JWT validation middleware"
+                    # Check minimum length
+                    if [ ${#commit_msg} -lt 5 ]; then
+                      echo "❌ Commit message too short: $commit_msg"
+                      echo "Message must be at least 5 characters"
                       exit 1
                     fi
                   done

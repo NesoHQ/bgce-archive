@@ -25,6 +25,8 @@ const initializeTenants = async () => {
     await tenantStore.fetchTenants()
 }
 
-initializeTenants()
+if (authStore.isAuthenticated) {
+    initializeTenants()
+}
 
 app.mount('#app')

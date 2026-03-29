@@ -58,6 +58,8 @@ func (s *service) CreatePost(ctx context.Context, req CreatePostRequest, userID 
 		return nil, fmt.Errorf("failed to get max order no: %w", err)
 	}
 
+	readTime := util.CalculateReadTime(&req.Content)
+
 	post := &domain.Post{
 		Title:           req.Title,
 		Slug:            slug,
@@ -73,6 +75,7 @@ func (s *service) CreatePost(ctx context.Context, req CreatePostRequest, userID 
 		Status:          domain.StatusDraft,
 		IsPublic:        isPublic,
 		IsFeatured:      isFeatured,
+		ReadTime:        readTime,
 		IsPinned:        isPinned,
 		CreatedBy:       userID,
 		Version:         1,
@@ -120,14 +123,32 @@ func (s *service) GetPostByID(ctx context.Context, id uint) (*PostResponse, erro
 
 	// Backfill cache
 	s.cachePost(ctx, post)
+
 	return ToPostResponse(post), nil
 }
 
 func (s *service) GetPostByUUID(ctx context.Context, uuid string) (*PostResponse, error) {
+	// Try cache first
+	if s.cache != nil {
+		cacheKey := fmt.Sprintf("post:uuid:%s", uuid)
+		cached, err := s.cache.Get(ctx, cacheKey)
+		if err == nil && cached != "" {
+			var post domain.Post
+			if err := json.Unmarshal([]byte(cached), &post); err == nil {
+				log.Printf("Cache HIT - returning from Redis (uuid=%s)", uuid)
+				return ToPostResponse(&post), nil
+			}
+		}
+	}
+
 	post, err := s.repo.GetByUUID(ctx, uuid)
 	if err != nil {
 		return nil, err
 	}
+
+	// Backfill cache
+	s.cachePost(ctx, post)
+
 	return ToPostResponse(post), nil
 }
 
@@ -145,8 +166,6 @@ func (s *service) GetPostBySlug(ctx context.Context, slug string) (*PostResponse
 		}
 	}
 
-	// Cache MISS - load from DB
-	log.Printf("Cache MISS - loading from DB (slug=%s)", slug)
 	post, err := s.repo.GetBySlug(ctx, slug)
 	if err != nil {
 		return nil, err
@@ -154,31 +173,37 @@ func (s *service) GetPostBySlug(ctx context.Context, slug string) (*PostResponse
 
 	// Backfill cache
 	s.cachePost(ctx, post)
+
 	return ToPostResponse(post), nil
 }
 
+func (s *service) IncrementViewCount(ctx context.Context, id uint) error {
+	// 1. Increment in DB
+	if err := s.repo.IncrementViewCount(ctx, id); err != nil {
+		return err
+	}
+
+	// 2. Load post to get slug and uuid for cache invalidation
+	post, err := s.repo.GetByID(ctx, id)
+	if err != nil {
+		log.Printf("IncrementViewCount: warning, failed to load post for invalidation: %v", err)
+		return nil // Don't fail the request if just cache invalidation fails
+	}
+
+	// 3. Invalidate details caches (ID, Slug, UUID)
+	s.invalidatePostCache(ctx, post)
+
+	// 4. Invalidate list caches (to show updated count in grid)
+	s.invalidateListCaches(ctx)
+
+	log.Printf("IncrementViewCount: success for post ID=%d", id)
+	return nil
+}
+
 func (s *service) ListPosts(ctx context.Context, filter PostFilter) ([]*PostListItemResponse, int64, error) {
-	// Try cache first for list queries
-	if s.cache != nil {
-		cacheKey := s.buildListCacheKey(filter)
-
-		cacheStart := time.Now()
-		cached, err := s.cache.Get(ctx, cacheKey)
-		cacheGetTime := time.Since(cacheStart)
-
-		if err == nil && cached != "" {
-			unmarshalStart := time.Now()
-			var cachedResult struct {
-				Posts []*PostListItemResponse `json:"posts"`
-				Total int64                   `json:"total"`
-			}
-			if err := json.Unmarshal([]byte(cached), &cachedResult); err == nil {
-				unmarshalTime := time.Since(unmarshalStart)
-				log.Printf("Cache HIT - returning post list from Redis (key=%s) [cache_get=%v, unmarshal=%v, total=%v]",
-					cacheKey, cacheGetTime, unmarshalTime, time.Since(cacheStart))
-				return cachedResult.Posts, cachedResult.Total, nil
-			}
-		}
+	// Try to get from full cache first (with pagination slicing)
+	if cachedPosts, cachedTotal, found := s.tryGetFromFullCache(ctx, filter); found {
+		return cachedPosts, cachedTotal, nil
 	}
 
 	// Cache MISS - load from DB
@@ -193,8 +218,8 @@ func (s *service) ListPosts(ctx context.Context, filter PostFilter) ([]*PostList
 		responses[i] = ToPostListItemResponse(post)
 	}
 
-	// Cache the result
-	s.cachePostList(ctx, filter, responses, total)
+	// Cache the full result set (async to not block response)
+	go s.cacheFullResultSet(context.Background(), filter, responses, total)
 
 	return responses, total, nil
 }
@@ -288,6 +313,8 @@ func (s *service) UpdatePost(ctx context.Context, id uint, req UpdatePostRequest
 	if req.Content != nil {
 		post.Content = *req.Content
 		contentChanged = true
+		readTime := util.CalculateReadTime(req.Content)
+		post.ReadTime = readTime
 	}
 	if req.Thumbnail != nil {
 		post.Thumbnail = *req.Thumbnail
@@ -602,4 +629,48 @@ func (s *service) cachePost(ctx context.Context, post *domain.Post) {
 			log.Printf("Failed to cache post by slug: %v", err)
 		}
 	}
+
+	// Cache by UUID
+	if post.UUID != "" {
+		uuidKey := fmt.Sprintf("post:uuid:%s", post.UUID)
+		if err := s.cache.Set(ctx, uuidKey, data, 24*time.Hour); err != nil {
+			log.Printf("Failed to cache post by uuid: %v", err)
+		}
+	}
+}
+
+func (s *service) SeedReadTime(ctx context.Context, userID uint) error {
+	// 1. Flush Redis first per user requirement
+	if s.cache != nil {
+		if err := s.cache.Flush(ctx); err != nil {
+			log.Printf("Failed to flush redis during seeding: %v", err)
+		}
+	}
+
+	// 2. Fetch all posts including content
+	filter := PostFilter{
+		Limit: 10000, // Fetch all for seeding
+	}
+	posts, _, err := s.repo.List(ctx, filter, true)
+	if err != nil {
+		return fmt.Errorf("failed to fetch posts for seeding: %w", err)
+	}
+
+	// 3. Launch goroutines for each post recalculation
+	for _, p := range posts {
+		go func(post *domain.Post) {
+			// Use a new background context for goroutines to avoid being cancelled with the request
+			bgCtx := context.Background()
+
+			readTime := util.CalculateReadTime(&post.Content)
+			post.ReadTime = readTime
+			post.UpdatedBy = userID
+
+			if err := s.repo.Update(bgCtx, post); err != nil {
+				log.Printf("Failed to update post %d read time in background: %v", post.ID, err)
+			}
+		}(p)
+	}
+
+	return nil
 }

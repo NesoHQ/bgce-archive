@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"postal/domain"
+	"postal/util"
 )
 
 type CreatePostRequest struct {
@@ -11,13 +12,13 @@ type CreatePostRequest struct {
 	Slug            string `json:"slug" validate:"required,min=3,max=500"`
 	Summary         string `json:"summary" validate:"max=1000"`
 	Content         string `json:"content" validate:"required"`
-	Thumbnail       string `json:"thumbnail"`
-	CategoryID      uint   `json:"category_id" validate:"required,min=1"`
-	SubCategoryID   *uint  `json:"sub_category_id"`
-	MetaTitle       string `json:"meta_title" validate:"max=500"`
-	MetaDescription string `json:"meta_description" validate:"max=1000"`
-	Keywords        string `json:"keywords"`
-	OGImage         string `json:"og_image"`
+	Thumbnail       string `json:"thumbnail" validate:"omitempty,url"`
+	CategoryID      uint   `json:"category_id" validate:"required,min=1,gt=0"`
+	SubCategoryID   *uint  `json:"sub_category_id" validate:"omitempty,gt=0"`
+	MetaTitle       string `json:"meta_title" validate:"omitempty,max=500"`
+	MetaDescription string `json:"meta_description" validate:"omitempty,max=1000"`
+	Keywords        string `json:"keywords" validate:"omitempty,max=500"`
+	OGImage         string `json:"og_image" validate:"omitempty,url"`
 	IsPublic        *bool  `json:"is_public"`
 	IsFeatured      *bool  `json:"is_featured"`
 	IsPinned        *bool  `json:"is_pinned"`
@@ -28,13 +29,13 @@ type UpdatePostRequest struct {
 	Slug            *string `json:"slug" validate:"omitempty,min=3,max=500"`
 	Summary         *string `json:"summary" validate:"omitempty,max=1000"`
 	Content         *string `json:"content"`
-	Thumbnail       *string `json:"thumbnail"`
-	CategoryID      *uint   `json:"category_id" validate:"omitempty,min=1"`
-	SubCategoryID   *uint   `json:"sub_category_id"`
+	Thumbnail       *string `json:"thumbnail" validate:"omitempty,url"`
+	CategoryID      *uint   `json:"category_id" validate:"omitempty,min=1,gt=0"`
+	SubCategoryID   *uint   `json:"sub_category_id" validate:"omitempty,gt=0"`
 	MetaTitle       *string `json:"meta_title" validate:"omitempty,max=500"`
 	MetaDescription *string `json:"meta_description" validate:"omitempty,max=1000"`
-	Keywords        *string `json:"keywords"`
-	OGImage         *string `json:"og_image"`
+	Keywords        *string `json:"keywords" validate:"omitempty,max=500"`
+	OGImage         *string `json:"og_image" validate:"omitempty,url"`
 	IsPublic        *bool   `json:"is_public"`
 	IsFeatured      *bool   `json:"is_featured"`
 	IsPinned        *bool   `json:"is_pinned"`
@@ -71,6 +72,7 @@ type PostResponse struct {
 	Status          domain.PostStatus `json:"status"`
 	IsPublic        bool              `json:"is_public"`
 	IsFeatured      bool              `json:"is_featured"`
+	ReadTime        int               `json:"read_time"`
 	IsPinned        bool              `json:"is_pinned"`
 	PublishedAt     *time.Time        `json:"published_at,omitempty"`
 	ArchivedAt      *time.Time        `json:"archived_at,omitempty"`
@@ -85,6 +87,7 @@ type PostResponse struct {
 // PostListItemResponse is a lighter response for list endpoints
 type PostListItemResponse struct {
 	ID              uint              `json:"id"`
+	UUID            string            `json:"uuid"`
 	OrderNo         uint              `json:"order_no"`
 	Slug            string            `json:"slug"`
 	Title           string            `json:"title"`
@@ -95,6 +98,7 @@ type PostListItemResponse struct {
 	Status          domain.PostStatus `json:"status"`
 	SubCategoryID   *uint             `json:"sub_category_id,omitempty"`
 	IsFeatured      bool              `json:"is_featured"`
+	ReadTime        int               `json:"read_time"`
 	IsPinned        bool              `json:"is_pinned"`
 	CreatedBy       uint              `json:"created_by"`
 	ViewCount       int               `json:"view_count"`
@@ -108,6 +112,11 @@ type BatchDeleteRequest struct {
 }
 
 func ToPostResponse(post *domain.Post) *PostResponse {
+	readTime := post.ReadTime
+	if readTime == 0 && post.Content != "" {
+		readTime = util.CalculateReadTime(&post.Content)
+	}
+
 	return &PostResponse{
 		ID:              post.ID,
 		UUID:            post.UUID,
@@ -123,6 +132,7 @@ func ToPostResponse(post *domain.Post) *PostResponse {
 		Keywords:        post.Keywords,
 		OGImage:         post.OGImage,
 		Status:          post.Status,
+		ReadTime:        readTime,
 		IsPublic:        post.IsPublic,
 		IsFeatured:      post.IsFeatured,
 		IsPinned:        post.IsPinned,
@@ -138,8 +148,15 @@ func ToPostResponse(post *domain.Post) *PostResponse {
 }
 
 func ToPostListItemResponse(post *domain.Post) *PostListItemResponse {
+	readTime := post.ReadTime
+	if readTime == 0 && post.Summary != "" {
+		// Estimate from summary if content is not available
+		readTime = util.CalculateReadTime(&post.Summary)
+	}
+
 	return &PostListItemResponse{
 		ID:              post.ID,
+		UUID:            post.UUID,
 		OrderNo:         post.OrderNo,
 		Slug:            post.Slug,
 		Title:           post.Title,
@@ -153,6 +170,7 @@ func ToPostListItemResponse(post *domain.Post) *PostListItemResponse {
 		IsPinned:        post.IsPinned,
 		CreatedBy:       post.CreatedBy,
 		ViewCount:       post.ViewCount,
+		ReadTime:        readTime,
 		ContentLength:   post.ContentLength,
 		CreatedAt:       post.CreatedAt,
 	}

@@ -62,6 +62,7 @@ type Post struct {
 	// Stats (can be updated via separate service)
 	ViewCount int `gorm:"default:0" json:"view_count"`
 	LikeCount int `gorm:"default:0" json:"like_count"`
+	ReadTime  int `gorm:"default:0" json:"read_time"`
 
 	// AI-powered features
 	QualityScore     *float64 `gorm:"type:decimal(3,2)" json:"quality_score,omitempty"`

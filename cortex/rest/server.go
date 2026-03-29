@@ -16,6 +16,9 @@ func NewServeMux(mw *middlewares.Middlewares, handlers *handlers.Handlers) (http
 	mux.HandleFunc("POST /api/v1/auth/login", handlers.Login)
 
 	// User routes (protected)
+	mux.HandleFunc("GET /api/v1/users", func(w http.ResponseWriter, r *http.Request) {
+		mw.AuthenticateJWT(http.HandlerFunc(handlers.GetUsers)).ServeHTTP(w, r)
+	})
 	mux.HandleFunc("GET /api/v1/users/profile", func(w http.ResponseWriter, r *http.Request) {
 		mw.AuthenticateJWT(http.HandlerFunc(handlers.GetProfile)).ServeHTTP(w, r)
 	})

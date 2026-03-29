@@ -13,7 +13,7 @@ jobs:
 
         strategy:
             matrix:
-                service: [cortex, skeleton] # Add more services here as needed
+                service: [cortex, skeleton, community] # Add more services here as needed
 
         steps:
             - name: ⬇️ Checkout

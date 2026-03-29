@@ -1,6 +1,7 @@
 'use client';
 
 import Script from 'next/script';
+import { ENV } from '@/lib/runtime-env';
 
 export function KrakensAnalytics() {
     return (
@@ -8,7 +9,7 @@ export function KrakensAnalytics() {
             src="https://krakens.nesohq.org/krakens.js"
             strategy="afterInteractive"
             onLoad={() => {
-                const projectId = process.env.NEXT_PUBLIC_KRAKENS_PROJECT_ID;
+                const projectId = ENV.KRAKENS_PROJECT_ID;
                 if (typeof window !== 'undefined' && (window as any).Krakens && projectId) {
                     (window as any).Krakens.init(projectId);
                 }

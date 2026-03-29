@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // the standalone configuration needs to be managed from environment variables
+  output: 'standalone',
   // Image optimization
   images: {
     remotePatterns: [
@@ -37,7 +39,7 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // Headers for better caching
+  // Headers - only cache static assets
   async headers() {
     return [
       {

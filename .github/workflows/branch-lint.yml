@@ -1,0 +1,27 @@
+name: Branch Name Lint
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate Branch Name
+        run: |
+          BRANCH_NAME=${GITHUB_HEAD_REF}
+
+          echo "Checking branch: $BRANCH_NAME"
+
+          if [[ ! "$BRANCH_NAME" =~ ^(feat|bug|hotfix)\/[a-z0-9-]+$ ]]; then
+            echo "Invalid branch name!"
+            echo "Allowed:"
+            echo "feat/"
+            echo "bug/"
+            echo "hotfix/"
+            exit 1
+          fi
+
+          echo "✅ Branch name valid"

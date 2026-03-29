@@ -219,6 +219,7 @@ DELETE /api/v1/tags/{id}
 - `likes` - Polymorphic likes (posts, comments, discussions)
 - `follows` - User relationships
 - `notifications` - User notifications
+- `contributors` - a table to store our community contributor list
 
 **API Endpoints** (35+ total):
 ```
@@ -264,6 +265,13 @@ DELETE /api/v1/notifications/{id}
 Activity:
 GET    /api/v1/activity/feed
 GET    /api/v1/users/{id}/activity
+
+Contributors:
+GET    /api/v1/contributors
+GET    /api/v1/contributors/{id}
+POST   /api/v1/contributors
+PUT    /api/v1/contributors/{id}
+DELETE /api/v1/contributors/{id}
 ```
 
 **Event Consumers**:
@@ -280,7 +288,7 @@ GET    /api/v1/users/{id}/activity
 
 **Technology Stack**:
 - Go 1.24 with standard library HTTP
-- PostgreSQL (GORM or Ent)
+- PostgreSQL (Go SQL)
 - Redis for caching (notification counts, activity feeds)
 - RabbitMQ for event-driven notifications
 

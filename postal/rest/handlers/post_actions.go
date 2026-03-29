@@ -135,3 +135,34 @@ func (h *Handlers) DeletePost(w http.ResponseWriter, r *http.Request) {
 		Message: "Post deleted successfully",
 	})
 }
+
+func (h *Handlers) IncrementViewCount(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	idStr := utils.ExtractIDFromPath(r.URL.Path)
+
+	id, err := strconv.ParseUint(idStr, 10, 32)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ErrorResponse{
+			Status:  false,
+			Message: "Invalid post ID",
+		})
+		return
+	}
+
+	if err := h.PostService.IncrementViewCount(ctx, uint(id)); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(ErrorResponse{
+			Status:  false,
+			Message: "Failed to increment view count",
+			Error:   err.Error(),
+		})
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(SuccessResponse{
+		Status:  true,
+		Message: "View count incremented successfully",
+	})
+}

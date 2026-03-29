@@ -82,6 +82,7 @@ export interface ApiPost {
   created_by: number;
   updated_by?: number;
   view_count: number;
+  read_time: number;
   version: number;
   created_at: string;
   updated_at: string;
@@ -102,6 +103,7 @@ export interface ApiPostListItem {
   is_pinned: boolean;
   created_by: number;
   view_count: number;
+  read_time: number;
   content_length: number; // For read time calculation
   created_at: string;
 }

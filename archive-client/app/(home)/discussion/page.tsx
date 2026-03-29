@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { MessageSquare, ThumbsUp, Eye, TrendingUp, Clock, Flame, Plus, Search, Filter, X, SlidersHorizontal } from "lucide-react";
+import { MessageSquare, ThumbsUp, Eye, Clock, Flame, Plus, Search, X, SlidersHorizontal } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

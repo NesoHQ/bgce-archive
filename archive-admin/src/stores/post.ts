@@ -237,6 +237,24 @@ export const usePostStore = defineStore('post', () => {
         }
     }
 
+    const seedReadTime = async () => {
+        loading.value = true
+        error.value = null
+        try {
+            const response = await postService.seedReadTime()
+            if (response.status) {
+                toast.success('Success', response.message)
+                return response
+            }
+        } catch (err: any) {
+            error.value = err.message || 'Failed to seed read times'
+            toast.error('Error', error.value)
+            throw err
+        } finally {
+            loading.value = false
+        }
+    }
+
     return {
         posts,
         currentPost,
@@ -254,6 +272,7 @@ export const usePostStore = defineStore('post', () => {
         archivePost,
         rejectPost,
         bulkUploadPosts,
-        batchDeletePosts
+        batchDeletePosts,
+        seedReadTime
     }
 })

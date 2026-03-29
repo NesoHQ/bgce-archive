@@ -104,10 +104,9 @@ func (r *postRepository) List(ctx context.Context, filter post.PostFilter, withC
 
 	if !withContent {
 		selectQuery = selectQuery.Select(
-			"id", "order_no", "slug", "title", "summary", "meta_description", "keywords",
+			"id", "order_no", "uuid", "slug", "title", "summary", "meta_description", "keywords",
 			"category_id", "sub_category_id", "is_featured", "is_pinned",
-			"status", "created_by", "view_count", "created_at",
-			"CHAR_LENGTH(content) as content_length",
+			"status", "created_by", "view_count", "read_time", "created_at",
 		)
 	}
 
@@ -248,6 +247,7 @@ func (r *postRepository) GetMaxOrderNo(ctx context.Context) (uint, error) {
 	var maxOrderNo uint
 
 	err := r.db.WithContext(ctx).
+		Unscoped().
 		Model(&domain.Post{}).
 		Select("COALESCE(MAX(order_no), 0)").
 		Row().
@@ -257,4 +257,8 @@ func (r *postRepository) GetMaxOrderNo(ctx context.Context) (uint, error) {
 	}
 
 	return maxOrderNo, nil
+}
+
+func (r *postRepository) IncrementViewCount(ctx context.Context, id uint) error {
+	return r.db.WithContext(ctx).Model(&domain.Post{}).Where("id = ?", id).Update("view_count", gorm.Expr("view_count + ?", 1)).Error
 }

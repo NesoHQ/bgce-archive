@@ -205,6 +205,57 @@
                 }
             }
         },
+        "/api/v1/posts/{id}/view": {
+            "post": {
+                "summary": "Record post view",
+                "description": "Increments the view count for a specific post. This should be called by the client when a post is actually viewed by a user.",
+                "tags": [
+                    "Posts"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "View count recorded successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid post ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to increment view count",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/posts/{id}": {
             "get": {
                 "summary": "Get post by ID",
@@ -405,6 +456,48 @@
                 }
             }
         },
+        "/api/v1/posts/uuid/{uuid}": {
+            "get": {
+                "summary": "Get post by UUID",
+                "description": "Retrieves a specific post by its UUID.",
+                "tags": [
+                    "Posts"
+                ],
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Post retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PostResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Post not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/posts/{id}/publish": {
             "post": {
                 "summary": "Publish post",
@@ -574,6 +667,124 @@
             }
         },
         "/api/v1/posts/batch": {
+            "delete": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Batch delete posts",
+                "description": "Deletes multiple posts by their UUIDs in a single request.",
+                "operationId": "batchDeletePosts",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "uuids"
+                                ],
+                                "properties": {
+                                    "uuids": {
+                                        "type": "array",
+                                        "minItems": 1,
+                                        "items": {
+                                            "type": "string",
+                                            "format": "uuid"
+                                        },
+                                        "example": [
+                                            "d290f1ee-6c54-4b01-90e6-d701748f0851",
+                                            "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Posts deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Posts deleted successfully"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "deleted_count": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "uuids": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "format": "uuid"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid body or no valid UUIDs)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No posts found or some UUIDs not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Posts"
@@ -620,6 +831,52 @@
                         "BearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/v1/posts/seed-read-time": {
+            "post": {
+                "summary": "Seed post read times",
+                "description": "Recalculates the read time for all existing posts in the background. Flushes the Redis cache first.",
+                "tags": [
+                    "Posts"
+                ],
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Seeding process started",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     },

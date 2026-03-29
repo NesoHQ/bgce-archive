@@ -1,16 +1,22 @@
 package handlers
 
 import (
+	"log/slog"
 	"net/http"
 	"strconv"
+	"time"
 
 	"cortex/category"
+	"cortex/logger"
 	"cortex/rest/utils"
 
 	"github.com/google/uuid"
 )
 
 func (h *Handlers) GetCategoryList(w http.ResponseWriter, r *http.Request) {
+	handlerStart := time.Now()
+	ctx := r.Context()
+
 	filter := category.GetCategoryFilter{}
 	if limit := r.URL.Query().Get("limit"); limit != "" {
 		filter.Limit = parseIntPointer(limit)
@@ -40,7 +46,10 @@ func (h *Handlers) GetCategoryList(w http.ResponseWriter, r *http.Request) {
 		filter.Label = &label
 	}
 
-	categories, err := h.CategoryService.GetCategoryList(r.Context(), filter)
+	serviceStart := time.Now()
+	categories, err := h.CategoryService.GetCategoryList(ctx, filter)
+	serviceTime := time.Since(serviceStart)
+
 	if err != nil {
 		utils.SendError(w, http.StatusInternalServerError, "failed to retrieve categories", err)
 		return
@@ -52,7 +61,16 @@ func (h *Handlers) GetCategoryList(w http.ResponseWriter, r *http.Request) {
 		Status:  true,
 	}
 
+	encodeStart := time.Now()
 	utils.SendJson(w, http.StatusOK, response)
+	encodeTime := time.Since(encodeStart)
+
+	slog.InfoContext(ctx, "GetCategoryList timing", logger.Extra(map[string]any{
+		"service_time": serviceTime.String(),
+		"encode_time":  encodeTime.String(),
+		"total_time":   time.Since(handlerStart).String(),
+		"count":        len(categories),
+	}))
 }
 
 func parseIntPointer(s string) *int {

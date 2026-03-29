@@ -58,9 +58,10 @@ export function SkeletonCardGrid({ count = 6 }: { count?: number }) {
 }
 
 export function SkeletonArticle() {
+    // ... (rest of SkeletonArticle)
     return (
         <div className="max-w-4xl mx-auto space-y-8 p-8">
-            {/* Header */}
+            {/* ... */}
             <div className="space-y-6">
                 <div className="flex gap-2">
                     <Skeleton className="h-6 w-20 rounded-full" />
@@ -78,7 +79,6 @@ export function SkeletonArticle() {
                 </div>
             </div>
 
-            {/* Content */}
             <div className="space-y-4">
                 <Skeleton className="h-4 w-full" />
                 <Skeleton className="h-4 w-full" />
@@ -91,6 +91,36 @@ export function SkeletonArticle() {
                 <Skeleton className="h-4 w-full" />
                 <Skeleton className="h-4 w-full" />
                 <Skeleton className="h-4 w-3/4" />
+            </div>
+        </div>
+    );
+}
+
+export function SkeletonSidebar() {
+    return (
+        <div className="space-y-6">
+            {/* Search */}
+            <Skeleton className="h-10 w-full" />
+
+            {/* Categories */}
+            <div className="space-y-3">
+                <Skeleton className="h-5 w-32" />
+                <div className="space-y-2">
+                    <Skeleton className="h-8 w-full" />
+                    <Skeleton className="h-8 w-full" />
+                    <Skeleton className="h-8 w-full" />
+                    <Skeleton className="h-8 w-full" />
+                    <Skeleton className="h-8 w-full" />
+                </div>
+            </div>
+
+            {/* Quick Filters */}
+            <div className="space-y-3 pt-4 border-t">
+                <Skeleton className="h-5 w-24" />
+                <div className="flex flex-col gap-2">
+                    <Skeleton className="h-6 w-full" />
+                    <Skeleton className="h-6 w-full" />
+                </div>
             </div>
         </div>
     );

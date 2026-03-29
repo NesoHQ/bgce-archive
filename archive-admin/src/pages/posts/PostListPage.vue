@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Plus, Search, Upload, Trash2, ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { Plus, Search, Upload, Trash2, ChevronLeft, ChevronRight, RefreshCcw } from 'lucide-vue-next'
 import { usePostStore } from '@/stores/post'
 import { postService } from '@/services'
 import { useCategoryStore } from '@/stores/category'
@@ -277,6 +277,23 @@ const handleBatchDelete = async () => {
   }
 }
 
+const handleSeedReadTime = async () => {
+  const confirmed = await confirm({
+    title: 'Recalculate Read Times',
+    message: 'This will flush all caches and recalculate reading times for all posts in the background. Continue?',
+    confirmText: 'Yes, Recalculate',
+    type: 'warning',
+  })
+
+  if (confirmed) {
+    try {
+      await postStore.seedReadTime()
+    } catch (error) {
+      console.error('Failed to seed read times:', error)
+    }
+  }
+}
+
 onMounted(async () => {
   await Promise.all([
     categoryStore.fetchCategories(),
@@ -305,6 +322,16 @@ onMounted(async () => {
         >
           <Trash2 class="h-4 w-4" />
           Delete Selected ({{ selectedPostUuids.length }})
+        </Button>
+        <Button 
+          @click="handleSeedReadTime" 
+          variant="outline" 
+          size="lg" 
+          class="gap-2 border-orange-200 hover:bg-orange-50 dark:border-orange-900/30 dark:hover:bg-orange-900/10 text-orange-600 dark:text-orange-400"
+          :disabled="postStore.loading"
+        >
+          <RefreshCcw :class="['h-4 w-4', { 'animate-spin': postStore.loading }]" />
+          Recalculate Read Times
         </Button>
         <Button @click="batchUploadModalOpen = true" variant="outline" size="lg" class="gap-2">
           <Upload class="h-4 w-4" />

@@ -1,35 +1,61 @@
-import React, { Suspense } from "react";
-import dynamic from "next/dynamic";
+import { Suspense } from "react";
+import nextDynamic from "next/dynamic";
 import { WelcomeSection } from "@/components/home/WelcomeSectionOptimized";
 import { SkeletonCardGrid } from "@/components/shared/SkeletonCard";
 
 // Dynamic imports for better code splitting
-const PopularCoursesSection = dynamic(
-  () => import("@/components/home/PopularCoursesSectionOptimized").then(mod => ({ default: mod.PopularCoursesSection })),
-  { loading: () => <div className="py-16"><SkeletonCardGrid count={4} /></div> }
+const PopularCoursesSection = nextDynamic(
+  () =>
+    import("@/components/home/PopularCoursesSectionOptimized").then((mod) => ({
+      default: mod.PopularCoursesSection,
+    })),
+  {
+    loading: () => (
+      <div className='py-16'>
+        <SkeletonCardGrid count={4} />
+      </div>
+    ),
+  },
 );
 
-const CommunityTalksSection = dynamic(
-  () => import("@/components/home/CommunityTalksSectionOptimized").then(mod => ({ default: mod.CommunityTalksSection })),
-  { loading: () => <div className="py-16"><SkeletonCardGrid count={3} /></div> }
-);
+import { CommunityTalksSection } from "@/components/home/CommunityTalksSectionOptimized";
+import { api } from "@/lib/api";
+import { CheatsheetSection } from "@/components/home/CheatsheetSection";
 
-const CheatsheetSection = dynamic(
-  () => import("@/components/home/CheatsheetSection").then(mod => ({ default: mod.CheatsheetSection })),
-  { loading: () => <div className="py-16"><SkeletonCardGrid count={4} /></div> }
-);
+export const dynamic = "force-dynamic";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const popularPosts = await api.getPosts({
+    sort_by: "view_count",
+    sort_order: "DESC",
+    limit: 3
+  });
+
   return (
     <>
       <WelcomeSection />
-      <Suspense fallback={<div className="py-16"><SkeletonCardGrid count={4} /></div>}>
+      <Suspense
+        fallback={
+          <div className='py-16'>
+            <SkeletonCardGrid count={4} />
+          </div>
+        }>
         <PopularCoursesSection />
       </Suspense>
-      <Suspense fallback={<div className="py-16"><SkeletonCardGrid count={3} /></div>}>
-        <CommunityTalksSection />
+      <Suspense
+        fallback={
+          <div className='py-16'>
+            <SkeletonCardGrid count={3} />
+          </div>
+        }>
+        <CommunityTalksSection initialPosts={popularPosts.data} />
       </Suspense>
-      <Suspense fallback={<div className="py-16"><SkeletonCardGrid count={4} /></div>}>
+      <Suspense
+        fallback={
+          <div className='py-16'>
+            <SkeletonCardGrid count={4} />
+          </div>
+        }>
         <CheatsheetSection />
       </Suspense>
     </>

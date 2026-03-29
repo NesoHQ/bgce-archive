@@ -1,6 +1,6 @@
 "use client";
 
-import { Info, Heart, Cloud, ArrowRight } from "lucide-react";
+import { Info, Heart, Cloud } from "lucide-react";
 
 const ArchiveProTips = () => {
   const tips = [
