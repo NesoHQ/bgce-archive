@@ -34,7 +34,9 @@ func (h *Handlers) AddPlannedCard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.RespondJSON(w, http.StatusCreated, map[string]any{"status": true, "message": "planned card added"})
+	response := roadmap.AddCardResponse{Success: true, Message: "planned card added"}
+
+	utils.RespondJSON(w, http.StatusCreated, response)
 }
 
 func (h *Handlers) GetPlannedCards(w http.ResponseWriter, r *http.Request) {
@@ -87,7 +89,9 @@ func (h *Handlers) MoveCardToPlanned(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.RespondJSON(w, http.StatusOK, map[string]any{"status": true, "message": "card moved to planned"})
+	response := roadmap.MoveCardResponse{Success: true, Message: "card moved to planned"}
+
+	utils.RespondJSON(w, http.StatusOK, response)
 }
 
 func (h *Handlers) UpdatePlannedCard(w http.ResponseWriter, r *http.Request) {
@@ -122,7 +126,9 @@ func (h *Handlers) UpdatePlannedCard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.RespondJSON(w, http.StatusOK, map[string]any{"status": true, "message": "planned card updated"})
+	response := roadmap.UpdateCardResponse{Success: true, Message: "planned card updated"}
+
+	utils.RespondJSON(w, http.StatusOK, response)
 }
 
 func (h *Handlers) DeletePlannedCard(w http.ResponseWriter, r *http.Request) {
@@ -142,5 +148,7 @@ func (h *Handlers) DeletePlannedCard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.RespondJSON(w, http.StatusOK, map[string]any{"status": true, "message": "planned card deleted"})
+	response := roadmap.DeleteCardResponse{Success: true, Message: "planned card deleted"}
+
+	utils.RespondJSON(w, http.StatusOK, response)
 }

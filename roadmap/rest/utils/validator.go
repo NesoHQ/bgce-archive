@@ -62,5 +62,5 @@ func RespondJSON(w http.ResponseWriter, status int, body any) {
 }
 
 func RespondError(w http.ResponseWriter, message string, status int) {
-	RespondJSON(w, status, map[string]any{"status": false, "message": message})
+	RespondJSON(w, status, map[string]any{"success": false, "message": message})
 }

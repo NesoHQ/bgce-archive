@@ -62,7 +62,9 @@ func (h *Handlers) MoveCardToInProgress(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	utils.RespondJSON(w, http.StatusOK, map[string]any{"status": true, "message": "card moved to in progress"})
+	response := roadmap.MoveCardResponse{Success: true, Message: "card moved to in progress"}
+
+	utils.RespondJSON(w, http.StatusOK, response)
 }
 
 func (h *Handlers) UpdateInProgressCard(w http.ResponseWriter, r *http.Request) {
@@ -90,14 +92,16 @@ func (h *Handlers) UpdateInProgressCard(w http.ResponseWriter, r *http.Request) 
 	if err := h.roadmapService.UpdateInProgressCard(r.Context(), cardID, req, int64(userID)); err != nil {
 		fmt.Printf("UpdateInProgressCard error: %v\n", err)
 		if errors.Is(err, roadmap.ErrCardNotFound) {
-			utils.RespondError(w, "in-progress card not found", http.StatusNotFound)
+			utils.RespondError(w, "card not found", http.StatusNotFound)
 			return
 		}
 		utils.RespondError(w, "failed to update in-progress card", http.StatusInternalServerError)
 		return
 	}
 
-	utils.RespondJSON(w, http.StatusOK, map[string]any{"status": true, "message": "in-progress card updated"})
+	response := roadmap.UpdateCardResponse{Success: true, Message: "in-progress card updated"}
+
+	utils.RespondJSON(w, http.StatusOK, response)
 }
 
 func (h *Handlers) DeleteInProgressCard(w http.ResponseWriter, r *http.Request) {
@@ -110,12 +114,14 @@ func (h *Handlers) DeleteInProgressCard(w http.ResponseWriter, r *http.Request) 
 	if err := h.roadmapService.DeleteInProgressCard(r.Context(), cardID); err != nil {
 		fmt.Printf("DeleteInProgressCard error: %v\n", err)
 		if errors.Is(err, roadmap.ErrCardNotFound) {
-			utils.RespondError(w, "in-progress card not found", http.StatusNotFound)
+			utils.RespondError(w, "card not found", http.StatusNotFound)
 			return
 		}
 		utils.RespondError(w, "failed to delete in-progress card", http.StatusInternalServerError)
 		return
 	}
 
-	utils.RespondJSON(w, http.StatusOK, map[string]any{"status": true, "message": "in-progress card deleted"})
+	response := roadmap.DeleteCardResponse{Success: true, Message: "in-progress card deleted"}
+
+	utils.RespondJSON(w, http.StatusOK, response)
 }

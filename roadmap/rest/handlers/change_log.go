@@ -34,7 +34,9 @@ func (h *Handlers) CreateChangeLog(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.RespondJSON(w, http.StatusCreated, map[string]any{"status": true, "message": "changelog created"})
+	response := roadmap.AddCardResponse{Success: true, Message: "changelog created"}
+
+	utils.RespondJSON(w, http.StatusCreated, response)
 }
 
 func (h *Handlers) UpdateChangeLog(w http.ResponseWriter, r *http.Request) {
@@ -69,7 +71,9 @@ func (h *Handlers) UpdateChangeLog(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.RespondJSON(w, http.StatusOK, map[string]any{"status": true, "message": "changelog updated"})
+	response := roadmap.AddCardResponse{Success: true, Message: "changelog card updated"}
+
+	utils.RespondJSON(w, http.StatusOK, response)
 }
 
 func (h *Handlers) GetChangeLogs(w http.ResponseWriter, r *http.Request) {
@@ -120,5 +124,7 @@ func (h *Handlers) DeleteChangeLog(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.RespondJSON(w, http.StatusOK, map[string]any{"status": true, "message": "changelog deleted"})
+	response := roadmap.AddCardResponse{Success: true, Message: "changelog card deleted"}
+
+	utils.RespondJSON(w, http.StatusOK, response)
 }
