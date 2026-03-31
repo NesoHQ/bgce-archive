@@ -39,7 +39,22 @@ type GetCompletedCardsResponse struct {
 	Pagination PaginationMeta         `json:"pagination"`
 }
 
-type MoveCardToCompletedResponse struct {
+type AddCardResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+type MoveCardResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+type UpdateCardResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+type DeleteCardResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
 }

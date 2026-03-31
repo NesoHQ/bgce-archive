@@ -63,9 +63,9 @@ func (h *Handlers) MoveCardToCompleted(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := roadmap.MoveCardToCompletedResponse{
+	response := roadmap.MoveCardResponse{
 		Success: true,
-		Message: "card moved to completed successfully",
+		Message: "card moved to completed",
 	}
 
 	utils.RespondJSON(w, http.StatusOK, response)
@@ -96,14 +96,16 @@ func (h *Handlers) UpdateCompletedCard(w http.ResponseWriter, r *http.Request) {
 	if err := h.roadmapService.UpdateCompletedCard(r.Context(), cardID, req, int64(userID)); err != nil {
 		fmt.Printf("UpdateCompletedCard error: %v\n", err)
 		if errors.Is(err, roadmap.ErrCardNotFound) {
-			utils.RespondError(w, "completed card not found", http.StatusNotFound)
+			utils.RespondError(w, "card not found", http.StatusNotFound)
 			return
 		}
 		utils.RespondError(w, "failed to update completed card", http.StatusInternalServerError)
 		return
 	}
 
-	utils.RespondJSON(w, http.StatusOK, map[string]any{"status": true, "message": "completed card updated"})
+	response := roadmap.UpdateCardResponse{Success: true, Message: "completed card updated"}
+
+	utils.RespondJSON(w, http.StatusOK, response)
 }
 
 func (h *Handlers) DeleteCompletedCard(w http.ResponseWriter, r *http.Request) {
@@ -116,12 +118,14 @@ func (h *Handlers) DeleteCompletedCard(w http.ResponseWriter, r *http.Request) {
 	if err := h.roadmapService.DeleteCompletedCard(r.Context(), cardID); err != nil {
 		fmt.Printf("DeleteCompletedCard error: %v\n", err)
 		if errors.Is(err, roadmap.ErrCardNotFound) {
-			utils.RespondError(w, "completed card not found", http.StatusNotFound)
+			utils.RespondError(w, "card not found", http.StatusNotFound)
 			return
 		}
 		utils.RespondError(w, "failed to delete completed card", http.StatusInternalServerError)
 		return
 	}
 
-	utils.RespondJSON(w, http.StatusOK, map[string]any{"status": true, "message": "completed card deleted"})
+	response := roadmap.DeleteCardResponse{Success: true, Message: "completed card deleted"}
+
+	utils.RespondJSON(w, http.StatusOK, response)
 }

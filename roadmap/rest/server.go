@@ -14,7 +14,7 @@ func NewServer(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handler,
 	mux.HandleFunc("GET /api/v1/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"status":true,"service":"roadmap","version":"1.0.0"}`))
+		w.Write([]byte(`{"success":true,"service":"roadmap","version":"1.0.0"}`))
 	})
 
 	// Roadmap routes (public)
