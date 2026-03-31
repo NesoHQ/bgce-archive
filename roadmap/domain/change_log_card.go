@@ -7,7 +7,7 @@ type ChangeLogCard struct {
 	Title     string    `json:"title" bson:"title"`
 	Items     []string  `json:"items" bson:"items"`
 	Month     string    `json:"month" bson:"month"`
-	Year      string    `json:"year" bson:"year"`
+	Year      int64     `json:"year" bson:"year"`
 	CreatedBy int64     `json:"createdBy" bson:"createdBy"`
 	CreatedAt time.Time `json:"createdAt" bson:"createdAt"`
 	UpdatedBy int64     `json:"updatedBy" bson:"updatedBy"`
