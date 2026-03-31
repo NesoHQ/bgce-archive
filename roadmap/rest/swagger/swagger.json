@@ -1,0 +1,1619 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "[Roadmap]: Task Management Service APIs",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/health": {
+            "get": {
+                "summary": "Get Health Status",
+                "responses": {
+                    "200": {
+                        "description": "Service health status",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "service": {
+                                            "type": "string"
+                                        },
+                                        "version": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "success": true,
+                                    "service": "roadmap",
+                                    "version": "1.0.0"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/planned": {
+            "get": {
+                "summary": "Get Planned Cards",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "description": "Page number for pagination",
+                        "schema": {
+                            "type": "integer",
+                            "example": 1,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "description": "Number of items per page",
+                        "schema": {
+                            "type": "integer",
+                            "example": 10,
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve planned tasks",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "retrieved successfully",
+                                    "data": [
+                                        {
+                                            "id": "69bf1e7f6e64f1fa699245c3",
+                                            "title": "Add share feature",
+                                            "items": [
+                                                "Social media share",
+                                                "Embed share"
+                                            ],
+                                            "plannedAt": {
+                                                "quartile": "Q4",
+                                                "year": 2026
+                                            },
+                                            "createdBy": 1,
+                                            "createdAt": "2026-03-21T22:41:03.752Z",
+                                            "updatedBy": 1,
+                                            "updatedAt": "2026-03-21T22:41:03.752Z"
+                                        }
+                                    ],
+                                    "pagination": {
+                                        "total": 2,
+                                        "page": 1,
+                                        "limit": 10,
+                                        "totalPages": 1,
+                                        "hasNextPage": false,
+                                        "hasPreviousPage": false,
+                                        "nextPage": null,
+                                        "prevPage": null
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to get planned cards"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Add Planned Card",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "title",
+                                    "items"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "example": {
+                                "title": "Make a roadmap service",
+                                "items": [
+                                    "Create Cards",
+                                    "Make card move around"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Planned card created",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "planned card added"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "invalid request body"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "Authorization header required"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "title is required"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to add planned card"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/planned/{id}": {
+            "put": {
+                "summary": "Update a Planned Card",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "example": {
+                                "title": "Refactor repository",
+                                "items": [
+                                    "Separate files for each function",
+                                    "Check with the AI"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Planned card updated",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "planned card updated"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "invalid request body"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "Invalid or expired token"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "card not found"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "card_id is required"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to update planned card"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a Planned Card",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Planned card deleted",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "planned card deleted"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "Invalid or expired token"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "card not found"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "card_id is required"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to delete planned card"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/in-progress": {
+            "get": {
+                "summary": "Get In Progress Cards",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "description": "Page number for pagination",
+                        "schema": {
+                            "type": "integer",
+                            "example": 1,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "description": "Number of items per page",
+                        "schema": {
+                            "type": "integer",
+                            "example": 10,
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve in progress tasks",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "retrieved successfully",
+                                    "data": [
+                                        {
+                                            "id": "69bf1e7f6e64f1fa699245c3",
+                                            "title": "Add share feature",
+                                            "items": [
+                                                "Social media share",
+                                                "Embed share"
+                                            ],
+                                            "completionPercentage": 32,
+                                            "startedAt": {
+                                                "quartile": "Q1",
+                                                "year": 2026
+                                            },
+                                            "createdBy": 1,
+                                            "createdAt": "2026-03-21T22:41:03.752Z",
+                                            "updatedBy": 2,
+                                            "updatedAt": "2026-03-31T10:22:17.582Z"
+                                        }
+                                    ],
+                                    "pagination": {
+                                        "total": 1,
+                                        "page": 1,
+                                        "limit": 10,
+                                        "totalPages": 1,
+                                        "hasNextPage": false,
+                                        "hasPreviousPage": false,
+                                        "nextPage": null,
+                                        "prevPage": null
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to get in progress cards"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/in-progress/{id}": {
+            "put": {
+                "summary": "Update In Progress Card",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "completionPercentage": {
+                                        "type": "number"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "title": "Add share feature",
+                                "items": [
+                                    "Social media share",
+                                    "Embed share"
+                                ],
+                                "completionPercentage": 45.5
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "In progress card updated",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "in-progress card updated"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "invalid request body"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "Invalid authorization header format"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "card not found"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "completion percentage must be between 0 and 100"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to update in-progress card"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete In Progress Card",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "In progress card deleted",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "in-progress card deleted"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "Invalid or expired token"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "card not found"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "card_id is required"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to delete in-progress card"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/completed": {
+            "get": {
+                "summary": "Get Completed Cards",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "description": "Page number for pagination",
+                        "schema": {
+                            "type": "integer",
+                            "example": 1,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "description": "Number of items per page",
+                        "schema": {
+                            "type": "integer",
+                            "example": 10,
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve completed tasks",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "retrieved successfully",
+                                    "data": [
+                                        {
+                                            "id": "69bf1e7f6e64f1fa699245c3",
+                                            "title": "Add share feature",
+                                            "items": [
+                                                "Social media share",
+                                                "Embed share"
+                                            ],
+                                            "completedAt": {
+                                                "quartile": "Q1",
+                                                "year": 2026
+                                            },
+                                            "createdBy": 1,
+                                            "createdAt": "2026-03-21T22:41:03.752Z",
+                                            "updatedBy": 1,
+                                            "updatedAt": "2026-03-31T22:41:03.752Z"
+                                        }
+                                    ],
+                                    "pagination": {
+                                        "total": 1,
+                                        "page": 1,
+                                        "limit": 10,
+                                        "totalPages": 1,
+                                        "hasNextPage": false,
+                                        "hasPreviousPage": false,
+                                        "nextPage": null,
+                                        "prevPage": null
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to get completed cards"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/completed/{id}": {
+            "put": {
+                "summary": "Update Completed Card",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "example": {
+                                "title": "Finalized share feature",
+                                "items": [
+                                    "Social media share",
+                                    "Embed share"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Completed card updated",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "completed card updated"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "invalid request body"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "Invalid or expired token"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "card not found"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "title is required"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to update completed card"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete Completed Card",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Completed card deleted",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "completed card deleted"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "Invalid or expired token"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "card not found"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "card_id is required"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to delete completed card"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/start/{id}": {
+            "patch": {
+                "summary": "Move a Card to In Progress",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Card moved to in progress",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "card moved to in progress"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "Authorization header required"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "planned card not found"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "card_id is required"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to move card to in progress"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/complete/{id}": {
+            "patch": {
+                "summary": "Move a Card to Completed",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Card moved to completed",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "card moved to completed"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "Authorization header required"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "card not found"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "card_id is required"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to move card to completed"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/plan/{id}": {
+            "patch": {
+                "summary": "Move a Card to Planned",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Card moved to planned",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "card moved to planned"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "Authorization header required"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "card not found"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "card_id is required"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to move card to planned"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/changelog": {
+            "get": {
+                "summary": "Get Changelogs",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "description": "Page number for pagination",
+                        "schema": {
+                            "type": "integer",
+                            "example": 1,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "description": "Number of items per page",
+                        "schema": {
+                            "type": "integer",
+                            "example": 10,
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve changelogs",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "retrieved successfully",
+                                    "data": [
+                                        {
+                                            "id": "69bf1e7f6e64f1fa699245c3",
+                                            "title": "v1.0.0 Release",
+                                            "items": [
+                                                "Initial release",
+                                                "Added roadmap features"
+                                            ],
+                                            "month": "March",
+                                            "year": 2026,
+                                            "createdBy": 1,
+                                            "createdAt": "2026-03-21T22:41:03.752Z",
+                                            "updatedBy": 1,
+                                            "updatedAt": "2026-03-21T22:41:03.752Z"
+                                        }
+                                    ],
+                                    "pagination": {
+                                        "total": 1,
+                                        "page": 1,
+                                        "limit": 10,
+                                        "totalPages": 1,
+                                        "hasNextPage": false,
+                                        "hasPreviousPage": false,
+                                        "nextPage": null,
+                                        "prevPage": null
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to get changelogs"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create Changelog",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "title",
+                                    "items",
+                                    "month",
+                                    "year"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "month": {
+                                        "type": "string"
+                                    },
+                                    "year": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "title": "v1.0.1 Patch",
+                                "items": [
+                                    "Fixed swagger documentation",
+                                    "Improved error handling"
+                                ],
+                                "month": "March",
+                                "year": 2026
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Changelog created",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "changelog created"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "invalid request body"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "Authorization header required"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "month is required"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to create changelog"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/changelog/{id}": {
+            "put": {
+                "summary": "Update Changelog",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "month": {
+                                        "type": "string"
+                                    },
+                                    "year": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "title": "v1.0.1 Patch Updated",
+                                "items": [
+                                    "Fixed swagger documentation",
+                                    "Improved error handling"
+                                ],
+                                "month": "April",
+                                "year": 2026
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Changelog card updated",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "changelog card updated"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "invalid request body"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "Invalid or expired token"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "changelog not found"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "id is required"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to update changelog"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete Changelog",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Changelog card deleted",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true,
+                                    "message": "changelog card deleted"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "Invalid or expired token"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "changelog not found"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "id is required"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": false,
+                                    "message": "failed to delete changelog"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

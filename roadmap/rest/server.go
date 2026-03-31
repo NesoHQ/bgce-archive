@@ -5,6 +5,7 @@ import (
 
 	"roadmap/rest/handlers"
 	"roadmap/rest/middlewares"
+	"roadmap/rest/swagger"
 )
 
 func NewServer(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handler, error) {
@@ -47,6 +48,11 @@ func NewServer(mw *middlewares.Middlewares, h *handlers.Handlers) (http.Handler,
 	mux.Handle("POST /api/v1/changelog", mw.AuthenticateJWT(http.HandlerFunc(h.CreateChangeLog)))
 	mux.Handle("DELETE /api/v1/changelog/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.DeleteChangeLog)))
 	mux.Handle("PUT /api/v1/changelog/{id}", mw.AuthenticateJWT(http.HandlerFunc(h.UpdateChangeLog)))
+
+	// Setup swagger with its own middleware manager
+	swaggerManager := middlewares.NewManager()
+	swaggerManager.Use(middlewares.Recover, middlewares.Logger, middlewares.CORS)
+	swagger.SetupSwagger(mux, swaggerManager)
 
 	manager := middlewares.NewManager()
 	handler := manager.With(mux, middlewares.Recover, mw.RateLimiter, middlewares.CORS, middlewares.Logger)
