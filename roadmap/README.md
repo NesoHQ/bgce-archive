@@ -4,7 +4,7 @@
 
 The Roadmap service manages project roadmaps, including planned, in-progress, and completed cards, as well as changelogs. It follows Domain-Driven Design (DDD) principles and a hexagonal architecture (Ports and Adapters) for a clean, maintainable, and testable codebase.
 
-## Getting Starte d
+## Getting Started
 
 Follow these instructions to get the project up and running on your local machine.
 
