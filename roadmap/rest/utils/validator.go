@@ -39,7 +39,7 @@ func ValidateUpdateCompletedCard(title string, items []string) error {
 	return nil
 }
 
-func ValidateCreateChangeLog(title string, items []string, month string, year string) error {
+func ValidateCreateChangeLog(title string, items []string, month string, year int64) error {
 	if title == "" {
 		return errors.New("title is required")
 	}
@@ -49,7 +49,7 @@ func ValidateCreateChangeLog(title string, items []string, month string, year st
 	if month == "" {
 		return errors.New("month is required")
 	}
-	if year == "" {
+	if year == 0 {
 		return errors.New("year is required")
 	}
 	return nil

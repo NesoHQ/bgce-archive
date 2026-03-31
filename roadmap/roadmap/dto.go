@@ -59,7 +59,7 @@ type CreateChangeLogRequest struct {
 	Title string   `json:"title"`
 	Items []string `json:"items"`
 	Month string   `json:"month"`
-	Year  string   `json:"year"`
+	Year  int64    `json:"year"`
 }
 
 type GetChangeLogsResponse struct {
