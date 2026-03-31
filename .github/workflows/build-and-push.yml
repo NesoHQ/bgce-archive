@@ -37,6 +37,8 @@ jobs:
               - 'postal/**'
             community:
               - 'community/**'
+            roadmap:
+              - 'roadmap/**'
 
   type-check:
     needs: detect-changes
@@ -54,7 +56,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        service: [archive-admin, archive-client, cortex, postal, community]
+        service: [archive-admin, archive-client, cortex, postal, community, roadmap]
     uses: ./.github/workflows/docker-build.yml
     with:
       service: ${{ matrix.service }}
