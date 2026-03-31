@@ -4,6 +4,95 @@
 
 The Roadmap service manages project roadmaps, including planned, in-progress, and completed cards, as well as changelogs. It follows Domain-Driven Design (DDD) principles and a hexagonal architecture (Ports and Adapters) for a clean, maintainable, and testable codebase.
 
+## Getting Started
+
+Follow these instructions to get the project up and running on your local machine.
+
+### Prerequisites
+
+- **Go**: Version 1.25 or higher
+- **MongoDB**: A running MongoDB instance (local or remote)
+- **Make**: (Optional) For using the provided Makefile commands
+- **Docker**: (Optional) For containerized deployment
+
+### Configuration
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd roadmap
+   ```
+
+2. Create a `.env` file from the example:
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Edit `.env` and update the configuration values as needed:
+   - `JWT_SECRET`: Secret key for JWT validation
+   - `MONGO_DB_URI`: Connection string for your MongoDB
+   - `MONGO_DB_NAME`: Database name to use
+
+### Running the Project
+
+#### Locally (Development)
+
+1. Install dependencies:
+   ```bash
+   go mod download
+   ```
+
+2. Start the REST API server:
+   ```bash
+   go run main.go rest
+   ```
+
+The server will start on the port specified in your `.env` (default is `8080`).
+
+#### Using Docker
+
+1. Build the Docker image:
+   ```bash
+   make build
+   ```
+
+2. Run the container (it will use the environment variables from `.env`):
+   ```bash
+   make run
+   ```
+
+3. View logs:
+   ```bash
+   make logs
+   ```
+
+4. Stop the container:
+   ```bash
+   make stop
+   ```
+
+## API Documentation
+
+When running in `debug` mode (set `MODE=debug` in `.env`), you can access the Swagger UI for interactive API documentation at:
+
+```
+http://localhost:8080/swagger/
+```
+
+The Swagger JSON specification is served at:
+```
+http://localhost:8080/swagger/swagger.json
+```
+
+## Authentication
+
+Management operations (create, update, delete) require a valid JWT token. Provide the token in the `Authorization` header as a Bearer token:
+
+```
+Authorization: Bearer <your-jwt-token>
+```
+
+
 ## Architecture Layers
 
 ### 1. Domain Layer (`domain/`)
