@@ -54,12 +54,14 @@ func RunRESTServer() error {
 	// 6. Initialize repositories
 	notificationRepo := repo.NewNotificationRepository(db)
 	preferenceRepo := repo.NewPreferenceRepository(db)
+	userRepo := repo.NewUserRepository(db)
 	templateRepo := repo.NewTemplateRepository(db)
 
-	// 6. Initialize services
+	// 7. Initialize services
 	notificationService := notification.NewService(
 		notificationRepo,
 		preferenceRepo,
+		userRepo,
 		templateRepo,
 		emailProvider,
 		cacheClient,

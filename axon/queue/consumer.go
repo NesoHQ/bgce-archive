@@ -18,6 +18,7 @@ type Consumer struct {
 	conn      *amqp.Connection
 	channel   *amqp.Channel
 	service   notification.Service
+	userRepo  notification.UserRepository
 	queueName string
 }
 
@@ -26,7 +27,7 @@ type Event struct {
 	Payload map[string]interface{} `json:"payload"`
 }
 
-func NewConsumer(amqpURL, queueName string, service notification.Service) (*Consumer, error) {
+func NewConsumer(amqpURL, queueName string, service notification.Service, userRepo notification.UserRepository) (*Consumer, error) {
 	conn, err := amqp.Dial(amqpURL)
 	if err != nil {
 		return nil, err
@@ -42,6 +43,7 @@ func NewConsumer(amqpURL, queueName string, service notification.Service) (*Cons
 		conn:      conn,
 		channel:   channel,
 		service:   service,
+		userRepo:  userRepo,
 		queueName: queueName,
 	}, nil
 }
@@ -106,7 +108,9 @@ func (c *Consumer) handleMessage(ctx context.Context, msg amqp.Delivery) {
 	var event Event
 	if err := json.Unmarshal(msg.Body, &event); err != nil {
 		log.Printf("Failed to parse event: %v", err)
-		msg.Nack(false, false) // don't requeue invalid messages
+		// Send parse errors to DLQ for debugging
+		c.sendToDLQ(msg, Event{Type: "parse_error", Payload: map[string]interface{}{"raw_body": string(msg.Body)}}, 0, err)
+		msg.Ack(false)
 		return
 	}
 
@@ -145,7 +149,9 @@ func (c *Consumer) handleMessage(ctx context.Context, msg amqp.Delivery) {
 		err = c.handleCourseEnrolled(ctx, event.Payload)
 	default:
 		log.Printf("Unknown event type: %s", event.Type)
-		msg.Nack(false, false) // reject unknown events
+		// Send unknown events to DLQ for analysis
+		c.sendToDLQ(msg, event, 0, fmt.Errorf("unknown event type: %s", event.Type))
+		msg.Ack(false)
 		return
 	}
 
@@ -234,12 +240,31 @@ func (c *Consumer) handleUserRegistered(ctx context.Context, payload map[string]
 	userEmail := payload["email"].(string)
 	userName := payload["name"].(string)
 
+	// Validate user exists and email matches
+	user, err := c.userRepo.GetByID(ctx, userID)
+	if err != nil {
+		return fmt.Errorf("user not found: %d", userID)
+	}
+	if user.Email != userEmail {
+		return fmt.Errorf("email mismatch for user %d: expected %s, got %s", userID, user.Email, userEmail)
+	}
+
 	return c.service.SendWelcomeEmail(ctx, userID, userEmail, userName)
 }
 
 func (c *Consumer) handlePasswordReset(ctx context.Context, payload map[string]interface{}) error {
+	userID := uint(payload["user_id"].(float64))
 	userEmail := payload["email"].(string)
 	resetToken := payload["token"].(string)
+
+	// Validate user exists and email matches
+	user, err := c.userRepo.GetByID(ctx, userID)
+	if err != nil {
+		return fmt.Errorf("user not found: %d", userID)
+	}
+	if user.Email != userEmail {
+		return fmt.Errorf("email mismatch for user %d: expected %s, got %s", userID, user.Email, userEmail)
+	}
 
 	return c.service.SendPasswordReset(ctx, userEmail, resetToken)
 }
@@ -248,6 +273,15 @@ func (c *Consumer) handleEmailVerification(ctx context.Context, payload map[stri
 	userID := uint(payload["user_id"].(float64))
 	userEmail := payload["email"].(string)
 	verifyToken := payload["token"].(string)
+
+	// Validate user exists and email matches
+	user, err := c.userRepo.GetByID(ctx, userID)
+	if err != nil {
+		return fmt.Errorf("user not found: %d", userID)
+	}
+	if user.Email != userEmail {
+		return fmt.Errorf("email mismatch for user %d: expected %s, got %s", userID, user.Email, userEmail)
+	}
 
 	return c.service.SendEmailVerification(ctx, userID, userEmail, verifyToken)
 }
@@ -260,6 +294,15 @@ func (c *Consumer) handleCommentReply(ctx context.Context, payload map[string]in
 	comment := ""
 	if commentVal, ok := payload["comment"]; ok {
 		comment = commentVal.(string)
+	}
+
+	// Validate user exists and email matches
+	user, err := c.userRepo.GetByID(ctx, postAuthorID)
+	if err != nil {
+		return fmt.Errorf("user not found: %d", postAuthorID)
+	}
+	if user.Email != postAuthorEmail {
+		return fmt.Errorf("email mismatch for user %d: expected %s, got %s", postAuthorID, user.Email, postAuthorEmail)
 	}
 
 	return c.service.SendCommentReplyNotification(ctx, postAuthorID, postAuthorEmail, commenterName, postTitle, comment)
@@ -282,6 +325,17 @@ func (c *Consumer) handlePostPublished(ctx context.Context, payload map[string]i
 		followerID := uint(follower["id"].(float64))
 		followerEmail := follower["email"].(string)
 
+		// Validate follower exists and email matches
+		user, err := c.userRepo.GetByID(ctx, followerID)
+		if err != nil {
+			log.Printf("Follower not found: %d, skipping", followerID)
+			continue
+		}
+		if user.Email != followerEmail {
+			log.Printf("Email mismatch for follower %d: expected %s, got %s, skipping", followerID, user.Email, followerEmail)
+			continue
+		}
+
 		if err := c.service.SendPostPublishedNotification(ctx, followerID, followerEmail, authorName, postTitle, postSlug); err != nil {
 			log.Printf("Failed to notify follower %d: %v", followerID, err)
 			// Continue with other followers
@@ -296,6 +350,15 @@ func (c *Consumer) handleCourseEnrolled(ctx context.Context, payload map[string]
 	userID := uint(payload["user_id"].(float64))
 	userEmail := payload["email"].(string)
 	courseName := payload["course_name"].(string)
+
+	// Validate user exists and email matches
+	user, err := c.userRepo.GetByID(ctx, userID)
+	if err != nil {
+		return fmt.Errorf("user not found: %d", userID)
+	}
+	if user.Email != userEmail {
+		return fmt.Errorf("email mismatch for user %d: expected %s, got %s", userID, user.Email, userEmail)
+	}
 
 	return c.service.SendCourseEnrolledNotification(ctx, userID, userEmail, courseName)
 }

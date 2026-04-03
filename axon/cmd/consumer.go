@@ -47,19 +47,21 @@ func RunConsumer() error {
 	// 5. Initialize repositories
 	notificationRepo := repo.NewNotificationRepository(db)
 	preferenceRepo := repo.NewPreferenceRepository(db)
+	userRepo := repo.NewUserRepository(db)
 	templateRepo := repo.NewTemplateRepository(db)
 
 	// 6. Initialize notification service
 	notificationService := notification.NewService(
 		notificationRepo,
 		preferenceRepo,
+		userRepo,
 		templateRepo,
 		emailProvider,
 		cacheClient,
 	)
 
 	// 7. Initialize RabbitMQ consumer
-	consumer, err := queue.NewConsumer(cfg.RabbitMQURL, cfg.RabbitMQQueuePrefix+".notifications", notificationService)
+	consumer, err := queue.NewConsumer(cfg.RabbitMQURL, cfg.RabbitMQQueuePrefix+".notifications", notificationService, userRepo)
 	if err != nil {
 		log.Fatalf("Failed to create consumer: %v", err)
 	}

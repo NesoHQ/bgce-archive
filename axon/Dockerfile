@@ -10,11 +10,8 @@ RUN go mod download
 # Copy source code
 COPY . .
 
-# Copy .env file if it exists
-COPY .env* ./
-
 # Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
 # Run stage
 FROM alpine:3.20
@@ -31,7 +28,7 @@ COPY --from=builder /app/main .
 COPY --from=builder /app/migrations ./migrations
 
 # Expose port
-EXPOSE 8088
+EXPOSE 3001
 
-# Command to run the executable
-CMD ["/app/main", "rest"]
+# Run the application
+CMD ["./main", "rest"]

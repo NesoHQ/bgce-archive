@@ -37,7 +37,6 @@ func Execute() {
 func init() {
 	rootCmd.AddCommand(restCmd)
 	rootCmd.AddCommand(consumerCmd)
-	rootCmd.AddCommand(testEmailCmd)
 }
 
 var restCmd = &cobra.Command{
@@ -57,17 +56,6 @@ var consumerCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := runConsumer(); err != nil {
 			fmt.Printf("Consumer error: %v\n", err)
-			os.Exit(1)
-		}
-	},
-}
-
-var testEmailCmd = &cobra.Command{
-	Use:   "test-email",
-	Short: "Send a test email using the Axon email provider",
-	Run: func(cmd *cobra.Command, args []string) {
-		if err := runTestEmail(); err != nil {
-			fmt.Printf("Email error: %v\n", err)
 			os.Exit(1)
 		}
 	},
@@ -103,11 +91,13 @@ func runRESTServer() error {
 
 	notificationRepo := repo.NewNotificationRepository(db)
 	preferenceRepo := repo.NewPreferenceRepository(db)
+	userRepo := repo.NewUserRepository(db)
 	templateRepo := repo.NewTemplateRepository(db)
 
 	notificationService := notification.NewService(
 		notificationRepo,
 		preferenceRepo,
+		userRepo,
 		templateRepo,
 		emailProvider,
 		cacheClient,
@@ -119,7 +109,7 @@ func runRESTServer() error {
 	// Start consumer in background goroutine
 	go func() {
 		log.Println("Starting consumer in background...")
-		consumer, err := queue.NewConsumer(cfg.RabbitMQURL, cfg.RabbitMQQueueName, notificationService)
+		consumer, err := queue.NewConsumer(cfg.RabbitMQURL, cfg.RabbitMQQueueName, notificationService, userRepo)
 		if err != nil {
 			log.Printf("Failed to create consumer: %v", err)
 			return
@@ -167,17 +157,19 @@ func runConsumer() error {
 
 	notificationRepo := repo.NewNotificationRepository(db)
 	preferenceRepo := repo.NewPreferenceRepository(db)
+	userRepo := repo.NewUserRepository(db)
 	templateRepo := repo.NewTemplateRepository(db)
 
 	notificationService := notification.NewService(
 		notificationRepo,
 		preferenceRepo,
+		userRepo,
 		templateRepo,
 		emailProvider,
 		cacheClient,
 	)
 
-	consumer, err := queue.NewConsumer(cfg.RabbitMQURL, cfg.RabbitMQQueueName, notificationService)
+	consumer, err := queue.NewConsumer(cfg.RabbitMQURL, cfg.RabbitMQQueueName, notificationService, userRepo)
 	if err != nil {
 		log.Fatalf("Failed to create consumer: %v", err)
 	}
@@ -200,30 +192,5 @@ func runConsumer() error {
 	cancel()
 	time.Sleep(2 * time.Second)
 
-	return nil
-}
-
-func runTestEmail() error {
-	_ = config.LoadConfig()
-
-	provider, err := email.NewProvider()
-	if err != nil {
-		return fmt.Errorf("failed to create email provider: %w", err)
-	}
-
-	log.Printf("Using email provider: %s", provider.GetName())
-
-	err = provider.Send(
-		context.Background(),
-		"armanruhit09@gmail.com",
-		"Axon Test Email",
-		"<strong>This is a test email from Axon notification service</strong>",
-		"This is a test email from Axon notification service",
-	)
-	if err != nil {
-		return err
-	}
-
-	log.Println("Test email sent successfully!")
 	return nil
 }

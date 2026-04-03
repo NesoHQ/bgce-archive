@@ -35,14 +35,18 @@ services:
       ENABLE_REDIS_TLS_MODE: "false"
 
       # Postgres DB - use container name for network access
-      AXON_DB_DSN: "postgresql://postgres:root@postgres:5432/axon_db?sslmode=disable"
+      AXON_DB_DSN: "postgresql://postgres:root@postgres:5432/cortex_db?sslmode=disable"
       AXON_DB_DRIVER: "postgres"
 
       # Email Configuration
-      EMAIL_PROVIDER: "sendgrid"
-      SENDGRID_API_KEY: "your-api-key-here"
-      EMAIL_FROM: "noreply@bgcearchive.com"
-      EMAIL_FROM_NAME: "BGCE Archive"
+      EMAIL_PROVIDER: "${EMAIL_PROVIDER}"
+      SMTP_HOST: "${SMTP_HOST}"
+      SMTP_PORT: "${SMTP_PORT}"
+      SMTP_USERNAME: "${SMTP_USERNAME}"
+      SMTP_PASSWORD: "${SMTP_PASSWORD}"
+      SMTP_USE_TLS: "${SMTP_USE_TLS}"
+      EMAIL_FROM: "${EMAIL_FROM}"
+      EMAIL_FROM_NAME: "${EMAIL_FROM_NAME}"
 
     depends_on:
       postgres:
@@ -55,14 +59,14 @@ services:
       - bgce-network
 
   postgres:
-    image: postgres:15-alpine
+    image: pgvector/pgvector:pg17
     container_name: bgce-postgres
     environment:
-      POSTGRES_DB: axon_db
+      POSTGRES_DB: cortex_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
     ports:
-      - "0.0.0.0:5432:5432"
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:

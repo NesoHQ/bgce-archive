@@ -16,15 +16,17 @@ import (
 type service struct {
 	repo         Repository
 	prefRepo     PreferenceRepository
+	userRepo     UserRepository
 	templateRepo template.Repository
 	email        email.Provider
 	cache        cache.Cache
 }
 
-func NewService(repo Repository, prefRepo PreferenceRepository, templateRepo template.Repository, email email.Provider, cache cache.Cache) Service {
+func NewService(repo Repository, prefRepo PreferenceRepository, userRepo UserRepository, templateRepo template.Repository, email email.Provider, cache cache.Cache) Service {
 	return &service{
 		repo:         repo,
 		prefRepo:     prefRepo,
+		userRepo:     userRepo,
 		templateRepo: templateRepo,
 		email:        email,
 		cache:        cache,
@@ -226,6 +228,15 @@ func (s *service) SendCourseEnrolledNotification(ctx context.Context, userID uin
 
 // Send sends a generic notification (NEW)
 func (s *service) Send(ctx context.Context, req *domain.SendRequest) error {
+	// Validate user exists
+	exists, err := s.userRepo.Exists(ctx, req.UserID)
+	if err != nil {
+		return fmt.Errorf("failed to validate user: %w", err)
+	}
+	if !exists {
+		return fmt.Errorf("user not found: %d", req.UserID)
+	}
+
 	tmpl, err := s.templateRepo.GetByType(ctx, domain.TemplateType(req.Type))
 	if err != nil {
 		// If no template, send direct email

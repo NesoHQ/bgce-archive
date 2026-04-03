@@ -1,217 +1,141 @@
 # @d:\Codes\bgce-archive\axon\Makefile
-GREEN  := $(shell tput -Txterm setaf 2)
-YELLOW := $(shell tput -Txterm setaf 3)
-WHITE  := $(shell tput -Txterm setaf 7)
-CYAN   := $(shell tput -Txterm setaf 6)
-RESET  := $(shell tput -Txterm sgr0)
-
-# Project variables
-TARGET := axon
-MAIN := main.go
-SERVER_CMD := ./$(TARGET) rest
-
-.DEFAULT_GOAL := help
 
 ## ------------------------------
 ## 🚀 Build & Run
 ## ------------------------------
 
-all: help ## Show this help (default)
+.PHONY: help build run dev test clean docker-build docker-up docker-down install-air
 
-build: install-deps ## Build the Go binary
-	@echo "$(GREEN)Building $(TARGET)...$(RESET)"
-	go build -o $(TARGET) $(MAIN)
+help: ## Show this help message
+	@echo 'Usage: make [target]'
+	@echo ''
+	@echo 'Available targets:'
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-start: build run-server ## Build and start server
+build: ## Build the application
+	@echo "Building axon..."
+	@go build -o axon main.go
+	@echo "✅ Build complete"
 
-run: run-server ## Run the server (alias)
+run: ## Run the application
+	@echo "Running axon..."
+	@go run main.go rest
 
-run-server: ## Run the server
-	@echo "$(GREEN)Starting server...$(RESET)"
-	$(SERVER_CMD)
-
-dev: prepare ## Start server in development mode
-	@echo "$(GREEN)Starting development server...$(RESET)"
-	air serve-rest
-
-test: ## Run all tests
-	@echo "$(GREEN)Running tests...$(RESET)"
-	go test -v ./...
-
-clean: ## Clean build artifacts
-	@echo "$(YELLOW)Cleaning build artifacts...$(RESET)"
-	rm -f $(TARGET)
-
-## ------------------------------
-## 🐳 Docker
-## ------------------------------
-
-docker-build: ## Build Docker image
-	@echo "$(GREEN)Building Docker image...$(RESET)"
-	docker build -t axon:local .
-
-docker-up: ## Start all services with docker-compose
-	@echo "$(GREEN)Starting Docker services...$(RESET)"
-	docker compose build --no-cache
-	docker compose up -d
-
-docker-down: ## Stop all services
-	@echo "$(YELLOW)Stopping Docker services...$(RESET)"
-	docker compose down
-
-docker-logs: ## Show logs from all services
-	docker compose logs -f
-
-docker-restart: docker-down docker-up ## Restart all services
-
-docker-clean: ## Remove all containers, volumes, and images
-	@echo "$(YELLOW)Cleaning Docker resources...$(RESET)"
-	docker compose down -v
-	docker rmi axon:local 2>/dev/null || true
-
-## ------------------------------
-## 📦 Dependencies
-## ------------------------------
-
-install-deps: ## Install Go dependencies
-	@echo "$(GREEN)Installing dependencies...$(RESET)"
-	go mod download
-
-tidy: ## Clean up go.mod
-	@echo "$(GREEN)Tidying go.mod...$(RESET)"
-	go mod tidy
-
-install-proto-deps: ## Install protobuf dependencies
-	@echo "$(GREEN)Installing protobuf dependencies...$(RESET)"
-	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
-
-install-dev-deps: ## Install dev tools (air)
-	@echo "$(GREEN)Installing development tools...$(RESET)"
-	go install github.com/air-verse/air@latest
-
-install-mockgen: ## Install mockgen
-	@echo "$(GREEN)Installing mockgen...$(RESET)"
-	go install go.uber.org/mock/mockgen@latest
-
-prepare: install-dev-deps install-deps tidy ## Prepare dev environment
-
-## ------------------------------
-## 🗄️ Database
-## ------------------------------
-
-db-create: ## Create database if it doesn't exist (auto-handled by app)
-	@echo "$(GREEN)Database will be created automatically on first run$(RESET)"
-
-db-migrate: ## Run database migrations
-	@echo "$(GREEN)Running database migrations...$(RESET)"
-	$(SERVER_CMD)
-
-db-reset: ## Drop notification tables (WARNING: destroys notification data)
-	@echo "$(YELLOW)⚠️  WARNING: This will destroy notification tables!$(RESET)"
-	@read -p "Are you sure? [y/N] " -n 1 -r; \
-	echo; \
-	if [[ $$REPLY =~ ^[Yy]$$ ]]; then \
-		echo "$(YELLOW)Dropping notification tables...$(RESET)"; \
-		PGPASSWORD=root psql -h localhost -p 5432 -U postgres -d axon_db -c "DROP TABLE IF EXISTS notifications CASCADE; DROP TABLE IF EXISTS user_notification_preferences CASCADE; DROP TABLE IF EXISTS notification_templates CASCADE;"; \
-		echo "$(GREEN)Tables will be recreated on next migration$(RESET)"; \
+dev: ## Run with hot reload (requires air - run 'make install-air' first)
+	@if command -v air > /dev/null; then \
+		echo "Starting development server with hot reload..."; \
+		air; \
+	else \
+		echo "❌ Air is not installed. Install it with: make install-air"; \
+		echo "Or run without hot reload: make run"; \
+		exit 1; \
 	fi
 
-seed: build ## Seed database with initial data
-	@echo "$(GREEN)Seeding database...$(RESET)"
-	./$(TARGET) seed
+install-air: ## Install air for hot reload
+	@echo "Installing air..."
+	@go install github.com/air-verse/air@latest
+	@echo "✅ Air installed successfully"
+	@echo "Make sure $(go env GOPATH)/bin is in your PATH"
 
-seed-docker: ## Seed database in Docker container
-	@echo "$(GREEN)Seeding database in Docker...$(RESET)"
-	docker compose exec bgce_axon /app/main seed
+test: ## Run tests
+	@echo "Running tests..."
+	@go test -v ./...
 
-## ------------------------------
-## 📖 Help
-## ------------------------------
+clean: ## Clean build artifacts
+	@echo "Cleaning..."
+	@rm -f axon
+	@rm -rf tmp/
+	@echo "✅ Clean complete"
 
-help: ## Show this help
-	@echo ''
-	@echo 'Usage:'
-	@echo '  $(YELLOW)make$(RESET) $(GREEN)<target>$(RESET)'
-	@echo ''
-	@echo 'Targets:'
-	@grep -E '^[a-zA-Z0-9_-]+:.*?## ' $(MAKEFILE_LIST) \
-		| sort \
-		| awk 'BEGIN {FS = ":.*?## "}; {printf "  $(YELLOW)%-20s$(GREEN)%s$(RESET)\n", $$1, $$2}'
-	@echo ''
-	@echo "Default target: $(CYAN)help$(RESET)"
+tidy: ## Tidy go modules
+	@echo "Tidying modules..."
+	@go mod tidy
+	@echo "✅ Tidy complete"
 
-.PHONY: all build start run-server dev test clean docker-build docker-up docker-down docker-logs docker-restart docker-clean install-deps tidy install-proto-deps install-dev-deps install-mockgen prepare db-migrate seed seed-docker help
+docker-build: ## Build Docker image
+	@echo "Building Docker image..."
+	@docker build -t axon:latest .
+	@echo "✅ Docker image built"
+
+docker-up: ## Start services with docker-compose
+	@echo "Starting services..."
+	@docker-compose up -d
+	@echo "✅ Services started"
+
+docker-down: ## Stop services
+	@echo "Stopping services..."
+	@docker-compose down
+	@echo "✅ Services stopped"
+
+docker-logs: ## View docker logs
+	@docker-compose logs -f
 
 ## ------------------------------
 ## 🔄 Database Migrations (golang-migrate)
 ## ------------------------------
 
 migrate-install: ## Install golang-migrate CLI
-	@echo "$(GREEN)Installing golang-migrate...$(RESET)"
-	go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+	@echo "Installing golang-migrate..."
+	@go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+	@echo "✅ golang-migrate installed"
 
 migrate-up: ## Apply all pending migrations
-	@echo "$(GREEN)Running migrations...$(RESET)"
+	@echo "Running migrations..."
 	@if [ -z "$(DATABASE_URL)" ]; then \
-		echo "$(YELLOW)DATABASE_URL not set, using default...$(RESET)"; \
-		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5432/axon_db?sslmode=disable" up; \
+		echo "DATABASE_URL not set, using default..."; \
+		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5432/cortex_db?sslmode=disable" up; \
 	else \
 		migrate -path ./migrations -database "$(DATABASE_URL)" up; \
 	fi
+	@echo "✅ Migrations applied"
 
 migrate-down: ## Rollback last migration
-	@echo "$(YELLOW)Rolling back last migration...$(RESET)"
+	@echo "Rolling back last migration..."
 	@if [ -z "$(DATABASE_URL)" ]; then \
-		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5432/axon_db?sslmode=disable" down 1; \
+		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5432/cortex_db?sslmode=disable" down 1; \
 	else \
 		migrate -path ./migrations -database "$(DATABASE_URL)" down 1; \
 	fi
+	@echo "✅ Migration rolled back"
 
-migrate-create: ## Create new migration (usage: make migrate-create NAME=add_user_avatar)
+migrate-create: ## Create new migration (usage: make migrate-create NAME=add_metadata)
 	@if [ -z "$(NAME)" ]; then \
-		echo "$(YELLOW)Usage: make migrate-create NAME=migration_name$(RESET)"; \
+		echo "Usage: make migrate-create NAME=migration_name"; \
 		exit 1; \
 	fi
-	@echo "$(GREEN)Creating migration: $(NAME)$(RESET)"
-	migrate create -ext sql -dir ./migrations -seq $(NAME)
+	@echo "Creating migration: $(NAME)"
+	@migrate create -ext sql -dir ./migrations -seq $(NAME)
+	@echo "✅ Migration files created"
 
 migrate-force: ## Force migration version (usage: make migrate-force VERSION=1)
 	@if [ -z "$(VERSION)" ]; then \
-		echo "$(YELLOW)Usage: make migrate-force VERSION=version_number$(RESET)"; \
+		echo "Usage: make migrate-force VERSION=version_number"; \
 		exit 1; \
 	fi
-	@echo "$(YELLOW)Forcing migration version to $(VERSION)...$(RESET)"
+	@echo "Forcing migration version to $(VERSION)..."
 	@if [ -z "$(DATABASE_URL)" ]; then \
-		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5432/axon_db?sslmode=disable" force $(VERSION); \
+		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5432/cortex_db?sslmode=disable" force $(VERSION); \
 	else \
 		migrate -path ./migrations -database "$(DATABASE_URL)" force $(VERSION); \
 	fi
+	@echo "✅ Migration version forced"
 
 migrate-version: ## Show current migration version
 	@if [ -z "$(DATABASE_URL)" ]; then \
-		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5432/axon_db?sslmode=disable" version; \
+		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5432/cortex_db?sslmode=disable" version; \
 	else \
 		migrate -path ./migrations -database "$(DATABASE_URL)" version; \
 	fi
 
 migrate-goto: ## Migrate to specific version (usage: make migrate-goto VERSION=2)
 	@if [ -z "$(VERSION)" ]; then \
-		echo "$(YELLOW)Usage: make migrate-goto VERSION=version_number$(RESET)"; \
+		echo "Usage: make migrate-goto VERSION=version_number"; \
 		exit 1; \
 	fi
-	@echo "$(GREEN)Migrating to version $(VERSION)...$(RESET)"
+	@echo "Migrating to version $(VERSION)..."
 	@if [ -z "$(DATABASE_URL)" ]; then \
-		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5432/axon_db?sslmode=disable" goto $(VERSION); \
+		migrate -path ./migrations -database "postgresql://postgres:root@localhost:5432/cortex_db?sslmode=disable" goto $(VERSION); \
 	else \
 		migrate -path ./migrations -database "$(DATABASE_URL)" goto $(VERSION); \
 	fi
-
-
-## ------------------------------
-## 📖 Swagger
-## ------------------------------
-
-swagger-serve: ## Serve swagger UI locally
-	@echo "$(GREEN)Opening Swagger UI...$(RESET)"
-	@open http://localhost:8088/swagger/ || xdg-open http://localhost:8088/swagger/
+	@echo "✅ Migrated to version $(VERSION)"

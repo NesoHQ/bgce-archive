@@ -25,6 +25,7 @@ Sent when user requests password reset.
 {
   "type": "password.reset.requested",
   "payload": {
+    "user_id": 123,
     "email": "your-mail@example.com",
     "token": "a1b2c3d4e5f6g7h8i9j0"
   }

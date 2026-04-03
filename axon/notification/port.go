@@ -40,6 +40,21 @@ type PreferenceRepository interface {
 	Update(ctx context.Context, preference *domain.UserPreference) error
 }
 
+// UserRepository defines user lookup operations (reads from cortex users table)
+type UserRepository interface {
+	// Exists checks if a user exists
+	Exists(ctx context.Context, userID uint) (bool, error)
+
+	// GetByID fetches user by ID for validation
+	GetByID(ctx context.Context, userID uint) (*User, error)
+}
+
+// User represents a minimal user record for validation
+type User struct {
+	ID    uint
+	Email string
+}
+
 // Service defines business operations
 type Service interface {
 	// SendWelcomeEmail sends welcome email to new users

@@ -2,31 +2,29 @@
 
 This document describes the implementation of database version control for the **Axon Notification Service** using:
 
-- golang-migrate
+* golang-migrate
 
 ---
 
 ## Overview
 
-Axon uses **versioned SQL migrations** for managing notification-related tables.
+Axon uses **versioned SQL migrations** instead of GORM AutoMigrate.
 
----
+### What Changed
 
-## What Changed
-
-### Before (GORM Auto Migration)
+### Before (GORM AutoMigrate)
 
 ```go
-// Auto-migration - NO ROLLBACK SUPPORT
-db.AutoMigrate(&domain.Notification{}, &domain.Template{}, &domain.UserPreference{})
+// Auto-migration - NO VERSION CONTROL
+err := db.AutoMigrate(&domain.Notification{}, &domain.Template{}, &domain.UserPreference{})
 ```
 
-### Problems
+Problems:
 
-- ❌ No migration version control
-- ❌ No rollback capability
-- ❌ No migration history
-- ❌ Schema drift between environments
+* ❌ No version tracking
+* ❌ No rollback support
+* ❌ Unsafe in production
+* ❌ No migration history
 
 ---
 
@@ -34,15 +32,15 @@ db.AutoMigrate(&domain.Notification{}, &domain.Template{}, &domain.UserPreferenc
 
 Axon now uses:
 
-- ✅ Versioned `.up.sql` / `.down.sql`
-- ✅ Rollback capability
-- ✅ Migration history tracking
-- ✅ Dirty state recovery
-- ✅ Production-safe schema evolution
+* ✅ Versioned `.up.sql` / `.down.sql`
+* ✅ Rollback capability
+* ✅ Migration history tracking
+* ✅ Dirty state recovery
+* ✅ Production-safe approach
 
 ---
 
-# Directory Structure (Axon)
+# Directory Structure (Axon Only)
 
 ```
 axon/
@@ -55,10 +53,7 @@ axon/
 │   ├── 000003_create_user_preferences_table.up.sql
 │   └── 000003_create_user_preferences_table.down.sql
 ├── repo/
-│   ├── migrate.go
-│   ├── notification_repository.go
-│   ├── template_repository.go
-│   └── preference_repository.go
+│   └── migrate.go
 └── Makefile
 ```
 
@@ -74,9 +69,9 @@ go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@lat
 
 Dependencies already added:
 
-- `github.com/golang-migrate/migrate/v4`
-- `github.com/golang-migrate/migrate/v4/database/postgres`
-- `github.com/golang-migrate/migrate/v4/source/file`
+* `github.com/golang-migrate/migrate/v4`
+* `github.com/golang-migrate/migrate/v4/database/postgres`
+* `github.com/golang-migrate/migrate/v4/source/file`
 
 ---
 
@@ -86,7 +81,6 @@ Check your `.env`:
 
 ```env
 AXON_DB_DSN=postgresql://postgres:postgres@localhost:5432/axon_db?sslmode=disable
-AXON_DB_DRIVER=postgres
 ```
 
 ---
@@ -105,22 +99,7 @@ make migrate-up
 make migrate-down
 
 # Create new migration
-make migrate-create NAME=migration_name
-
-# Axon Migration Flow:
-# 1. Create notification templates table
-make migrate-create NAME=create_notification_templates
-
-# 2. Create user notification preferences table
-make migrate-create NAME=create_user_notification_preferences
-
-# 3. Create notifications table
-make migrate-create NAME=create_notifications
-
-# After creating migrations:
-# - Edit .up.sql files with table definitions
-# - Edit .down.sql files with rollback statements
-# - Run 'make migrate-up' to apply all migrations
+make migrate-create NAME=add_notification_metadata
 
 # Check current version
 make migrate-version
@@ -142,7 +121,7 @@ Migration state is tracked in:
 SELECT * FROM schema_migrations;
 ```
 
-Example:
+Example output:
 
 ```
  version | dirty
@@ -195,62 +174,28 @@ ALTER TABLE notifications DROP COLUMN IF EXISTS metadata;
 
 ### 1️⃣ notifications
 
-Stores all notification records
-
-| Column             | Type         | Description                      |
-| ------------------ | ------------ | -------------------------------- |
-| id                 | BIGSERIAL    | Primary key                      |
-| user_id            | BIGINT       | Recipient user ID                |
-| type               | VARCHAR(50)  | welcome, password_reset, etc.    |
-| subject            | VARCHAR(255) | Email subject                    |
-| body               | TEXT         | Email body                       |
-| recipient          | VARCHAR(255) | Email address                    |
-| status             | VARCHAR(50)  | pending, sent, failed, delivered |
-| provider_ref       | VARCHAR(255) | SendGrid message ID              |
-| sent_at            | TIMESTAMP    | When sent                        |
-| delivered_at       | TIMESTAMP    | When delivered                   |
-| included_in_digest | BOOLEAN      | Part of weekly digest            |
-| created_at         | TIMESTAMP    | Record creation                  |
-| updated_at         | TIMESTAMP    | Last update                      |
+* user_id (recipient)
+* type (welcome, password_reset, etc.)
+* status (pending, sent, failed, delivered)
+* provider_ref (email provider message ID)
 
 ### 2️⃣ templates
 
-Email templates for different notification types
-
-| Column      | Type         | Description                   |
-| ----------- | ------------ | ----------------------------- |
-| id          | BIGSERIAL    | Primary key                   |
-| name        | VARCHAR(100) | Template name                 |
-| type        | VARCHAR(50)  | welcome, password_reset, etc. |
-| subject     | VARCHAR(255) | Subject with {{.Variable}}    |
-| body_html   | TEXT         | HTML body                     |
-| body_text   | TEXT         | Plain text body               |
-| sendgrid_id | VARCHAR(255) | SendGrid dynamic template ID  |
-| is_active   | BOOLEAN      | Active status                 |
-| created_at  | TIMESTAMP    | Record creation               |
-| updated_at  | TIMESTAMP    | Last update                   |
+* Email templates by type
+* Subject with {{.Variable}} support
+* HTML and text body variants
 
 ### 3️⃣ user_preferences
 
-User notification preferences
-
-| Column          | Type      | Description                 |
-| --------------- | --------- | --------------------------- |
-| id              | BIGSERIAL | Primary key                 |
-| user_id         | BIGINT    | User ID (unique)            |
-| email_enabled   | BOOLEAN   | Email notifications on/off  |
-| digest_enabled  | BOOLEAN   | Weekly digest on/off        |
-| digest_weekly   | BOOLEAN   | Weekly digest preference    |
-| comment_replies | BOOLEAN   | Comment reply notifications |
-| post_updates    | BOOLEAN   | Post update notifications   |
-| created_at      | TIMESTAMP | Record creation             |
-| updated_at      | TIMESTAMP | Last update                 |
+* Per-user notification settings
+* Email/digest toggles
+* Comment reply and post update preferences
 
 ---
 
 # Default Templates
 
-The migration includes seed data for default templates:
+Migration includes seed data for default templates:
 
 | Type           | Name               | Purpose               |
 | -------------- | ------------------ | --------------------- |
@@ -276,7 +221,7 @@ make migrate-goto VERSION=1
 1. Test rollback in staging
 2. Backup database
 3. Use specific version targeting
-4. Monitor application logs
+4. Monitor logs
 5. Verify data integrity
 
 ---
@@ -325,6 +270,7 @@ Every `.up.sql` must have a `.down.sql`.
 ### 2️⃣ Make Migrations Idempotent
 
 ```sql
+-- Good
 CREATE TABLE IF NOT EXISTS notifications (...);
 CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
 ALTER TABLE notifications ADD COLUMN IF NOT EXISTS metadata JSONB DEFAULT '{}';
@@ -365,3 +311,14 @@ ON notifications(status);
   env:
     DATABASE_URL: ${{ secrets.AXON_DATABASE_URL }}
 ```
+
+---
+
+# Next Steps
+
+1. ✅ Axon migrations implemented
+2. ⏳ Add foreign key constraints to Cortex users table
+3. ⏳ Add automated migration testing in CI/CD
+4. ⏳ Create migration templates for new notification types
+
+---
