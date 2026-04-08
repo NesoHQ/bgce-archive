@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import {
   CheckCircle2,
   Circle,
@@ -10,285 +7,15 @@ import {
   Calendar,
   Zap,
 } from "lucide-react";
+import { fetchAllRoadmapData } from "./actions";
 
-// const roadmapItems = {
-//   completed: [
-//     {
-//       id: 1,
-//       title: "Platform Launch",
-//       date: "Q4 2023",
-//       features: [
-//         "User authentication",
-//         "Course catalog",
-//         "Community features",
-//         "Content management",
-//       ],
-//     },
-//     {
-//       id: 2,
-//       title: "Enhanced Learning",
-//       date: "Q1 2024",
-//       features: [
-//         "Code playgrounds",
-//         "Progress tracking",
-//         "Video optimization",
-//         "Mobile responsive",
-//       ],
-//     },
-//   ],
-//   inProgress: [
-//     {
-//       id: 3,
-//       title: "Community Tools",
-//       date: "Q2 2024",
-//       progress: 65,
-//       features: [
-//         "Discussion forums",
-//         "Project showcase",
-//         "Code review",
-//         "Live sessions",
-//       ],
-//     },
-//     {
-//       id: 4,
-//       title: "AI Features",
-//       date: "Q2-Q3 2024",
-//       progress: 40,
-//       features: [
-//         "AI suggestions",
-//         "Personalized paths",
-//         "Mock interviews",
-//         "Collaboration tools",
-//       ],
-//     },
-//   ],
-//   planned: [
-//     {
-//       id: 5,
-//       title: "Cloud Labs",
-//       date: "Q3 2024",
-//       features: [
-//         "Cloud-based IDE",
-//         "Pre-configured envs",
-//         "K8s playground",
-//         "Cloud sandbox",
-//       ],
-//     },
-//     {
-//       id: 6,
-//       title: "Career Tools",
-//       date: "Q4 2024",
-//       features: ["Job board", "Resume builder", "Interview prep", "Mentorship"],
-//     },
-//     {
-//       id: 7,
-//       title: "Enterprise",
-//       date: "Q1 2025",
-//       features: [
-//         "Team dashboards",
-//         "Custom paths",
-//         "SSO auth",
-//         "Bulk licensing",
-//       ],
-//     },
-//     {
-//       id: 8,
-//       title: "Cloud Labs",
-//       date: "Q3 2024",
-//       features: [
-//         "Cloud-based IDE",
-//         "Pre-configured envs",
-//         "K8s playground",
-//         "Cloud sandbox",
-//       ],
-//     },
-//     // {
-//     //   id: 9,
-//     //   title: "Career Tools",
-//     //   date: "Q4 2024",
-//     //   features: ["Job board", "Resume builder", "Interview prep", "Mentorship"],
-//     // },
-//     // {
-//     //   id: 10,
-//     //   title: "Enterprise",
-//     //   date: "Q1 2025",
-//     //   features: [
-//     //     "Team dashboards",
-//     //     "Custom paths",
-//     //     "SSO auth",
-//     //     "Bulk licensing",
-//     //   ],
-//     // },
-//   ],
-//   changelog: [
-//     {
-//       id: 1,
-//       version: "v2.1.0",
-//       date: "Feb 20",
-//       type: "feature",
-//       changes: [
-//         "Dark mode support",
-//         "Enhanced search",
-//         "Mobile nav fixes",
-//         "Performance boost",
-//       ],
-//     },
-//     {
-//       id: 2,
-//       version: "v2.0.0",
-//       date: "Jan 15",
-//       type: "major",
-//       changes: [
-//         "UI redesign",
-//         "New course player",
-//         "Enhanced profiles",
-//         "Bug fixes",
-//       ],
-//     },
-//     {
-//       id: 3,
-//       version: "v1.5.0",
-//       date: "Dec 10",
-//       type: "feature",
-//       changes: [
-//         "Progress tracking",
-//         "Certificate system",
-//         "Performance",
-//         "Security updates",
-//       ],
-//     },
-//   ],
-// };
-
-const URLS = `https://roadmap.nesohq.org/api/v1/`;
-
-interface RoadmapItem {
-  id: string;
-  title: string;
-  date: string;
-  progress?: number;
-  features: string[];
-}
-
-interface ChangelogItem {
-  id: string;
-  version: string;
-  date: string;
-  type: "major" | "feature";
-  changes: string[];
-}
-
-const transformRoadmapItems = (payload: any): RoadmapItem[] => {
-  if (!payload?.data || !Array.isArray(payload.data)) return [];
-
-  return payload.data.map((item: any) => ({
-    id: item.id,
-    title: item.title || "Untitled",
-    date:
-      item.date ||
-      (item.startedAt
-        ? `${item.startedAt.quartile} ${item.startedAt.year}`
-        : item.completedAt
-          ? `${item.completedAt.quartile} ${item.completedAt.year}`
-          : item.plannedAt
-            ? `${item.plannedAt.quartile} ${item.plannedAt.year}`
-            : "Unknown"),
-    progress:
-      typeof item.progress === "number"
-        ? item.progress
-        : typeof item.completionPercentage === "number"
-          ? item.completionPercentage
-          : undefined,
-    features: item.items || item.features || [],
-  }));
-};
-
-const transformChangelogItems = (payload: any): ChangelogItem[] => {
-  if (!payload?.data || !Array.isArray(payload.data)) return [];
-
-  return payload.data.map((item: any) => ({
-    id: item.id,
-    version: item.title || "v0.0.0",
-    date: item.month && item.year ? `${item.month} ${item.year}` : "Unknown",
-    type: "feature" as const,
-    changes: item.items || [],
-  }));
-};
-
-export default function RoadmapPage() {
-  const [plannedItems, setPlannedItems] = useState<RoadmapItem[]>([]);
-  const [inProgressItems, setInProgressItems] = useState<RoadmapItem[]>([]);
-  const [completedItems, setCompletedItems] = useState<RoadmapItem[]>([]);
-  const [changelogItems, setChangelogItems] = useState<ChangelogItem[]>([]);
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchPlannedRoadmap = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const response = await fetch(`${URLS}planned`);
-      const res = await response.json();
-
-      setPlannedItems(transformRoadmapItems(res));
-    } catch (err) {
-      setError("Failed to load planned roadmap.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const fetchInProgressRoadmap = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const response = await fetch(`${URLS}in-progress`);
-      const res = await response.json();
-      setInProgressItems(transformRoadmapItems(res));
-    } catch (err) {
-      setError("Failed to load in-progress roadmap. Please try again later.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const fetchCompletedRoadmap = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const response = await fetch(`${URLS}completed`);
-      const res = await response.json();
-      setCompletedItems(transformRoadmapItems(res));
-    } catch (err) {
-      setError("Failed to load completed roadmap. Please try again later.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const fetchChengelog = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const response = await fetch(`${URLS}changelog`);
-      const res = await response.json();
-
-      setChangelogItems(transformChangelogItems(res));
-    } catch (err) {
-      setError("Failed to load changelog. Please try again later.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchPlannedRoadmap();
-    fetchInProgressRoadmap();
-    fetchCompletedRoadmap();
-    fetchChengelog();
-  }, []);
+export default async function RoadmapPage() {
+  const {
+    planned: plannedItems,
+    inProgress: inProgressItems,
+    completed: completedItems,
+    changelog: changelogItems,
+  } = await fetchAllRoadmapData();
 
   return (
     <>
@@ -352,13 +79,7 @@ export default function RoadmapPage() {
                 </div>
 
                 <div className="space-y-3 max-h-[600px] overflow-y-auto hide-scrollbar">
-                  {isLoading ? (
-                    <div className="text-xs text-muted-foreground">
-                      Loading planned roadmap...
-                    </div>
-                  ) : error ? (
-                    <div className="text-xs text-red-500">{error}</div>
-                  ) : plannedItems.length === 0 ? (
+                  {plannedItems.length === 0 ? (
                     <div className="text-xs text-muted-foreground">
                       No planned items available.
                     </div>
@@ -406,13 +127,7 @@ export default function RoadmapPage() {
                 </div>
 
                 <div className="space-y-3 max-h-[600px] overflow-y-auto hide-scrollbar">
-                  {isLoading ? (
-                    <div className="text-xs text-muted-foreground">
-                      Loading in-progress roadmap...
-                    </div>
-                  ) : error ? (
-                    <div className="text-xs text-red-500">{error}</div>
-                  ) : inProgressItems.length === 0 ? (
+                  {inProgressItems.length === 0 ? (
                     <div className="text-xs text-muted-foreground">
                       No in-progress items available.
                     </div>
@@ -481,13 +196,7 @@ export default function RoadmapPage() {
                 </div>
 
                 <div className="space-y-3 max-h-[600px] overflow-y-auto hide-scrollbar">
-                  {isLoading ? (
-                    <div className="text-xs text-muted-foreground">
-                      Loading completed roadmap...
-                    </div>
-                  ) : error ? (
-                    <div className="text-xs text-red-500">{error}</div>
-                  ) : completedItems.length === 0 ? (
+                  {completedItems.length === 0 ? (
                     <div className="text-xs text-muted-foreground">
                       No completed items available.
                     </div>
