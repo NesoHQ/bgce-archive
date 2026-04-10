@@ -39,14 +39,11 @@ const getStatusBadge = (status: string) => {
 <template>
   <TableRow class="hover:bg-muted/30 transition-colors">
     <TableCell class="w-12">
-      <Checkbox 
-        :checked="selected"
-        @update:checked="emit('toggleSelect')"
-      />
+      <Checkbox :checked="selected" @update:checked="emit('toggleSelect')" />
     </TableCell>
     <TableCell>
       <div class="flex items-start gap-2">
-        <div class="flex-1">
+        <div class="flex-1 cursor-pointer" @click="emit('toggleSelect')">
           <div class="flex items-center gap-2">
             <p class="font-semibold text-sm">{{ post.title }}</p>
             <Badge v-if="post.is_pinned" variant="outline" class="text-xs">Pinned</Badge>
@@ -87,51 +84,36 @@ const getStatusBadge = (status: string) => {
             Preview
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          
+
           <!-- Draft actions -->
-          <DropdownMenuItem 
-            v-if="post.status === 'draft'" 
-            @click="emit('publish', post.id)"
-            class="gap-2 text-green-600"
-          >
+          <DropdownMenuItem v-if="post.status === 'draft'" @click="emit('publish', post.id)"
+            class="gap-2 text-green-600">
             <CheckCircle class="h-4 w-4" />
             Publish
           </DropdownMenuItem>
-          
+
           <!-- Published actions -->
-          <DropdownMenuItem 
-            v-if="post.status === 'published'" 
-            @click="emit('unpublish', post.id)"
-            class="gap-2 text-orange-600"
-          >
+          <DropdownMenuItem v-if="post.status === 'published'" @click="emit('unpublish', post.id)"
+            class="gap-2 text-orange-600">
             <XCircle class="h-4 w-4" />
             Unpublish
           </DropdownMenuItem>
-          <DropdownMenuItem 
-            v-if="post.status === 'published'" 
-            @click="emit('archive', post.id)"
-            class="gap-2 text-blue-600"
-          >
+          <DropdownMenuItem v-if="post.status === 'published'" @click="emit('archive', post.id)"
+            class="gap-2 text-blue-600">
             <Archive class="h-4 w-4" />
             Archive
           </DropdownMenuItem>
-          
+
           <!-- Archived actions -->
-          <DropdownMenuItem 
-            v-if="post.status === 'archived'" 
-            @click="emit('publish', post.id)"
-            class="gap-2 text-green-600"
-          >
+          <DropdownMenuItem v-if="post.status === 'archived'" @click="emit('publish', post.id)"
+            class="gap-2 text-green-600">
             <CheckCircle class="h-4 w-4" />
             Restore & Publish
           </DropdownMenuItem>
-          
+
           <DropdownMenuSeparator v-if="post.status !== 'deleted'" />
-          <DropdownMenuItem 
-            v-if="post.status !== 'deleted'"
-            @click="emit('delete', post.id)" 
-            class="gap-2 text-red-600 focus:text-red-600"
-          >
+          <DropdownMenuItem v-if="post.status !== 'deleted'" @click="emit('delete', post.id)"
+            class="gap-2 text-red-600 focus:text-red-600">
             <Trash2 class="h-4 w-4" />
             Delete
           </DropdownMenuItem>
