@@ -1,0 +1,530 @@
+{
+  "version": "1.0.0",
+  "rules": [
+    {
+      "pattern": "fuck",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "f+u+c+k+",
+      "severity": "high",
+      "useWordBoundary": false
+    },
+    {
+      "pattern": "fuk",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "fck",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "fxck",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "phuck",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "shit",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "s+h+i+t+",
+      "severity": "high",
+      "useWordBoundary": false
+    },
+    {
+      "pattern": "sh1t",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "sht",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "bullshit",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "ass",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "a+s+s+",
+      "severity": "medium",
+      "useWordBoundary": false
+    },
+    {
+      "pattern": "arse",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "asshole",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "a55hole",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "bastard",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "b@stard",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "bitch",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "b+i+t+c+h+",
+      "severity": "high",
+      "useWordBoundary": false
+    },
+    {
+      "pattern": "b1tch",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "biatch",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "cunt",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "c+u+n+t+",
+      "severity": "high",
+      "useWordBoundary": false
+    },
+    {
+      "pattern": "cnt",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "dick",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "d1ck",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "dickhead",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "cock",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "c0ck",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "pussy",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "pussye",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "pu55y",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "twat",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "whore",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "h0r",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "hoe",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "slut",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "skank",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "nigger",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "n+1+g+g+e+r+",
+      "severity": "high",
+      "useWordBoundary": false
+    },
+    {
+      "pattern": "nigga",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "n1gga",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "faggot",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "fag",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "f4gg0t",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "retard",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "r3tard",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "mong",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "spastic",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "chink",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "gook",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "kike",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "spic",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "wetback",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "paki",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "towelhead",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "rape",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "pedo",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "paedo",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "incest",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "bestiality",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "damn",
+      "severity": "low",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "d4mn",
+      "severity": "low",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "crap",
+      "severity": "low",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "hell",
+      "severity": "low",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "h3ll",
+      "severity": "low",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "piss",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "p1ss",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "pissed",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "crap",
+      "severity": "low",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "screw",
+      "severity": "low",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "screw",
+      "severity": "low",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "balls",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "bollocks",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "b0ll0cks",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "nuts",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "wanker",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "w4nker",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "prat",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "git",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "tosser",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "knob",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "knobhead",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "motherfucker",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "muthafucka",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "m0th3rfucker",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "sonofabitch",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "s.o.b.",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "douche",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "douchebag",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "douch3",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "dipshit",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "dumbshit",
+      "severity": "high",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "jackass",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "jackoff",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "jerkoff",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "jerk",
+      "severity": "low",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "moron",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "idiot",
+      "severity": "low",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "imbecile",
+      "severity": "medium",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "stupid",
+      "severity": "low",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "dumb",
+      "severity": "low",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "loser",
+      "severity": "low",
+      "useWordBoundary": true
+    },
+    {
+      "pattern": "sucker",
+      "severity": "low",
+      "useWordBoundary": true
+    }
+  ]
+}

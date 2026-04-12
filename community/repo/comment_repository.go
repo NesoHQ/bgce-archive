@@ -2,6 +2,8 @@ package repo
 
 import (
 	"context"
+	"errors"
+	"log/slog"
 	"strings"
 
 	"community/comment"
@@ -11,10 +13,10 @@ import (
 )
 
 var (
-	allowedCommentSortBy    = map[string]string{
-		"created_at": "created_at",
-		"updated_at": "updated_at",
-		"like_count": "like_count",
+	allowedCommentSortBy = map[string]string{
+		"created_at":  "created_at",
+		"updated_at":  "updated_at",
+		"like_count":  "like_count",
 		"reply_count": "reply_count",
 	}
 	allowedSortOrder = map[string]string{
@@ -81,4 +83,44 @@ func (r *commentRepository) List(ctx context.Context, filter comment.CommentFilt
 	}
 
 	return comments, total, nil
+}
+
+func (r *commentRepository) FindByID(ctx context.Context, id uint) (*domain.Comment, error) {
+	var c domain.Comment
+
+	err := r.db.WithContext(ctx).First(&c, id).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &c, nil
+}
+
+func (r *commentRepository) Create(ctx context.Context, c *domain.Comment) error {
+	if err := r.db.WithContext(ctx).Create(c).Error; err != nil {
+		return err
+	}
+
+	if c.ParentID != nil {
+		if err := r.incrementReplyCount(ctx, *c.ParentID); err != nil {
+			slog.WarnContext(ctx, "failed to increment reply_count",
+				"parent_id", *c.ParentID,
+				"comment_id", c.ID,
+				"error", err,
+			)
+		}
+	}
+
+	return nil
+}
+
+func (r *commentRepository) incrementReplyCount(ctx context.Context, parentID uint) error {
+	return r.db.WithContext(ctx).
+		Model(&domain.Comment{}).
+		Where("id = ?", parentID).
+		UpdateColumn("reply_count", gorm.Expr("reply_count + 1")).
+		Error
 }

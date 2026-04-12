@@ -17,11 +17,10 @@ const (
 )
 
 type Comment struct {
-	ID        uint           `gorm:"primarykey" json:"id"`
-	UUID      string         `gorm:"type:uuid;uniqueIndex;not null" json:"uuid"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
-	DeletedAt gorm.DeletedAt `gorm:"index" json:"deleted_at,omitempty"`
+	ID        uint      `gorm:"primarykey" json:"id"`
+	UUID      string    `gorm:"type:uuid;uniqueIndex;not null" json:"uuid"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 
 	// Multi-tenant support
 	TenantID *uint `gorm:"index" json:"tenant_id,omitempty"`
@@ -35,8 +34,8 @@ type Comment struct {
 	Content string `gorm:"type:text;not null" json:"content"`
 
 	// Moderation
-	Status       CommentStatus `gorm:"type:varchar(20);not null;default:'pending';index" json:"status"`
-	ToxicityScore *float64     `gorm:"type:decimal(3,2)" json:"toxicity_score,omitempty"`
+	Status        CommentStatus `gorm:"type:varchar(20);not null;default:'pending';index" json:"status"`
+	ToxicityScore *float64      `gorm:"type:decimal(3,2)" json:"toxicity_score,omitempty"`
 
 	// Stats
 	LikeCount  int `gorm:"default:0" json:"like_count"`
