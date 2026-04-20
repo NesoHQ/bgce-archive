@@ -1,7 +1,7 @@
 arcdocs-index:
 	chmod +x ./scripts/docs/generate_index.sh && ./scripts/docs/generate_index.sh
 
-arcdocs: arcdocs-index
+arcdocs:
 	chmod +x ./scripts/docs/run.sh && ./scripts/docs/run.sh
 
 arcdocs-serve:
